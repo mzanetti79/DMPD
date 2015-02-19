@@ -36,7 +36,7 @@ output_service = cfg.Service(
       TFileService,
       'outputfile',
       name="outputfile",
-      fname='tree2.root',
+      fname='tree3.root',
       option='recreate'
     )
 
