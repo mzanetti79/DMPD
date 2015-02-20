@@ -12,17 +12,17 @@ class MuonAnalyzer( Analyzer ):
 
     def declareHandles(self):
         super(MuonAnalyzer, self).declareHandles()
-        self.handles['muons'] = AutoHandle(self.cfg_ana.muons,"std::vector<pat::Muon>")            
-        self.handles['rho'] = AutoHandle( self.cfg_ana.rho, 'double')
+        self.handles['muons'] = AutoHandle(self.cfg_ana.muons,"std::vector<pat::Muon>")
+        self.handles['rho'] = AutoHandle( self.cfg_ana.rhoMuons, 'double')
 
     def beginLoop(self, setup):
         super(MuonAnalyzer,self).beginLoop(setup)
 
     def makeAllMuons(self, event):
         allmuons = map( Muon, self.handles['muons'].product() )
+        # fill EA for rho-corrected isolation
         for mu in allmuons:
             mu.rho = float(self.handles['rho'].product()[0])
-            # Attach EAs for isolation:
             if self.effectiveArea == "Data2012":
                 if   aeta < 1.0  : mu.EffectiveArea03 = 0.382;
                 elif aeta < 1.47 : mu.EffectiveArea03 = 0.317;
@@ -52,30 +52,27 @@ class MuonAnalyzer( Analyzer ):
             # Attach the vertex to them, for dxy/dz calculation
             mu.associatedVertex = event.goodVertices[0]
             # Attach the isolation
-            if self.cfg_ana.isoCorr=="rhoArea" :
+            if self.cfg_ana.mu_isoCorr=="rhoArea" :
                 mu.absIso03 = (mu.pfIsolationR03().sumChargedHadronPt + max( mu.pfIsolationR03().sumNeutralHadronEt +  mu.pfIsolationR03().sumPhotonEt - mu.rho * mu.EffectiveArea03,0.0))
                 mu.absIso04 = (mu.pfIsolationR04().sumChargedHadronPt + max( mu.pfIsolationR04().sumNeutralHadronEt +  mu.pfIsolationR04().sumPhotonEt - mu.rho * mu.EffectiveArea04,0.0))
-            elif self.cfg_ana.isoCorr=="deltaBeta" :
+            elif self.cfg_ana.mu_isoCorr=="deltaBeta" :
                 mu.absIso03 = (mu.pfIsolationR03().sumChargedHadronPt + max( mu.pfIsolationR03().sumNeutralHadronEt +  mu.pfIsolationR03().sumPhotonEt -  mu.pfIsolationR03().sumPUPt/2,0.0))
                 mu.absIso04 = (mu.pfIsolationR04().sumChargedHadronPt + max( mu.pfIsolationR04().sumNeutralHadronEt +  mu.pfIsolationR04().sumPhotonEt -  mu.pfIsolationR04().sumPUPt/2,0.0))
             else :
-                raise RuntimeError, "Unsupported isoCorr name '" + str(self.cfg_ana.isoCorr) +  "'! For now only 'rhoArea' and 'deltaBeta' are supported."
+                raise RuntimeError, "Unsupported isoCorr name '" + str(self.cfg_ana.mu_isoCorr) +  "'! For now only 'rhoArea' and 'deltaBeta' are supported."
             mu.relIso03 = mu.absIso03/mu.pt()
             mu.relIso04 = mu.absIso04/mu.pt()
         return allmuons
 
-
     def selectMuons(self, event):
-        """
-        select the good muons
-        """
         event.selectedMuons = []
         allmuons = self.makeAllMuons(event)
         for mu in allmuons:
-            if (mu.track().isNonnull() and 
-                mu.pt()>self.cfg_ana.muon_pt and
-                abs(mu.dxy())<self.cfg_ana.muon_dxy and abs(mu.dz())<self.cfg_ana.muon_dz):
-                event.selectedMuons.append(mu)
+            if (mu.track().isNonnull() and
+                mu.pt()>self.cfg_ana.mu_pt and
+                abs(mu.eta())<self.cfg_ana.mu_eta and
+                mu.muonID(self.cfg_ana.mu_id)) :
+                    event.selectedMuons.append(mu)
         event.selectedMuons.sort(key = lambda l : l.pt(), reverse = True)
 
     def process(self, event):
@@ -85,16 +82,14 @@ class MuonAnalyzer( Analyzer ):
 
 #A default config
 setattr(MuonAnalyzer,"defaultConfig",cfg.Analyzer(
-    verbose=False,
-    class_object=MuonAnalyzer,
-    muons='slimmedMuons',
-    rho= 'fixedGridRhoFastjetAll',
-    muon_id  = "POG_ID_Loose",
-    muon_pt  = 5,
-    muon_dxy = 0.5,
-    muon_dz  = 1.0,
-    muon_relIso = 0.4,
-    isoCorr = "rhoArea" ,
-    effectiveAreas = "Phys14_25ns_v1", #(can be 'Data2012' or 'Phys14_25ns_v1')
+    verbose             = False,
+    class_object        = MuonAnalyzer,
+    muons               = 'slimmedMuons',
+    rhoMuons            = 'fixedGridRhoFastjetAll',
+    mu_id               = "POG_ID_Loose",
+    mu_pt               = 5,
+    mu_eta              = 2.4,
+    mu_isoCorr          = "rhoArea" ,
+    mu_effectiveAreas   = "Phys14_25ns_v1", #(can be 'Data2012' or 'Phys14_25ns_v1')
     )
 )
