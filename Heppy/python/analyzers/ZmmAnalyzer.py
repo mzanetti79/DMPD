@@ -18,8 +18,8 @@ class ZmmAnalyzer( Analyzer ):
     def selectZ(self,event):
         if not len(event.selectedMuons) == 2: return False
         if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): return False
-	#event.Z = ROOT.reco.Particle.LorentzVector(0.,0.,0.,0.)        
-        event.Z = event.selectedMuons[0].p4() + event.selectedMuons[1].p4() 
+	#event.Z = ROOT.reco.Particle.LorentzVector(0.,0.,0.,0.)
+        event.Z = event.selectedMuons[0].p4() + event.selectedMuons[1].p4()
         return True
 
     def makeMET(self,event):
