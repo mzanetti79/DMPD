@@ -85,5 +85,5 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 ])
 
 metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("sign",    lambda x : x.metSignificance(), float, mcOnly=False,help="missing energy significance"),
+    NTupleVariable("sign",    lambda x : x.metSignificance(), float, mcOnly=False, help="missing energy significance"),
 ])
