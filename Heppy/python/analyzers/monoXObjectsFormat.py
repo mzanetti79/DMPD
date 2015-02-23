@@ -85,5 +85,10 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 ])
 
 metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("sign",    lambda x : x.metSignificance(), float, mcOnly=False, help="missing energy significance"),
+    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1, float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
+    NTupleVariable("phf",     lambda x : x.NeutralEMFraction(), float, mcOnly=False, help="neutral electromagnetic energy fraction"),
+    NTupleVariable("nhf",     lambda x : x.NeutralHadEtFraction(), float, mcOnly=False, help="neutral hadron energy fraction"),
+    NTupleVariable("elf",     lambda x : x.ChargedEMEtFraction(), float, mcOnly=False, help="charged electromagnetic energy fraction"),
+    NTupleVariable("chf",     lambda x : x.ChargedHadEtFraction(), float, mcOnly=False, help="charged hadron energy fraction"),
+    NTupleVariable("muf",     lambda x : x.MuonEtFraction(), float, mcOnly=False, help="muon energy fraction"),
 ])
