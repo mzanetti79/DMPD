@@ -83,3 +83,7 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
     #NTupleVariable("phIso",  lambda x : x.recoPhotonIso(), float, help="gammaIsolation for photons"),
     #NTupleVariable("mcMatchId",  lambda x : x.mcMatchId, int, mcOnly=True, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
 ])
+
+metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("sign",    lambda x : x.metSignificance(), float, mcOnly=False,help="missing energy significance"),
+])
