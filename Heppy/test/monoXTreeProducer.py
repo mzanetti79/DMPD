@@ -6,13 +6,13 @@ from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
 
-collections = {
-      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-      }
+#collections = {
+#      "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+#      "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+#      "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+#      "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+#      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+#      }
 
 ##############################
 ### SIGNAL REGION TREE     ###
