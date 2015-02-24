@@ -5,6 +5,15 @@ from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
+
+collections = {
+      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
+
 ##############################
 ### SIGNAL REGION TREE     ###
 ##############################
@@ -19,12 +28,12 @@ SignalRegionTreeProducer= cfg.Analyzer(
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         },
     collections = {
-        "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-        "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-        "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-        "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-        "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-        }
+      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
     )
 
 
@@ -40,16 +49,16 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = True,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMET" : NTupleObject("fakeMET", fourVectorType, help="fake MET in Zmumu event obtained removing the muons"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
         "Z" : NTupleObject("Z", fourVectorType, help="Z boson candidate"),
         },
     collections = {
-        "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-        "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-        "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-        "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-        "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-        }
+      "selectedMuons"     : NTupleCollection("muons", muonType, 2, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
     )
     
 
@@ -65,16 +74,16 @@ WControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = True,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMET" : NTupleObject("fakeMET", fourVectorType, help="fake MET in Zmumu event obtained removing the muons"),
-        "W" : NTupleObject("Z", fourVectorType, help="Z boson candidate"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
+        "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
         },
     collections = {
-        "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-        "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-        "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-        "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-        "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-        }
+      "selectedMuons"     : NTupleCollection("muons", muonType, 1, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
     )
     
 ##############################
@@ -89,15 +98,15 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = True,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMET" : NTupleObject("fakeMET", fourVectorType, help="fake MET in Zmumu event obtained removing the muons"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
         },
     collections = {
-        "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-        "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-        "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-        "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-        "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-        }
+      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      "selectedPhotons"   : NTupleCollection("photons", photonType, 1, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
     )
 
 
@@ -262,18 +271,60 @@ from PhysicsTools.Heppy.analyzers.objects.METAnalyzer import METAnalyzer
 MEtAnalyzer = METAnalyzer.defaultConfig
 
 ##############################
-### ZMMANALYZER            ###
+### DM ANALYZERS           ###
 ##############################
-from DMPD.Heppy.analyzers.ZmmAnalyzer import ZmmAnalyzer
-zmmAnalyzer = cfg.Analyzer(
-    verbose=False,
-    class_object=ZmmAnalyzer
+
+#from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
+#PreselectionAnalyzer = cfg.Analyzer(
+#    verbose = False,
+#    class_object = PreselectionAnalyzer,
+#    jet_pt = 80.,
+#    met_pt = 100.,
+#    )
+
+from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
+SRAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = SRAnalyzer,
+    jet1_pt = 80.,
+    jet2_pt = 20.,
+    deltaPhi12 = 99.,
+    met_pt = 100.,
     )
+
+from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
+ZAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = ZAnalyzer,
+    mass = 50.,
+    jet_pt = 100.,
+    met_pt = 100.,
+    )
+
+from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
+WAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = WAnalyzer,
+    mt_low = 50.,
+    mt_high = 120.,
+    jet_pt = 100.,
+    met_pt = 100.,
+    )
+
+from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
+GammaAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = GammaAnalyzer,
+    photon_pt = 160.,
+    jet_pt = 100.,
+    met_pt = 100.,
+    )
+
 
 ##############################
 ### SEQUENCE               ###
 ##############################
-sequence = [pilupeAnalyzer, vertexAnalyzer, leptonAnalyzer, jetAnalyzer, tauAnalyzer, photonAnalyzer, MEtAnalyzer, zmmAnalyzer, SignalRegionTreeProducer]
+sequence = [pilupeAnalyzer, vertexAnalyzer, leptonAnalyzer, jetAnalyzer, tauAnalyzer, photonAnalyzer, MEtAnalyzer, ZAnalyzer, ZControlRegionTreeProducer]
 
 ##############################
 ### TFILESERVICE           ###
