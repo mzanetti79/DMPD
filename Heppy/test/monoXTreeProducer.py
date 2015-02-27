@@ -376,8 +376,8 @@ sequence = [
     #### Preselection (Jet+Met)
     #PreselectionAnalyzer, 
     #### Gamma
-    GammaAnalyzer,
-    GammaControlRegionTreeProducer,
+    #GammaAnalyzer,
+    #GammaControlRegionTreeProducer,
     #### Zmm
     #ZAnalyzer,
     #ZControlRegionTreeProducer,
@@ -385,8 +385,8 @@ sequence = [
     #WAnalyzer, 
     #WControlRegionTreeProducer,
     #### SignalRegion
-    #SRAnalyzer, 
-    #SignalRegionTreeProducer,
+    SRAnalyzer, 
+    SignalRegionTreeProducer,
     ]
 
 ##############################
