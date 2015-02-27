@@ -5,7 +5,6 @@ from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
-
 #collections = {
 #      "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
 #      "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
@@ -274,21 +273,25 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 ### DM ANALYZERS           ###
 ##############################
 
-#from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
-#PreselectionAnalyzer = cfg.Analyzer(
-#    verbose = False,
-#    class_object = PreselectionAnalyzer,
-#    jet_pt = 80.,
-#    met_pt = 100.,
-#    )
+from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
+PreselectionAnalyzer = cfg.Analyzer(
+   verbose = False,
+   class_object = PreselectionAnalyzer,
+   jet_pt = 80.,
+   met_pt = 80.,
+   )
 
 from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
 SRAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = SRAnalyzer,
-    jet1_pt = 80.,
-    jet2_pt = 20.,
-    deltaPhi12 = 99.,
+    jet1_pt = 150.,
+    jet1_eta = 2.0,
+    jet2_pt = 30.,
+    jet2_eta = 2.5,
+    deltaPhi12 = 2.,
+    jetveto_pt = 20.,
+    jetveto_eta = 2.5,
     met_pt = 100.,
     )
 
@@ -296,7 +299,10 @@ from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
 ZAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = ZAnalyzer,
-    mass = 50.,
+    mass_low = 61.,
+    mass_high = 121.,
+    mu1_pt = 0., # cut implemented in the Analyzer
+    mu1_id = "POG_ID_Tight",
     jet_pt = 100.,
     met_pt = 100.,
     )
@@ -306,7 +312,9 @@ WAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = WAnalyzer,
     mt_low = 50.,
-    mt_high = 120.,
+    mt_high = 100.,
+    mu_pt = 20., 
+    mu_id = "POG_ID_Tight",    
     jet_pt = 100.,
     met_pt = 100.,
     )
@@ -316,15 +324,39 @@ GammaAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = GammaAnalyzer,
     photon_pt = 160.,
+    photon_id = "PhotonCutBasedIDLoose",
+    photon_eta = 2.5,
+    photon_eta_remove_min = 1.442,
+    photon_eta_remove_max = 1.56,
     jet_pt = 100.,
     met_pt = 100.,
     )
 
-
 ##############################
 ### SEQUENCE               ###
 ##############################
-sequence = [pilupeAnalyzer, vertexAnalyzer, leptonAnalyzer, jetAnalyzer, tauAnalyzer, photonAnalyzer, MEtAnalyzer, ZAnalyzer, ZControlRegionTreeProducer]
+sequence = [pilupeAnalyzer, 
+            vertexAnalyzer, 
+            leptonAnalyzer, 
+            jetAnalyzer, 
+            tauAnalyzer, 
+            photonAnalyzer, 
+            MEtAnalyzer, 
+            #### Preselection (Jet+Met)
+            #PreselectionAnalyzer, 
+            #### Gamma
+            GammaAnalyzer,
+            GammaControlRegionTreeProducer,
+            #### Zmm
+            #ZAnalyzer,
+            #ZControlRegionTreeProducer,
+            #### Wmn
+            #WAnalyzer, 
+            #WControlRegionTreeProducer,
+            #### SignalRegion
+            #SRAnalyzer, 
+            #SignalRegionTreeProducer,
+            ]
 
 ##############################
 ### TFILESERVICE           ###
@@ -342,11 +374,47 @@ output_service = cfg.Service(
 ### INPUT                  ###
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
+from DMPD.Heppy.samples.Phys14 import fileLists
+
 sample = cfg.Component(
-    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
-    name="SingleSample",
-    isMC=False,
-    isEmbed=False
+    #files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
+    #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
+    ### QCD
+    #files = fileLists.QCD_HT100To250+
+             #fileLists.QCD_HT250To500+
+             #fileLists.QCD_HT500To1000+
+             #fileLists.QCD_HT_1000ToInf,
+    ### DYJetsToLL
+    #files = fileLists.DYJetsToLL_M50_HT100to200+
+            #fileLists.DYJetsToLL_M50_HT200to400+
+            #fileLists.DYJetsToLL_M50_HT400to600+
+            #fileLists.DYJetsToLL_M50_HT600toInf,
+    ### GJets
+    files = fileLists.GJets_HT100to200+
+            fileLists.GJets_HT200to400+
+            fileLists.GJets_HT400to600+
+            fileLists.GJets_HT600toInf,
+    ### TTbar
+    #files = fileLists.TT+
+            #fileLists.TToLeptons_schannel+
+            #fileLists.TToLeptons_tchannel,
+    ### SingleT
+    #files = fileLists.T_tWchannel+
+            #fileLists.Tbar_tWchannel,
+    ### WJetsToLNu
+    #files = fileLists.WJetsToLNu_HT100to200+
+            #fileLists.WJetsToLNu_HT200to400+
+            #fileLists.WJetsToLNu_HT400to600+
+            #fileLists.WJetsToLNu_HT600toInf,
+    ### ZJetsToNuNu
+    #files = fileLists.ZJetsToNuNu_HT100to200+
+            #fileLists.ZJetsToNuNu_HT200to400+
+            #fileLists.ZJetsToNuNu_HT400to600+
+            #fileLists.ZJetsToNuNu_HT600toInf,
+    name="GJets",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
     )
 
 ##############################
@@ -370,8 +438,8 @@ if __name__ == '__main__':
     looper = Looper(
         'MonoX',
         config,
-        nPrint = 1,
-        nEvents=1000
+        nPrint = 0,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
