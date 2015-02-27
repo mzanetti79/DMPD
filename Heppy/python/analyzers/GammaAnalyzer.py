@@ -8,15 +8,26 @@ class GammaAnalyzer( Analyzer ):
     '''Analyze and select gamma+jets events
     selectG: selects at least one photon above pt threshold
     '''
-    
+
+    #def selectGamma(self, event):
+      ## Select at least one photon
+      #if len(event.selectedPhotons) < 1: return False
+      #if event.selectedPhotons[0] < self.cfg_ana.photon_pt:
+        #return False
+      #event.Gamma = event.selectedPhotons[0]
+      #return True
+
     def selectGamma(self, event):
-      # Select at least one photon
-      if len(event.selectedPhotons) < 1: return False
-      if event.selectedPhotons[0] < self.cfg_ana.photon_pt:
-        return False
-      event.Gamma = event.selectedPhotons[0]
+      # At least one photon
+      if len(event.selectedPhotons) < 1: 
+          return False
+      # List all the photons passing the cuts
+      GammaPostCuts = [x for x in event.selectedPhotons if x.photonID(self.cfg_ana.photon_id) and x.pt() > self.cfg_ana.photon_pt and abs(x.eta()) < self.cfg_ana.photon_eta and ( abs(x.eta()) < self.cfg_ana.photon_eta_remove_min or abs(x.eta()) > self.cfg_ana.photon_eta_remove_max ) ]
+      if len(GammaPostCuts) != 1: 
+          return False
+      event.Gamma = GammaPostCuts[0]      
       return True
-    
+
     def makeFakeMET(self,event):
         # Make ject in the event and adding photon px, py
         event.fakeMEt = copy.deepcopy(event.met)

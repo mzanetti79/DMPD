@@ -12,12 +12,28 @@ class ZAnalyzer( Analyzer ):
     selectZtoLL: selects best muon combination to build the Z, does not veto other muons
     '''
 
+    #def selectExclusiveZtoMM(self, event):
+        ## Select exactly two muon
+        #if not len(event.selectedMuons) == 2: return False
+        #if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): return False
+        #theZ =  event.selectedMuons[0].p4() + event.selectedMuons[1].p4()
+        #if theZ.mass() < self.cfg_ana.mass: return False
+        #event.Z = theZ
+        #return True
+
     def selectExclusiveZtoMM(self, event):
         # Select exactly two muon
-        if not len(event.selectedMuons) == 2: return False
-        if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): return False
+        if not len(event.selectedMuons) == 2: 
+            return False
+        if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): 
+            return False
+        if event.selectedMuons[0].pt() < self.cfg_ana.mu1_pt: 
+            return False
+        if not event.selectedMuons[0].muonID(self.cfg_ana.mu1_id): 
+            return False
         theZ =  event.selectedMuons[0].p4() + event.selectedMuons[1].p4()
-        if theZ.mass() < self.cfg_ana.mass: return False
+        if theZ.mass() < self.cfg_ana.mass_low or theZ.mass() > self.cfg_ana.mass_high: 
+            return False
         event.Z = theZ
         return True
 
