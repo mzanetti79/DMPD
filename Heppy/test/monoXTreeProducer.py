@@ -219,6 +219,33 @@ jetAnalyzer = cfg.Analyzer(
     jecPath                     = ""
     ### ====================== ###
     )
+    
+fatJetAnalyzer = cfg.Analyzer(
+
+    class_object                = JetAnalyzer,
+
+    ### Jet - General
+    ##############################
+    jetCol                      = 'slimmedJetsAK8',
+    jetPt                       = 50.,
+    jetEta                      = 4.7,
+    jetEtaCentral               = 2.4,
+    jetLepDR                    = 0.4,
+    jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet
+    minLepPt                    = 10,
+    relaxJetId                  = False,
+    doPuId                      = False, # Not commissioned in 7.0.X
+    doQG                        = False,
+    recalibrateJets             = False,
+    shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    smearJets                   = True,
+    shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    cleanJetsFromFirstPhoton    = False,
+    cleanJetsFromTaus           = False,
+    cleanJetsFromIsoTracks      = False,
+    jecPath                     = ""
+    ### ====================== ###
+    )
 
 ##############################
 ### TAUANALYZER            ###
@@ -287,8 +314,10 @@ SRAnalyzer = cfg.Analyzer(
     class_object = SRAnalyzer,
     jet1_pt = 150.,
     jet1_eta = 2.0,
+    jet1_tag = -99.,
     jet2_pt = 30.,
     jet2_eta = 2.5,
+    jet2_tag = -99.,
     deltaPhi12 = 2.,
     jetveto_pt = 20.,
     jetveto_eta = 2.5,
@@ -335,28 +364,30 @@ GammaAnalyzer = cfg.Analyzer(
 ##############################
 ### SEQUENCE               ###
 ##############################
-sequence = [pilupeAnalyzer, 
-            vertexAnalyzer, 
-            leptonAnalyzer, 
-            jetAnalyzer, 
-            tauAnalyzer, 
-            photonAnalyzer, 
-            MEtAnalyzer, 
-            #### Preselection (Jet+Met)
-            #PreselectionAnalyzer, 
-            #### Gamma
-            GammaAnalyzer,
-            GammaControlRegionTreeProducer,
-            #### Zmm
-            #ZAnalyzer,
-            #ZControlRegionTreeProducer,
-            #### Wmn
-            #WAnalyzer, 
-            #WControlRegionTreeProducer,
-            #### SignalRegion
-            #SRAnalyzer, 
-            #SignalRegionTreeProducer,
-            ]
+sequence = [
+    pilupeAnalyzer, 
+    vertexAnalyzer, 
+    leptonAnalyzer, 
+    jetAnalyzer, 
+    #fatJetAnalyzer,
+    tauAnalyzer, 
+    photonAnalyzer, 
+    MEtAnalyzer, 
+    #### Preselection (Jet+Met)
+    #PreselectionAnalyzer, 
+    #### Gamma
+    GammaAnalyzer,
+    GammaControlRegionTreeProducer,
+    #### Zmm
+    #ZAnalyzer,
+    #ZControlRegionTreeProducer,
+    #### Wmn
+    #WAnalyzer, 
+    #WControlRegionTreeProducer,
+    #### SignalRegion
+    #SRAnalyzer, 
+    #SignalRegionTreeProducer,
+    ]
 
 ##############################
 ### TFILESERVICE           ###
@@ -374,10 +405,10 @@ output_service = cfg.Service(
 ### INPUT                  ###
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
-from DMPD.Heppy.samples.Phys14 import fileLists
+#from DMPD.Heppy.samples.Phys14 import fileLists
 
 sample = cfg.Component(
-    #files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
     ### QCD
     #files = fileLists.QCD_HT100To250+
@@ -390,10 +421,10 @@ sample = cfg.Component(
             #fileLists.DYJetsToLL_M50_HT400to600+
             #fileLists.DYJetsToLL_M50_HT600toInf,
     ### GJets
-    files = fileLists.GJets_HT100to200+
-            fileLists.GJets_HT200to400+
-            fileLists.GJets_HT400to600+
-            fileLists.GJets_HT600toInf,
+    #files = fileLists.GJets_HT100to200+
+    #        fileLists.GJets_HT200to400+
+    #        fileLists.GJets_HT400to600+
+    #        fileLists.GJets_HT600toInf,
     ### TTbar
     #files = fileLists.TT+
             #fileLists.TToLeptons_schannel+
@@ -420,12 +451,16 @@ sample = cfg.Component(
 ##############################
 ### FWLITE                 ###
 ##############################
+from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
+preprocessor = CmsswPreprocessor("tagFatJets.py")
+
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 selectedComponents = [sample]
 config = cfg.Config(
     components = selectedComponents,
     sequence = sequence,
     services = [output_service],
+    #preprocessor=preprocessor,
     events_class = Events
     )
 
