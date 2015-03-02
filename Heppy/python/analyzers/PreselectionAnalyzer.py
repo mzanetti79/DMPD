@@ -20,9 +20,13 @@ class PreselectionAnalyzer( Analyzer ):
             return False
         return True
 
+    def vetoTau(self, event):
+        # VETO TAUS
+
+    def vetoEle(self, event):
+        # VETO ELECTRONS
+
     def process(self, event):
         if not self.selectJet(event):
-            return False
-        if not self.selectMet(event):
             return False
         return True

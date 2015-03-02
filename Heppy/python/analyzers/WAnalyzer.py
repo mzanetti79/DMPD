@@ -31,17 +31,17 @@ class WAnalyzer( Analyzer ):
         if theW.mt() < self.cfg_ana.mt_low or theW.mt() > self.cfg_ana.mt_high:
             return False
         event.W = theW
-        event.Muon = MuonPostCuts[0]      
+        event.Muon = MuonPostCuts[0]
         return True
     
     def makeFakeMET(self,event):
         # Make ject in the event and adding muon px, py
         event.fakeMEt = copy.deepcopy(event.met)
-        px, py = event.met.px()-event.Muon.px(), event.met.py()-event.Muon.py()
+        px, py = event.met.px()+event.Muon.px(), event.met.py()+event.Muon.py()
         event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         event.fakeMEtNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px()-event.Muon.px(), event.metNoPU.py()-event.Muon.py()
+        px, py = event.metNoPU.px()+event.Muon.px(), event.metNoPU.py()+event.Muon.py()
         event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         if event.fakeMEt.pt() < self.cfg_ana.met_pt:

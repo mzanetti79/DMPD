@@ -88,11 +88,11 @@ class ZAnalyzer( Analyzer ):
     def makeFakeMET(self,event):
         # Make ject in the event and adding Z px, py
         event.fakeMEt = copy.deepcopy(event.met)
-        px, py = event.met.px()-event.Z.px(), event.met.py()-event.Z.py()
+        px, py = event.met.px()+event.Z.px(), event.met.py()+event.Z.py()
         event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         event.fakeMEtNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px()-event.Z.px(), event.metNoPU.py()-event.Z.py()
+        px, py = event.metNoPU.px()+event.Z.px(), event.metNoPU.py()+event.Z.py()
         event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         if event.fakeMEt.pt() < self.cfg_ana.met_pt:

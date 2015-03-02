@@ -31,11 +31,11 @@ class GammaAnalyzer( Analyzer ):
     def makeFakeMET(self,event):
         # Make ject in the event and adding photon px, py
         event.fakeMEt = copy.deepcopy(event.met)
-        px, py = event.met.px()-event.Gamma.px(), event.met.py()-event.Gamma.py()
+        px, py = event.met.px()+event.Gamma.px(), event.met.py()+event.Gamma.py()
         event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         event.fakeMEtNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px()-event.Gamma.px(), event.metNoPU.py()-event.Gamma.py()
+        px, py = event.metNoPU.px()+event.Gamma.px(), event.metNoPU.py()+event.Gamma.py()
         event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         if event.fakeMEt.pt() < self.cfg_ana.met_pt:
