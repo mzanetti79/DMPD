@@ -51,9 +51,10 @@ class WAnalyzer( Analyzer ):
     
     def process(self, event):
         # Select exactly one muon
-        if not self.selectW(event):
-          return False
-        if not self.makeFakeMET(event):
-          return False
-        return True
+        #self.inputCounter.Fill(1)
+        event.isWCR = False
+        if self.selectW(event) and self.makeFakeMET(event):
+            event.isWCR = True
+            return True
+
 

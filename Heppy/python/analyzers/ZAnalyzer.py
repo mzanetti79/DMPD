@@ -102,9 +102,8 @@ class ZAnalyzer( Analyzer ):
          
     def process(self, event):
         #self.inputCounter.Fill(1)
-        if not self.selectExclusiveZtoMM(event):
-          return False
-        if not self.makeFakeMET(event):
-          return False
-        return True
+        event.isZCR = False
+        if self.selectExclusiveZtoMM(event) and self.makeFakeMET(event):
+            event.isZCR = True
+            return True
 
