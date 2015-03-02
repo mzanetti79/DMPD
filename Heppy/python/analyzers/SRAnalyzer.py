@@ -56,23 +56,19 @@ class SRAnalyzer( Analyzer ):
     
     
     def process(self, event):
+        
+        event.isSR = False
         event.Category = 0
-        if not self.selectMet(event):
-            return False
-        if not self.vetoLeptonsGamma(event):
-            return False
-        if not self.selectJets(event):
-            return False
-        ### Category 1: one fat, double b-tagged jet
-        #if self.selectCategory1(event):
-        #    event.Category = 1
-        #    return True
-        ### Category 2: two resolved, b-tagged jet
-        if self.selectCategory2(event):
-            event.Category = 2
+        if self.selectMet(event) and self.vetoLeptonsGamma(event) and self.selectJets(event):
+            event.isSR = True
+            ### Category 1: one fat, double b-tagged jet
+            #if self.selectCategory1(event):
+            #    event.Category = 1
+            ### Category 2: two resolved, b-tagged jet
+            if self.selectCategory2(event):
+                event.Category = 2
+            ### Category 3: one single b-tagged jet
+            elif self.selectCategory3(event):
+                event.Category = 3
             return True
-        ### Category 3: one single b-tagged jet
-        if self.selectCategory3(event):
-            event.Category = 3
-            return True
-        return False
+            

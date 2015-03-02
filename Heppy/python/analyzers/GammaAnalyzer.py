@@ -44,9 +44,9 @@ class GammaAnalyzer( Analyzer ):
         
         
     def process(self, event):
-        if not self.selectGamma(event):
-          return False
-        if not self.makeFakeMET(event):
-          return False
-        return True
+        # Select exactly 1 photon
+        event.isGCR = False
+        if self.selectGamma(event) and self.makeFakeMET(event):
+            event.isGCR = True
+            return True
 

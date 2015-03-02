@@ -5,109 +5,6 @@ from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
-#collections = {
-#      "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-#      "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-#      "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-#      "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-#      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-#      }
-
-##############################
-### SIGNAL REGION TREE     ###
-##############################
-
-SignalRegionTreeProducer= cfg.Analyzer(
-    class_object=AutoFillTreeProducer,
-    name='SignalRegionTreeProducer',
-    treename='SR',
-    verbose=False,
-    vectorTree = True,
-    globalObjects = {
-        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        },
-    collections = {
-      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-      }
-    )
-
-
-##############################
-### Z CONTROL REGION TREE  ###
-##############################
-
-ZControlRegionTreeProducer= cfg.Analyzer(
-    class_object=AutoFillTreeProducer,
-    name='ZControlRegionTreeProducer',
-    treename='ZCR',
-    verbose=False,
-    vectorTree = True,
-    globalObjects = {
-        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
-        "Z" : NTupleObject("Z", fourVectorType, help="Z boson candidate"),
-        },
-    collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 2, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-      }
-    )
-    
-
-##############################
-### W CONTROL REGION TREE  ###
-##############################
-
-WControlRegionTreeProducer= cfg.Analyzer(
-    class_object=AutoFillTreeProducer,
-    name='WControlRegionTreeProducer',
-    treename='WCR',
-    verbose=False,
-    vectorTree = True,
-    globalObjects = {
-        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
-        "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
-        },
-    collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 1, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-      }
-    )
-    
-##############################
-### G CONTROL REGION TREE  ###
-##############################
-
-GammaControlRegionTreeProducer= cfg.Analyzer(
-    class_object=AutoFillTreeProducer,
-    name='GammaControlRegionTreeProducer',
-    treename='GCR',
-    verbose=False,
-    vectorTree = True,
-    globalObjects = {
-        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
-        },
-    collections = {
-      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      "selectedPhotons"   : NTupleCollection("photons", photonType, 1, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-      }
-    )
-
 
 ##############################
 ### PILEUPANALYZER         ###
@@ -300,13 +197,13 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 ### DM ANALYZERS           ###
 ##############################
 
-from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
-PreselectionAnalyzer = cfg.Analyzer(
-   verbose = False,
-   class_object = PreselectionAnalyzer,
-   jet_pt = 80.,
-   met_pt = 80.,
-   )
+#from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
+#PreselectionAnalyzer = cfg.Analyzer(
+#   verbose = False,
+#   class_object = PreselectionAnalyzer,
+#   jet_pt = 80.,
+#   met_pt = 80.,
+#   )
 
 from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
 SRAnalyzer = cfg.Analyzer(
@@ -361,31 +258,151 @@ GammaAnalyzer = cfg.Analyzer(
     met_pt = 100.,
     )
 
+
+globalVariables = [
+        NTupleVariable("isSR",  lambda x: x.isSR, int, help="Signal Region flag"),
+        NTupleVariable("isZCR",  lambda x: x.isZCR, int, help="Z+jets Control Region flag"),
+        NTupleVariable("isWCR",  lambda x: x.isWCR, int, help="W+jets Control Region flag"),
+        NTupleVariable("isGCR",  lambda x: x.isGCR, int, help="Gamma+jets Control Region flag"),
+        NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3, 0 if CR"),
+        ]
+#collections = {
+#      "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+#      "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+#      "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+#      "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+#      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+#      }
+
+
+##############################
+### SIGNAL REGION TREE     ###
+##############################
+
+SignalRegionTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='SignalRegionTreeProducer',
+    treename='SR',
+    filter = lambda x: x.isSR,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables,
+    globalObjects = {
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        },
+    collections = {
+      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
+    )
+
+
+##############################
+### Z CONTROL REGION TREE  ###
+##############################
+
+ZControlRegionTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='ZControlRegionTreeProducer',
+    treename='ZCR',
+    filter = lambda x: x.isZCR,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables,
+    globalObjects = {
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
+        "Z" : NTupleObject("Z", fourVectorType, help="Z boson candidate"),
+        },
+    collections = {
+      "selectedMuons"     : NTupleCollection("muons", muonType, 2, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
+    )
+    
+
+##############################
+### W CONTROL REGION TREE  ###
+##############################
+
+WControlRegionTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='WControlRegionTreeProducer',
+    treename='WCR',
+    filter = lambda x: x.isWCR,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables,
+    globalObjects = {
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
+        "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
+        },
+    collections = {
+      "selectedMuons"     : NTupleCollection("muons", muonType, 1, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
+    )
+    
+##############################
+### G CONTROL REGION TREE  ###
+##############################
+
+GammaControlRegionTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='GammaControlRegionTreeProducer',
+    treename='GCR',
+    filter = lambda x: x.isGCR,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables,
+    globalObjects = {
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
+        },
+    collections = {
+      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
+      "selectedPhotons"   : NTupleCollection("photons", photonType, 1, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      }
+    )
+
+
+
+
+
 ##############################
 ### SEQUENCE               ###
 ##############################
 sequence = [
-    pilupeAnalyzer, 
-    vertexAnalyzer, 
-    leptonAnalyzer, 
-    jetAnalyzer, 
+    pilupeAnalyzer,
+    vertexAnalyzer,
+    leptonAnalyzer,
+    jetAnalyzer,
     #fatJetAnalyzer,
-    tauAnalyzer, 
-    photonAnalyzer, 
-    MEtAnalyzer, 
-    #### Preselection (Jet+Met)
-    #PreselectionAnalyzer, 
-    #### Gamma
-    #GammaAnalyzer,
-    #GammaControlRegionTreeProducer,
-    #### Zmm
-    #ZAnalyzer,
-    #ZControlRegionTreeProducer,
-    #### Wmn
-    #WAnalyzer, 
-    #WControlRegionTreeProducer,
-    #### SignalRegion
-    SRAnalyzer, 
+    tauAnalyzer,
+    photonAnalyzer,
+    MEtAnalyzer,
+    ### Analysis Analyzers
+    SRAnalyzer,
+    ZAnalyzer,
+    WAnalyzer,
+    GammaAnalyzer,
+    ### Tree producers
+    GammaControlRegionTreeProducer,
+    ZControlRegionTreeProducer,
+    WControlRegionTreeProducer,
     SignalRegionTreeProducer,
     ]
 
