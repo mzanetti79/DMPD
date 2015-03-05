@@ -1,4 +1,5 @@
 QCD_HT100To250 = [
+    ### Nevents = 4123612
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-100To250_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0441A526-7C87-E411-BE19-002590574604.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-100To250_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/101C1882-7B87-E411-B559-E0CB4E19F98A.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-100To250_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/10C40CA1-7987-E411-8C57-E0CB4E19F98A.root',
@@ -87,6 +88,7 @@ QCD_HT100To250 = [
 ]
 
 QCD_HT250To500 = [
+    ### Nevents = 663953
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/344677E1-3B6F-E411-8F29-0025905A6082.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/407299DC-3B6F-E411-8BB7-003048FFD760.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/4C7BFAD9-3B6F-E411-8D2A-002618943939.root',
@@ -104,7 +106,8 @@ QCD_HT250To500 = [
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_250To500_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/F84786DA-3B6F-E411-B404-00261894390A.root',
 ]
 
-QCD_HT500To1000 = [
+QCD_HT500To1000 = [    
+    ### Nevents = 849033
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-500To1000_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/481A6155-916F-E411-BA52-00266CFFCAF0.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-500To1000_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/60893A5E-916F-E411-B2D9-00266CFBE43C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT-500To1000_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/7A37A45E-916F-E411-94F2-00266CFFBEB4.root',
@@ -126,6 +129,7 @@ QCD_HT500To1000 = [
 ]
 
 QCD_HT_1000ToInf = [
+    ### Nevents = 333733
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/14F113BD-1A74-E411-8B1F-002590AC4C26.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/4E4253B6-1A74-E411-B3BD-003048F0E518.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/8C4F965E-1B74-E411-BEF1-002590A8DC50.root',
@@ -143,6 +147,7 @@ QCD_HT_1000ToInf = [
 ]
 
 DYJetsToLL_M50_HT100to200 = [
+    ### Nevents = 4054159    
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0468A3DF-1D71-E411-97BF-003048F0E82A.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/06997C0F-2970-E411-ADF4-002590DB91FA.root',
@@ -244,6 +249,7 @@ DYJetsToLL_M50_HT100to200 = [
 ]
 
 DYJetsToLL_M50_HT200to400 = [
+    ### Nevents = 4666496
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/022B1EB3-B06F-E411-9408-E0CB4E29C4D0.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/02603DCC-ED6F-E411-85D1-20CF3019DF0F.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0685D0E7-ED6F-E411-920C-BCAEC532972B.root',
@@ -352,6 +358,7 @@ DYJetsToLL_M50_HT200to400 = [
 ]
 
 DYJetsToLL_M50_HT400to600 = [
+    ### Nevents = 4931372
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/02B4B1A0-9972-E411-BFE8-00266CFFA7C0.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/060C9DE7-8372-E411-B7AE-00215AEDFC8E.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0864BB7E-8D72-E411-891B-003048D3CD62.root',
@@ -470,6 +477,7 @@ DYJetsToLL_M50_HT400to600 = [
 ]
 
 DYJetsToLL_M50_HT600toInf = [
+    ### Nevents = 4493574
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/04860BAA-B673-E411-8B20-002481E0D50C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0C3E1051-ED71-E411-B8C9-002590DB91CE.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0E90BCA1-0F72-E411-89DB-002481E946EE.root',
@@ -581,6 +589,7 @@ DYJetsToLL_M50_HT600toInf = [
 ]
 
 GJets_HT100to200 = [
+    ### Nevents = 4734234
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/00D67F78-2873-E411-B3BB-0025907DC9C0.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/06B0A939-4473-E411-BFF6-002590AC4C66.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/08116AEB-2873-E411-A9D8-00266CF2ABA8.root',
@@ -693,6 +702,7 @@ GJets_HT100to200 = [
 ]
 
 GJets_HT200to400 = [
+    ### Nevents = 4533420
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/060B8ED3-8571-E411-A2CD-002590D0AFEA.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0822A147-8671-E411-AABB-20CF3019DF17.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0ED26924-8571-E411-8B7F-002590D0B020.root',
@@ -794,6 +804,7 @@ GJets_HT200to400 = [
 ]
 
 GJets_HT400to600 = [
+    ### Nevents = 4560801
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/02CB626B-6771-E411-BDEF-003048F0E5A2.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/04A2C44A-3471-E411-9C21-0025901D4090.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0A897BE5-0872-E411-AC43-00266CFFA048.root',
@@ -917,6 +928,7 @@ GJets_HT400to600 = [
 ]
 
 GJets_HT600toInf = [
+    ### Nevents = 4341179
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/086903CE-2773-E411-A9B8-001E673967C5.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0887147C-0D74-E411-9E95-001E6739730A.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/GJets_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0C7FDFE9-2973-E411-817C-001E67396E32.root',
@@ -1014,6 +1026,7 @@ GJets_HT600toInf = [
 ]
 
 TT = [
+    ### Nevents = 2991609
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/007B37D4-8B70-E411-BC2D-0025905A6066.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/06843FC5-8370-E411-9B8C-0025905A60AA.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TT_Tune4C_13TeV-pythia8-tauola/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/0A867F71-8C70-E411-9CC9-0025905A48D6.root',
@@ -1084,6 +1097,7 @@ TT = [
 ]
 
 T_tWchannel = [
+    ### Nevents = 986100
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/1E9DD9C1-8E7A-E411-87DD-1CC1DE04FF50.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/3C999DBB-8E7A-E411-A218-1CC1DE1D1E3C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/T_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/3E092BBC-8E7A-E411-BD6A-1CC1DE1D03FC.root',
@@ -1108,6 +1122,7 @@ T_tWchannel = [
 ]
 
 Tbar_tWchannel = [
+    ### Nevents = 971800
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0AFEB3CA-9D72-E411-8ACC-20CF305B057E.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/161ADBA3-9D72-E411-811D-002590D0B0D2.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/Tbar_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/185613B5-9D72-E411-BD97-00248CB3209C.root',
@@ -1132,6 +1147,7 @@ Tbar_tWchannel = [
 ]
 
 TToLeptons_schannel = [
+    ### Nevents = 500000
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/0CA1FCA1-C56C-E411-89AA-00259073E37C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/10AA1B19-C86C-E411-AB68-002590D0AFD8.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_s-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/16B84246-C96C-E411-94B5-002590D0AFD4.root',
@@ -1146,6 +1162,7 @@ TToLeptons_schannel = [
 ]
 
 TToLeptons_tchannel = [
+    ### Nevents = 3991000
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_t-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0260CBE1-9F6A-E411-88C8-E0CB4E29C514.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_t-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/086ADB3A-DF6B-E411-B0FE-485B39800B7D.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/TToLeptons_t-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/1633F11F-A06A-E411-A44E-20CF300E9ECF.root',
@@ -1239,6 +1256,7 @@ TToLeptons_tchannel = [
 ]
 
 WJetsToLNu_HT100to200 = [
+    ### Nevents = 5262265
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/10278611-DF7F-E411-979D-002590494E34.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/10AB0D46-8977-E411-9C56-002590DB9196.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/1C88D1E2-5377-E411-A166-002590A2CDA8.root',
@@ -1456,6 +1474,7 @@ WJetsToLNu_HT100to200 = [
 ]
 
 WJetsToLNu_HT200to400 = [
+    ### Nevents = 4936077
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/08B5CE07-9271-E411-A031-C4346BC808B8.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/08B65AF3-A472-E411-80E7-00266CFFC948.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0AA5E42B-7472-E411-854B-C4346BC808B8.root',
@@ -1566,6 +1585,7 @@ WJetsToLNu_HT200to400 = [
 ]
 
 WJetsToLNu_HT400to600 = [
+    ### Nevents = 4640594
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0024B56B-E670-E411-9FE4-C4346BB2D508.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/00AF08EF-4D70-E411-97C3-00266CFFC9C4.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0204CCBC-5670-E411-8CA9-1CC1DE051080.root',
@@ -1666,6 +1686,7 @@ WJetsToLNu_HT400to600 = [
 ]
 
 WJetsToLNu_HT600toInf = [
+    ### Nevents = 4581841
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/1A229BAB-7378-E411-8B5D-0025907DC9F2.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/2C462EAE-D77F-E411-80DA-0025907DBA06.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/WJetsToLNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/30B37CD6-8279-E411-9AA6-002481E0DDBE.root',
@@ -2021,6 +2042,7 @@ WJetsToLNu_HT600toInf = [
 ]
 
 ZJetsToNuNu_HT100to200 = [
+    ### Nevents = 4986424
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0E9FF9A1-D073-E411-B441-20CF305B04DA.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/20C3193D-D073-E411-A835-E0CB4E553693.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/260C803C-D073-E411-865A-00259073E4B8.root',
@@ -2128,6 +2150,7 @@ ZJetsToNuNu_HT100to200 = [
 ]
 
 ZJetsToNuNu_HT200to400 = [
+    ### Nevents = 4546470
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/00F7042E-656C-E411-BFEF-002590D0B03E.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0672012B-686C-E411-86CA-E0CB4E29C513.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-200to400_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/0A26C228-656C-E411-A2B6-20CF305B0581.root',
@@ -2230,6 +2253,7 @@ ZJetsToNuNu_HT200to400 = [
 ]
 
 ZJetsToNuNu_HT400to600 = [
+    ### Nevents = 4433784
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v2/00000/008C2397-DF7F-E411-8AC2-0025905A6064.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v2/00000/0414692A-DF89-E411-BDF0-0025905A612C.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-400to600_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v2/00000/06E05696-DF7F-E411-9558-0025905A612C.root',
@@ -2335,6 +2359,7 @@ ZJetsToNuNu_HT400to600 = [
 ]
 
 ZJetsToNuNu_HT600toInf = [
+    ### Nevents = 4463806
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/000D3972-D973-E411-B12E-001E67398142.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/02FB0226-A571-E411-8991-002590A88804.root',
     'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZJetsToNuNu_HT-600toInf_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/046B6DB0-B072-E411-8229-002590A887F8.root',
