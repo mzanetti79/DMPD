@@ -84,7 +84,7 @@ patMuons = 'selectedMuons'
 
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_' + ('data' if options.runOnData else 'mc'))
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc') # + ('data' if options.runOnData else 'mc'))
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
@@ -107,14 +107,14 @@ switchJetCollection(
     pfCandidates = cms.InputTag(pfCandidates),
     pvSource = cms.InputTag(pvSource),
     svSource = cms.InputTag(svSource),
-    muSource = cms.InputTag(muSource),
-    elSource = cms.InputTag(elSource),
+    #muSource = cms.InputTag(muSource),
+    #elSource = cms.InputTag(elSource),
     btagInfos = bTagInfos,
     btagDiscriminators = bTagDiscriminators,
     jetCorrections = jetCorrectionsAK4,
     genJetCollection = cms.InputTag(genJetCollection),
-    genParticles = cms.InputTag(genParticles),
-    explicitJTA = options.useExplicitJTA,
+    #genParticles = cms.InputTag(genParticles),
+    #explicitJTA = True,
     postfix = postfix
 )
 

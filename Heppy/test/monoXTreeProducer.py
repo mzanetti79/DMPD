@@ -465,19 +465,23 @@ sample = cfg.Component(
     splitFactor=1
     )
 
+
 ##############################
-### FWLITE                 ###
+### PREPROCESSOR           ###
 ##############################
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("tagFatJets.py")
 
+##############################
+### FWLITE                 ###
+##############################
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 selectedComponents = [sample]
 config = cfg.Config(
     components = selectedComponents,
     sequence = sequence,
     services = [output_service],
-    #preprocessor=preprocessor,
+    preprocessor = preprocessor,
     events_class = Events
     )
 
