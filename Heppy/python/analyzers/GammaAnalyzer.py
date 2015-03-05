@@ -1,5 +1,6 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
+from PhysicsTools.HeppyCore.utils.deltar import deltaR2, deltaPhi
 import copy
 import math
 import ROOT
@@ -16,6 +17,12 @@ class GammaAnalyzer( Analyzer ):
         #return False
       #event.Gamma = event.selectedPhotons[0]
       #return True
+
+    def vetoMuon(self, event):
+        # VETO MUONS - selectedMuons must pass the 'veto' SelectionCuts
+        if len(event.selectedMuons) != 0:
+            return False
+        return True
 
     def selectGamma(self, event):
       # At least one photon
@@ -38,15 +45,21 @@ class GammaAnalyzer( Analyzer ):
         px, py = event.metNoPU.px()+event.Gamma.px(), event.metNoPU.py()+event.Gamma.py()
         event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
-        if event.fakeMEt.pt() < self.cfg_ana.met_pt:
-          return False
         return True
-        
+
+    def selectFakeMet(self, event):
+        if event.fakeMEt.pt() < self.cfg_ana.met_pt:
+            return False
+        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+            return True
+        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+            return True
+        return False
         
     def process(self, event):
         # Select exactly 1 photon
         event.isGCR = False
-        if self.selectGamma(event) and self.makeFakeMET(event):
+        if self.vetoMuon(event) and self.selectGamma(event) and self.makeFakeMET(event) and self.selectFakeMet(event):
             event.isGCR = True
             return True
 

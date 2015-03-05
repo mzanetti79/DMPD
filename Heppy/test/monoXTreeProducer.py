@@ -5,6 +5,25 @@ from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
+##############################
+### TRIGGERANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.core.TriggerBitAnalyzer import TriggerBitAnalyzer
+triggerAnalyzer= cfg.Analyzer(
+    verbose=False,
+    class_object=TriggerBitAnalyzer,
+    #grouping several paths into a single flag
+    # v* can be used to ignore the version of a path
+    triggerBits={
+    'MET':['HLT_PFHT350_PFMET120_NoiseCleaned_v1','HLT_PFMET170_NoiseCleaned_v1','HLT_PFMET120_NoiseCleaned_BTagCSV07_v1'],
+    'JET':['HLT_PFJet260_v1'],
+    },
+#   processName='HLT',
+#   outprefix='HLT'
+    #setting 'unrollbits' to true will not only store the OR for each set of trigger bits but also the individual bits
+    #caveat: this does not unroll the version numbers
+    unrollbits=True
+    )
 
 ##############################
 ### PILEUPANALYZER         ###
@@ -56,7 +75,7 @@ leptonAnalyzer = cfg.Analyzer(
     ### Electron selection - Second step
     loose_electron_id           = "POG_Cuts_ID_CSA14_25ns_v1_Veto",
     loose_electron_pt           = 10,
-    loose_electron_eta          = 2.4,
+    loose_electron_eta          = 2.5,
     loose_electron_dxy          = 0.05,
     loose_electron_dz           = 0.2,
     loose_electron_relIso       = 0.4,
@@ -99,7 +118,7 @@ jetAnalyzer = cfg.Analyzer(
     jetCol                      = 'slimmedJets',
     jetPt                       = 20.,
     jetEta                      = 4.7,
-    jetEtaCentral               = 2.4,
+    jetEtaCentral               = 2.5,
     jetLepDR                    = 0.4,
     jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet
     minLepPt                    = 10,
@@ -154,8 +173,8 @@ tauAnalyzer = cfg.Analyzer(
 
     ### Tau - General
     ##############################
-    ptMin                       = 20,
-    etaMax                      = 9999,
+    ptMin                       = 15.,
+    etaMax                      = 2.5,
     dxyMax                      = 1000.,
     dzMax                       = 0.2,
     vetoLeptons                 = True,
@@ -197,83 +216,84 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 ### DM ANALYZERS           ###
 ##############################
 
-#from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
-#PreselectionAnalyzer = cfg.Analyzer(
-#   verbose = False,
-#   class_object = PreselectionAnalyzer,
-#   jet_pt = 80.,
-#   met_pt = 80.,
-#   )
+### GLOBAL CUTS
+met_pt_cut = 100. # met or fakemet
+jet_met_deltaphi_cut = 2. # wrt met or fakemet
+
+from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
+PreselectionAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = PreselectionAnalyzer,
+    
+    jet1_pt = 150.,
+    jet1_eta = 2.5,
+    jet1_tag = -99.,
+    jet1_chf_min = 0.2,
+    jet1_nhf_max = 0.7,
+    jet1_phf_max = 0.7,
+    jet2_pt = 30.,
+    jet2_eta = 2.5,
+    jet2_tag = -99.,
+    deltaPhi12 = 2.,
+    jetveto_pt = 30.,
+    jetveto_eta = 2.5,
+    )
 
 from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
 SRAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = SRAnalyzer,
-    jet1_pt = 150.,
-    jet1_eta = 2.0,
-    jet1_tag = -99.,
-    jet2_pt = 30.,
-    jet2_eta = 2.5,
-    jet2_tag = -99.,
-    deltaPhi12 = 2.,
-    jetveto_pt = 20.,
-    jetveto_eta = 2.5,
-    met_pt = 100.,
+    met_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
     )
 
 from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
 ZAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = ZAnalyzer,
+    met_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
+
     mass_low = 61.,
     mass_high = 121.,
-    mu1_pt = 0., # cut implemented in the Analyzer
+    mu1_pt = 20.,
     mu1_id = "POG_ID_Tight",
-    jet_pt = 100.,
-    met_pt = 100.,
     )
 
 from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
 WAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = WAnalyzer,
+    met_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
+    
     mt_low = 50.,
     mt_high = 100.,
     mu_pt = 20., 
     mu_id = "POG_ID_Tight",    
-    jet_pt = 100.,
-    met_pt = 100.,
     )
 
 from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
 GammaAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = GammaAnalyzer,
+    met_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
+    
     photon_pt = 160.,
     photon_id = "PhotonCutBasedIDLoose",
     photon_eta = 2.5,
     photon_eta_remove_min = 1.442,
     photon_eta_remove_max = 1.56,
-    jet_pt = 100.,
-    met_pt = 100.,
     )
-
 
 globalVariables = [
         NTupleVariable("isSR",  lambda x: x.isSR, int, help="Signal Region flag"),
         NTupleVariable("isZCR",  lambda x: x.isZCR, int, help="Z+jets Control Region flag"),
         NTupleVariable("isWCR",  lambda x: x.isWCR, int, help="W+jets Control Region flag"),
         NTupleVariable("isGCR",  lambda x: x.isGCR, int, help="Gamma+jets Control Region flag"),
-        NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3, 0 if CR"),
+        NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3"),
         ]
-#collections = {
-#      "selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-#      "selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-#      "selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-#      "selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-#      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
-#      }
-
 
 ##############################
 ### SIGNAL REGION TREE     ###
@@ -295,10 +315,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
       }
     )
-
 
 ##############################
 ### Z CONTROL REGION TREE  ###
@@ -322,10 +341,9 @@ ZControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
       }
-    )
-    
+    )    
 
 ##############################
 ### W CONTROL REGION TREE  ###
@@ -349,7 +367,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
       }
     )
     
@@ -374,18 +392,15 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       "selectedPhotons"   : NTupleCollection("photons", photonType, 1, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 3, help="Jets after the preselection"),
+      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
       }
     )
-
-
-
-
 
 ##############################
 ### SEQUENCE               ###
 ##############################
 sequence = [
+    triggerAnalyzer,
     pilupeAnalyzer,
     vertexAnalyzer,
     leptonAnalyzer,
@@ -394,11 +409,13 @@ sequence = [
     tauAnalyzer,
     photonAnalyzer,
     MEtAnalyzer,
+    ### Preselection Analyzers
+    PreselectionAnalyzer,
     ### Analysis Analyzers
-    SRAnalyzer,
+    GammaAnalyzer,
     ZAnalyzer,
     WAnalyzer,
-    GammaAnalyzer,
+    SRAnalyzer,
     ### Tree producers
     GammaControlRegionTreeProducer,
     ZControlRegionTreeProducer,
@@ -422,47 +439,110 @@ output_service = cfg.Service(
 ### INPUT                  ###
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
-#from DMPD.Heppy.samples.Phys14 import fileLists
+from DMPD.Heppy.samples.Phys14 import fileLists
 
-sample = cfg.Component(
+sampleTest = cfg.Component(
     files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
+    name="Test",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleQCD = cfg.Component(
     ### QCD
-    #files = fileLists.QCD_HT100To250+
-             #fileLists.QCD_HT250To500+
-             #fileLists.QCD_HT500To1000+
-             #fileLists.QCD_HT_1000ToInf,
+    files = fileLists.QCD_HT100To250+
+            fileLists.QCD_HT250To500+
+            fileLists.QCD_HT500To1000+
+            fileLists.QCD_HT_1000ToInf,
+    name="QCD",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=6
+    #splitFactor=18
+    )
+
+sampleDYJetsToLL = cfg.Component(
     ### DYJetsToLL
-    #files = fileLists.DYJetsToLL_M50_HT100to200+
-            #fileLists.DYJetsToLL_M50_HT200to400+
-            #fileLists.DYJetsToLL_M50_HT400to600+
-            #fileLists.DYJetsToLL_M50_HT600toInf,
+    files = fileLists.DYJetsToLL_M50_HT100to200+
+            fileLists.DYJetsToLL_M50_HT200to400+
+            fileLists.DYJetsToLL_M50_HT400to600+
+            fileLists.DYJetsToLL_M50_HT600toInf,
+    name="DYJetsToLL",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=18
+    #splitFactor=54
+    )
+
+sampleGJets = cfg.Component(
     ### GJets
-    #files = fileLists.GJets_HT100to200+
-    #        fileLists.GJets_HT200to400+
-    #        fileLists.GJets_HT400to600+
-    #        fileLists.GJets_HT600toInf,
-    ### TTbar
-    #files = fileLists.TT+
-            #fileLists.TToLeptons_schannel+
-            #fileLists.TToLeptons_tchannel,
-    ### SingleT
-    #files = fileLists.T_tWchannel+
-            #fileLists.Tbar_tWchannel,
-    ### WJetsToLNu
-    #files = fileLists.WJetsToLNu_HT100to200+
-            #fileLists.WJetsToLNu_HT200to400+
-            #fileLists.WJetsToLNu_HT400to600+
-            #fileLists.WJetsToLNu_HT600toInf,
-    ### ZJetsToNuNu
-    #files = fileLists.ZJetsToNuNu_HT100to200+
-            #fileLists.ZJetsToNuNu_HT200to400+
-            #fileLists.ZJetsToNuNu_HT400to600+
-            #fileLists.ZJetsToNuNu_HT600toInf,
+    files = fileLists.GJets_HT100to200+
+            fileLists.GJets_HT200to400+
+            fileLists.GJets_HT400to600+
+            fileLists.GJets_HT600toInf,
     name="GJets",
     isMC=True,
     isEmbed=False,
     splitFactor=1
+    #splitFactor=18
+    #splitFactor=54
+    )
+
+sampleTTbar = cfg.Component(
+    ### TTbar
+    files = fileLists.TT+
+            fileLists.TToLeptons_schannel+
+            fileLists.TToLeptons_tchannel,
+    name="TTbar",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=8
+    #splitFactor=24
+    )
+
+sampleSingleT = cfg.Component(
+    ### SingleT
+    files = fileLists.T_tWchannel+
+            fileLists.Tbar_tWchannel,
+    name="SingleT",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=2
+    #splitFactor=6
+    )
+
+sampleWJetsToLNu = cfg.Component(
+    ### WJetsToLNu
+    files = fileLists.WJetsToLNu_HT100to200+
+            fileLists.WJetsToLNu_HT200to400+
+            fileLists.WJetsToLNu_HT400to600+
+            fileLists.WJetsToLNu_HT600toInf,
+    name="WJetsToLNu",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=19
+    #splitFactor=58
+    )
+
+sampleZJetsToNuNu = cfg.Component(
+    ### ZJetsToNuNu
+    files = fileLists.ZJetsToNuNu_HT100to200+
+            fileLists.ZJetsToNuNu_HT200to400+
+            fileLists.ZJetsToNuNu_HT400to600+
+            fileLists.ZJetsToNuNu_HT600toInf,
+    name="ZJetsToNuNu",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    #splitFactor=18
+    #splitFactor=54
     )
 
 ##############################
@@ -472,12 +552,14 @@ from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("tagFatJets.py")
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
-selectedComponents = [sample]
+selectedComponents = [sampleTest]
+#selectedComponents = [sampleQCD,sampleDYJetsToLL,sampleGJets,sampleTTbar,sampleSingleT,sampleWJetsToLNu,sampleZJetsToNuNu]
+#selectedComponents = [sampleTTbar]
 config = cfg.Config(
     components = selectedComponents,
     sequence = sequence,
     services = [output_service],
-    #preprocessor=preprocessor,
+    #preprocessor = preprocessor,
     events_class = Events
     )
 
@@ -491,7 +573,7 @@ if __name__ == '__main__':
         'MonoX',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=5000,
         )
     looper.loop()
     looper.write()

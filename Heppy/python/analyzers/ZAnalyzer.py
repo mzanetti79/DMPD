@@ -1,5 +1,6 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
+from PhysicsTools.HeppyCore.utils.deltar import deltaR2, deltaPhi
 import copy
 import math
 import ROOT
@@ -12,14 +13,11 @@ class ZAnalyzer( Analyzer ):
     selectZtoLL: selects best muon combination to build the Z, does not veto other muons
     '''
 
-    #def selectExclusiveZtoMM(self, event):
-        ## Select exactly two muon
-        #if not len(event.selectedMuons) == 2: return False
-        #if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): return False
-        #theZ =  event.selectedMuons[0].p4() + event.selectedMuons[1].p4()
-        #if theZ.mass() < self.cfg_ana.mass: return False
-        #event.Z = theZ
-        #return True
+    def vetoGamma(self, event):
+        # VETO PHOTONS - selectedPhotons must pass the 'veto' SelectionCuts
+        if len(event.selectedPhotons) != 0:
+            return False
+        return True
 
     def selectExclusiveZtoMM(self, event):
         # Select exactly two muon
@@ -95,15 +93,21 @@ class ZAnalyzer( Analyzer ):
         px, py = event.metNoPU.px()+event.Z.px(), event.metNoPU.py()+event.Z.py()
         event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
-        if event.fakeMEt.pt() < self.cfg_ana.met_pt:
-          return False
         return True
-         
+
+    def selectFakeMet(self, event):
+        if event.fakeMEt.pt() < self.cfg_ana.met_pt:
+            return False
+        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+            return True
+        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+            return True
+        return False
          
     def process(self, event):
         #self.inputCounter.Fill(1)
         event.isZCR = False
-        if self.selectExclusiveZtoMM(event) and self.makeFakeMET(event):
+        if self.vetoGamma(event) and self.selectExclusiveZtoMM(event) and self.makeFakeMET(event) and self.selectFakeMet(event):
             event.isZCR = True
             return True
 
