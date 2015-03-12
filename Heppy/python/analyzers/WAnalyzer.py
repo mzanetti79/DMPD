@@ -31,6 +31,7 @@ class WAnalyzer( Analyzer ):
 #        return True
 #    
     
+    
     def selectMuon(self, event):
         # The leading muons has to satisfy the following conditions
         if not len(event.selectedMuons) >= 1:
