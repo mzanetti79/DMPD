@@ -13,6 +13,14 @@ class WAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("WCounter", "WCounter", 10, 0, 10)
+            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(5, "#Muons > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(7, "W cand")
+            self.inputCounter.GetXaxis().SetBinLabel(8, "MEt cut")
     
     #def selectW(self, event):
         ## Select exactly one muon
@@ -88,23 +96,23 @@ class WAnalyzer( Analyzer ):
         # Exactly one muon
         if not len(event.selectedMuons) == 1:
             return True
-        self.inputCounter.Fill(3)
+        self.inputCounter.Fill(4)
         # Select the muon
         if not self.selectMuon(event):
             return True
-        self.inputCounter.Fill(4)
+        self.inputCounter.Fill(5)
         # Build W candidate
         if not self.selectW(event):
             return True
-        self.inputCounter.Fill(5)
+        self.inputCounter.Fill(6)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMet(event):
             return True
-        self.inputCounter.Fill(6)
+        self.inputCounter.Fill(7)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.inputCounter.Fill(7)
+        #self.inputCounter.Fill(8)
         
         event.candidate = event.W
         event.isWCR = True

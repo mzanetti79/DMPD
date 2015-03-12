@@ -12,6 +12,15 @@ class SRAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
+            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(5, "MEt cut")
+            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon veto")
+            self.inputCounter.GetXaxis().SetBinLabel(7, "Electron veto")
+            self.inputCounter.GetXaxis().SetBinLabel(8, "Tau veto")
+            self.inputCounter.GetXaxis().SetBinLabel(9, "Photon veto")
     
     def vetoMuon(self, event):
         if len(event.selectedMuons) != 0:
@@ -44,23 +53,23 @@ class SRAnalyzer( Analyzer ):
 
         if not self.selectMet(event):
             return True
-        self.inputCounter.Fill(3)
+        self.inputCounter.Fill(4)
         # Muon veto
         if not self.vetoMuon(event):
             return True
-        self.inputCounter.Fill(4)
+        self.inputCounter.Fill(5)
         # Electron veto
         if not self.vetoElectron(event):
             return True
-        self.inputCounter.Fill(5)
+        self.inputCounter.Fill(6)
         # Tau veto
         if not self.vetoTau(event):
             return True
-        self.inputCounter.Fill(6)
+        self.inputCounter.Fill(7)
         # Photon veto
         if not self.vetoGamma(event):
             return True
-        self.inputCounter.Fill(7)
+        self.inputCounter.Fill(8)
         
         event.isSR = True
         return True

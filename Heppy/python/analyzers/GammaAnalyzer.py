@@ -13,6 +13,14 @@ class GammaAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("GCounter", "GCounter", 10, 0, 10)
+            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(5, "Muon veto")
+            self.inputCounter.GetXaxis().SetBinLabel(6, "Photons #geq 1")
+            self.inputCounter.GetXaxis().SetBinLabel(7, "Photon cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(8, "MEt cut")
             
     #def selectGamma(self, event):
       ## Select at least one photon
@@ -79,21 +87,21 @@ class GammaAnalyzer( Analyzer ):
         # No Muons
         if not len(event.selectedMuons) == 0:
             return True
-        self.inputCounter.Fill(3)
+        self.inputCounter.Fill(4)
         # At least one photon
         if not len(event.selectedPhotons) >= 1:
             return True
-        self.inputCounter.Fill(4)
+        self.inputCounter.Fill(5)
         # Photon selection
         if not self.selectPhoton(event):
             return True
-        self.inputCounter.Fill(5)
+        self.inputCounter.Fill(6)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMet(event):
             return True
-        self.inputCounter.Fill(6)
+        self.inputCounter.Fill(7)
         # Vetoes
-        #self.inputCounter.Fill(7)
+        #self.inputCounter.Fill(8)
         
         event.isGCR = True
         return True

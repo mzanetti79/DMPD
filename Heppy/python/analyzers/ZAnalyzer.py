@@ -13,6 +13,15 @@ class ZAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("ZCounter", "ZCounter", 10, 0, 10)
+            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(5, "#Muons #geq 2")
+            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon1 cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(7, "Muon2 cuts")
+            self.inputCounter.GetXaxis().SetBinLabel(8, "Z cand")
+            self.inputCounter.GetXaxis().SetBinLabel(9, "MEt cut")
     
 #    def vetoGamma(self, event):
 #        # VETO PHOTONS - selectedPhotons must pass the 'veto' SelectionCuts
@@ -140,27 +149,27 @@ class ZAnalyzer( Analyzer ):
         # Muons >= 2
         if not len(event.selectedMuons) >= 2:
             return True
-        self.inputCounter.Fill(3)
+        self.inputCounter.Fill(4)
         # Select first muon
         if not self.selectMuon1(event):
             return True
-        self.inputCounter.Fill(4)
+        self.inputCounter.Fill(5)
         # Select second muon
         if not self.selectMuon2(event):
             return True
-        self.inputCounter.Fill(5)
+        self.inputCounter.Fill(6)
         # Build Z candidate
         if not self.selectZtoMM(event):
             return True
-        self.inputCounter.Fill(6)
+        self.inputCounter.Fill(7)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMet(event):
             return True
-        self.inputCounter.Fill(7)
+        self.inputCounter.Fill(8)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.inputCounter.Fill(8)
+        #self.inputCounter.Fill(9)
         
         event.candidate = event.Z
         event.isZCR = True

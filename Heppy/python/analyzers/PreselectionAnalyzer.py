@@ -93,12 +93,13 @@ class PreselectionAnalyzer( Analyzer ):
         event.Jet2 = None
         
         self.inputCounter.Fill(0)
-        # Initialize jet collection
+        # Trigger
+        self.inputCounter.Fill(1)
         
         # Check if there is at least one jet
         if len(event.cleanJets) < 1:# or len(event.cleanFatJets) < 1:
             return False
-        self.inputCounter.Fill(1)
+        self.inputCounter.Fill(2)
 #        # Category 1
 #        if self.selectFatJet(event):
 #            event.Category = 1
@@ -111,7 +112,7 @@ class PreselectionAnalyzer( Analyzer ):
             event.Category = 3
         else:
             return False
-        self.inputCounter.Fill(2)
+        self.inputCounter.Fill(3)
                     
         
 #        event.Category = 3
