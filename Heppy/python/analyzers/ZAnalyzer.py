@@ -6,12 +6,7 @@ import math
 import ROOT
 
 class ZAnalyzer( Analyzer ):
-    '''Analyze and select Z->ll events
-    selectExclusiveZtoMM: selects exactly two muons
-    selectZtoLL: selects best lepton combination to build the Z, does not veto other leptons
-    selectZtoLL: selects best electron combination to build the Z, does not veto other electrons
-    selectZtoLL: selects best muon combination to build the Z, does not veto other muons
-    '''
+    '''Analyze and select Z->ll events'''
 
     def beginLoop(self,setup):
         super(ZAnalyzer,self).beginLoop(setup)

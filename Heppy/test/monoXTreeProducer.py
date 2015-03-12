@@ -408,12 +408,6 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 ##############################
 ### SEQUENCE               ###
 ##############################
-#from DMPD.Heppy.analyzers.DMAnalyzer import DMAnalyzer
-
-#DMAnalyzer = cfg.Analyzer(
-#    verbose = False,
-#    class_object = DMAnalyzer
-#    )
 
 sequence = [
     triggerAnalyzer,

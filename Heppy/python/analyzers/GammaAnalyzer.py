@@ -6,9 +6,7 @@ import math
 import ROOT
 
 class GammaAnalyzer( Analyzer ):
-    '''Analyze and select gamma+jets events
-    selectG: selects at least one photon above pt threshold
-    '''
+    '''Analyze and select gamma+jets events'''
     
     def beginLoop(self,setup):
         super(GammaAnalyzer,self).beginLoop(setup)

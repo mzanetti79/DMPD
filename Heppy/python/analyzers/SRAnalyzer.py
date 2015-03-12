@@ -5,8 +5,7 @@ import math
 import ROOT
 
 class SRAnalyzer( Analyzer ):
-    '''Select Signal Region
-    '''
+    '''Select Signal Region'''
     
     def beginLoop(self,setup):
         super(SRAnalyzer,self).beginLoop(setup)

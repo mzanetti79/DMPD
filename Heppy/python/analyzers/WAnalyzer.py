@@ -6,8 +6,7 @@ import math
 import ROOT
 
 class WAnalyzer( Analyzer ):
-    '''Analyze and select W->mu nu events
-    '''
+    '''Analyze and select W->mu nu events'''
     
     def beginLoop(self,setup):
         super(WAnalyzer,self).beginLoop(setup)

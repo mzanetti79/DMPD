@@ -114,8 +114,6 @@ class PreselectionAnalyzer( Analyzer ):
         self.inputCounter.Fill(2)
                     
         
-#        # Apply basic jet selection
-#        
 #        event.Category = 3
 #        self.inputCounter.Fill(2)
         

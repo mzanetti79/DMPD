@@ -4,8 +4,9 @@ import ROOT
 from PhysicsTools.Heppy.analyzers.core.autovars import *
 from PhysicsTools.Heppy.analyzers.objects.autophobj  import *
 
+
 compositeType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("charge",   lambda x : x.charge if x.charge else -1., int, help="Candidate charge"),
+    NTupleVariable("charge",   lambda x : x.charge if x.charge else -1., int, help="charge"),
     NTupleVariable("dEta",   lambda x : x.deltaEta if x.deltaEta else -9., float, help="delta Eta"),
     NTupleVariable("dPhi",   lambda x : x.deltaPhi if x.deltaPhi else -9., float, help="delta Phi"),
     NTupleVariable("dR",   lambda x : x.deltaR if x.deltaR else -9., float, help="delta R"),
