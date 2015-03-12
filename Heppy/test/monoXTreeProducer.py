@@ -29,7 +29,7 @@ triggerAnalyzer= cfg.Analyzer(
 ### PILEUPANALYZER         ###
 ##############################
 from PhysicsTools.Heppy.analyzers.core.PileUpAnalyzer import PileUpAnalyzer
-pilupeAnalyzer = PileUpAnalyzer.defaultConfig
+pileupAnalyzer = PileUpAnalyzer.defaultConfig
 
 ##############################
 ### VERTEXANALYZER         ###
@@ -65,7 +65,7 @@ leptonAnalyzer = cfg.Analyzer(
     ele_tightId                 = "Cuts_2012",
 
     ### Electron selection - First step
-    inclusive_electron_id       = "",
+    inclusive_electron_id       = "POG_Cuts_ID_CSA14_25ns_v1_Veto",
     inclusive_electron_pt       = 5,
     inclusive_electron_eta      = 2.5,
     inclusive_electron_dxy      = 0.5,
@@ -78,14 +78,14 @@ leptonAnalyzer = cfg.Analyzer(
     loose_electron_eta          = 2.5,
     loose_electron_dxy          = 0.05,
     loose_electron_dz           = 0.2,
-    loose_electron_relIso       = 0.4,
     loose_electron_lostHits     = 1.0,
+    loose_electron_relIso       = 0.15,
 
     ### Muon - General
     ##############################
     muons                       = 'slimmedMuons',
     rhoMuon                     = 'fixedGridRhoFastjetAll',
-    mu_isoCorr                  = "rhoArea" ,
+    mu_isoCorr                  = "deltaBeta" ,
     mu_effectiveAreas           = "Phys14_25ns_v1", #(can be 'Data2012' or 'Phys14_25ns_v1')
 
     ### Muon selection - First step
@@ -101,7 +101,7 @@ leptonAnalyzer = cfg.Analyzer(
     loose_muon_eta              = 2.4,
     loose_muon_dxy              = 0.05,
     loose_muon_dz               = 0.2,
-    loose_muon_relIso           = 0.4
+    loose_muon_relIso           = 0.2
     ### ====================== ###
     )
 
@@ -116,7 +116,7 @@ jetAnalyzer = cfg.Analyzer(
     ### Jet - General
     ##############################
     jetCol                      = 'slimmedJets',
-    jetPt                       = 20.,
+    jetPt                       = 30.,
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
     jetLepDR                    = 0.4,
@@ -199,7 +199,7 @@ photonAnalyzer = cfg.Analyzer(
     ### Photon - General
     ##############################
     photons                     = 'slimmedPhotons',
-    ptMin                       = 10,
+    ptMin                       = 15,
     etaMax                      = 2.5,
     gammaID                     = "PhotonCutBasedIDLoose",
     do_mc_match                 = True,
@@ -218,14 +218,14 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 
 ### GLOBAL CUTS
 met_pt_cut = 100. # met or fakemet
-jet_met_deltaphi_cut = 2. # wrt met or fakemet
+jet_met_deltaphi_cut = 0. # wrt met or fakemet
 
 from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = PreselectionAnalyzer,
     
-    jet1_pt = 150.,
+    jet1_pt = 100.,
     jet1_eta = 2.5,
     jet1_tag = -99.,
     jet1_chf_min = 0.2,
@@ -235,7 +235,7 @@ PreselectionAnalyzer = cfg.Analyzer(
     jet2_eta = 2.5,
     jet2_tag = -99.,
     deltaPhi12 = 2.,
-    jetveto_pt = 30.,
+    jetveto_pt = 0.,
     jetveto_eta = 2.5,
     )
 
@@ -251,20 +251,22 @@ from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
 ZAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = ZAnalyzer,
-    met_pt = met_pt_cut,
+    fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
 
     mass_low = 61.,
     mass_high = 121.,
     mu1_pt = 20.,
     mu1_id = "POG_ID_Tight",
+    mu2_pt = 10.,
+    mu2_id = "POG_ID_Loose",
     )
 
 from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
 WAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = WAnalyzer,
-    met_pt = met_pt_cut,
+    fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
     
     mt_low = 50.,
@@ -277,14 +279,14 @@ from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
 GammaAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = GammaAnalyzer,
-    met_pt = met_pt_cut,
+    fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
     
     photon_pt = 160.,
     photon_id = "PhotonCutBasedIDLoose",
-    photon_eta = 2.5,
-    photon_eta_remove_min = 1.442,
-    photon_eta_remove_max = 1.56,
+#    photon_eta = 2.5,
+#    photon_eta_remove_min = 1.442,
+#    photon_eta_remove_max = 1.56,
     )
 
 globalVariables = [
@@ -293,7 +295,14 @@ globalVariables = [
         NTupleVariable("isWCR",  lambda x: x.isWCR, int, help="W+jets Control Region flag"),
         NTupleVariable("isGCR",  lambda x: x.isGCR, int, help="Gamma+jets Control Region flag"),
         NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3"),
+        NTupleVariable("nMuons",  lambda x: len(x.selectedMuons), int, help="Number of selected muons"),
+        NTupleVariable("nElectrons",  lambda x: len(x.selectedElectrons), int, help="Number of selected electrons"),
+        NTupleVariable("nTaus",  lambda x: len(x.selectedTaus), int, help="Number of selected taus"),
+        NTupleVariable("nPhoton",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
+        NTupleVariable("nJets",  lambda x: len(x.cleanJets), int, help="Number of cleaned jets"),
+        #NTupleVariable("nFatJets",  lambda x: len(x.cleanFatJets), int, help="Number of cleaned fat jets"),
         ]
+
 
 ##############################
 ### SIGNAL REGION TREE     ###
@@ -315,7 +324,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
       }
     )
 
@@ -334,14 +343,14 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
-        "Z" : NTupleObject("Z", fourVectorType, help="Z boson candidate"),
+        "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 2, help="Muons after the preselection"),
+      "selectedMuons"     : NTupleCollection("muons", muonType, 4, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
       }
     )    
 
@@ -363,11 +372,11 @@ WControlRegionTreeProducer= cfg.Analyzer(
         "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 1, help="Muons after the preselection"),
+      "selectedMuons"     : NTupleCollection("muons", muonType, 4, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
       }
     )
     
@@ -391,17 +400,24 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
       #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      "selectedPhotons"   : NTupleCollection("photons", photonType, 1, help="Photons after the preselection"),
-      "JetPostCuts"         : NTupleCollection("jets", jetType, 2, help="Jets after the preselection"),
+      "selectedPhotons"   : NTupleCollection("photons", photonType, 4, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
       }
     )
 
 ##############################
 ### SEQUENCE               ###
 ##############################
+#from DMPD.Heppy.analyzers.DMAnalyzer import DMAnalyzer
+
+#DMAnalyzer = cfg.Analyzer(
+#    verbose = False,
+#    class_object = DMAnalyzer
+#    )
+
 sequence = [
     triggerAnalyzer,
-    pilupeAnalyzer,
+    pileupAnalyzer,
     vertexAnalyzer,
     leptonAnalyzer,
     jetAnalyzer,
@@ -554,7 +570,7 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 selectedComponents = [sampleTest]
 #selectedComponents = [sampleQCD,sampleDYJetsToLL,sampleGJets,sampleTTbar,sampleSingleT,sampleWJetsToLNu,sampleZJetsToNuNu]
-#selectedComponents = [sampleTTbar]
+#selectedComponents = [sampleDYJetsToLL]
 config = cfg.Config(
     components = selectedComponents,
     sequence = sequence,
@@ -573,7 +589,7 @@ if __name__ == '__main__':
         'MonoX',
         config,
         nPrint = 0,
-        nEvents=5000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
