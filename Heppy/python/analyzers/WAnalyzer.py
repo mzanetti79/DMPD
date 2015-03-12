@@ -48,7 +48,7 @@ class WAnalyzer( Analyzer ):
         theW = event.Muon.p4() + event.met.p4()
         if theW.mt() < self.cfg_ana.mt_low or theW.mt() > self.cfg_ana.mt_high:
             return False
-        theZ.charge = event.Muon.charge()
+        theW.charge = event.Muon.charge()
         theW.deltaEta = abs(event.Muon.eta())
         theW.deltaPhi = deltaPhi(event.Muon.phi(), event.met.phi())
         theW.deltaR = deltaR(event.Muon.eta(), event.Muon.phi(), 0, event.met.phi())
