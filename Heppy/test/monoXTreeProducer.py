@@ -270,7 +270,7 @@ WAnalyzer = cfg.Analyzer(
     deltaPhi1met = jet_met_deltaphi_cut,
     
     mt_low = 50.,
-    mt_high = 100.,
+    mt_high = 9e99,
     mu_pt = 20., 
     mu_id = "POG_ID_Tight",    
     )
@@ -562,9 +562,9 @@ from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("tagFatJets.py")
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
-selectedComponents = [sampleTest]
+#selectedComponents = [sampleTest]
 #selectedComponents = [sampleQCD,sampleDYJetsToLL,sampleGJets,sampleTTbar,sampleSingleT,sampleWJetsToLNu,sampleZJetsToNuNu]
-#selectedComponents = [sampleDYJetsToLL]
+selectedComponents = [sampleWJetsToLNu]
 config = cfg.Config(
     components = selectedComponents,
     sequence = sequence,
