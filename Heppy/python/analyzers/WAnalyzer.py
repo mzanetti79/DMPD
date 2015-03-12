@@ -60,12 +60,12 @@ class WAnalyzer( Analyzer ):
             return False
         # Make ject in the event and adding muon px, py
         event.fakeMEt = copy.deepcopy(event.met)
-        px, py = event.met.px()+event.Muon.px(), event.met.py()+event.Muon.py()
-        event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
+        px, py = event.met.px() + event.Muon.px(), event.met.py() + event.Muon.py()
+        event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
         event.fakeMEtNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px()+event.Muon.px(), event.metNoPU.py()+event.Muon.py()
-        event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
+        px, py = event.metNoPU.px() + event.Muon.px(), event.metNoPU.py() + event.Muon.py()
+        event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
         return True
                 
