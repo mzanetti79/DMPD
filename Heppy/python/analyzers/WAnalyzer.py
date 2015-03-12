@@ -1,6 +1,6 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
-from PhysicsTools.HeppyCore.utils.deltar import deltaR2, deltaPhi
+from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
 import copy
 import math
 import ROOT
