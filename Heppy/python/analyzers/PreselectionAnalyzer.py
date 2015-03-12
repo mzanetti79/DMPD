@@ -16,7 +16,11 @@ class PreselectionAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("Counter", "Counter", 10, 0, 10)
-    
+            self.inputCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
+            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
     
 #    #def fatJetCategory(self, event):
 #        #if event.fatJets[0].pt() > self.cfg_ana.jet1_pt and abs(event.fatJets[0].eta()) < self.cfg_ana.jet1_eta and event.fatJets[0].chargedHadronEnergyFraction() > self.cfg_ana.jet1_chf_min and event.fatJets[0].neutralHadronEnergyFraction() < self.cfg_ana.jet1_nhf_max and event.fatJets[0].neutralEmEnergyFraction() < self.cfg_ana.jet1_phf_max:
