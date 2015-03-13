@@ -12,7 +12,7 @@ heppy_output_dir = '/lustre/cmsdata/DM/ntuples/'+prod_version
 
 if not os.path.exists(heppy_output_dir+'weighted'):
     print 'output dir does not exist, creating it'
-    os.makedirs(heppy_output_dir+'wighted')
+    os.makedirs(heppy_output_dir+'weighted')
 
 for ref_file_name in samples.keys: 
 
