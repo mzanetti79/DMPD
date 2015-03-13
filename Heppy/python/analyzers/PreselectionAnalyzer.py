@@ -16,7 +16,6 @@ class PreselectionAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             self.inputCounter = ROOT.TH1F("Counter", "Counter", 10, 0, 10)
-            self.inputCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
             self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
             self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
             self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
