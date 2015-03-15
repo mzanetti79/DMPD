@@ -466,7 +466,7 @@ sampleQCD_HT100To250 = cfg.Component(
     name="QCD_HT100To250",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleQCD_HT250To500 = cfg.Component(
@@ -487,10 +487,10 @@ sampleQCD_HT500To1000 = cfg.Component(
     splitFactor=1
     )
 
-sampleQCD_HT_1000ToInf = cfg.Component(
+sampleQCD_HT1000ToInf = cfg.Component(
     ### QCD
-    files = samples['QCD_HT_1000ToInf']['files'],
-    name="QCD_HT_1000ToInf",
+    files = samples['QCD_HT1000ToInf']['files'],
+    name="QCD_HT1000ToInf",
     isMC=True,
     isEmbed=False,
     splitFactor=1
@@ -502,7 +502,7 @@ sampleDYJetsToLL_M50_HT100to200 = cfg.Component(
     name="DYJetsToLL_M50_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleDYJetsToLL_M50_HT200to400 = cfg.Component(
@@ -511,7 +511,7 @@ sampleDYJetsToLL_M50_HT200to400 = cfg.Component(
     name="DYJetsToLL_M50_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleDYJetsToLL_M50_HT400to600 = cfg.Component(
@@ -520,7 +520,7 @@ sampleDYJetsToLL_M50_HT400to600 = cfg.Component(
     name="DYJetsToLL_M50_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleDYJetsToLL_M50_HT600toInf = cfg.Component(
@@ -529,7 +529,7 @@ sampleDYJetsToLL_M50_HT600toInf = cfg.Component(
     name="DYJetsToLL_M50_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleGJets_HT100to200 = cfg.Component(
@@ -538,7 +538,7 @@ sampleGJets_HT100to200 = cfg.Component(
     name="GJets_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleGJets_HT200to400 = cfg.Component(
@@ -547,25 +547,25 @@ sampleGJets_HT200to400 = cfg.Component(
     name="GJets_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleGJets_HT400to600 = cfg.Component(
     ### GJets
-    files = samples['GJets_HT200to400']['files'],
+    files = samples['GJets_HT400to600']['files'],
     name="GJets_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleGJets_HT600toInf = cfg.Component(
     ### GJets
-    files = samples['GJets_HT200to400']['files'],
+    files = samples['GJets_HT600toInf']['files'],
     name="GJets_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleTT = cfg.Component(
@@ -574,7 +574,25 @@ sampleTT = cfg.Component(
     name="TT",
     isMC=True,
     isEmbed=False,
+    splitFactor=5
+    )
+
+sampleTToLeptons_schannel = cfg.Component(
+    ### TToLeptons_schannel
+    files = samples['TToLeptons_schannel']['files'],
+    name="TToLeptons_schannel",
+    isMC=True,
+    isEmbed=False,
     splitFactor=1
+    )
+
+sampleTToLeptons_tchannel = cfg.Component(
+    ### TToLeptons_tchannel
+    files = samples['TToLeptons_tchannel']['files'],
+    name="TToLeptons_tchannel",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=7
     )
 
 sampleT_tWchannel = cfg.Component(
@@ -583,7 +601,7 @@ sampleT_tWchannel = cfg.Component(
     name="T_tWchannel",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=2
     )
 
 sampleTbar_tWchannel = cfg.Component(
@@ -592,7 +610,7 @@ sampleTbar_tWchannel = cfg.Component(
     name="Tbar_tWchannel",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=2
     )
 
 sampleWJetsToLNu_HT100to200 = cfg.Component(
@@ -601,7 +619,7 @@ sampleWJetsToLNu_HT100to200 = cfg.Component(
     name="WJetsToLNu_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleWJetsToLNu_HT200to400 = cfg.Component(
@@ -610,7 +628,7 @@ sampleWJetsToLNu_HT200to400 = cfg.Component(
     name="WJetsToLNu_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleWJetsToLNu_HT400to600 = cfg.Component(
@@ -619,7 +637,7 @@ sampleWJetsToLNu_HT400to600 = cfg.Component(
     name="WJetsToLNu_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleWJetsToLNu_HT600toInf = cfg.Component(
@@ -628,7 +646,7 @@ sampleWJetsToLNu_HT600toInf = cfg.Component(
     name="WJetsToLNu_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleZJetsToNuNu_HT100to200 = cfg.Component(
@@ -637,7 +655,7 @@ sampleZJetsToNuNu_HT100to200 = cfg.Component(
     name="ZJetsToNuNu_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleZJetsToNuNu_HT200to400 = cfg.Component(
@@ -646,7 +664,7 @@ sampleZJetsToNuNu_HT200to400 = cfg.Component(
     name="ZJetsToNuNu_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=8
     )
 
 sampleZJetsToNuNu_HT400to600 = cfg.Component(
@@ -655,7 +673,7 @@ sampleZJetsToNuNu_HT400to600 = cfg.Component(
     name="ZJetsToNuNu_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 sampleZJetsToNuNu_HT600toInf = cfg.Component(
@@ -664,7 +682,7 @@ sampleZJetsToNuNu_HT600toInf = cfg.Component(
     name="ZJetsToNuNu_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=7
     )
 
 ##############################
@@ -682,7 +700,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT_1000ToInf] 
 
 #### FULL DYJetsToLL
-selectedComponents = [sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200to400,sampleDYJetsToLL_M50_HT400to600,sampleDYJetsToLL_M50_HT600toInf] 
+#selectedComponents = [sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200to400,sampleDYJetsToLL_M50_HT400to600,sampleDYJetsToLL_M50_HT600toInf] 
 
 #### FULL GJets
 #selectedComponents = [sampleGJets_HT100to200,sampleGJets_HT200to400,sampleGJets_HT400to600,sampleGJets_HT600toInf] 
@@ -691,16 +709,45 @@ selectedComponents = [sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200
 #selectedComponents = [sampleTT] 
 
 #### FULL T
-#selectedComponents = [sampleT_tWchannel,sampleTbar_tWchannel] 
+#selectedComponents = [sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTToLeptons_tchannel] 
 
 #### FULL WJetsToLNu
 #selectedComponents = [sampleWJetsToLNu_HT100to200,sampleWJetsToLNu_HT200to400,sampleWJetsToLNu_HT400to600,sampleWJetsToLNu_HT600toInf] 
 
-### FULL ZJetsToNuNu
+#### FULL ZJetsToNuNu
 #selectedComponents = [sampleZJetsToNuNu_HT100to200,sampleZJetsToNuNu_HT200to400,sampleZJetsToNuNu_HT400to600,sampleZJetsToNuNu_HT600toInf] 
 
-##### ALL SAMPLES
-#selectedComponents = [sampleQCD_HT100To250, sampleQCD_HT250To500, sampleQCD_HT500To1000, sampleQCD_HT_1000ToInf, sampleDYJetsToLL_M50_HT100to200, sampleDYJetsToLL_M50_HT200to400, sampleDYJetsToLL_M50_HT400to600, sampleDYJetsToLL_M50_HT600toInf, sampleGJets_HT100to200, sampleGJets_HT200to400, sampleGJets_HT400to600, sampleGJets_HT600toInf, sampleTT, sampleT_tWchannel, sampleTbar_tWchannel, sampleWJetsToLNu_HT100to200, sampleWJetsToLNu_HT200to400, sampleWJetsToLNu_HT400to600, sampleWJetsToLNu_HT600toInf, sampleZJetsToNuNu_HT100to200, sampleZJetsToNuNu_HT200to400, sampleZJetsToNuNu_HT400to600, sampleZJetsToNuNu_HT600toInf] 
+
+#### SINGLE COMPONENTS
+#selectedComponents = [sampleQCD_HT100To250]
+#selectedComponents = [sampleQCD_HT250To500]
+#selectedComponents = [sampleQCD_HT500To1000]
+#selectedComponents = [sampleQCD_HT_1000ToInf]
+#selectedComponents = [sampleTT]
+#selectedComponents = [sampleT_tWchannel]
+#selectedComponents = [sampleTbar_tWchannel]
+#selectedComponents = [sampleTToLeptons_schannel]
+#selectedComponents = [sampleTToLeptons_tchannel] 
+
+#selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
+#selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
+#selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
+#selectedComponents = [sampleDYJetsToLL_M50_HT600toInf] 
+
+#selectedComponents = [sampleGJets_HT100to200]
+#selectedComponents = [sampleGJets_HT200to400]
+#selectedComponents = [sampleGJets_HT400to600]
+#selectedComponents = [sampleGJets_HT600toInf]
+
+#selectedComponents = [sampleWJetsToLNu_HT100to200]
+#selectedComponents = [sampleWJetsToLNu_HT200to400]
+#selectedComponents = [sampleWJetsToLNu_HT400to600]
+#selectedComponents = [sampleWJetsToLNu_HT600toInf]
+
+#selectedComponents = [sampleZJetsToNuNu_HT100to200]
+#selectedComponents = [sampleZJetsToNuNu_HT200to400]
+#selectedComponents = [sampleZJetsToNuNu_HT400to600]
+#selectedComponents = [sampleZJetsToNuNu_HT600toInf] 
 
 config = cfg.Config(
     components = selectedComponents,

@@ -139,7 +139,7 @@ samples = {
         'xsec' : 26740,
         },
         
-    'QCD_HT_1000ToInf' : {
+    'QCD_HT1000ToInf' : {
         'files' : [
             ### Nevents = 333733
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/QCD_HT_1000ToInf_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/14F113BD-1A74-E411-8B1F-002590AC4C26.root',
