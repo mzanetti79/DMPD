@@ -7,14 +7,18 @@ from ROOT import TFile, TH1D
 
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
-prod_version = 'Prod_v00/'
+prod_version = 'Prod_v01/'
 heppy_output_dir = '/lustre/cmsdata/DM/ntuples/'+prod_version
 
 if not os.path.exists(heppy_output_dir+'weighted'):
     print 'output dir does not exist, creating it'
     os.makedirs(heppy_output_dir+'weighted')
 
-for ref_file_name in samples.keys: 
+for ref_file_name in samples.keys(): 
+
+    print "##################################################"
+    print " Processing", ref_file_name.replace(heppy_output_dir,'')
+    print "##################################################"
 
     # Unweighted input
     ref_file_name_with_path = heppy_output_dir+ref_file_name+'/tree.root'
@@ -22,9 +26,9 @@ for ref_file_name in samples.keys:
         print 'WARNING:', ref_file_name_with_path, 'does not exist, continuing' 
         continue
     ref_file = TFile(ref_file_name_with_path)
-    Counter = ref_file.Get('Counter') 
+    hCounters = ref_file.Get('Counter') 
     totalEntries = hCounters.GetBinContent(1)
-    
+
     # Weighted output
     new_file_name_with_path = heppy_output_dir+'weighted/'+ref_file_name+'.root'
     if os.path.exists(new_file_name_with_path):
