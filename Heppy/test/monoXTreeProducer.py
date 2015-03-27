@@ -120,7 +120,7 @@ jetAnalyzer = cfg.Analyzer(
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
     jetLepDR                    = 0.4,
-    jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet
+    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
     minLepPt                    = 10,
     relaxJetId                  = False,
     doPuId                      = False, # Not commissioned in 7.0.X
@@ -147,7 +147,7 @@ fatJetAnalyzer = cfg.Analyzer(
     jetEta                      = 4.7,
     jetEtaCentral               = 2.4,
     jetLepDR                    = 0.4,
-    jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet
+    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
     minLepPt                    = 10,
     relaxJetId                  = False,
     doPuId                      = False, # Not commissioned in 7.0.X
@@ -731,7 +731,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
 #selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
-#selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
+selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
 #selectedComponents = [sampleDYJetsToLL_M50_HT600toInf] 
 
 #selectedComponents = [sampleGJets_HT100to200]
