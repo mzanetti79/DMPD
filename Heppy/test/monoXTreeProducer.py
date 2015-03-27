@@ -224,7 +224,6 @@ from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = PreselectionAnalyzer,
-    
     jet1_pt = 100.,
     jet1_eta = 2.5,
     jet1_tag = -99.,
@@ -298,7 +297,7 @@ globalVariables = [
         NTupleVariable("nMuons",  lambda x: len(x.selectedMuons), int, help="Number of selected muons"),
         NTupleVariable("nElectrons",  lambda x: len(x.selectedElectrons), int, help="Number of selected electrons"),
         NTupleVariable("nTaus",  lambda x: len(x.selectedTaus), int, help="Number of selected taus"),
-        NTupleVariable("nPhoton",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
+        NTupleVariable("nPhotons",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
         NTupleVariable("nJets",  lambda x: len(x.cleanJets), int, help="Number of cleaned jets"),
         #NTupleVariable("nFatJets",  lambda x: len(x.cleanFatJets), int, help="Number of cleaned fat jets"),
         ]
@@ -320,11 +319,11 @@ SignalRegionTreeProducer= cfg.Analyzer(
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         },
     collections = {
-      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
+      #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
       }
     )
 
@@ -342,15 +341,15 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalVariables,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
+        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
         "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 4, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
+      "selectedMuons"     : NTupleCollection("muon", muonType, 4, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
       }
     )    
 
@@ -368,15 +367,15 @@ WControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalVariables,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
+        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
         "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muons", muonType, 4, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photons", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
+      "selectedMuons"     : NTupleCollection("muon", muonType, 4, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
       }
     )
     
@@ -394,14 +393,14 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalVariables,
     globalObjects = {
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakeMEt" : NTupleObject("fakeMEt", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
+        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
         },
     collections = {
-      #"selectedMuons"     : NTupleCollection("muons", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electrons", electronType, 3, help="Electrons after the preselection"),
-      #"selectedTaus"      : NTupleCollection("taus", tauType, 3, help="Taus after the preselection"),
-      "selectedPhotons"   : NTupleCollection("photons", photonType, 4, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jets", jetType, 4, help="Jets after the preselection"),
+      #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
+      #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
+      "selectedPhotons"   : NTupleCollection("photon", photonType, 4, help="Photons after the preselection"),
+      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
       }
     )
 
@@ -452,7 +451,7 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
 sampleTest = cfg.Component(
-    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MINIAODSIM.root"],
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/M2000/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
     name="Test",
     isMC=True,
@@ -729,9 +728,9 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleTToLeptons_schannel]
 #selectedComponents = [sampleTToLeptons_tchannel] 
 
-#selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
+selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
 #selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
-selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
+#selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
 #selectedComponents = [sampleDYJetsToLL_M50_HT600toInf] 
 
 #selectedComponents = [sampleGJets_HT100to200]

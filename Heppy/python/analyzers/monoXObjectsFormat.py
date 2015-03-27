@@ -41,11 +41,11 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
     NTupleVariable("looseId",    lambda x : x.jetID("POG_PFID_Loose") , int, mcOnly=False,help="Jet POG Loose id"),
     NTupleVariable("mediumId",    lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
     NTupleVariable("tightId",    lambda x : x.jetID("POG_PFID_Tight") , int, mcOnly=False,help="Jet POG Tight id"),
-    NTupleVariable("btagCSV",   lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), help="Jet CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV",   lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), help="Jet CSV-IVF v2 discriminator"),
     NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -99), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
-
-    NTupleVariable("mcFlavour", lambda x : x.partonFlavour(), int,     mcOnly=True, help="parton flavour (physics definition, i.e. including b's from shower)"),
-    #NTupleVariable("mcMatchId",  lambda x : getattr(x, 'mcMatchId', -99), int, mcOnly=True, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
+    NTupleVariable("pdgId", lambda x : x.partonFlavour(), int,     mcOnly=True, help="parton flavour (physics definition, i.e. including b's from shower)"),
+    NTupleVariable("motherPdgId", lambda x : x.mother().partonFlavour(), int,     mcOnly=True, help="parton flavour (physics definition, i.e. including b's from shower)"),
+    NTupleVariable("mcMatchPdgId",  lambda x : getattr(x, 'mcMatchId', -99), int, mcOnly=True, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
     #NTupleVariable("mcPt",   lambda x : x.mcJet.pt() if getattr(x,"mcJet",None) else 0., mcOnly=True, help="p_{T} of associated gen jet"),
     NTupleVariable("rawPt",  lambda x : x.pt() * x.rawFactor(), help="p_{T} before JEC"),
     NTupleVariable("chf",    lambda x : x.chargedHadronEnergyFraction() , float, mcOnly=False,help="Jet charged hadron energy fraction"),
@@ -93,6 +93,7 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 
 metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1, float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
+#    NTupleVariable("uncorrected",    lambda x : x.uncorrectedPt(), float, mcOnly=False, help="missing energy significance"), #uncorrected met
 #    NTupleVariable("phf",     lambda x : x.NeutralEMFraction(), float, mcOnly=False, help="neutral electromagnetic energy fraction"),
 #    NTupleVariable("nhf",     lambda x : x.NeutralHadEtFraction(), float, mcOnly=False, help="neutral hadron energy fraction"),
 #    NTupleVariable("elf",     lambda x : x.ChargedEMEtFraction(), float, mcOnly=False, help="charged electromagnetic energy fraction"),

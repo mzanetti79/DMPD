@@ -39,7 +39,7 @@ class SRAnalyzer( Analyzer ):
             return False
         return True
 
-    def selectMet(self, event):
+    def selectMET(self, event):
         if event.met.pt() < self.cfg_ana.met_pt:
             return False
 #        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.met.phi()) > self.cfg_ana.deltaPhi1met:
@@ -51,7 +51,7 @@ class SRAnalyzer( Analyzer ):
     def process(self, event):
         event.isSR = False
 
-        if not self.selectMet(event):
+        if not self.selectMET(event):
             return True
         self.inputCounter.Fill(4)
         # Muon veto

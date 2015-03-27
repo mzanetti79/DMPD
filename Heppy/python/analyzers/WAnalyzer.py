@@ -68,22 +68,22 @@ class WAnalyzer( Analyzer ):
         if not event.Muon:
             return False
         # Make ject in the event and adding muon px, py
-        event.fakeMEt = copy.deepcopy(event.met)
+        event.fakemet = copy.deepcopy(event.met)
         px, py = event.met.px() + event.Muon.px(), event.met.py() + event.Muon.py()
-        event.fakeMEt.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
+        event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
-        event.fakeMEtNoPU = copy.deepcopy(event.metNoPU)
+        event.fakemetNoPU = copy.deepcopy(event.metNoPU)
         px, py = event.metNoPU.px() + event.Muon.px(), event.metNoPU.py() + event.Muon.py()
-        event.fakeMEtNoPU.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
+        event.fakemetNoPU.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
         return True
                 
-    def selectFakeMet(self, event):
-        if event.fakeMEt.pt() < self.cfg_ana.fakemet_pt:
+    def selectFakeMET(self, event):
+        if event.fakemet.pt() < self.cfg_ana.fakemet_pt:
             return False
-#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
 #            return True
-#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakeMEt.phi()) > self.cfg_ana.deltaPhi1met:
+#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
 #            return True
         return True
     
@@ -106,7 +106,7 @@ class WAnalyzer( Analyzer ):
             return True
         self.inputCounter.Fill(6)
         # Build and cut fake MET
-        if not self.makeFakeMET(event) or not self.selectFakeMet(event):
+        if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
         self.inputCounter.Fill(7)
         # Vetoes
