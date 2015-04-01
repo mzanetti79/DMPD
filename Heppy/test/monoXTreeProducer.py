@@ -299,6 +299,7 @@ globalVariables = [
         NTupleVariable("nTaus",  lambda x: len(x.selectedTaus), int, help="Number of selected taus"),
         NTupleVariable("nPhotons",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
         NTupleVariable("nJets",  lambda x: len(x.cleanJets), int, help="Number of cleaned jets"),
+        NTupleVariable("nBJets",  lambda x: len([jet for jet in x.cleanJets if abs(jet.partonFlavour()) == 5]), int, help="Number of cleaned jets"),
         #NTupleVariable("nFatJets",  lambda x: len(x.cleanFatJets), int, help="Number of cleaned fat jets"),
         ]
 
@@ -693,7 +694,7 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### TEST (LOCAL)
-#selectedComponents = [sampleTest]
+selectedComponents = [sampleTest]
 
 #### FULL QCD
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT_1000ToInf] 
@@ -728,7 +729,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleTToLeptons_schannel]
 #selectedComponents = [sampleTToLeptons_tchannel] 
 
-selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
+#selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
 #selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
 #selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
 #selectedComponents = [sampleDYJetsToLL_M50_HT600toInf] 
