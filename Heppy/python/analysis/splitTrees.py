@@ -20,7 +20,7 @@ for fname in fnames:
     for f in range(0, 2+1):
         newfile.append( TFile((heppy_output_dir+fname+"_%db.root" % f), "RECREATE") )
         for oldtree in oldtrees:
-            newtree = oldtree.CopyTree("nJets"+("=" if f<2 else ">")+"=%d" % f);
+            newtree = oldtree.CopyTree("nBJets"+("=" if f<2 else ">")+"=%d" % f);
             print " - - New tree", oldtree.GetName(), f, "b has", newtree.GetEntriesFast(), "events"
             newtree.AutoSave()
         newfile[-1].Close()
