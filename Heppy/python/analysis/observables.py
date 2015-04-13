@@ -1,6 +1,7 @@
 from array import array
 
-momentum_bins=range(200,331,10)+[350, 380, 430, 500, 1000]
+#momentum_bins=range(200,331,10)+[350, 380, 430, 500, 1000]
+momentum_bins=range(100,331,25)+[350, 380, 430, 500, 1000]
 
 class Observable():
     def __init__(self,**k):
@@ -25,11 +26,44 @@ observables = {
                      formula='met_pt',
                      labelX='E_{T}^{miss} [GeV]',
                      ),
+    'fakemet':Observable(variable='met',
+                        formula='fakemet_pt',
+                        labelX='E_{T}^{miss} [GeV]',
+                     ),
+    'jet1Pt':Observable(variable='jet1Pt',
+                        formula='jet_pt[0]',
+                        labelX='leading jet p_{T} [GeV]',
+                        ),
     'metPhi':Observable(variable='metPhi',
+                        formula='fakemet_phi',
+                        labelX='E_{T}^{miss} #phi',
+                        ),
+    'fakemetPhi':Observable(variable='metPhi',
                         formula='met_phi',
                         labelX='E_{T}^{miss} #phi',
                         ),
-#               'dPhiMetJet1':'deltaPhi(jet1.Phi(), metPhi)',
+    'nMuons':Observable(variable='nMuons',
+                        formula='nMuons',
+                        labelX='muon multiplicity',
+                        bins = array('d',range(0,5))
+                        ),
+    'nElectrons':Observable(variable='nElectrons',
+                            formula='nElectrons',
+                            labelX='muon multiplicity',
+                            bins = array('d',range(0,5))
+                            ),
+    'dPhiJet1Jet2': Observable(variable='dPhiJet1Jet2',
+                               formula='deltaPhi(jet_phi[0],jet_phi[1])',
+                               labelX='#Delta#phi(jet_{1},jet_{2})',
+                               bins = array('d',[v/10. for v in range(0,33)])
+                               ),  
+    'bDisc': Observable(variable='bDisc',
+                        formula='jet_CSV[0]',
+                        labelX='leading jet CSV',
+                        bins = array('d',[v/25. for v in range(0,26)]),  
+                        ),
+
+    #               'dPhiMetJet1':'deltaPhi(jet1.Phi(), metPhi)',
 #               'dPhiMetJet2':'deltaPhi(jet2.Phi(), metPhi)',
 #               'njets':'njets',
 #               'nphotons':'nphotons',

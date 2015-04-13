@@ -6,18 +6,18 @@ from plottingTools import *
 from ROOT import THStack, TLegend, TCanvas
 
 class Analyzer():
-    def __init__(self, cfg, label):
+    def __init__(self, cfg, hash_label=''):
         self.cfg = cfg
         self.cfg.check_parametersSet()
-        self.cfg.log_parametersSet(label)
+        if hash_label: self.cfg.log_parametersSet(hash_label)
         self.setup = Setup(cfg.parametersSet)
         self.trees = self.setup.grow_trees()
         self.setup.create_observable()
         self.init_selection()
 
     def init_selection(self):
-        selection = Selection()
-        selection.build_selection(self.setup.configuration)
+        selection = Selection(self.setup.configuration)
+        selection.build_selection()
         self.selection = selection.selection
         print ''
         print 'Applying the following selection:'
@@ -27,6 +27,7 @@ class Analyzer():
     def analyze(self):
         self.histograms = {}
         for process_name in self.trees:
+            print 'processing', process_name, self.trees[process_name].GetName()
             self.histograms[process_name] = self.setup.make_histogram(process_name)
             selection = self.selection
             if process_name.find('data')==-1: 
@@ -37,10 +38,28 @@ class Analyzer():
                                              selection)
 
 
+    def generate(self, variables, weight=':weight'):
+        from formatting import getRooDataSet
+        rooDataSets = {}
+        for process_name in self.trees:
+            self.trees[process_name].Project('h'+process_name,
+                                             ':'.join([o.formula for o in variables])+weight,
+                                             self.selection,
+                                             'para goff')
+            rooDataSets[process_name] = getRooDataSet(self.trees[process_name], variables, self.cfg.parametersSet)
+        return rooDataSets
+    
+            
+    def print_yields(self):
+        print ''
+        print 'Yields:'
+        for process_name in self.histograms: 
+            print process_name, int(self.histograms[process_name].Integral(0,-1))
+
     def format_histograms(self):
         self.formatted_histograms = {}
         stack = THStack('stack','')
-        self.legend = TLegend(0.16,0.67,0.4,0.92)
+        self.legend = TLegend(0.65,0.6,0.88,0.88)
         self.legend.SetFillColor(0)
         self.legend.SetLineColor(0)
         self.legend.SetBorderSize(0)
@@ -77,7 +96,8 @@ class Analyzer():
             self.legend.AddEntry(hist,processes[process_name]['label'],legendMarker)
 
     
-    def draw(self,name):
+    def draw(self,name=''):
+        if name=='': name=self.setup.observable.variable
         self.make_canvas(name) 
         self.formatted_histograms['background'].Draw('fhist')
         self.formatted_histograms['background'].GetXaxis().SetTitle(self.setup.observable.labelX)
@@ -94,6 +114,7 @@ class Analyzer():
             
 
     def make_canvas(self,name):
-        self.canvas = MultiCanvas(name) if self.formatted_histograms.has_key('data') else TCanvas(name,name)
+        self.canvas = MultiCanvas(name) if self.formatted_histograms.has_key('data') else TCanvas(name,name,1000,800)
+        self.canvas.SetLogy()
         SetOwnership(self.canvas,False)
 

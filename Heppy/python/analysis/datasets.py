@@ -1,6 +1,7 @@
 from colors import defineColors
 colors = defineColors()
-dataDir = '/Users/mzanetti/Work/cms/data/DM/'
+#colors = defineColors('ColorBrewer2_01')
+dataDir = '/Users/mzanetti/Work/cms/data/DM/current/'
 processes = {
     'Zll': { 'label':'Z#rightarrow ll',
              'color': colors.keys()[1],
@@ -50,9 +51,10 @@ processes = {
     'QCD': { 'label':'QCD',
              'color': colors.keys()[0],
              'ordering': 0,                  
-             'files': [dataDir+'QCD_HT100To250.root',
-                       dataDir+'QCD_HT250To500.root',
-                       dataDir+'QCD_HT500To1000.root',]},
+             'files': [#dataDir+'QCD_HT100To250.root',
+                       #dataDir+'QCD_HT250To500.root',
+                       dataDir+'QCD_HT500To1000.root',
+                       dataDir+'QCD_HT1000ToInf.root']},
 
     'signal': { 'label':'Signal',
                 'color': 418,

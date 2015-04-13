@@ -6,7 +6,8 @@ from ROOT import TChain, TH1D
 class Configuration():
     def __init__(self):
         self.parametersSet = {}
-
+        self.name = 'default'
+        
     def check_parametersSet(self):
         parametersSet_is_good = True
         # list of mandatory parameters
@@ -70,8 +71,10 @@ class Setup():
         build the TChains.
         '''
         trees = {}
+        print 'CHECK', self.configuration['region']
         for process in self.processes:
             trees[process] = TChain()
+            trees[process].SetName(process)
             for f in self.processes[process]['files']: 
                 trees[process].Add(f+'/'+self.configuration['region'])
         return trees

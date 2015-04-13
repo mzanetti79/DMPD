@@ -9,18 +9,20 @@ cfg=Configuration()
 from observables import Observable
 
 cfg.parametersSet['region'] = 'SR'
-cfg.parametersSet['observable'] = 'met'
-cfg.parametersSet['lumi'] = '10000' # pb^-1
+cfg.parametersSet['observable'] = 'jet1Pt'
+cfg.parametersSet['lumi'] = '20000' # pb^-1
 #cfg.parametersSet['observable'] = Observable(variable='ZpT',formula='z_pt',labelX='Z p_{T} [GeV]')
 #cfg.parametersSet['selection'] = '{"leading jet":"jets_pt[0]>120"}'
+cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
 
 label = str(hash(frozenset(cfg.parametersSet.items())))
 
 from analyzer import Analyzer
 analyzer = Analyzer(cfg, label)
 analyzer.analyze()
+analyzer.print_yields()
 analyzer.format_histograms()
-analyzer.draw('pippo')
+analyzer.draw()
 
 histograms = analyzer.formatted_histograms
 
