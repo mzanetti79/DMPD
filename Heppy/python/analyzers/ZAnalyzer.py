@@ -12,72 +12,60 @@ class ZAnalyzer( Analyzer ):
         super(ZAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            self.inputCounter = ROOT.TH1F("ZCounter", "ZCounter", 10, 0, 10)
-            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(5, "#Muons #geq 2")
-            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon1 cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(7, "Muon2 cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(8, "Z cand")
-            self.inputCounter.GetXaxis().SetBinLabel(9, "MEt cut")
-    
+            self.ZCRCounter = ROOT.TH1F("ZCRCounter", "ZCRCounter", 10, 0, 10)
+            self.ZCRCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.ZCRCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.ZCRCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
+            self.ZCRCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            self.ZCRCounter.GetXaxis().SetBinLabel(5, "Lep #geq 2")
+            self.ZCRCounter.GetXaxis().SetBinLabel(6, "Lep1 cuts")
+            self.ZCRCounter.GetXaxis().SetBinLabel(7, "Lep2 cuts")
+            self.ZCRCounter.GetXaxis().SetBinLabel(8, "Z cand")
+            self.ZCRCounter.GetXaxis().SetBinLabel(9, "MEt cut")
+            
+            self.ZZhCounter = ROOT.TH1F("ZZhCounter", "ZZhCounter", 10, 0, 10)
+            self.ZZhCounter.GetXaxis().SetBinLabel(1, "All events")
+            self.ZZhCounter.GetXaxis().SetBinLabel(2, "Trigger")
+            self.ZZhCounter.GetXaxis().SetBinLabel(3, "#Lep #geq 2")
+            self.ZZhCounter.GetXaxis().SetBinLabel(4, "Z cand")
+            self.ZZhCounter.GetXaxis().SetBinLabel(5, "FatJet")
+            self.ZZhCounter.GetXaxis().SetBinLabel(6, "Z mass")
+            self.ZZhCounter.GetXaxis().SetBinLabel(7, "b-Jet")
+            self.ZZhCounter.GetXaxis().SetBinLabel(8, "h mass")
+            self.ZZhCounter.GetXaxis().SetBinLabel(9, "met cut")
+            
+            
 #    def vetoGamma(self, event):
 #        # VETO PHOTONS - selectedPhotons must pass the 'veto' SelectionCuts
 #        if len(event.selectedPhotons) != 0:
 #            return False
 #        return True
-
-#    def selectExclusiveZtoMM(self, event):
-#        # Select exactly two muon
-#        if not len(event.selectedMuons) >= 2: 
-#            return False
-#        if not event.selectedMuons[0].charge() != event.selectedMuons[1].charge(): 
-#            return False
-#        if event.selectedMuons[0].pt() < self.cfg_ana.mu1_pt: 
-#            return False
-#        if not event.selectedMuons[0].muonID(self.cfg_ana.mu1_id): 
-#            return False
-#        theZ =  event.selectedMuons[0].p4() + event.selectedMuons[1].p4()
-#        if theZ.mass() < self.cfg_ana.mass_low or theZ.mass() > self.cfg_ana.mass_high: 
-#            return False
-#        event.Z = theZ
-#        return True
-
-#    def selectZtoLL(self, event):
-#        # Select best Z candidate
-#        if len(event.selectedLeptons) < 2:
-#          return False
-#        event.lep1 = event.selectedLeptons[0]
-#        event.lep2 = None
-#        for l in event.selectedLeptons:
-#          if l.pdgId() == event.lep1.pdgId() and l.charge() != event.lep1.charge():
-#            event.lep2 = l
-#        if event.lep2 == None:
-#          return False
-#        theZ = event.lep1.p4() + event.lep2.p4()
-#        if theZ.mass() < self.cfg_ana.mass_low or theZ.mass() > self.cfg_ana.mass_high:
-#          return False
-#        event.Z = theZ
-#        return True
-
-#    def selectZtoEE(self, event):
-#        # Select best Z candidate
-#        if len(event.selectedElectrons) < 2:
-#          return False
-#        event.elec1 = event.selectedElectrons[0]
-#        event.elec2 = None
-#        for l in event.selectedElectrons:
-#          if l.charge() != event.elec1.charge():
-#            event.elec2 = l
-#        if event.elec2 == None:
-#          return False
-#        theZ = event.elec1.p4() + event.elec2.p4()
-#        if theZ.mass() < self.cfg_ana.mass_low or theZ.mass() > self.cfg_ana.mass_high:
-#          return False
-#        event.Z = theZ
-#        return True
+    
+    def selectElectron1(self, event):
+        # The leading electron has to satisfy the following conditions
+        if not len(event.selectedElectrons) >= 1:
+            return False
+        if not event.selectedElectrons[0].pt() > self.cfg_ana.ele1_pt: 
+            return False
+        if not event.selectedElectrons[0].electronID(self.cfg_ana.ele1_id):
+            return False
+        event.electron1 = event.selectedElectrons[0]
+        return True
+        
+    def selectElectron2(self, event):
+        # Select the second electron, as the first one after the leading with opposite sign satisfying the following conditions
+        if not len(event.selectedElectrons) >= 2:
+            return False
+        for e in event.selectedElectrons:
+            if e.charge() == event.electron1.charge():
+                continue
+            if not e.pt() > self.cfg_ana.ele2_pt: 
+                return False
+            if not e.electronID(self.cfg_ana.ele2_id):
+                return False
+            event.electron2 = e
+        return True
+    
     
     def selectMuon1(self, event):
         # The leading muons has to satisfy the following conditions
@@ -87,7 +75,7 @@ class ZAnalyzer( Analyzer ):
             return False
         if not event.selectedMuons[0].muonID(self.cfg_ana.mu1_id):
             return False
-        event.Muon1 = event.selectedMuons[0]
+        event.muon1 = event.selectedMuons[0]
         return True
         
     def selectMuon2(self, event):
@@ -95,30 +83,56 @@ class ZAnalyzer( Analyzer ):
         if not len(event.selectedMuons) >= 2:
             return False
         for m in event.selectedMuons:
-            if m.charge() == event.Muon1.charge():
+            if m.charge() == event.muon1.charge():
                 continue
             if not m.pt() > self.cfg_ana.mu2_pt: 
                 return False
             if not m.muonID(self.cfg_ana.mu2_id):
                 return False
-            event.Muon2 = m
+            event.muon2 = m
         return True
+    
+    
+    def selectZ(self, event):
+        event.isZtoEE = False
+        event.isZtoMM = False
         
-    def selectZtoMM(self, event):
-        if not event.Muon1 or not event.Muon2:
+        if hasattr(event, "muon1") and hasattr(event, "muon2"):
+            event.isZtoMM = True
+            event.Leptons.append(event.muon1)
+            event.Leptons.append(event.muon2)
+        elif hasattr(event, "electron1") and hasattr(event, "electron2"):
+            event.isZtoEE = True
+            event.Leptons.append(event.electron1)
+            event.Leptons.append(event.electron2)
+        else:
             return False
-        theZ = event.Muon1.p4() + event.Muon2.p4()
+            
+        theZ = event.Leptons[0].p4() + event.Leptons[1].p4()
         if theZ.mass() < self.cfg_ana.mass_low or theZ.mass() > self.cfg_ana.mass_high:
             return False
-        theZ.charge = event.Muon1.charge() + event.Muon2.charge()
-        theZ.deltaEta = abs(event.Muon1.eta() - event.Muon2.eta())
-        theZ.deltaPhi = deltaPhi(event.Muon1.phi(), event.Muon2.phi())
-        theZ.deltaR = deltaR(event.Muon1.eta(), event.Muon1.phi(), event.Muon2.eta(), event.Muon2.phi())
+        theZ.charge = event.Leptons[0].charge() + event.Leptons[1].charge()
+        theZ.deltaR = deltaR(event.Leptons[0].eta(), event.Leptons[0].phi(), event.Leptons[1].eta(), event.Leptons[1].phi())
+        theZ.deltaEta = abs(event.Leptons[0].eta() - event.Leptons[1].eta())
+        theZ.deltaPhi = deltaPhi(event.Leptons[0].phi(), event.Leptons[1].phi())
+        theZ.deltaPhi_met = deltaPhi(theZ.phi(), event.met.phi())
+        theZ.deltaPhi_jet1 = deltaPhi(theZ.phi(), event.Jets[0].phi())
         event.Z = theZ
+        
+        # Zh resonances
+        theA = theZ + event.Jets[0].p4()
+        theA.charge = theZ.charge + event.Jets[0].charge()
+        theA.deltaR = deltaR(theZ.eta(), theZ.phi(), event.Jets[0].eta(), event.Jets[0].phi())
+        theA.deltaEta = abs(theZ.eta() - event.Jets[0].eta())
+        theA.deltaPhi = deltaPhi(theZ.phi(), event.Jets[0].phi())
+        theA.deltaPhi_met = deltaPhi(theA.phi(), event.met.phi())
+        theA.deltaPhi_jet1 = deltaPhi(theA.phi(), event.Jets[0].phi())
+        event.A = theA
+        
         return True
 
     def makeFakeMET(self,event):
-        if not event.Z:
+        if not hasattr(event, "Z"):
             return False
         # Make ject in the event and adding Z px, py
         event.fakemet = copy.deepcopy(event.met)
@@ -134,44 +148,44 @@ class ZAnalyzer( Analyzer ):
     def selectFakeMET(self, event):
         if event.fakemet.pt() < self.cfg_ana.fakemet_pt:
             return False
-#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
-#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
         return True
          
     def process(self, event):
         event.isZCR = False
-        event.Muon1 = None
-        event.Muon2 = None
         event.Z = None
+        event.A = None
+        event.Leptons = []
         
-        # Muons >= 2
-        if not len(event.selectedMuons) >= 2:
+        self.ZZhCounter.Fill(1)
+        self.ZZhCounter.Fill(2)
+        # Leptons >= 2
+        if not len(event.inclusiveLeptons)>=2:
             return True
-        self.inputCounter.Fill(4)
-        # Select first muon
-        if not self.selectMuon1(event):
+        self.ZCRCounter.Fill(4)
+        self.ZZhCounter.Fill(3)
+        # Select first lepton
+        if not self.selectMuon1(event) and not self.selectElectron1(event):
             return True
-        self.inputCounter.Fill(5)
-        # Select second muon
-        if not self.selectMuon2(event):
+        self.ZCRCounter.Fill(5)
+        # Select second lepton
+        if not self.selectMuon2(event) and not self.selectElectron2(event):
             return True
-        self.inputCounter.Fill(6)
+        self.ZCRCounter.Fill(6)
         # Build Z candidate
-        if not self.selectZtoMM(event):
+        if not self.selectZ(event):
             return True
-        self.inputCounter.Fill(7)
+        self.ZCRCounter.Fill(7)
+        self.ZZhCounter.Fill(4)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.inputCounter.Fill(8)
+        self.ZCRCounter.Fill(8)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.inputCounter.Fill(9)
+        #self.ZCRCounter.Fill(9)
         
-        event.candidate = event.Z
         event.isZCR = True
+        
         return True
 

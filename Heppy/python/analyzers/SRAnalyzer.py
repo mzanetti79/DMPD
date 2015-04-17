@@ -42,10 +42,6 @@ class SRAnalyzer( Analyzer ):
     def selectMET(self, event):
         if event.met.pt() < self.cfg_ana.met_pt:
             return False
-#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.met.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
-#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.met.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
         return True
         
     def process(self, event):
@@ -54,22 +50,22 @@ class SRAnalyzer( Analyzer ):
         if not self.selectMET(event):
             return True
         self.inputCounter.Fill(4)
-        # Muon veto
-        if not self.vetoMuon(event):
-            return True
-        self.inputCounter.Fill(5)
-        # Electron veto
-        if not self.vetoElectron(event):
-            return True
-        self.inputCounter.Fill(6)
-        # Tau veto
-        if not self.vetoTau(event):
-            return True
-        self.inputCounter.Fill(7)
-        # Photon veto
-        if not self.vetoGamma(event):
-            return True
-        self.inputCounter.Fill(8)
+#        # Muon veto
+#        if not self.vetoMuon(event):
+#            return True
+#        self.inputCounter.Fill(5)
+#        # Electron veto
+#        if not self.vetoElectron(event):
+#            return True
+#        self.inputCounter.Fill(6)
+#        # Tau veto
+#        if not self.vetoTau(event):
+#            return True
+#        self.inputCounter.Fill(7)
+#        # Photon veto
+#        if not self.vetoGamma(event):
+#            return True
+#        self.inputCounter.Fill(8)
         
         event.isSR = True
         return True
