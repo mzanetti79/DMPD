@@ -236,6 +236,8 @@ PreselectionAnalyzer = cfg.Analyzer(
     jet2_tag = -1e99,
     deltaPhi12 = 2.5,
     fatjet_pt = 250.,
+    fatjet_tag1 = 0.423,
+    fatjet_tag2 = 0.423,
     jetveto_pt = 0.,
     jetveto_eta = 2.5,
     )
@@ -246,6 +248,32 @@ SRAnalyzer = cfg.Analyzer(
     class_object = SRAnalyzer,
     met_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
+    )
+
+from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
+GammaAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = GammaAnalyzer,
+    fakemet_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
+    photon_pt = 175.,
+    photon_id = "PhotonCutBasedIDLoose",
+#    photon_eta = 2.5,
+#    photon_eta_remove_min = 1.442,
+#    photon_eta_remove_max = 1.56,
+    )
+
+from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
+WAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = WAnalyzer,
+    fakemet_pt = met_pt_cut,
+    deltaPhi1met = jet_met_deltaphi_cut,
+    
+    mt_low = 50.,
+    mt_high = 9e99,
+    mu_pt = 20., 
+    mu_id = "POG_ID_Tight",    
     )
 
 from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
@@ -267,30 +295,19 @@ ZAnalyzer = cfg.Analyzer(
     ele2_id = "POG_Cuts_ID_CSA14_25ns_v1_Medium",
     )
 
-from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
-WAnalyzer = cfg.Analyzer(
+from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
+ZZhAnalyzer = cfg.Analyzer(
     verbose = False,
-    class_object = WAnalyzer,
-    fakemet_pt = met_pt_cut,
-    deltaPhi1met = jet_met_deltaphi_cut,
-    
-    mt_low = 50.,
-    mt_high = 9e99,
-    mu_pt = 20., 
-    mu_id = "POG_ID_Tight",    
-    )
-
-from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
-GammaAnalyzer = cfg.Analyzer(
-    verbose = False,
-    class_object = GammaAnalyzer,
-    fakemet_pt = met_pt_cut,
-    deltaPhi1met = jet_met_deltaphi_cut,
-    photon_pt = 175.,
-    photon_id = "PhotonCutBasedIDLoose",
-#    photon_eta = 2.5,
-#    photon_eta_remove_min = 1.442,
-#    photon_eta_remove_max = 1.56,
+    class_object = ZZhAnalyzer,
+    fatjet_pt = 250.,
+    Z_pt = 100.,
+    Zmass_low = 75.,
+    Zmass_high = 105.,
+    fatJet_btag_1 = 0.423,
+    fatJet_btag_2 = 0.423,
+    fatJetMass_low = 100.,
+    fatJetMass_high = 150.,
+    met_pt = 200.,
     )
 
 globalVariables = [
@@ -412,7 +429,6 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in Z events obtained removing the muons"),
         "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
-        "A" : NTupleObject("A", compositeType, help="A boson candidate"),
         },
     collections = {
       "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
@@ -424,6 +440,31 @@ ZControlRegionTreeProducer= cfg.Analyzer(
       }
     )    
 
+
+##############################
+### Z CONTROL REGION TREE  ###
+##############################
+
+ZZhTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='ZZhTreeProducer',
+    treename='ZZh',
+    filter = lambda x: x.isZZh,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables + [
+        NTupleVariable("isZtoMM",  lambda x: x.isZtoMM, int, help="Z -> mu mu flag")
+    ],
+    globalObjects = {
+        "A" : NTupleObject("A", compositeType, help="A boson candidate"),
+        "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        },
+    collections = {
+      "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
+      "cleanFatJets"      : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      }
+    )    
 
 ##############################
 ### SEQUENCE               ###
@@ -446,11 +487,13 @@ sequence = [
     GammaAnalyzer,
     WAnalyzer,
     ZAnalyzer,
+    ZZhAnalyzer,
     ### Tree producers
     SignalRegionTreeProducer,
     GammaControlRegionTreeProducer,
     WControlRegionTreeProducer, 
     ZControlRegionTreeProducer,
+    ZZhTreeProducer,
     ]
 
 ##############################

@@ -23,17 +23,6 @@ class ZAnalyzer( Analyzer ):
             self.ZCRCounter.GetXaxis().SetBinLabel(8, "Z cand")
             self.ZCRCounter.GetXaxis().SetBinLabel(9, "MEt cut")
             
-            self.ZZhCounter = ROOT.TH1F("ZZhCounter", "ZZhCounter", 10, 0, 10)
-            self.ZZhCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.ZZhCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.ZZhCounter.GetXaxis().SetBinLabel(3, "#Lep #geq 2")
-            self.ZZhCounter.GetXaxis().SetBinLabel(4, "Z cand")
-            self.ZZhCounter.GetXaxis().SetBinLabel(5, "FatJet")
-            self.ZZhCounter.GetXaxis().SetBinLabel(6, "Z mass")
-            self.ZZhCounter.GetXaxis().SetBinLabel(7, "b-Jet")
-            self.ZZhCounter.GetXaxis().SetBinLabel(8, "h mass")
-            self.ZZhCounter.GetXaxis().SetBinLabel(9, "met cut")
-            
             
 #    def vetoGamma(self, event):
 #        # VETO PHOTONS - selectedPhotons must pass the 'veto' SelectionCuts
@@ -119,16 +108,6 @@ class ZAnalyzer( Analyzer ):
         theZ.deltaPhi_jet1 = deltaPhi(theZ.phi(), event.Jets[0].phi())
         event.Z = theZ
         
-        # Zh resonances
-        theA = theZ + event.Jets[0].p4()
-        theA.charge = theZ.charge + event.Jets[0].charge()
-        theA.deltaR = deltaR(theZ.eta(), theZ.phi(), event.Jets[0].eta(), event.Jets[0].phi())
-        theA.deltaEta = abs(theZ.eta() - event.Jets[0].eta())
-        theA.deltaPhi = deltaPhi(theZ.phi(), event.Jets[0].phi())
-        theA.deltaPhi_met = deltaPhi(theA.phi(), event.met.phi())
-        theA.deltaPhi_jet1 = deltaPhi(theA.phi(), event.Jets[0].phi())
-        event.A = theA
-        
         return True
 
     def makeFakeMET(self,event):
@@ -152,17 +131,12 @@ class ZAnalyzer( Analyzer ):
          
     def process(self, event):
         event.isZCR = False
-        event.Z = None
-        event.A = None
         event.Leptons = []
         
-        self.ZZhCounter.Fill(1)
-        self.ZZhCounter.Fill(2)
         # Leptons >= 2
         if not len(event.inclusiveLeptons)>=2:
             return True
         self.ZCRCounter.Fill(4)
-        self.ZZhCounter.Fill(3)
         # Select first lepton
         if not self.selectMuon1(event) and not self.selectElectron1(event):
             return True
@@ -175,7 +149,6 @@ class ZAnalyzer( Analyzer ):
         if not self.selectZ(event):
             return True
         self.ZCRCounter.Fill(7)
-        self.ZZhCounter.Fill(4)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True

@@ -1,6 +1,6 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
-from PhysicsTools.HeppyCore.utils.deltar import deltaR2, deltaPhi
+from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
 import math
 import ROOT
 import sys
@@ -34,8 +34,27 @@ class PreselectionAnalyzer( Analyzer ):
             return False
         if not event.cleanFatJets[0].pt() > self.cfg_ana.fatjet_pt: 
             return False
-#        if not event.cleanFatJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.jet1_tag: 
-#            return False
+        
+        #########
+        # FIXME dirty hack: count the number of ak4 b-tagged jet close instead
+        # Count number of b-tagged subjets
+        nSubJetTags = 0
+        for f in event.cleanFatJets:
+            subJets = []
+            for j in event.cleanJets:
+                if deltaR(f.eta(), f.phi(), j.eta(), j.phi())<0.8:
+                    subJets.append(j)
+            subJets.sort(key = lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
+            f.subJetCSV_1 = -99.
+            f.subJetCSV_2 = -99.
+            if len(subJets) >= 1:
+                f.subJetCSV_1 = subJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags')
+            if len(subJets) >= 2:
+                f.subJetCSV_2 = subJets[1].btag('combinedInclusiveSecondaryVertexV2BJetTags')
+        #########
+        
+        if not event.cleanFatJets[0].subJetCSV_1 > self.cfg_ana.fatjet_tag1 or not event.cleanFatJets[0].subJetCSV_2 > self.cfg_ana.fatjet_tag2: 
+            return False
         return True
 
 

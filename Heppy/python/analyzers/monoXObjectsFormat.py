@@ -65,6 +65,8 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
     NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredLinks") if x.hasUserFloat("ak8PFJetsCHSFilteredLinks") else -1., float, help="Jet filtered mass"),
     NTupleVariable("tau21",   lambda x : x.userFloat("NjettinessAK8:tau2")/x.userFloat("NjettinessAK8:tau1") if x.hasUserFloat("NjettinessAK8:tau1") and x.hasUserFloat("NjettinessAK8:tau2") else -1., float, help="Jet filtered mass"),
     NTupleVariable("CSV",   lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
+    NTupleVariable("subJet1_CSV",   lambda x : x.subJetCSV_1 if hasattr(x, "subJetCSV_1") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
+    NTupleVariable("subJet2_CSV",   lambda x : x.subJetCSV_2 if hasattr(x, "subJetCSV_2") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
     NTupleVariable("dPhi_met",   lambda x : x.deltaPhi_met, float, help="dPhi between jet and met"),
     NTupleVariable("dPhi_jet1",   lambda x : x.deltaPhi_jet1, float, help="dPhi between jet and leading jet"),
     NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -99), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),

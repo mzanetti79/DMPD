@@ -87,7 +87,6 @@ class WAnalyzer( Analyzer ):
     def process(self, event):
         # Select exactly one muon
         event.isWCR = False
-        event.W = None
         
         # Exactly one muon
         if not len(event.selectedMuons) == 1:
