@@ -48,6 +48,8 @@ class WAnalyzer( Analyzer ):
             return False
         if not event.selectedMuons[0].muonID(self.cfg_ana.mu_id):
             return False
+        if not event.selectedMuons[0].relIso04 < self.cfg_ana.mu_iso:
+            return False
         return True
     
     def selectW(self, event):

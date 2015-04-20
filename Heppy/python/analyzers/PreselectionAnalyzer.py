@@ -24,7 +24,7 @@ class PreselectionAnalyzer( Analyzer ):
 
        
     def fillJetVariables(self, event):
-        for j in event.Jets:
+        for j in event.Jets + event.cleanJets + event.cleanFatJets:
             j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
             j.deltaPhi_jet1 = deltaPhi(j.phi(), event.Jets[0].phi())
     
@@ -45,16 +45,27 @@ class PreselectionAnalyzer( Analyzer ):
                 if deltaR(f.eta(), f.phi(), j.eta(), j.phi())<0.8:
                     subJets.append(j)
             subJets.sort(key = lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
-            f.subJetCSV_1 = -99.
-            f.subJetCSV_2 = -99.
+            f.nSubJets = len(subJets)
             if len(subJets) >= 1:
-                f.subJetCSV_1 = subJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags')
+                f.subJet1 = subJets[0]
             if len(subJets) >= 2:
-                f.subJetCSV_2 = subJets[1].btag('combinedInclusiveSecondaryVertexV2BJetTags')
+                f.subJet2 = subJets[1]
         #########
         
-        if not event.cleanFatJets[0].subJetCSV_1 > self.cfg_ana.fatjet_tag1 or not event.cleanFatJets[0].subJetCSV_2 > self.cfg_ana.fatjet_tag2: 
+        if not event.cleanFatJets[0].nSubJets >=2 or not event.cleanFatJets[0].subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag1 or not event.cleanFatJets[0].subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag2: 
             return False
+        
+        # Higgs candidate
+        event.cleanFatJets[0].setMass(event.cleanFatJets[0].userFloat("ak8PFJetsCHSPrunedLinks"))
+        theH = event.cleanFatJets[0].p4()
+        theH.charge = event.cleanFatJets[0].charge()
+        theH.deltaR = deltaR(event.cleanFatJets[0].subJet1.eta(), event.cleanFatJets[0].subJet1.phi(), event.cleanFatJets[0].subJet2.eta(), event.cleanFatJets[0].subJet2.phi()) if hasattr(event.cleanFatJets[0], "subJet2") else -1.
+        theH.deltaEta = abs(event.cleanFatJets[0].subJet1.eta() - event.cleanFatJets[0].subJet2.eta()) if hasattr(event.cleanFatJets[0], "subJet2") else -9.
+        theH.deltaPhi = deltaPhi(event.cleanFatJets[0].subJet1.phi(), event.cleanFatJets[0].subJet2.phi()) if hasattr(event.cleanFatJets[0], "subJet2") else -9.
+        theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
+        theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanFatJets[0].phi())
+        event.H = theH
+        
         return True
 
 
@@ -69,6 +80,17 @@ class PreselectionAnalyzer( Analyzer ):
             return False
 #        if not event.cleanJets[1].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.jet2_tag: 
 #            return False
+        
+        # Higgs candidate
+        theH = event.cleanJets[0].p4() + event.cleanJets[1].p4()
+        theH.charge = event.cleanJets[0].charge() + event.cleanJets[1].charge()
+        theH.deltaR = deltaR(event.cleanJets[0].eta(), event.cleanJets[0].phi(), event.cleanJets[1].eta(), event.cleanJets[1].phi())
+        theH.deltaEta = abs(event.cleanJets[0].eta() - event.cleanJets[1].eta())
+        theH.deltaPhi = deltaPhi(event.cleanJets[0].phi(), event.cleanJets[1].phi())
+        theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
+        theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanJets[0].phi())
+        event.H = theH
+        
         return True
     
     
@@ -79,6 +101,17 @@ class PreselectionAnalyzer( Analyzer ):
             return False
         #if not event.cleanJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.jet1_tag:
         #    return False
+        
+        # Higgs candidate
+        theH = event.cleanJets[0].p4()
+        theH.charge = event.cleanJets[0].charge()
+        theH.deltaR = -1.
+        theH.deltaEta = -9.
+        theH.deltaPhi = -9.
+        theH.deltaPhi_met = -9.
+        theH.deltaPhi_jet1 = -9.
+        event.H = theH
+        
         return True
     
     
@@ -90,11 +123,12 @@ class PreselectionAnalyzer( Analyzer ):
         self.inputCounter.Fill(1)
         
         # Check if there is at least one jet
-        if len(event.cleanJets) < 1 and len(event.cleanFatJets) < 1:
+        if len(event.cleanJets) < 1:
             return False
         self.inputCounter.Fill(2)
         
         # Categorization
+        
         # Category 1
         if self.selectFatJet(event):
             event.Category = 1

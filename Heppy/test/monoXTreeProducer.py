@@ -270,10 +270,11 @@ WAnalyzer = cfg.Analyzer(
     fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
     
-    mt_low = 50.,
+    mt_low = 0.,
     mt_high = 9e99,
     mu_pt = 20., 
-    mu_id = "POG_ID_Tight",    
+    mu_id = "POG_ID_Tight",
+    mu_iso = 0.12,    
     )
 
 from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
@@ -287,12 +288,16 @@ ZAnalyzer = cfg.Analyzer(
     mass_high = 9e99,
     mu1_pt = 20.,
     mu1_id = "POG_ID_Tight",
+    mu1_iso = 0.12,
     mu2_pt = 10.,
     mu2_id = "POG_ID_Loose",
+    mu2_iso = 0.20,
     ele1_pt = 20.,
     ele1_id = "POG_Cuts_ID_CSA14_25ns_v1_Medium",
+    ele1_iso = 0.15,
     ele2_pt = 10.,
     ele2_id = "POG_Cuts_ID_CSA14_25ns_v1_Medium",
+    ele2_iso = 0.15,
     )
 
 from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
@@ -340,6 +345,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #"jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
       #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
@@ -368,6 +374,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
         #"jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
       #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
@@ -397,6 +404,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
         "W" : NTupleObject("W", compositeType, help="W boson candidate"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
       "selectedMuons"     : NTupleCollection("muon", muonType, 1, help="Muons after the preselection"),
@@ -429,6 +437,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in Z events obtained removing the muons"),
         "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
       "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
@@ -442,7 +451,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
 
 
 ##############################
-### Z CONTROL REGION TREE  ###
+###  Zprime -> Zh -> llbb  ###
 ##############################
 
 ZZhTreeProducer= cfg.Analyzer(
@@ -458,6 +467,7 @@ ZZhTreeProducer= cfg.Analyzer(
     globalObjects = {
         "A" : NTupleObject("A", compositeType, help="A boson candidate"),
         "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "h" : NTupleObject("h", compositeType, help="Higgs boson candidate"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         },
     collections = {

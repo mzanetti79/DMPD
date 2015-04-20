@@ -38,6 +38,8 @@ class ZAnalyzer( Analyzer ):
             return False
         if not event.selectedElectrons[0].electronID(self.cfg_ana.ele1_id):
             return False
+        if not event.selectedElectrons[0].relIso03 < self.cfg_ana.ele1_iso: 
+            return False
         event.electron1 = event.selectedElectrons[0]
         return True
         
@@ -45,14 +47,23 @@ class ZAnalyzer( Analyzer ):
         # Select the second electron, as the first one after the leading with opposite sign satisfying the following conditions
         if not len(event.selectedElectrons) >= 2:
             return False
-        for e in event.selectedElectrons:
-            if e.charge() == event.electron1.charge():
-                continue
-            if not e.pt() > self.cfg_ana.ele2_pt: 
-                return False
-            if not e.electronID(self.cfg_ana.ele2_id):
-                return False
-            event.electron2 = e
+#        for e in event.selectedElectrons:
+#            if e.charge() == event.electron1.charge():
+#                continue
+#            if not e.pt() > self.cfg_ana.ele2_pt: 
+#                return False
+#            if not e.electronID(self.cfg_ana.ele2_id):
+#                return False
+#            event.electron2 = e
+        if not event.selectedElectrons[1].charge() != event.selectedElectrons[0].charge():
+            return False
+        if not event.selectedElectrons[1].pt() > self.cfg_ana.ele2_pt: 
+            return False
+        if not event.selectedElectrons[1].electronID(self.cfg_ana.ele2_id):
+            return False
+        if not event.selectedElectrons[1].relIso03 < self.cfg_ana.ele2_iso: 
+            return False
+        event.electron2 = event.selectedElectrons[1]
         return True
     
     
@@ -64,6 +75,8 @@ class ZAnalyzer( Analyzer ):
             return False
         if not event.selectedMuons[0].muonID(self.cfg_ana.mu1_id):
             return False
+        if not event.selectedMuons[0].relIso04 < self.cfg_ana.mu1_iso:
+            return False
         event.muon1 = event.selectedMuons[0]
         return True
         
@@ -71,14 +84,23 @@ class ZAnalyzer( Analyzer ):
         # Select the second muon, as the first one after the leading with opposite sign satisfying the following conditions
         if not len(event.selectedMuons) >= 2:
             return False
-        for m in event.selectedMuons:
-            if m.charge() == event.muon1.charge():
-                continue
-            if not m.pt() > self.cfg_ana.mu2_pt: 
-                return False
-            if not m.muonID(self.cfg_ana.mu2_id):
-                return False
-            event.muon2 = m
+#        for m in event.selectedMuons:
+#            if m.charge() == event.muon1.charge():
+#                continue
+#            if not m.pt() > self.cfg_ana.mu2_pt: 
+#                return False
+#            if not m.muonID(self.cfg_ana.mu2_id):
+#                return False
+#            event.muon2 = m
+        if not event.selectedMuons[1].charge() != event.selectedMuons[0].charge(): 
+            return False
+        if not event.selectedMuons[1].pt() > self.cfg_ana.mu2_pt: 
+            return False
+        if not event.selectedMuons[1].muonID(self.cfg_ana.mu2_id):
+            return False
+        if not event.selectedMuons[1].relIso04 < self.cfg_ana.mu2_iso:
+            return False
+        event.muon2 = event.selectedMuons[1]
         return True
     
     
