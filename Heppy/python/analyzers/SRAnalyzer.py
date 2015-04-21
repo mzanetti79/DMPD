@@ -11,16 +11,11 @@ class SRAnalyzer( Analyzer ):
         super(SRAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            self.inputCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
-            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(5, "MEt cut")
-            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon veto")
-            self.inputCounter.GetXaxis().SetBinLabel(7, "Electron veto")
-            self.inputCounter.GetXaxis().SetBinLabel(8, "Tau veto")
-            self.inputCounter.GetXaxis().SetBinLabel(9, "Photon veto")
+            SRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "MEt cut", "Muon veto", "Electron veto", "Tau veto", "Photon veto"]
+            self.SRCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
+            for i, l in enumerate(SRLabels):
+                self.SRCounter.GetXaxis().SetBinLabel(i+1, l)
+            
     
     def vetoMuon(self, event):
         if len(event.selectedMuons) != 0:
@@ -42,10 +37,6 @@ class SRAnalyzer( Analyzer ):
     def selectMET(self, event):
         if event.met.pt() < self.cfg_ana.met_pt:
             return False
-#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.met.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
-#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.met.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
         return True
         
     def process(self, event):
@@ -53,23 +44,21 @@ class SRAnalyzer( Analyzer ):
 
         if not self.selectMET(event):
             return True
-        self.inputCounter.Fill(4)
+        self.SRCounter.Fill(4)
+        
+        # other cuts NOT in Ntuple
         # Muon veto
-        if not self.vetoMuon(event):
-            return True
-        self.inputCounter.Fill(5)
-        # Electron veto
-        if not self.vetoElectron(event):
-            return True
-        self.inputCounter.Fill(6)
-        # Tau veto
-        if not self.vetoTau(event):
-            return True
-        self.inputCounter.Fill(7)
-        # Photon veto
-        if not self.vetoGamma(event):
-            return True
-        self.inputCounter.Fill(8)
+        if self.vetoMuon(event):
+            self.SRCounter.Fill(5)
+            # Electron veto
+            if not self.vetoElectron(event):
+                self.SRCounter.Fill(6)
+                # Tau veto
+                if not self.vetoTau(event):
+                    self.SRCounter.Fill(7)
+                    # Photon veto
+                    if not self.vetoGamma(event):
+                        self.SRCounter.Fill(8)
         
         event.isSR = True
         return True
