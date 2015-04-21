@@ -12,15 +12,10 @@ class GammaAnalyzer( Analyzer ):
         super(GammaAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
+            GCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "Muon veto", "Photons #geq 1", "Photon cuts", "MEt cut"]
             self.GCRCounter = ROOT.TH1F("GCRCounter", "GCRCounter", 10, 0, 10)
-            self.GCRCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.GCRCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.GCRCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.GCRCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.GCRCounter.GetXaxis().SetBinLabel(5, "Muon veto")
-            self.GCRCounter.GetXaxis().SetBinLabel(6, "Photons #geq 1")
-            self.GCRCounter.GetXaxis().SetBinLabel(7, "Photon cuts")
-            self.GCRCounter.GetXaxis().SetBinLabel(8, "MEt cut")
+            for i, l in enumerate(GCRLabels):
+                self.GCRCounter.GetXaxis().SetBinLabel(i+1, l)
             
     #def selectGamma(self, event):
       ## Select at least one photon

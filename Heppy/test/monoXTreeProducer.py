@@ -238,6 +238,8 @@ PreselectionAnalyzer = cfg.Analyzer(
     fatjet_pt = 250.,
     fatjet_tag1 = 0.423,
     fatjet_tag2 = 0.423,
+    fatjet_mass = 50.,
+    fatjet_tau21 = -1.,
     jetveto_pt = 0.,
     jetveto_eta = 2.5,
     )
@@ -353,6 +355,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
       "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )
 
@@ -382,6 +385,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       "selectedPhotons"   : NTupleCollection("photon", photonType, 1, help="Photons after the preselection"),
       "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )
 
@@ -412,6 +416,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
       "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )
     
@@ -446,6 +451,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
       "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )    
 
@@ -472,7 +478,7 @@ ZZhTreeProducer= cfg.Analyzer(
         },
     collections = {
       "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
-      "cleanFatJets"      : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("jet", jetType, 4, help="fatJets after the preselection"),
       }
     )    
 

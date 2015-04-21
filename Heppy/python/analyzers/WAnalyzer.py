@@ -12,15 +12,11 @@ class WAnalyzer( Analyzer ):
         super(WAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
+            WCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "#Muons > 1", "Muon cuts", "W cand", "MEt cut"]
             self.WCRCounter = ROOT.TH1F("WCRCounter", "WCRCounter", 10, 0, 10)
-            self.WCRCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.WCRCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.WCRCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.WCRCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.WCRCounter.GetXaxis().SetBinLabel(5, "#Muons > 1")
-            self.WCRCounter.GetXaxis().SetBinLabel(6, "Muon cuts")
-            self.WCRCounter.GetXaxis().SetBinLabel(7, "W cand")
-            self.WCRCounter.GetXaxis().SetBinLabel(8, "MEt cut")
+            for i, l in enumerate(WCRLabels):
+                self.WCRCounter.GetXaxis().SetBinLabel(i+1, l)
+
     
     #def selectW(self, event):
         ## Select exactly one muon

@@ -1,6 +1,7 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
+import copy
 import math
 import ROOT
 import sys
@@ -15,11 +16,10 @@ class PreselectionAnalyzer( Analyzer ):
         super(PreselectionAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            self.inputCounter = ROOT.TH1F("Counter", "Counter", 10, 0, 10)
-            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
+            Labels = ["All events", "Trigger", "#Jets > 1", "Jet cuts"]
+            self.Counter = ROOT.TH1F("Counter", "Counter", 10, 0, 10)
+            for i, l in enumerate(Labels):
+                self.Counter.GetXaxis().SetBinLabel(i+1, l)
 
 
        
@@ -27,13 +27,17 @@ class PreselectionAnalyzer( Analyzer ):
         for j in event.Jets + event.cleanJets + event.cleanFatJets:
             j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
             j.deltaPhi_jet1 = deltaPhi(j.phi(), event.Jets[0].phi())
-    
+        
     
     def selectFatJet(self, event):
         if not len(event.cleanFatJets) >= 1:
             return False
         if not event.cleanFatJets[0].pt() > self.cfg_ana.fatjet_pt: 
             return False
+        
+        # Add n-subjettiness
+        for i, j in enumerate(event.cleanFatJets):
+            j.tau21 = j.userFloat("NjettinessAK8:tau2")/j.userFloat("NjettinessAK8:tau1")
         
         #########
         # FIXME dirty hack: count the number of ak4 b-tagged jet close instead
@@ -52,12 +56,21 @@ class PreselectionAnalyzer( Analyzer ):
                 f.subJet2 = subJets[1]
         #########
         
-        if not event.cleanFatJets[0].nSubJets >=2 or not event.cleanFatJets[0].subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag1 or not event.cleanFatJets[0].subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag2: 
+        # FatJet selections
+        if not event.cleanFatJets[0].nSubJets >= 1 or not event.cleanFatJets[0].subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag1:
+            return False
+#        if not event.cleanFatJets[0].nSubJets >= 2 or not event.cleanFatJets[0].subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag2:
+#            return False
+        if not event.cleanFatJets[0].userFloat("ak8PFJetsCHSPrunedLinks") > self.cfg_ana.fatjet_mass:
+            return False
+        if not hasattr(event.cleanFatJets[0], "tau21") or not event.cleanFatJets[0].tau21 > self.cfg_ana.fatjet_tau21:
             return False
         
+        
         # Higgs candidate
-        event.cleanFatJets[0].setMass(event.cleanFatJets[0].userFloat("ak8PFJetsCHSPrunedLinks"))
-        theH = event.cleanFatJets[0].p4()
+        prunedJet = copy.deepcopy(event.cleanFatJets[0]) # Copy fatJet...
+        prunedJet.setMass(prunedJet.userFloat("ak8PFJetsCHSPrunedLinks")) # ... and set the mass to the pruned mass
+        theH = prunedJet.p4()
         theH.charge = event.cleanFatJets[0].charge()
         theH.deltaR = deltaR(event.cleanFatJets[0].subJet1.eta(), event.cleanFatJets[0].subJet1.phi(), event.cleanFatJets[0].subJet2.eta(), event.cleanFatJets[0].subJet2.phi()) if hasattr(event.cleanFatJets[0], "subJet2") else -1.
         theH.deltaEta = abs(event.cleanFatJets[0].subJet1.eta() - event.cleanFatJets[0].subJet2.eta()) if hasattr(event.cleanFatJets[0], "subJet2") else -9.
@@ -118,14 +131,14 @@ class PreselectionAnalyzer( Analyzer ):
     def process(self, event):
         event.Category = 0
         
-        self.inputCounter.Fill(0)
+        self.Counter.Fill(0)
         # Trigger
-        self.inputCounter.Fill(1)
+        self.Counter.Fill(1)
         
         # Check if there is at least one jet
         if len(event.cleanJets) < 1:
             return False
-        self.inputCounter.Fill(2)
+        self.Counter.Fill(2)
         
         # Categorization
         
@@ -140,7 +153,7 @@ class PreselectionAnalyzer( Analyzer ):
             event.Category = 3
         else:
             return False
-        self.inputCounter.Fill(3)
+        self.Counter.Fill(3)
         
         # Create final jet list (standard or fat)
         event.Jets = []

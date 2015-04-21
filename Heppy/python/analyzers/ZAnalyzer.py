@@ -12,16 +12,10 @@ class ZAnalyzer( Analyzer ):
         super(ZAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
+            ZCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "Lep #geq 2", "Lep1 cuts", "Lep2 cuts", "Z cand", "MEt cut"]
             self.ZCRCounter = ROOT.TH1F("ZCRCounter", "ZCRCounter", 10, 0, 10)
-            self.ZCRCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.ZCRCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.ZCRCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.ZCRCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.ZCRCounter.GetXaxis().SetBinLabel(5, "Lep #geq 2")
-            self.ZCRCounter.GetXaxis().SetBinLabel(6, "Lep1 cuts")
-            self.ZCRCounter.GetXaxis().SetBinLabel(7, "Lep2 cuts")
-            self.ZCRCounter.GetXaxis().SetBinLabel(8, "Z cand")
-            self.ZCRCounter.GetXaxis().SetBinLabel(9, "MEt cut")
+            for i, l in enumerate(ZCRLabels):
+                self.ZCRCounter.GetXaxis().SetBinLabel(i+1, l)
             
             
 #    def vetoGamma(self, event):

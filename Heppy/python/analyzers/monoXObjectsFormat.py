@@ -6,13 +6,13 @@ from PhysicsTools.Heppy.analyzers.objects.autophobj  import *
 
 
 compositeType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("mt",   lambda x : x.mT if hasattr(x, "mT") else -1., int, help="transverse mass"),
-    NTupleVariable("charge",   lambda x : x.charge if hasattr(x, "charge") else -1., int, help="charge"),
-    NTupleVariable("dR",   lambda x : x.deltaR if hasattr(x, "deltaR") else -1., float, help="delta R"),
-    NTupleVariable("dEta",   lambda x : x.deltaEta if hasattr(x, "deltaEta") else -9., float, help="delta Eta"),
-    NTupleVariable("dPhi",   lambda x : x.deltaPhi if hasattr(x, "deltaPhi") else -9., float, help="delta Phi"),
-    NTupleVariable("dPhi_met",   lambda x : x.deltaPhi_met if hasattr(x, "deltaPhi_met") else -9., float, help="delta Phi with met"),
-    NTupleVariable("dPhi_jet1",   lambda x : x.deltaPhi_jet1 if hasattr(x, "deltaPhi_jet1") else -9., float, help="delta Phi with leading jet"),
+    NTupleVariable("mt",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
+    NTupleVariable("charge",   lambda x : getattr(x, "charge", -1.), int, help="charge"),
+    NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
+    NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
+    NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
+    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="delta Phi with met"),
+    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="delta Phi with leading jet"),
 ])
 
 leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], variables = [
@@ -63,12 +63,12 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
     NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedLinks") if x.hasUserFloat("ak8PFJetsCHSPrunedLinks") else -1., float, help="Jet pruned mass"),
     NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedLinks") if x.hasUserFloat("ak8PFJetsCHSTrimmedLinks") else -1., float, help="Jet trimmed mass"),
     NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredLinks") if x.hasUserFloat("ak8PFJetsCHSFilteredLinks") else -1., float, help="Jet filtered mass"),
-    NTupleVariable("tau21",   lambda x : x.userFloat("NjettinessAK8:tau2")/x.userFloat("NjettinessAK8:tau1") if x.hasUserFloat("NjettinessAK8:tau1") and x.hasUserFloat("NjettinessAK8:tau2") else -1., float, help="n-subjettiness 2/1"),
+    NTupleVariable("tau21",   lambda x : getattr(x, "tau21", -1.), float, help="n-subjettiness 2/1"),
     NTupleVariable("CSV",   lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
     NTupleVariable("subJet1_CSV",   lambda x : x.subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') if hasattr(x, "subJet1") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
     NTupleVariable("subJet2_CSV",   lambda x : x.subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') if hasattr(x, "subJet2") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
-    NTupleVariable("dPhi_met",   lambda x : x.deltaPhi_met, float, help="dPhi between jet and met"),
-    NTupleVariable("dPhi_jet1",   lambda x : x.deltaPhi_jet1, float, help="dPhi between jet and leading jet"),
+    NTupleVariable("dPhi_met",   lambda x : getattr(x, "dPhi_met", -9.), float, help="dPhi between jet and met"),
+    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "dPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
     NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -99), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
     NTupleVariable("flavour", lambda x : x.partonFlavour(), int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
 #    NTupleVariable("motherPdgId", lambda x : x.mother().pdgId() if x.mother() else 0, int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
