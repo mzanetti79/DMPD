@@ -12,15 +12,10 @@ class GammaAnalyzer( Analyzer ):
         super(GammaAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            self.inputCounter = ROOT.TH1F("GCounter", "GCounter", 10, 0, 10)
-            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(5, "Muon veto")
-            self.inputCounter.GetXaxis().SetBinLabel(6, "Photons #geq 1")
-            self.inputCounter.GetXaxis().SetBinLabel(7, "Photon cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(8, "MEt cut")
+            GCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "Muon veto", "Photons #geq 1", "Photon cuts", "MEt cut"]
+            self.GCRCounter = ROOT.TH1F("GCRCounter", "GCRCounter", 10, 0, 10)
+            for i, l in enumerate(GCRLabels):
+                self.GCRCounter.GetXaxis().SetBinLabel(i+1, l)
             
     #def selectGamma(self, event):
       ## Select at least one photon
@@ -53,19 +48,16 @@ class GammaAnalyzer( Analyzer ):
           return False
       if not event.selectedPhotons[0].photonID(self.cfg_ana.photon_id):
             return False
-      event.Photon = event.selectedPhotons[0]
       return True
 
     def makeFakeMET(self,event):
-        if not event.Photon:
-            return False
         # Make ject in the event and adding photon px, py
         event.fakemet = copy.deepcopy(event.met)
-        px, py = event.met.px()+event.Photon.px(), event.met.py()+event.Photon.py()
+        px, py = event.met.px()+event.selectedPhotons[0].px(), event.met.py()+event.selectedPhotons[0].py()
         event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         event.fakemetNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px()+event.Photon.px(), event.metNoPU.py()+event.Photon.py()
+        px, py = event.metNoPU.px()+event.selectedPhotons[0].px(), event.metNoPU.py()+event.selectedPhotons[0].py()
         event.fakemetNoPU.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
         
         return True
@@ -82,26 +74,25 @@ class GammaAnalyzer( Analyzer ):
     def process(self, event):
         # Select exactly 1 photon
         event.isGCR = False
-        event.Photon = None
         
         # No Muons
         if not len(event.selectedMuons) == 0:
             return True
-        self.inputCounter.Fill(4)
+        self.GCRCounter.Fill(4)
         # At least one photon
         if not len(event.selectedPhotons) >= 1:
             return True
-        self.inputCounter.Fill(5)
+        self.GCRCounter.Fill(5)
         # Photon selection
         if not self.selectPhoton(event):
             return True
-        self.inputCounter.Fill(6)
+        self.GCRCounter.Fill(6)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.inputCounter.Fill(7)
+        self.GCRCounter.Fill(7)
         # Vetoes
-        #self.inputCounter.Fill(8)
+        #self.GCRCounter.Fill(8)
         
         event.isGCR = True
         return True

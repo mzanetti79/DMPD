@@ -12,15 +12,11 @@ class WAnalyzer( Analyzer ):
         super(WAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            self.inputCounter = ROOT.TH1F("WCounter", "WCounter", 10, 0, 10)
-            self.inputCounter.GetXaxis().SetBinLabel(1, "All events")
-            self.inputCounter.GetXaxis().SetBinLabel(2, "Trigger")
-            self.inputCounter.GetXaxis().SetBinLabel(3, "#Jets > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(4, "Jet cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(5, "#Muons > 1")
-            self.inputCounter.GetXaxis().SetBinLabel(6, "Muon cuts")
-            self.inputCounter.GetXaxis().SetBinLabel(7, "W cand")
-            self.inputCounter.GetXaxis().SetBinLabel(8, "MEt cut")
+            WCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "#Muons > 1", "Muon cuts", "W cand", "MEt cut"]
+            self.WCRCounter = ROOT.TH1F("WCRCounter", "WCRCounter", 10, 0, 10)
+            for i, l in enumerate(WCRLabels):
+                self.WCRCounter.GetXaxis().SetBinLabel(i+1, l)
+
     
     #def selectW(self, event):
         ## Select exactly one muon
@@ -48,32 +44,35 @@ class WAnalyzer( Analyzer ):
             return False
         if not event.selectedMuons[0].muonID(self.cfg_ana.mu_id):
             return False
-        event.Muon = event.selectedMuons[0]
+        if not event.selectedMuons[0].relIso04 < self.cfg_ana.mu_iso:
+            return False
         return True
     
     def selectW(self, event):
-        if not event.Muon:
+        if not hasattr(event, "muon1"):
             return False
-        theW = event.Muon.p4() + event.met.p4()
-        if theW.mt() < self.cfg_ana.mt_low or theW.mt() > self.cfg_ana.mt_high:
+        theW = event.selectedMuons[0].p4() + event.met.p4()
+        theW.deltaPhi_met = deltaPhi(event.selectedMuons[0].phi(), event.met.phi())
+        theW.mT = math.sqrt( 2.*event.selectedMuons[0].et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )
+        if theW.mT < self.cfg_ana.mt_low or theW.mT > self.cfg_ana.mt_high:
             return False
-        theW.charge = event.Muon.charge()
-        theW.deltaEta = abs(event.Muon.eta())
-        theW.deltaPhi = deltaPhi(event.Muon.phi(), event.met.phi())
-        theW.deltaR = deltaR(event.Muon.eta(), event.Muon.phi(), 0, event.met.phi())
+        theW.charge = event.selectedMuons[0].charge()
+        theW.deltaEta = abs(event.selectedMuons[0].eta())
+        theW.deltaPhi = deltaPhi(event.selectedMuons[0].phi(), event.met.phi())
+        theW.deltaR = deltaR(event.selectedMuons[0].eta(), event.selectedMuons[0].phi(), 0, event.met.phi())
         event.W = theW
         return True
     
     def makeFakeMET(self,event):
-        if not event.Muon:
+        if not hasattr(event, "muon1"):
             return False
         # Make ject in the event and adding muon px, py
         event.fakemet = copy.deepcopy(event.met)
-        px, py = event.met.px() + event.Muon.px(), event.met.py() + event.Muon.py()
+        px, py = event.met.px() + event.selectedMuons[0].px(), event.met.py() + event.selectedMuons[0].py()
         event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
         event.fakemetNoPU = copy.deepcopy(event.metNoPU)
-        px, py = event.metNoPU.px() + event.Muon.px(), event.metNoPU.py() + event.Muon.py()
+        px, py = event.metNoPU.px() + event.selectedMuons[0].px(), event.metNoPU.py() + event.selectedMuons[0].py()
         event.fakemetNoPU.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px,py)))
         
         return True
@@ -81,40 +80,33 @@ class WAnalyzer( Analyzer ):
     def selectFakeMET(self, event):
         if event.fakemet.pt() < self.cfg_ana.fakemet_pt:
             return False
-#        if event.Category == 1 and deltaPhi(event.fatJets[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
-#        if (event.Category == 2 or event.Category == 3) and deltaPhi(event.JetPostCuts[0].phi(), event.fakemet.phi()) > self.cfg_ana.deltaPhi1met:
-#            return True
         return True
     
     def process(self, event):
         # Select exactly one muon
         event.isWCR = False
-        event.Muon = None
-        event.W = None
         
         # Exactly one muon
         if not len(event.selectedMuons) == 1:
             return True
-        self.inputCounter.Fill(4)
+        self.WCRCounter.Fill(4)
         # Select the muon
         if not self.selectMuon(event):
             return True
-        self.inputCounter.Fill(5)
+        self.WCRCounter.Fill(5)
         # Build W candidate
         if not self.selectW(event):
             return True
-        self.inputCounter.Fill(6)
+        self.WCRCounter.Fill(6)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.inputCounter.Fill(7)
+        self.WCRCounter.Fill(7)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.inputCounter.Fill(8)
+        #self.WCRCounter.Fill(8)
         
-        event.candidate = event.W
         event.isWCR = True
         return True
         

@@ -135,18 +135,19 @@ jetAnalyzer = cfg.Analyzer(
     jecPath                     = ""
     ### ====================== ###
     )
-    
+
+from PhysicsTools.Heppy.analyzers.objects.FatJetAnalyzer import FatJetAnalyzer
 fatJetAnalyzer = cfg.Analyzer(
 
-    class_object                = JetAnalyzer,
+    class_object                = FatJetAnalyzer,
 
     ### Jet - General
     ##############################
     jetCol                      = 'slimmedJetsAK8',
     jetPt                       = 50.,
     jetEta                      = 4.7,
-    jetEtaCentral               = 2.4,
-    jetLepDR                    = 0.4,
+    jetEtaCentral               = 2.5,
+    jetLepDR                    = 0.8,
     jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
     minLepPt                    = 10,
     relaxJetId                  = False,
@@ -199,7 +200,7 @@ photonAnalyzer = cfg.Analyzer(
     ### Photon - General
     ##############################
     photons                     = 'slimmedPhotons',
-    ptMin                       = 15,
+    ptMin                       = 10,
     etaMax                      = 2.5,
     gammaID                     = "PhotonCutBasedIDLoose",
     do_mc_match                 = True,
@@ -226,14 +227,19 @@ PreselectionAnalyzer = cfg.Analyzer(
     class_object = PreselectionAnalyzer,
     jet1_pt = 100.,
     jet1_eta = 2.5,
-    jet1_tag = -99.,
+    jet1_tag = -1e99,
     jet1_chf_min = 0.2,
     jet1_nhf_max = 0.7,
     jet1_phf_max = 0.7,
     jet2_pt = 30.,
     jet2_eta = 2.5,
-    jet2_tag = -99.,
-    deltaPhi12 = 2.,
+    jet2_tag = -1e99,
+    deltaPhi12 = 2.5,
+    fatjet_pt = 250.,
+    fatjet_tag1 = 0.423,
+    fatjet_tag2 = 0.423,
+    fatjet_mass = 50.,
+    fatjet_tau21 = -1.,
     jetveto_pt = 0.,
     jetveto_eta = 2.5,
     )
@@ -246,19 +252,17 @@ SRAnalyzer = cfg.Analyzer(
     deltaPhi1met = jet_met_deltaphi_cut,
     )
 
-from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
-ZAnalyzer = cfg.Analyzer(
+from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
+GammaAnalyzer = cfg.Analyzer(
     verbose = False,
-    class_object = ZAnalyzer,
+    class_object = GammaAnalyzer,
     fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
-
-    mass_low = 61.,
-    mass_high = 121.,
-    mu1_pt = 20.,
-    mu1_id = "POG_ID_Tight",
-    mu2_pt = 10.,
-    mu2_id = "POG_ID_Loose",
+    photon_pt = 175.,
+    photon_id = "PhotonCutBasedIDLoose",
+#    photon_eta = 2.5,
+#    photon_eta_remove_min = 1.442,
+#    photon_eta_remove_max = 1.56,
     )
 
 from DMPD.Heppy.analyzers.WAnalyzer import WAnalyzer
@@ -268,40 +272,64 @@ WAnalyzer = cfg.Analyzer(
     fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
     
-    mt_low = 50.,
+    mt_low = 0.,
     mt_high = 9e99,
     mu_pt = 20., 
-    mu_id = "POG_ID_Tight",    
+    mu_id = "POG_ID_Tight",
+    mu_iso = 0.12,    
     )
 
-from DMPD.Heppy.analyzers.GammaAnalyzer import GammaAnalyzer
-GammaAnalyzer = cfg.Analyzer(
+from DMPD.Heppy.analyzers.ZAnalyzer import ZAnalyzer
+ZAnalyzer = cfg.Analyzer(
     verbose = False,
-    class_object = GammaAnalyzer,
+    class_object = ZAnalyzer,
     fakemet_pt = met_pt_cut,
     deltaPhi1met = jet_met_deltaphi_cut,
-    
-    photon_pt = 160.,
-    photon_id = "PhotonCutBasedIDLoose",
-#    photon_eta = 2.5,
-#    photon_eta_remove_min = 1.442,
-#    photon_eta_remove_max = 1.56,
+
+    mass_low = 50.,
+    mass_high = 9e99,
+    mu1_pt = 20.,
+    mu1_id = "POG_ID_Tight",
+    mu1_iso = 0.12,
+    mu2_pt = 10.,
+    mu2_id = "POG_ID_Loose",
+    mu2_iso = 0.20,
+    ele1_pt = 20.,
+    ele1_id = "POG_Cuts_ID_CSA14_25ns_v1_Medium",
+    ele1_iso = 0.15,
+    ele2_pt = 10.,
+    ele2_id = "POG_Cuts_ID_CSA14_25ns_v1_Medium",
+    ele2_iso = 0.15,
+    )
+
+from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
+ZZhAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = ZZhAnalyzer,
+    fatjet_pt = 250.,
+    Z_pt = 100.,
+    Zmass_low = 75.,
+    Zmass_high = 105.,
+    fatJet_btag_1 = 0.423,
+    fatJet_btag_2 = 0.423,
+    fatJetMass_low = 100.,
+    fatJetMass_high = 150.,
+    met_pt = 200.,
     )
 
 globalVariables = [
-        NTupleVariable("isSR",  lambda x: x.isSR, int, help="Signal Region flag"),
-        NTupleVariable("isZCR",  lambda x: x.isZCR, int, help="Z+jets Control Region flag"),
-        NTupleVariable("isWCR",  lambda x: x.isWCR, int, help="W+jets Control Region flag"),
-        NTupleVariable("isGCR",  lambda x: x.isGCR, int, help="Gamma+jets Control Region flag"),
-        NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3"),
-        NTupleVariable("nMuons",  lambda x: len(x.selectedMuons), int, help="Number of selected muons"),
-        NTupleVariable("nElectrons",  lambda x: len(x.selectedElectrons), int, help="Number of selected electrons"),
-        NTupleVariable("nTaus",  lambda x: len(x.selectedTaus), int, help="Number of selected taus"),
-        NTupleVariable("nPhotons",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
-        NTupleVariable("nJets",  lambda x: len(x.cleanJets), int, help="Number of cleaned jets"),
-        NTupleVariable("nBJets",  lambda x: len([jet for jet in x.cleanJets if abs(jet.partonFlavour()) == 5]), int, help="Number of cleaned jets"),
-        #NTupleVariable("nFatJets",  lambda x: len(x.cleanFatJets), int, help="Number of cleaned fat jets"),
-        ]
+    NTupleVariable("isSR",  lambda x: x.isSR, int, help="Signal Region flag"),
+    NTupleVariable("isZCR",  lambda x: x.isZCR, int, help="Z+jets Control Region flag"),
+    NTupleVariable("isWCR",  lambda x: x.isWCR, int, help="W+jets Control Region flag"),
+    NTupleVariable("isGCR",  lambda x: x.isGCR, int, help="Gamma+jets Control Region flag"),
+    NTupleVariable("Cat",  lambda x: x.Category, int, help="Signal Region Category 1/2/3"),
+    NTupleVariable("nMuons",  lambda x: len(x.selectedMuons), int, help="Number of selected muons"),
+    NTupleVariable("nElectrons",  lambda x: len(x.selectedElectrons), int, help="Number of selected electrons"),
+    NTupleVariable("nTaus",  lambda x: len(x.selectedTaus), int, help="Number of selected taus"),
+    NTupleVariable("nPhotons",  lambda x: len(x.selectedPhotons), int, help="Number of selected photons"),
+    NTupleVariable("nJets",  lambda x: len(x.cleanJets) if not x.Category==1 else len(x.cleanFatJets), int, help="Number of cleaned jets"),
+    NTupleVariable("nBJets",  lambda x: len([jet for jet in x.cleanJets if abs(jet.partonFlavour()) == 5]), int, help="Number of cleaned jets"),
+]
 
 
 ##############################
@@ -317,42 +345,50 @@ SignalRegionTreeProducer= cfg.Analyzer(
     vectorTree = True,
     globalVariables = globalVariables,
     globalObjects = {
+        #"jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
       #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )
 
+
 ##############################
-### Z CONTROL REGION TREE  ###
+### G CONTROL REGION TREE  ###
 ##############################
 
-ZControlRegionTreeProducer= cfg.Analyzer(
+GammaControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
-    name='ZControlRegionTreeProducer',
-    treename='ZCR',
-    filter = lambda x: x.isZCR,
+    name='GammaControlRegionTreeProducer',
+    treename='GCR',
+    filter = lambda x: x.isGCR,
     verbose=False,
     vectorTree = True,
     globalVariables = globalVariables,
     globalObjects = {
+        #"photon1" : NTupleObject("photon1", photonType, help="leading photon"),
+        #"jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in Z -> mu mu event obtained removing the muons"),
-        "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muon", muonType, 4, help="Muons after the preselection"),
+      #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
-      #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "selectedPhotons"   : NTupleCollection("photon", photonType, 1, help="Photons after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
-    )    
+    )
+
 
 ##############################
 ### W CONTROL REGION TREE  ###
@@ -367,43 +403,84 @@ WControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = True,
     globalVariables = globalVariables,
     globalObjects = {
+#        "muon1" : NTupleObject("muon1", leptonType, help="leading muon"),
+#        "jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
         "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in W -> mu nu event obtained removing the muon"),
-        "W" : NTupleObject("W", fourVectorType, help="W boson candidate"),
+        "W" : NTupleObject("W", compositeType, help="W boson candidate"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
-      "selectedMuons"     : NTupleCollection("muon", muonType, 4, help="Muons after the preselection"),
+      "selectedMuons"     : NTupleCollection("muon", muonType, 1, help="Muons after the preselection"),
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
     )
     
+    
 ##############################
-### G CONTROL REGION TREE  ###
+### Z CONTROL REGION TREE  ###
 ##############################
 
-GammaControlRegionTreeProducer= cfg.Analyzer(
+ZControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
-    name='GammaControlRegionTreeProducer',
-    treename='GCR',
-    filter = lambda x: x.isGCR,
+    name='ZControlRegionTreeProducer',
+    treename='ZCR',
+    filter = lambda x: x.isZCR,
     verbose=False,
     vectorTree = True,
-    globalVariables = globalVariables,
+    globalVariables = globalVariables + [
+        NTupleVariable("isZtoMM",  lambda x: x.isZtoMM, int, help="Z -> mu mu flag")
+    ],
     globalObjects = {
+#        "lepton1" : NTupleObject("lepton1", leptonType, help="leading lepton"),
+#        "lepton2" : NTupleObject("lepton2", leptonType, help="subleading lepton"),
+#        "jet1" : NTupleObject("jet1", jetType, help="leading jet"),
         "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
-        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in gamma + jets event obtained removing the photon"),
+        "fakemet" : NTupleObject("fakemet", fourVectorType, help="fake MET in Z events obtained removing the muons"),
+        "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "H" : NTupleObject("H", compositeType, help="Higgs boson candidate"),
         },
     collections = {
-      #"selectedMuons"     : NTupleCollection("muon", muonType, 3, help="Muons after the preselection"),
-      #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
+      "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
+      #"selectedMuons"     : NTupleCollection("muon", muonType, 4, help="Muons after the preselection"),
+      #"selectedElectrons" : NTupleCollection("electron", electronType, 4, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
-      "selectedPhotons"   : NTupleCollection("photon", photonType, 4, help="Photons after the preselection"),
-      "cleanJets"         : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
       }
-    )
+    )    
+
+
+##############################
+###  Zprime -> Zh -> llbb  ###
+##############################
+
+ZZhTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='ZZhTreeProducer',
+    treename='ZZh',
+    filter = lambda x: x.isZZh,
+    verbose=False,
+    vectorTree = True,
+    globalVariables = globalVariables + [
+        NTupleVariable("isZtoMM",  lambda x: x.isZtoMM, int, help="Z -> mu mu flag")
+    ],
+    globalObjects = {
+        "A" : NTupleObject("A", compositeType, help="A boson candidate"),
+        "Z" : NTupleObject("Z", compositeType, help="Z boson candidate"),
+        "h" : NTupleObject("h", compositeType, help="Higgs boson candidate"),
+        "met" : NTupleObject("met",  metType, help="PF E_{T}^{miss}, after default type 1 corrections"),
+        },
+    collections = {
+      "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
+      "cleanFatJets"      : NTupleCollection("jet", jetType, 4, help="fatJets after the preselection"),
+      }
+    )    
 
 ##############################
 ### SEQUENCE               ###
@@ -415,22 +492,24 @@ sequence = [
     vertexAnalyzer,
     leptonAnalyzer,
     jetAnalyzer,
-    #fatJetAnalyzer,
+    fatJetAnalyzer,
     tauAnalyzer,
     photonAnalyzer,
     MEtAnalyzer,
     ### Preselection Analyzers
     PreselectionAnalyzer,
     ### Analysis Analyzers
-    GammaAnalyzer,
-    ZAnalyzer,
-    WAnalyzer,
     SRAnalyzer,
+    GammaAnalyzer,
+    WAnalyzer,
+    ZAnalyzer,
+    ZZhAnalyzer,
     ### Tree producers
-    GammaControlRegionTreeProducer,
-    ZControlRegionTreeProducer,
-    WControlRegionTreeProducer,
     SignalRegionTreeProducer,
+    GammaControlRegionTreeProducer,
+    WControlRegionTreeProducer, 
+    ZControlRegionTreeProducer,
+    ZZhTreeProducer,
     ]
 
 ##############################
@@ -452,7 +531,7 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
 sampleTest = cfg.Component(
-    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/M2000/MINIAODSIM.root"],
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/Buggy/M2000/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
     name="Test",
     isMC=True,
