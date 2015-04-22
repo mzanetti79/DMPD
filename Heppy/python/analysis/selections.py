@@ -2,13 +2,13 @@
 class Selection:
     def __init__(self, cfg):
         self.cfg = cfg
-        met_cut = 120
+        met_cut = 200
         if self.cfg.has_key('met_cut'): met_cut = self.cfg['met_cut']
         self.cuts = {
             'common': {
-                'leading jet':'jet_pt[0]>100&&abs(jet_eta[0])<2.4',
-                'trailing jet':'(jet_pt[1] <30||deltaPhi(jet_phi[0],jet_phi[1])<2)',
-                #'trailing jet':'(jet_pt[1] <30||deltaPhi(jet_phi[0],jet_phi[1])<4)',
+                'leading jet':'jet_pt[0]>150&&abs(jet_eta[0])<2.5',
+                #'trailing jet':'(jet_pt[1] <30||deltaPhi(jet_phi[0],jet_phi[1])<2)',
+                'trailing jet':'(nJets<2||deltaPhi(jet_phi[0],jet_phi[1])<2)',
                 'jet multiplicity':'nJets<3',
                 'veto':'nElectrons==0&&nTaus==0',
                 #'trigger':'',
@@ -16,7 +16,7 @@ class Selection:
                 },
             'SR': {
                 'met':'met_pt>'+str(met_cut),
-                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], met_phi)>1.8',
+                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], met_phi)>2.0',
                 'muon veto': 'nMuons==0',
                 'photon veto': 'nPhotons==0',
                 #'b-tag':'jet_CSV[0]>0.423',

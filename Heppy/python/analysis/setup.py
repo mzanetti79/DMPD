@@ -71,7 +71,6 @@ class Setup():
         build the TChains.
         '''
         trees = {}
-        print 'CHECK', self.configuration['region']
         for process in self.processes:
             trees[process] = TChain()
             trees[process].SetName(process)
@@ -88,7 +87,7 @@ class Setup():
             print 'WARNING: not a recognizable observable:', self.configuration['observable']
             self.observable = observables['default']
 
-    def make_histogram(self,process_name):
-        histogram = TH1D(self.observable.variable+process_name,'',self.observable.nBinsX, self.observable.bins)
+    def make_histogram(self,name):
+        histogram = TH1D(self.observable.variable+name,'',self.observable.nBinsX, self.observable.bins)
         histogram.Sumw2()
         return histogram

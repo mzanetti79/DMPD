@@ -28,7 +28,7 @@ class Analyzer():
         self.histograms = {}
         for process_name in self.trees:
             print 'processing', process_name, self.trees[process_name].GetName()
-            self.histograms[process_name] = self.setup.make_histogram(process_name)
+            self.histograms[process_name] = self.setup.make_histogram(process_name+'_'+self.cfg.name)
             selection = self.selection
             if process_name.find('data')==-1: 
                 weight = str(self.cfg.parametersSet['lumi'])+'*weight' 
@@ -56,9 +56,15 @@ class Analyzer():
         for process_name in self.histograms: 
             print process_name, int(self.histograms[process_name].Integral(0,-1))
 
+    def rescale_bins(self,hist):
+        for bin in range(1,hist.GetNbinsX()+1):
+            hist.SetBinContent(bin,hist.GetBinContent(bin)/hist.GetBinWidth(bin))
+            hist.SetBinError(bin,hist.GetBinError(bin)/hist.GetBinWidth(bin))
+
+            
     def format_histograms(self):
         self.formatted_histograms = {}
-        stack = THStack('stack','')
+        stack = THStack('stack'+self.cfg.name,'')
         self.legend = TLegend(0.65,0.6,0.88,0.88)
         self.legend.SetFillColor(0)
         self.legend.SetLineColor(0)
@@ -69,9 +75,7 @@ class Analyzer():
             except KeyError: continue
             hist = self.histograms[process_name]
             # --> events / GeV
-            for bin in range(1,hist.GetNbinsX()+1):
-                hist.SetBinContent(bin,hist.GetBinContent(bin)/hist.GetBinWidth(bin))
-                hist.SetBinError(bin,hist.GetBinError(bin)/hist.GetBinWidth(bin))
+            if self.setup.observable.scale_bin_content: self.rescale_bins(hist)
             # data
             if process_name.find('data')>-1:
                 legendMarker = 'p'
@@ -97,7 +101,7 @@ class Analyzer():
 
     
     def draw(self,name=''):
-        if name=='': name=self.setup.observable.variable
+        if name=='': name=self.cfg.name
         self.make_canvas(name) 
         self.formatted_histograms['background'].Draw('fhist')
         self.formatted_histograms['background'].GetXaxis().SetTitle(self.setup.observable.labelX)
