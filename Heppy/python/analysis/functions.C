@@ -1,5 +1,5 @@
 void functions(){
-  cout<<"load some functions.."<<endl;
+  //cout<<"load some functions.."<<endl;
 }
 
 float deltaPhi(float phi1, float phi2) {

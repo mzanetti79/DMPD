@@ -3,13 +3,13 @@ import os, sys, time, multiprocessing
 from ROOT import TFile, gROOT
 gROOT.Macro('functions.C')
 
-# the timeout
-timeout = 20
+# the timeout (needed for some to be understood reasons..)
+timeout = 10
 
 ## tell me what I need to plot
 common_plots = ['nJets','jet1Pt']
 to_be_processed = {
-    'SR':['nJets','met','jet1Pt'],
+    'SR':common_plots+['met'],
     'ZCR':common_plots+['fakemet','Zmass'],
     #'WCR':common_plots,
     #'GCR':common_plots,
@@ -26,7 +26,7 @@ def worker(cfg, label, result_queue):
     analyzer = Analyzer(cfg, label)
     analyzer.analyze()
     analyzer.format_histograms()
-    result_queue.put([cfg.parametersSet['observable'],analyzer])
+    result_queue.put([cfg.name,analyzer])
 
 ### launch the threads
 processes = []
@@ -34,6 +34,7 @@ result_queue = multiprocessing.Queue()
 ## looping on the regions and the plots
 for phasespace_region in to_be_processed:
     for plot in to_be_processed[phasespace_region]:
+        print 'Launching analysis for region', phasespace_region, 'and plotting', plot
         cfg.parametersSet['region'] = phasespace_region
         cfg.parametersSet['observable'] = plot
         cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
@@ -48,11 +49,13 @@ for process in processes: process.join(timeout)
 results = {}
 while len(results) < len(processes):
     result = result_queue.get()
-    print 'retriving results', result
     results[result[0]] = result[1]
-    result[1].draw()
 
 ### save the results
+output = TFile(cfg.parametersSet['output_name'],'recreate')
+for plot in results:
+    results[plot].draw()
+    results[plot].canvas.Write()
     
 ### kill the processes    
 for process in processes: process.terminate()

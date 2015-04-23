@@ -19,15 +19,17 @@ class Analyzer():
         selection = Selection(self.setup.configuration)
         selection.build_selection()
         self.selection = selection.selection
-        print ''
-        print 'Applying the following selection:'
-        print self.selection
-        print ''
+        if self.cfg.parametersSet['verbosity'] > 2:
+            print ''
+            print 'Applying the following selection:'
+            print self.selection
+            print ''
 
     def analyze(self):
         self.histograms = {}
         for process_name in self.trees:
-            print 'processing', process_name, self.trees[process_name].GetName()
+            if self.cfg.parametersSet['verbosity'] > 2:
+                print 'processing', process_name, self.trees[process_name].GetName()
             self.histograms[process_name] = self.setup.make_histogram(process_name+'_'+self.cfg.name)
             selection = self.selection
             if process_name.find('data')==-1: 
@@ -111,9 +113,11 @@ class Analyzer():
         try: 
             self.formatted_histograms['data'].Draw('ep,same') 
             self.draw_compare()
-        except: print 'data not plotted'
+        except:
+            if self.cfg.parametersSet['verbosity'] > 2: print 'data not plotted'
         try: self.formatted_histograms['signal'].Draw('hist,same') 
-        except: print 'signal not plotted'
+        except:
+            if self.cfg.parametersSet['verbosity'] > 2: print 'signal not plotted'
         self.legend.Draw()
             
 

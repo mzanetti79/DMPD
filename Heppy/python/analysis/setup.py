@@ -5,7 +5,11 @@ from ROOT import TChain, TH1D
 
 class Configuration():
     def __init__(self):
-        self.parametersSet = {}
+        # here goes the defaults
+        self.parametersSet = {
+            'verbosity':1, #1-> error, 2-> warning, 3-> info, 0->none
+            'output_name':'tmp.root',
+        }
         self.name = 'default'
         
     def check_parametersSet(self):
@@ -13,13 +17,14 @@ class Configuration():
         # list of mandatory parameters
         for p in ['region',  'observable', 'lumi']:
             if not self.parametersSet.has_key(p): 
-                print 'ERROR:', p, 'not found in the configuration' 
+                if self.parametersSet['verbosity'] > 0: print 'ERROR:', p, 'not found in the configuration' 
                 parametersSet_is_good = False
         # region must match tree names inside the root file    
         valid_regions = ['SR','ZCR','WCR','GCR']
         if not self.parametersSet['region'] in valid_regions: 
-            print 'ERROR: not a valid phase space region '
-            print 'valid phase space regions are', valid_regions
+            if self.parametersSet['verbosity'] > 0:
+                print 'ERROR: not a valid phase space region '
+                print 'valid phase space regions are', valid_regions
             parametersSet_is_good = False
         
         return parametersSet_is_good
@@ -49,7 +54,7 @@ class Setup():
             for f in processes[p]['files']:
                 if not os.path.exists(f): 
                     sample_to_be_added = False
-                    print 'WARNING:', p, 'is not there'
+                    if self.configuration['verbosity'] > 1: print 'WARNING:', p, 'is not there'
                 if self.configuration['region']!='GJets' and p=='GJets': sample_to_be_added = False
             if sample_to_be_added: self.processes[p] = processes[p]
 
@@ -84,7 +89,7 @@ class Setup():
                 self.observable = observables[self.configuration['observable']]
         else: self.observable = self.configuration['observable']
         if not self.observable:
-            print 'WARNING: not a recognizable observable:', self.configuration['observable']
+            if self.configuration['verbosity'] > 1: print 'WARNING: not a recognizable observable:', self.configuration['observable']
             self.observable = observables['default']
 
     def make_histogram(self,name):
