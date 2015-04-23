@@ -36,14 +36,14 @@ for ref_file_name in samples.keys():
     ref_hist = ref_file.Get('Counter')
     totalEntries = ref_hist.GetBinContent(1)
     weightXS = samples[ref_file_name]['xsec']/totalEntries 
-    
+
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
             print "  TH1:", obj.GetName()
-            if "Counter" in obj.GetName() and not "ZZh" in obj.GetName():
+            if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
             obj.Scale(weightXS)
             new_file.cd()
