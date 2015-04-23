@@ -3,10 +3,10 @@ import os, sys, time, multiprocessing
 from ROOT import TFile, gROOT
 gROOT.Macro('functions.C')
 
-# the timeout (needed for some to be understood reasons..)
+### the timeout (needed for some to be understood reasons..)
 timeout = 10
 
-## tell me what I need to plot
+### tell me what I need to plot
 common_plots = ['nJets','jet1Pt']
 to_be_processed = {
     'SR':common_plots+['met'],
@@ -15,12 +15,12 @@ to_be_processed = {
     #'GCR':common_plots,
     }
 
-## the configuration. First the common features
+### the configuration. First the common features
 from setup import Configuration
 cfg=Configuration()
 cfg.parametersSet['lumi'] = '5000' # pb^-1
 
-## the analyzer
+### the analyzer
 from analyzer import Analyzer
 def worker(cfg, label, result_queue):
     analyzer = Analyzer(cfg, label)
@@ -28,7 +28,7 @@ def worker(cfg, label, result_queue):
     analyzer.format_histograms()
     result_queue.put([cfg.name,analyzer])
 
-### launch the threads
+### launch the processes
 processes = []
 result_queue = multiprocessing.Queue()
 ## looping on the regions and the plots
@@ -38,11 +38,11 @@ for phasespace_region in to_be_processed:
         cfg.parametersSet['region'] = phasespace_region
         cfg.parametersSet['observable'] = plot
         cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
-        #label = str(hash(frozenset(cfg.parametersSet.items())))
-        label = ''
-        process = multiprocessing.Process(target = worker, args = [cfg, label, result_queue])
+        process = multiprocessing.Process(target = worker, args = [cfg, '', result_queue])
         process.start()
         processes.append(process)
+
+### close the processes
 for process in processes: process.join(timeout)
 
 ### retrieve the results
@@ -51,13 +51,10 @@ while len(results) < len(processes):
     result = result_queue.get()
     results[result[0]] = result[1]
 
-### save the results
+### plot and save the results
 output = TFile(cfg.parametersSet['output_name'],'recreate')
 for plot in results:
     results[plot].draw()
     results[plot].canvas.Write()
     
-### kill the processes    
-for process in processes: process.terminate()
-
 

@@ -1,6 +1,5 @@
 from array import array
 
-#momentum_bins=range(200,331,10)+[350, 380, 430, 500, 1000]
 momentum_bins=range(100,331,25)+[350, 380, 430, 500, 1000]
 
 class Observable():
@@ -83,21 +82,6 @@ observables = {
                 
 
     }
-
-#               'dPhiMetJet1':'deltaPhi(jet1.Phi(), metPhi)',
-#               'dPhiMetJet2':'deltaPhi(jet2.Phi(), metPhi)',
-#               'njets':'njets',
-#               'nphotons':'nphotons',
-#               'jet1Pt':'jet1_pt()',
-#               'jet2Pt':'jet2_pt()',
-#               'jet1Eta':'jet1_eta()',
-#               'jet2Eta':'jet2_eta()',
-#               'lep1Pt':'lep1.pt()',
-#               'lep2Pt':'lep2.pt()',
-#               'lep1Eta':'lep1.eta()',
-#               'lep2Eta':'lep2.eta()',
-#               'mll':'vectorSumMass(lep1.px(),lep1.py(),lep1.pz(),lep2.px(),lep2.py(),lep2.pz())',                        
-#               'mT':'transverseMass(lep1.Pt(),lep1.Phi(),met,metPhi)',                        
 
 
 
