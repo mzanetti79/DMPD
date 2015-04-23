@@ -1,0 +1,26 @@
+What follows describes the python scripts allowing the analysis of flat ntuples.
+
+The set of ntuples is defined in datasets.py together with related ancillary information (colors, labels, plotting order, etc.)
+
+The current ntuples structure expects 4 TTrees with well defined names to live in the same file.
+The input is managed in the setup.py class (grow_trees() method)
+
+The processing of the ntuples is configurable, by means of the Configuration class in setup.py
+
+The selections are (pre-)defined in selections.py. Further selections can be put together on the fly via the Configuration instance
+or can be added/edited in selections.py. Names of the variables should match those in the tree
+
+The possible plots are defined in observables.py. Furhter plot can be defined on the fly via the Configuration instance
+or can be added/edited in observables.py. Names of the variables should match those in the tree
+
+Execution options:
+ - python -i process.py
+ plot the given variable in the given region defined in process.py
+
+ - python -i multiprocess.py
+ plot the set of variables in the given regions defined in multiprocess.py
+ a process per plot is launched, care must be put to limit the number of processes to a limited amout
+
+ - python generate_datasets.py
+ generated a set RooDatasets with only the events passing the selections and storing only the set of
+ variables defined in generate_datasets.py
