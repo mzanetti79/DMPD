@@ -43,8 +43,10 @@ for ref_file_name in samples.keys():
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
             print "  TH1:", obj.GetName()
-            obj.Scale()
-            new_file.cd(weightXS)
+            if "Counter" in obj.GetName() and not "ZZh" in obj.GetName():
+                obj.Add(ref_hist)
+            obj.Scale(weightXS)
+            new_file.cd()
             obj.Write()
         # Copy trees
         elif obj.IsA().InheritsFrom("TTree"):
