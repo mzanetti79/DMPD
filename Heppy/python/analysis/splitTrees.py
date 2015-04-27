@@ -5,9 +5,9 @@ from array import array
 from ROOT import TFile, TTree, TH1
 
 fnames = ['ZJetsToNuNu', 'DYJetsToLL']
-prod_version = 'Prod_v02/'
+prod_version = 'Prod_v03/'
 heppy_output_dir = '/lustre/cmsdata/DM/ntuples/'+prod_version
-tnames = ['SR', 'ZCR', 'WCR', 'GCR']
+tnames = ['SR', 'ZCR', 'WCR', 'GCR', 'ZZh']
 
 for fname in fnames:
     oldfile = TFile((heppy_output_dir+fname+".root"), "READ")
