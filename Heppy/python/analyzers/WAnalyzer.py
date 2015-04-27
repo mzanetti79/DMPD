@@ -46,6 +46,7 @@ class WAnalyzer( Analyzer ):
             return False
         if not event.selectedMuons[0].relIso04 < self.cfg_ana.mu_iso:
             return False
+        event.muon1 = event.selectedMuons[0]
         return True
     
     def selectW(self, event):
@@ -53,7 +54,7 @@ class WAnalyzer( Analyzer ):
             return False
         theW = event.selectedMuons[0].p4() + event.met.p4()
         theW.deltaPhi_met = deltaPhi(event.selectedMuons[0].phi(), event.met.phi())
-        theW.mT = math.sqrt( 2.*event.selectedMuons[0].et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )
+        theW.mT = math.sqrt( 2.*event.selectedMuons[0].et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )        
         if theW.mT < self.cfg_ana.mt_low or theW.mT > self.cfg_ana.mt_high:
             return False
         theW.charge = event.selectedMuons[0].charge()
