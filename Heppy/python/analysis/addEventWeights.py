@@ -6,16 +6,18 @@ from ROOT import TFile, TH1
 
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
-heppy_output_dir = '/lustre/cmsdata/DM/ntuples/Prod_v01/'
+#prod_version = 'QWERTY'
+prod_version = 'Prod_v03/'
+heppy_output_dir = '/lustre/cmsdata/DM/ntuples/'+prod_version
 
 if not os.path.exists(heppy_output_dir+'weighted'):
     print 'Output dir does not exist, creating it'
     os.makedirs(heppy_output_dir+'weighted')
 
 for ref_file_name in samples.keys():
-    #print "##################################################"
+    print "##################################################"
     print "Processing:", ref_file_name.replace(heppy_output_dir, '')
-    #print "##################################################"
+    print "##################################################"
 
     # Unweighted input
     ref_file_name_with_path = heppy_output_dir+ref_file_name+'/tree.root'
@@ -43,6 +45,7 @@ for ref_file_name in samples.keys():
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
             print "  TH1:", obj.GetName()
+            new_file.cd()
             if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
             obj.Scale(weightXS)
@@ -51,12 +54,13 @@ for ref_file_name in samples.keys():
         # Copy trees
         elif obj.IsA().InheritsFrom("TTree"):
             print "  TTree:", obj.GetName()
+            new_file.cd()
             new_tree = obj.CloneTree(-1, 'fast')
             weight = array('f',[1.0])  # weight
             weightBranch = new_tree.Branch('weight',weight,'weight/F') 
             # looping over events
             for event in range(0, obj.GetEntries()):
-                #if event%100000==0: print event 
+                if event%100000==0: print event 
                 obj.GetEntry(event)
                 weight[0] = weightXS
                 weightBranch.Fill() # fill the branch

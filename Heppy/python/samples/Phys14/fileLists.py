@@ -3169,7 +3169,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZH_HToBB_ZToNuNu_M-125_13TeV_powheg-herwigpp/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/00000/DA048446-916B-E411-9DEE-C4346BC8C310.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/ZH_HToBB_ZToNuNu_M-125_13TeV_powheg-herwigpp/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/54CBC5EF-EC6B-E411-87BB-008CFA051DA8.root',            
             ],
-        'xsec' : 0.10035184,
+        'xsec' : 1.,
+        #'xsec' : 0.10035184,
         },
 
     'DM_Monojet_M1000_AV' : {
@@ -3182,7 +3183,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1000_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/9ED76A5A-3676-E411-8570-002481E150DA.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1000_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/A8004C44-9D75-E411-AB88-001E67396892.root',            
             ],
-        'xsec' : 0.000000046629,
+        'xsec' : 1.,
+        #'xsec' : 0.000000046629,
         },
         
     'DM_Monojet_M1000_V' : {
@@ -3195,7 +3197,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1000_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/E07BD56A-6E78-E411-A312-002481E14FE6.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1000_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/F263CDE3-7C77-E411-97A9-0025902009C0.root',
             ],
-        'xsec' : 0.000000124380,
+        'xsec' : 1.,
+        #'xsec' : 0.000000124380,
         },
         
     'DM_Monojet_M100_AV' : {
@@ -3207,7 +3210,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-100_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/C09466B2-1B77-E411-882D-002590A831DC.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-100_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/E82FAF59-9B76-E411-B6AD-002590A831AA.root',
             ],
-        'xsec' : 0.000000800870,
+        'xsec' : 1.,
+        #'xsec' : 0.000000800870,
         },
         
     'DM_Monojet_M100_V' : {
@@ -3218,7 +3222,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-100_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/DCEFBA3D-F37A-E411-BE81-001E673976ED.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-100_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/98EAFBF3-3378-E411-BE5C-002590A831DC.root',
             ],
-        'xsec' : 0.000000904510,
+        'xsec' : 1.,
+        #'xsec' : 0.000000904510,
         },
         
     'DM_Monojet_M10_AV' : {
@@ -3238,7 +3243,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-10_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/20000/DA1BF4BF-9061-E411-9BB8-001E67396DF1.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-10_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/20000/EEFD4E0F-9161-E411-8556-001E67396DF1.root',
             ],
-        'xsec' : 0.000000953810,
+        'xsec' : 1.,
+        #'xsec' : 0.000000953810,
         },
         
     'DM_Monojet_M10_V' : {
@@ -3249,7 +3255,8 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-10_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/F2F54211-C77A-E411-B8E3-001E67398C37.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-10_V_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/10000/98C1BF52-2B78-E411-B08E-002590200B40.root',
             ],
-        'xsec' : 0.000000954630,
+        'xsec' : 1.,
+        #'xsec' : 0.000000954630,
         },
         
     'DM_Monojet_M1_AV' : {
@@ -3263,7 +3270,29 @@ samples = {
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/EA9943C4-6271-E411-8A87-001E67397EEA.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DarkMatter_Monojet_M-1_AV_Tune4C_13TeV-madgraph/MINIAODSIM/PU20bx25_tsg_PHYS14_25_V1-v1/10000/FC5A2D99-7671-E411-B05F-002590200A98.root',
             ],
-        'xsec' : 0.000000956950,
+        'xsec' : 1.,
+        #'xsec' : 0.000000956950,
         },
         
+    'DM_MonoB' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/bbDM/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+
+    'DM_MonoVbb' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/DMV/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+
+    'DM_MonoH' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/MonoH/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+
     }
