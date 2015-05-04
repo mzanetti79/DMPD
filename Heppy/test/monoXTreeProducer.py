@@ -983,12 +983,12 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleDM_Monojet_M100_AV] 
 #selectedComponents = [sampleDM_Monojet_M1000_AV] 
 
-#selectedComponents = [sampleDM_MonoB] 
+selectedComponents = [sampleDM_MonoB] 
 #selectedComponents = [sampleDM_MonoVbb] 
 #selectedComponents = [sampleDM_MonoH] 
 
 ###LOCAL COMPONENTS
-selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
+#selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
 config = cfg.Config(
     components = selectedComponents,
