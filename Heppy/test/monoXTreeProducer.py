@@ -175,7 +175,7 @@ tauAnalyzer = cfg.Analyzer(
     ### Tau - General
     ##############################
     ptMin                       = 15.,
-    etaMax                      = 2.5,
+    etaMax                      = 2.3,
     dxyMax                      = 1000.,
     dzMax                       = 0.2,
     vetoLeptons                 = True,
@@ -200,7 +200,7 @@ photonAnalyzer = cfg.Analyzer(
     ### Photon - General
     ##############################
     photons                     = 'slimmedPhotons',
-    ptMin                       = 10,
+    ptMin                       = 15,
     etaMax                      = 2.5,
     gammaID                     = "PhotonCutBasedIDLoose",
     do_mc_match                 = True,
@@ -342,7 +342,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     treename='SR',
     filter = lambda x: x.isSR,
     verbose=False,
-    vectorTree = True,
+    vectorTree = False,
     globalVariables = globalVariables,
     globalObjects = {
         #"jet1" : NTupleObject("jet1", jetType, help="leading jet"),
@@ -370,7 +370,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     treename='GCR',
     filter = lambda x: x.isGCR,
     verbose=False,
-    vectorTree = True,
+    vectorTree = False,
     globalVariables = globalVariables,
     globalObjects = {
         #"photon1" : NTupleObject("photon1", photonType, help="leading photon"),
@@ -400,7 +400,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     treename='WCR',
     filter = lambda x: x.isWCR,
     verbose=False,
-    vectorTree = True,
+    vectorTree = False,
     globalVariables = globalVariables,
     globalObjects = {
 #        "muon1" : NTupleObject("muon1", leptonType, help="leading muon"),
@@ -431,7 +431,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     treename='ZCR',
     filter = lambda x: x.isZCR,
     verbose=False,
-    vectorTree = True,
+    vectorTree = False,
     globalVariables = globalVariables + [
         NTupleVariable("isZtoMM",  lambda x: x.isZtoMM, int, help="Z -> mu mu flag")
     ],
@@ -466,7 +466,7 @@ ZZhTreeProducer= cfg.Analyzer(
     treename='ZZh',
     filter = lambda x: x.isZZh,
     verbose=False,
-    vectorTree = True,
+    vectorTree = False,
     globalVariables = globalVariables + [
         NTupleVariable("isZtoMM",  lambda x: x.isZtoMM, int, help="Z -> mu mu flag")
     ],
@@ -545,7 +545,7 @@ sampleQCD_HT100To250 = cfg.Component(
     name="QCD_HT100To250",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=16
     )
 
 sampleQCD_HT250To500 = cfg.Component(
@@ -554,7 +554,7 @@ sampleQCD_HT250To500 = cfg.Component(
     name="QCD_HT250To500",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=3
     )
 
 sampleQCD_HT500To1000 = cfg.Component(
@@ -563,7 +563,7 @@ sampleQCD_HT500To1000 = cfg.Component(
     name="QCD_HT500To1000",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=4
     )
 
 sampleQCD_HT1000ToInf = cfg.Component(
@@ -572,7 +572,7 @@ sampleQCD_HT1000ToInf = cfg.Component(
     name="QCD_HT1000ToInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=1
+    splitFactor=2
     )
 
 sampleDYJetsToLL_M50_HT100to200 = cfg.Component(
@@ -581,7 +581,7 @@ sampleDYJetsToLL_M50_HT100to200 = cfg.Component(
     name="DYJetsToLL_M50_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=16
     )
 
 sampleDYJetsToLL_M50_HT200to400 = cfg.Component(
@@ -590,7 +590,7 @@ sampleDYJetsToLL_M50_HT200to400 = cfg.Component(
     name="DYJetsToLL_M50_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=18
     )
 
 sampleDYJetsToLL_M50_HT400to600 = cfg.Component(
@@ -599,7 +599,7 @@ sampleDYJetsToLL_M50_HT400to600 = cfg.Component(
     name="DYJetsToLL_M50_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=19
     )
 
 sampleDYJetsToLL_M50_HT600toInf = cfg.Component(
@@ -608,7 +608,7 @@ sampleDYJetsToLL_M50_HT600toInf = cfg.Component(
     name="DYJetsToLL_M50_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
     )
 
 sampleGJets_HT100to200 = cfg.Component(
@@ -617,7 +617,7 @@ sampleGJets_HT100to200 = cfg.Component(
     name="GJets_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=18
     )
 
 sampleGJets_HT200to400 = cfg.Component(
@@ -626,7 +626,7 @@ sampleGJets_HT200to400 = cfg.Component(
     name="GJets_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
     )
 
 sampleGJets_HT400to600 = cfg.Component(
@@ -635,7 +635,7 @@ sampleGJets_HT400to600 = cfg.Component(
     name="GJets_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=17
     )
 
 sampleGJets_HT600toInf = cfg.Component(
@@ -644,7 +644,7 @@ sampleGJets_HT600toInf = cfg.Component(
     name="GJets_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
     )
 
 sampleTT = cfg.Component(
@@ -653,13 +653,31 @@ sampleTT = cfg.Component(
     name="TT",
     isMC=True,
     isEmbed=False,
-    splitFactor=5
+    splitFactor=12
+    )
+
+sampleTTJets = cfg.Component(
+    ### TTJets
+    files = samples['TTJets']['files'],
+    name="TTJets",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=95
     )
 
 sampleTToLeptons_schannel = cfg.Component(
     ### TToLeptons_schannel
     files = samples['TToLeptons_schannel']['files'],
     name="TToLeptons_schannel",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=2
+    )
+
+sampleTbarToLeptons_schannel = cfg.Component(
+    ### TbarToLeptons_schannel
+    files = samples['TbarToLeptons_schannel']['files'],
+    name="TbarToLeptons_schannel",
     isMC=True,
     isEmbed=False,
     splitFactor=1
@@ -671,7 +689,16 @@ sampleTToLeptons_tchannel = cfg.Component(
     name="TToLeptons_tchannel",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=15
+    )
+
+sampleTbarToLeptons_tchannel = cfg.Component(
+    ### TbarToLeptons_tchannel
+    files = samples['TbarToLeptons_tchannel']['files'],
+    name="TbarToLeptons_tchannel",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=8
     )
 
 sampleT_tWchannel = cfg.Component(
@@ -680,7 +707,7 @@ sampleT_tWchannel = cfg.Component(
     name="T_tWchannel",
     isMC=True,
     isEmbed=False,
-    splitFactor=2
+    splitFactor=4
     )
 
 sampleTbar_tWchannel = cfg.Component(
@@ -689,7 +716,7 @@ sampleTbar_tWchannel = cfg.Component(
     name="Tbar_tWchannel",
     isMC=True,
     isEmbed=False,
-    splitFactor=2
+    splitFactor=4
     )
 
 sampleWJetsToLNu_HT100to200 = cfg.Component(
@@ -698,7 +725,7 @@ sampleWJetsToLNu_HT100to200 = cfg.Component(
     name="WJetsToLNu_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=20
     )
 
 sampleWJetsToLNu_HT200to400 = cfg.Component(
@@ -707,7 +734,7 @@ sampleWJetsToLNu_HT200to400 = cfg.Component(
     name="WJetsToLNu_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=19
     )
 
 sampleWJetsToLNu_HT400to600 = cfg.Component(
@@ -716,7 +743,7 @@ sampleWJetsToLNu_HT400to600 = cfg.Component(
     name="WJetsToLNu_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=18
     )
 
 sampleWJetsToLNu_HT600toInf = cfg.Component(
@@ -725,7 +752,7 @@ sampleWJetsToLNu_HT600toInf = cfg.Component(
     name="WJetsToLNu_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
     )
 
 sampleZJetsToNuNu_HT100to200 = cfg.Component(
@@ -734,7 +761,7 @@ sampleZJetsToNuNu_HT100to200 = cfg.Component(
     name="ZJetsToNuNu_HT100to200",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=19
     )
 
 sampleZJetsToNuNu_HT200to400 = cfg.Component(
@@ -743,7 +770,7 @@ sampleZJetsToNuNu_HT200to400 = cfg.Component(
     name="ZJetsToNuNu_HT200to400",
     isMC=True,
     isEmbed=False,
-    splitFactor=8
+    splitFactor=17
     )
 
 sampleZJetsToNuNu_HT400to600 = cfg.Component(
@@ -752,7 +779,7 @@ sampleZJetsToNuNu_HT400to600 = cfg.Component(
     name="ZJetsToNuNu_HT400to600",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
     )
 
 sampleZJetsToNuNu_HT600toInf = cfg.Component(
@@ -761,7 +788,106 @@ sampleZJetsToNuNu_HT600toInf = cfg.Component(
     name="ZJetsToNuNu_HT600toInf",
     isMC=True,
     isEmbed=False,
-    splitFactor=7
+    splitFactor=17
+    )
+
+sampleZH_HToBB_ZToNuNu = cfg.Component(
+    ### ZH_HToBB_ZToNuNu
+    files = samples['ZH_HToBB_ZToNuNu']['files'],
+    name="ZH_HToBB_ZToNuNu",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M1_AV = cfg.Component(
+    ### DM_Monojet_M1_AV
+    files = samples['DM_Monojet_M1_AV']['files'],
+    name="DM_Monojet_M1_AV",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M10_AV = cfg.Component(
+    ### DM_Monojet_M10_AV
+    files = samples['DM_Monojet_M10_AV']['files'],
+    name="DM_Monojet_M10_AV",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M100_AV = cfg.Component(
+    ### DM_Monojet_M100_AV
+    files = samples['DM_Monojet_M100_AV']['files'],
+    name="DM_Monojet_M100_AV",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M1000_AV = cfg.Component(
+    ### DM_Monojet_M1000_AV
+    files = samples['DM_Monojet_M1000_AV']['files'],
+    name="DM_Monojet_M1000_AV",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M10_V = cfg.Component(
+    ### DM_Monojet_M10_V
+    files = samples['DM_Monojet_M10_V']['files'],
+    name="DM_Monojet_M10_V",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M100_V = cfg.Component(
+    ### DM_Monojet_M100_V
+    files = samples['DM_Monojet_M100_V']['files'],
+    name="DM_Monojet_M100_V",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_Monojet_M1000_V = cfg.Component(
+    ### DM_Monojet_M1000_V
+    files = samples['DM_Monojet_M1000_V']['files'],
+    name="DM_Monojet_M1000_V",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_MonoB = cfg.Component(
+    ### DM_MonoB
+    files = samples['DM_MonoB']['files'],
+    name="DM_MonoB",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_MonoVbb = cfg.Component(
+    ### DM_MonoVbb
+    files = samples['DM_MonoVbb']['files'],
+    name="DM_MonoVbb",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_MonoH = cfg.Component(
+    ### DM_MonoH
+    files = samples['DM_MonoH']['files'],
+    name="DM_MonoH",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
     )
 
 ##############################
@@ -773,10 +899,10 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### TEST (LOCAL)
-selectedComponents = [sampleTest]
+#selectedComponents = [sampleTest]
 
 #### FULL QCD
-#selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT_1000ToInf] 
+#selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf] 
 
 #### FULL DYJetsToLL
 #selectedComponents = [sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200to400,sampleDYJetsToLL_M50_HT400to600,sampleDYJetsToLL_M50_HT600toInf] 
@@ -785,10 +911,10 @@ selectedComponents = [sampleTest]
 #selectedComponents = [sampleGJets_HT100to200,sampleGJets_HT200to400,sampleGJets_HT400to600,sampleGJets_HT600toInf] 
 
 #### FULL TT
-#selectedComponents = [sampleTT] 
+#selectedComponents = [sampleTT,sampleTTJets] 
 
 #### FULL T
-#selectedComponents = [sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTToLeptons_tchannel] 
+#selectedComponents = [sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTbarToLeptons_schannel,sampleTToLeptons_tchannel,sampleTbarToLeptons_tchannel] 
 
 #### FULL WJetsToLNu
 #selectedComponents = [sampleWJetsToLNu_HT100to200,sampleWJetsToLNu_HT200to400,sampleWJetsToLNu_HT400to600,sampleWJetsToLNu_HT600toInf] 
@@ -796,17 +922,38 @@ selectedComponents = [sampleTest]
 #### FULL ZJetsToNuNu
 #selectedComponents = [sampleZJetsToNuNu_HT100to200,sampleZJetsToNuNu_HT200to400,sampleZJetsToNuNu_HT400to600,sampleZJetsToNuNu_HT600toInf] 
 
+#### FULL ZH_HToBB_ZToNuNu
+#selectedComponents = [sampleZH_HToBB_ZToNuNu] 
+
+#### FULL DM-MonoJet
+#selectedComponents = [sampleDM_Monojet_M10_V,sampleDM_Monojet_M100_V,sampleDM_Monojet_M1000_V,sampleDM_Monojet_M1_AV,sampleDM_Monojet_M10_AV,sampleDM_Monojet_M100_AV,sampleDM_Monojet_M1000_AV] 
+
+#### FULL List
+#selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf,
+                      #sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200to400,sampleDYJetsToLL_M50_HT400to600,sampleDYJetsToLL_M50_HT600toInf,
+                      #sampleGJets_HT100to200,sampleGJets_HT200to400,sampleGJets_HT400to600,sampleGJets_HT600toInf,
+                      #sampleTT,sampleTTJets,
+                      #sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTbarToLeptons_schannel,sampleTToLeptons_tchannel,sampleTbarToLeptons_tchannel,
+                      #sampleWJetsToLNu_HT100to200,sampleWJetsToLNu_HT200to400,sampleWJetsToLNu_HT400to600,sampleWJetsToLNu_HT600toInf,
+                      #sampleZJetsToNuNu_HT100to200,sampleZJetsToNuNu_HT200to400,sampleZJetsToNuNu_HT400to600,sampleZJetsToNuNu_HT600toInf,
+                      #sampleZH_HToBB_ZToNuNu,
+                      #sampleDM_Monojet_M10_V,sampleDM_Monojet_M100_V,sampleDM_Monojet_M1000_V,sampleDM_Monojet_M1_AV,sampleDM_Monojet_M10_AV,sampleDM_Monojet_M100_AV,sampleDM_Monojet_M1000_AV] 
+
 
 #### SINGLE COMPONENTS
 #selectedComponents = [sampleQCD_HT100To250]
 #selectedComponents = [sampleQCD_HT250To500]
 #selectedComponents = [sampleQCD_HT500To1000]
-#selectedComponents = [sampleQCD_HT_1000ToInf]
+#selectedComponents = [sampleQCD_HT1000ToInf]
+
 #selectedComponents = [sampleTT]
+#selectedComponents = [sampleTTJets]
 #selectedComponents = [sampleT_tWchannel]
 #selectedComponents = [sampleTbar_tWchannel]
 #selectedComponents = [sampleTToLeptons_schannel]
+#selectedComponents = [sampleTbarToLeptons_schannel]
 #selectedComponents = [sampleTToLeptons_tchannel] 
+#selectedComponents = [sampleTbarToLeptons_tchannel] 
 
 #selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
 #selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
@@ -827,6 +974,21 @@ selectedComponents = [sampleTest]
 #selectedComponents = [sampleZJetsToNuNu_HT200to400]
 #selectedComponents = [sampleZJetsToNuNu_HT400to600]
 #selectedComponents = [sampleZJetsToNuNu_HT600toInf] 
+
+#selectedComponents = [sampleDM_Monojet_M10_V] 
+#selectedComponents = [sampleDM_Monojet_M100_V] 
+#selectedComponents = [sampleDM_Monojet_M1000_V] 
+#selectedComponents = [sampleDM_Monojet_M1_AV] 
+#selectedComponents = [sampleDM_Monojet_M10_AV] 
+#selectedComponents = [sampleDM_Monojet_M100_AV] 
+#selectedComponents = [sampleDM_Monojet_M1000_AV] 
+
+#selectedComponents = [sampleDM_MonoB] 
+#selectedComponents = [sampleDM_MonoVbb] 
+#selectedComponents = [sampleDM_MonoH] 
+
+###LOCAL COMPONENTS
+selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
 config = cfg.Config(
     components = selectedComponents,
