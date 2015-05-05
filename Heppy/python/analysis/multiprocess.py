@@ -55,6 +55,7 @@ while len(results) < len(processes):
 output = TFile(cfg.parametersSet['output_name'],'recreate')
 for plot in results:
     results[plot].draw()
+    results[plot].canvas.SaveAs('plots/'+results[plot].canvas.GetName()+'.png')
     results[plot].canvas.Write()
     
 

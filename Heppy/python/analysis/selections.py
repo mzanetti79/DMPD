@@ -6,9 +6,8 @@ class Selection:
         if self.cfg.has_key('met_cut'): met_cut = self.cfg['met_cut']
         self.cuts = {
             'common': {
-                'leading jet':'jet_pt[0]>150&&abs(jet_eta[0])<2.5',
-                #'trailing jet':'(jet_pt[1] <30||deltaPhi(jet_phi[0],jet_phi[1])<2)',
-                'trailing jet':'(nJets<2||deltaPhi(jet_phi[0],jet_phi[1])<2)',
+                'leading jet':'jet1_pt>15&&abs(jet1_eta)<2.5',
+                'trailing jet':'(jet2_pt <30||deltaPhi(jet1_phi,jet2_phi)<2)',
                 'jet multiplicity':'nJets<3',
                 'veto':'nElectrons==0&&nTaus==0',
                 #'trigger':'',
@@ -16,27 +15,27 @@ class Selection:
                 },
             'SR': {
                 'met':'met_pt>'+str(met_cut),
-                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], met_phi)>2.0',
+                'dPhi(Jet1,Met)':'deltaPhi(jet1_phi, met_phi)>2.0',
                 'muon veto': 'nMuons==0',
                 'photon veto': 'nPhotons==0',
-                #'b-tag':'jet_CSV[0]>0.423',
+                #'b-tag':'jet1_CSV>0.423',
                 },
             'GCR': {
                 'fakemet':'fakemet_pt>'+str(met_cut),
-                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], fakemet_phi)>1.8',
-                'photon pt': 'photon_pt[0]>160',
+                'dPhi(Jet1,Met)':'deltaPhi(jet1_phi, fakemet_phi)>1.8',
+                'photon pt': 'photon1_pt>160',
                 'muon veto': 'nMuons==0',
                 },
             'ZCR': {
                 'met':'fakemet_pt>'+str(met_cut),
-                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], fakemet_phi)>1.8',
+                'dPhi(Jet1,Met)':'deltaPhi(jet1_phi, fakemet_phi)>1.8',
                 'Z': 'Z_mass>60&&Z_mass<120',
                 'photon veto': 'nPhotons==0',
                 },
             'WCR': {
                 'met':'fakemet_pt>'+str(met_cut),
-                'dPhi(Jet1,Met)':'deltaPhi(jet_phi[0], fakemet_phi)>1.8',
-                'W': 'abs(transverseMass(muon_pt[0],muon_phi[0],met_pt,met_phi)-75)<25',
+                'dPhi(Jet1,Met)':'deltaPhi(jet1_phi, fakemet_phi)>1.8',
+                'W': 'abs(transverseMass(muon1_pt,muon1_phi,met_pt,met_phi)-75)<25',
                 'photon veto': 'nPhotons==0',
                 },
             }

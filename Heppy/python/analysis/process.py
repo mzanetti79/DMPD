@@ -10,6 +10,7 @@ cfg=Configuration()
 ## mandatory configurations parameters
 cfg.parametersSet['region'] = 'SR'
 cfg.parametersSet['observable'] = 'met'
+cfg.parametersSet['verbosity'] = 3
 cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
 cfg.parametersSet['lumi'] = '5000' # pb^-1
 
