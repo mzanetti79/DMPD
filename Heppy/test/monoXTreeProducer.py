@@ -557,7 +557,7 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
 sampleTest = cfg.Component(
-    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/Buggy/M2000/MINIAODSIM.root"],
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/bbDM/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
     name="Test",
     isMC=True,
@@ -959,7 +959,7 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### TEST (LOCAL)
-#selectedComponents = [sampleTest]
+selectedComponents = [sampleTest]
 
 #### FULL QCD
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf] 
@@ -1051,7 +1051,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleZZhToLLM1000]
 #selectedComponents = [sampleZZhToLLM2000]
 #selectedComponents = [sampleZZhToLLM3000]
-selectedComponents = [sampleZZhToLLM4000] 
+#selectedComponents = [sampleZZhToLLM4000] 
 
 ###LOCAL COMPONENTS
 #selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
