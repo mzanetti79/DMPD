@@ -6,7 +6,24 @@ from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
 ##############################
-### TRIGGERANALYZER         ###
+### GENANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.gen.GeneratorAnalyzer import GeneratorAnalyzer
+generatorAnalyzer= cfg.Analyzer(
+    verbose=False,
+    class_object=GeneratorAnalyzer,
+    stableBSMParticleIds = [ 1000022, 9100000, 9100022, -9100022, 1023 ], # BSM particles that can appear with status <= 2 and should be kept
+    # Particles of which we want to save the pre-FSR momentum (a la status 3).
+    # Note that for quarks and gluons the post-FSR doesn't make sense,
+    # so those should always be in the list
+    savePreFSRParticleIds = [ 1,2,3,4,5, 11,12,13,14,15,16, 21 ],
+    makeAllGenParticles = True, # Make also the list of all genParticles, for other analyzers to handle
+    makeSplittedGenLists = True, # Make also the splitted lists
+    allGenTaus = False, 
+    )
+
+##############################
+### TRIGGERANALYZER        ###
 ##############################
 from PhysicsTools.Heppy.analyzers.core.TriggerBitAnalyzer import TriggerBitAnalyzer
 triggerAnalyzer= cfg.Analyzer(
@@ -55,7 +72,8 @@ leptonAnalyzer = cfg.Analyzer(
     min_dr_electron_muon        = 0.02,
     # do MC matching
     do_mc_match                 = True, # note: it will in any case try it only on MC, not on data
-
+    match_inclusiveLeptons      = False, # match to all inclusive leptons
+    
     ### Electron - General
     ##############################
     electrons                   = 'slimmedElectrons',
@@ -208,7 +226,7 @@ photonAnalyzer = cfg.Analyzer(
     )
 
 ##############################
-### METANALYZER         ###
+### METANALYZER            ###
 ##############################
 from PhysicsTools.Heppy.analyzers.objects.METAnalyzer import METAnalyzer
 MEtAnalyzer = METAnalyzer.defaultConfig
@@ -220,6 +238,12 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 ### GLOBAL CUTS
 met_pt_cut = 100. # met or fakemet
 jet_met_deltaphi_cut = 0. # wrt met or fakemet
+
+from DMPD.Heppy.analyzers.GenAnalyzer import GenAnalyzer
+GenAnalyzer = cfg.Analyzer(
+    mediator = [],
+    darkmatter = [],
+    )
 
 from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
@@ -487,6 +511,7 @@ ZZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
+    generatorAnalyzer,
     triggerAnalyzer,
     pileupAnalyzer,
     vertexAnalyzer,
@@ -497,6 +522,7 @@ sequence = [
     photonAnalyzer,
     MEtAnalyzer,
     ### Preselection Analyzers
+    GenAnalyzer,
     PreselectionAnalyzer,
     ### Analysis Analyzers
     SRAnalyzer,
@@ -890,6 +916,40 @@ sampleDM_MonoH = cfg.Component(
     splitFactor=1
     )
 
+
+
+sampleZZhToLLM1000 = cfg.Component(
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM1000/MINIAODSIM.root"],
+    name="ZZhToLLM1000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM2000 = cfg.Component(
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM2000/MINIAODSIM.root"],
+    name="ZZhToLLM2000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM3000 = cfg.Component(
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM3000/MINIAODSIM.root"],
+    name="ZZhToLLM3000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM4000 = cfg.Component(
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM4000/MINIAODSIM.root"],
+    name="ZZhToLLM4000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
 ##############################
 ### FWLITE                 ###
 ##############################
@@ -987,8 +1047,14 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleDM_MonoVbb] 
 #selectedComponents = [sampleDM_MonoH] 
 
+#### FULL ZZhToLL
+#selectedComponents = [sampleZZhToLLM1000]
+#selectedComponents = [sampleZZhToLLM2000]
+#selectedComponents = [sampleZZhToLLM3000]
+selectedComponents = [sampleZZhToLLM4000] 
+
 ###LOCAL COMPONENTS
-selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
+#selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
 config = cfg.Config(
     components = selectedComponents,
@@ -1008,7 +1074,7 @@ if __name__ == '__main__':
         'MonoX',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=1000000,
         )
     looper.loop()
     looper.write()

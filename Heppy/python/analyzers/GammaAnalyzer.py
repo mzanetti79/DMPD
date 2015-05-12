@@ -12,8 +12,8 @@ class GammaAnalyzer( Analyzer ):
         super(GammaAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            GCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "Muon veto", "Photons #geq 1", "Photon cuts", "MEt cut"]
-            self.GCRCounter = ROOT.TH1F("GCRCounter", "GCRCounter", 10, 0, 10)
+            GCRLabels = ["Trigger", "#Jets > 1", "Jet cuts", "Muon veto", "Photons #geq 1", "Photon cuts", "MEt cut"]
+            self.GCRCounter = ROOT.TH1F("GCRCounter", "GCRCounter", 8, 0, 8)
             for i, l in enumerate(GCRLabels):
                 self.GCRCounter.GetXaxis().SetBinLabel(i+1, l)
             
@@ -78,21 +78,21 @@ class GammaAnalyzer( Analyzer ):
         # No Muons
         if not len(event.selectedMuons) == 0:
             return True
-        self.GCRCounter.Fill(4)
+        self.GCRCounter.Fill(3)
         # At least one photon
         if not len(event.selectedPhotons) >= 1:
             return True
-        self.GCRCounter.Fill(5)
+        self.GCRCounter.Fill(4)
         # Photon selection
         if not self.selectPhoton(event):
             return True
-        self.GCRCounter.Fill(6)
+        self.GCRCounter.Fill(5)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.GCRCounter.Fill(7)
+        self.GCRCounter.Fill(6)
         # Vetoes
-        #self.GCRCounter.Fill(8)
+        #self.GCRCounter.Fill(7)
         
         event.isGCR = True
         return True

@@ -11,8 +11,8 @@ class SRAnalyzer( Analyzer ):
         super(SRAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            SRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "MEt cut", "Muon veto", "Electron veto", "Tau veto", "Photon veto"]
-            self.SRCounter = ROOT.TH1F("SRCounter", "SRCounter", 10, 0, 10)
+            SRLabels = ["Trigger", "#Jets > 1", "Jet cuts", "MEt cut", "Muon veto", "Electron veto", "Tau veto", "Photon veto"]
+            self.SRCounter = ROOT.TH1F("SRCounter", "SRCounter", 8, 0, 8)
             for i, l in enumerate(SRLabels):
                 self.SRCounter.GetXaxis().SetBinLabel(i+1, l)
             
@@ -44,21 +44,21 @@ class SRAnalyzer( Analyzer ):
 
         if not self.selectMET(event):
             return True
-        self.SRCounter.Fill(4)
+        self.SRCounter.Fill(3)
         
         # other cuts NOT in Ntuple
         # Muon veto
         if self.vetoMuon(event):
-            self.SRCounter.Fill(5)
+            self.SRCounter.Fill(4)
             # Electron veto
-            if not self.vetoElectron(event):
-                self.SRCounter.Fill(6)
+            if self.vetoElectron(event):
+                self.SRCounter.Fill(5)
                 # Tau veto
-                if not self.vetoTau(event):
-                    self.SRCounter.Fill(7)
+                if self.vetoTau(event):
+                    self.SRCounter.Fill(6)
                     # Photon veto
-                    if not self.vetoGamma(event):
-                        self.SRCounter.Fill(8)
+                    if self.vetoGamma(event):
+                        self.SRCounter.Fill(7)
         
         event.isSR = True
         return True
