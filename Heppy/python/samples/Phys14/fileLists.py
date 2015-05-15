@@ -3294,5 +3294,53 @@ samples = {
             ],
         'xsec' : 1.,
         },
+    'ZZhToLLM1000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM1000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToLLM2000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM2000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToLLM3000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM3000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToLLM4000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM4000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToNuNuM1000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToNuNuM1000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToNuNuM2000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToNuNuM2000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToNuNuM3000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToNuNuM3000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
+    'ZZhToNuNuM4000' : {
+        'files' : [
+            '/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToNuNuM4000/MINIAODSIM.root',
+            ],
+        'xsec' : 1.,
+        },
 
     }

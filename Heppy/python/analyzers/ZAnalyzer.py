@@ -12,8 +12,8 @@ class ZAnalyzer( Analyzer ):
         super(ZAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            ZCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "Lep #geq 2", "Lep1 cuts", "Lep2 cuts", "Z cand", "MEt cut"]
-            self.ZCRCounter = ROOT.TH1F("ZCRCounter", "ZCRCounter", 10, 0, 10)
+            ZCRLabels = ["Trigger", "#Jets > 1", "Jet cuts", "Lep #geq 2", "Lep1 cuts", "Lep2 cuts", "Z cand", "MEt cut"]
+            self.ZCRCounter = ROOT.TH1F("ZCRCounter", "ZCRCounter", 8, 0, 8)
             for i, l in enumerate(ZCRLabels):
                 self.ZCRCounter.GetXaxis().SetBinLabel(i+1, l)
             
@@ -152,27 +152,27 @@ class ZAnalyzer( Analyzer ):
         # Leptons >= 2
         if not len(event.inclusiveLeptons)>=2:
             return True
-        self.ZCRCounter.Fill(4)
+        self.ZCRCounter.Fill(3)
         # Select first lepton
         if not self.selectMuon1(event) and not self.selectElectron1(event):
             return True
-        self.ZCRCounter.Fill(5)
+        self.ZCRCounter.Fill(4)
         # Select second lepton
         if not self.selectMuon2(event) and not self.selectElectron2(event):
             return True
-        self.ZCRCounter.Fill(6)
+        self.ZCRCounter.Fill(5)
         # Build Z candidate
         if not self.selectZ(event):
             return True
-        self.ZCRCounter.Fill(7)
+        self.ZCRCounter.Fill(6)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.ZCRCounter.Fill(8)
+        self.ZCRCounter.Fill(7)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.ZCRCounter.Fill(9)
+        #self.ZCRCounter.Fill(8)
         
         event.isZCR = True
         

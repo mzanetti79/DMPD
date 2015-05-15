@@ -12,8 +12,8 @@ class WAnalyzer( Analyzer ):
         super(WAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            WCRLabels = ["All events", "Trigger", "#Jets > 1", "Jet cuts", "#Muons > 1", "Muon cuts", "W cand", "MEt cut"]
-            self.WCRCounter = ROOT.TH1F("WCRCounter", "WCRCounter", 10, 0, 10)
+            WCRLabels = ["Trigger", "#Jets > 1", "Jet cuts", "#Muons > 1", "Muon cuts", "W cand", "MEt cut"]
+            self.WCRCounter = ROOT.TH1F("WCRCounter", "WCRCounter", 8, 0, 8)
             for i, l in enumerate(WCRLabels):
                 self.WCRCounter.GetXaxis().SetBinLabel(i+1, l)
 
@@ -90,23 +90,23 @@ class WAnalyzer( Analyzer ):
         # Exactly one muon
         if not len(event.selectedMuons) == 1:
             return True
-        self.WCRCounter.Fill(4)
+        self.WCRCounter.Fill(3)
         # Select the muon
         if not self.selectMuon(event):
             return True
-        self.WCRCounter.Fill(5)
+        self.WCRCounter.Fill(4)
         # Build W candidate
         if not self.selectW(event):
             return True
-        self.WCRCounter.Fill(6)
+        self.WCRCounter.Fill(5)
         # Build and cut fake MET
         if not self.makeFakeMET(event) or not self.selectFakeMET(event):
             return True
-        self.WCRCounter.Fill(7)
+        self.WCRCounter.Fill(6)
         # Vetoes
         #if not self.vetoGamma(event):
         #    return True
-        #self.WCRCounter.Fill(8)
+        #self.WCRCounter.Fill(7)
         
         event.isWCR = True
         return True
