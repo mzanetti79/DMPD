@@ -6,7 +6,24 @@ from DMPD.Heppy.analyzers.monoXObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
 ##############################
-### TRIGGERANALYZER         ###
+### GENANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.gen.GeneratorAnalyzer import GeneratorAnalyzer
+generatorAnalyzer= cfg.Analyzer(
+    verbose=False,
+    class_object=GeneratorAnalyzer,
+    stableBSMParticleIds = [ 1000022, 9100000, 9100012, 9100022, -9100022, 9900032, 1023 ], # BSM particles that can appear with status <= 2 and should be kept
+    # Particles of which we want to save the pre-FSR momentum (a la status 3).
+    # Note that for quarks and gluons the post-FSR doesn't make sense,
+    # so those should always be in the list
+    savePreFSRParticleIds = [ 1,2,3,4,5, 11,12,13,14,15,16, 21 ],
+    makeAllGenParticles = True, # Make also the list of all genParticles, for other analyzers to handle
+    makeSplittedGenLists = True, # Make also the splitted lists
+    allGenTaus = False, 
+    )
+
+##############################
+### TRIGGERANALYZER        ###
 ##############################
 from PhysicsTools.Heppy.analyzers.core.TriggerBitAnalyzer import TriggerBitAnalyzer
 triggerAnalyzer= cfg.Analyzer(
@@ -55,7 +72,8 @@ leptonAnalyzer = cfg.Analyzer(
     min_dr_electron_muon        = 0.02,
     # do MC matching
     do_mc_match                 = True, # note: it will in any case try it only on MC, not on data
-
+    match_inclusiveLeptons      = False, # match to all inclusive leptons
+    
     ### Electron - General
     ##############################
     electrons                   = 'slimmedElectrons',
@@ -208,7 +226,7 @@ photonAnalyzer = cfg.Analyzer(
     )
 
 ##############################
-### METANALYZER         ###
+### METANALYZER            ###
 ##############################
 from PhysicsTools.Heppy.analyzers.objects.METAnalyzer import METAnalyzer
 MEtAnalyzer = METAnalyzer.defaultConfig
@@ -221,11 +239,18 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 met_pt_cut = 100. # met or fakemet
 jet_met_deltaphi_cut = 0. # wrt met or fakemet
 
+from DMPD.Heppy.analyzers.GenAnalyzer import GenAnalyzer
+GenAnalyzer = cfg.Analyzer(
+    class_object = GenAnalyzer,
+    mediator = [9100000, 9900032, 1023],
+    darkmatter = [9100022, -9100022, 9100012],
+    )
+
 from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = PreselectionAnalyzer,
-    jet1_pt = 100.,
+    jet1_pt = 30.,
     jet1_eta = 2.5,
     jet1_tag = -1e99,
     jet1_chf_min = 0.2,
@@ -310,10 +335,10 @@ ZZhAnalyzer = cfg.Analyzer(
     Z_pt = 100.,
     Zmass_low = 75.,
     Zmass_high = 105.,
+    fatJetMass_low = 50.,
+    fatJetMass_high = 1e99,
     fatJet_btag_1 = 0.423,
     fatJet_btag_2 = 0.423,
-    fatJetMass_low = 100.,
-    fatJetMass_high = 150.,
     met_pt = 200.,
     )
 
@@ -354,8 +379,8 @@ SignalRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
-      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 3, help="Jets after the preselection"),
+      #"cleanFatJets"      : NTupleCollection("fatjet", jetType, 3, help="fatJets after the preselection"),
       }
     )
 
@@ -384,8 +409,8 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       "selectedPhotons"   : NTupleCollection("photon", photonType, 1, help="Photons after the preselection"),
-      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
-      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 3, help="Jets after the preselection"),
+      #"cleanFatJets"      : NTupleCollection("fatjet", jetType, 3, help="fatJets after the preselection"),
       }
     )
 
@@ -415,8 +440,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electron", electronType, 3, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
-      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 3, help="Jets after the preselection"),
+      #"cleanFatJets"      : NTupleCollection("fatjet", jetType, 3, help="fatJets after the preselection"),
       }
     )
     
@@ -450,8 +475,8 @@ ZControlRegionTreeProducer= cfg.Analyzer(
       #"selectedElectrons" : NTupleCollection("electron", electronType, 4, help="Electrons after the preselection"),
       #"selectedTaus"      : NTupleCollection("tau", tauType, 3, help="Taus after the preselection"),
       #"selectedPhotons"   : NTupleCollection("photon", photonType, 3, help="Photons after the preselection"),
-      "Jets"              : NTupleCollection("jet", jetType, 4, help="Jets after the preselection"),
-      "cleanFatJets"      : NTupleCollection("fatjet", jetType, 4, help="fatJets after the preselection"),
+      "Jets"              : NTupleCollection("jet", jetType, 3, help="Jets after the preselection"),
+      #"cleanFatJets"      : NTupleCollection("fatjet", jetType, 3, help="fatJets after the preselection"),
       }
     )    
 
@@ -478,7 +503,7 @@ ZZhTreeProducer= cfg.Analyzer(
         },
     collections = {
       "Leptons"           : NTupleCollection("lepton", muonType, 2, help="Muons and Electrons after the preselection"),
-      "cleanFatJets"      : NTupleCollection("jet", jetType, 4, help="fatJets after the preselection"),
+      "cleanFatJets"      : NTupleCollection("jet", jetType, 2, help="fatJets after the preselection"),
       }
     )    
 
@@ -487,6 +512,7 @@ ZZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
+    generatorAnalyzer,
     triggerAnalyzer,
     pileupAnalyzer,
     vertexAnalyzer,
@@ -497,6 +523,7 @@ sequence = [
     photonAnalyzer,
     MEtAnalyzer,
     ### Preselection Analyzers
+    GenAnalyzer,
     PreselectionAnalyzer,
     ### Analysis Analyzers
     SRAnalyzer,
@@ -531,7 +558,7 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 from DMPD.Heppy.samples.Phys14.fileLists import samples
 
 sampleTest = cfg.Component(
-    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/Buggy/M2000/MINIAODSIM.root"],
+    files = ["file:/lustre/cmswork/zucchett/CMSSW_7_2_0_patch1/src/ZZhToLLM1000/MINIAODSIM.root"],
     #files = ["dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/Phys14DR/DYJetsToLL_M-50_HT-100to200_Tune4C_13TeV-madgraph-tauola/MINIAODSIM/PU20bx25_PHYS14_25_V1-v1/00000/021C8316-1E71-E411-8CBD-0025901D484C.root"],
     name="Test",
     isMC=True,
@@ -890,6 +917,40 @@ sampleDM_MonoH = cfg.Component(
     splitFactor=1
     )
 
+
+
+sampleZZhToLLM1000 = cfg.Component(
+    files = samples['ZZhToLLM1000']['files'],
+    name="ZZhToLLM1000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM2000 = cfg.Component(
+    files = samples['ZZhToLLM2000']['files'],
+    name="ZZhToLLM2000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM3000 = cfg.Component(
+    files = samples['ZZhToLLM3000']['files'],
+    name="ZZhToLLM3000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToLLM4000 = cfg.Component(
+    files = samples['ZZhToLLM4000']['files'],
+    name="ZZhToLLM4000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
 ##############################
 ### FWLITE                 ###
 ##############################
@@ -899,7 +960,7 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### TEST (LOCAL)
-#selectedComponents = [sampleTest]
+selectedComponents = [sampleTest]
 
 #### FULL QCD
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf] 
@@ -986,6 +1047,12 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 selectedComponents = [sampleDM_MonoB] 
 #selectedComponents = [sampleDM_MonoVbb] 
 #selectedComponents = [sampleDM_MonoH] 
+
+#### FULL ZZhToLL
+#selectedComponents = [sampleZZhToLLM1000]
+#selectedComponents = [sampleZZhToLLM2000]
+#selectedComponents = [sampleZZhToLLM3000]
+#selectedComponents = [sampleZZhToLLM4000] 
 
 ###LOCAL COMPONENTS
 #selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 

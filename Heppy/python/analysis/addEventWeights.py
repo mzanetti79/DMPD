@@ -36,7 +36,7 @@ for ref_file_name in samples.keys():
     # Get event number
     ref_file = TFile(ref_file_name_with_path, "READ")
     ref_hist = ref_file.Get('Counter')
-    totalEntries = ref_hist.GetBinContent(1)
+    totalEntries = ref_hist.GetBinContent(0)
     weightXS = samples[ref_file_name]['xsec']/totalEntries 
 
     # Looping over file content
