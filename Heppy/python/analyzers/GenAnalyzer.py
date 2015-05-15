@@ -7,6 +7,7 @@ import ROOT
 import sys
 
 class GenAnalyzer( Analyzer ):
+    '''Make plots at generation level'''
     
     def beginLoop(self,setup):
         super(GenAnalyzer,self).beginLoop(setup)
@@ -36,6 +37,7 @@ class GenAnalyzer( Analyzer ):
             self.GenHpt = ROOT.TH1F("GenHpt", ";H p_{T} [GeV]", 250, 0., 2500.)
             self.GenHeta = ROOT.TH1F("GenHeta", ";H #eta", 50, -5, 5.)
             self.GenHdR = ROOT.TH1F("GenHdR", ";b-quarks #Delta R", 50, 0, 5.)
+            self.GenHdPhi = ROOT.TH1F("GenHdPhi", ";b-quarks #Delta #varphi", 50, 0, 3.15)
             self.GenLepton1pt = ROOT.TH1F("GenLepton1pt", ";Lepton 1 p_{T} [GeV]", 250, 0., 2500.)
             self.GenLepton1eta = ROOT.TH1F("GenLepton1eta", ";Lepton 1 #eta", 50, -5, 5.)
             self.GenLepton2pt = ROOT.TH1F("GenLepton2pt", ";Lepton 2 p_{T} [GeV]", 250, 0., 2500.)
@@ -48,17 +50,19 @@ class GenAnalyzer( Analyzer ):
             setup.services["outputfile"].file.cd()
     
     def process(self, event):
+        
         if not hasattr(event, "genParticles"):
             return False
         # Mediator
         event.genPhi = None
         event.genChi = []
+        
         for g in event.genParticles:
             if g.pdgId() == 9100000 or g.pdgId() == 9900032 or g.pdgId() == 1023:
                 event.genPhi = g
             if abs(g.pdgId()) == 9100022 or g.pdgId() == 9100012:
                 chi.append(g)
-        if hasattr(event, "genPhi"):
+        if event.genPhi:
             self.GenPhi1mass.Fill(event.genPhi.mass())
             self.GenPhi1pt.Fill(event.genPhi.pt())
             self.GenPhi1eta.Fill(event.genPhi.eta())
@@ -73,7 +77,7 @@ class GenAnalyzer( Analyzer ):
             self.GenChi12dR.Fill(deltaR(chi[0].eta(), chi[0].phi(), chi[1].eta(), chi[1].phi()))
         # Z
         if hasattr(event, "genVBosons"):
-            if len(event.genVBosons) > 0 and event.genVBosons[0].pdgId() == 23:
+            if len(event.genVBosons) > 0:
                 self.GenZmass.Fill(event.genVBosons[0].mass())
                 self.GenZpt.Fill(event.genVBosons[0].pt())
                 self.GenZeta.Fill(event.genVBosons[0].eta())
@@ -85,7 +89,7 @@ class GenAnalyzer( Analyzer ):
                 self.GenHeta.Fill(event.genHiggsBosons[0].eta())
         # Leptons from Z
         if hasattr(event, "genleps"):
-            if len(event.genleps) >= 1:
+            if len(event.genleps) >= 2:
                 self.GenZdecay.Fill(abs(event.genleps[0].pdgId()))
                 self.GenZdR.Fill(deltaR(event.genleps[0].eta(), event.genleps[0].phi(), event.genleps[1].eta(), event.genleps[1].phi()))
                 i1, i2 = [0, 1] if event.genleps[0].pt() > event.genleps[1].pt() else [1, 0]
@@ -94,15 +98,19 @@ class GenAnalyzer( Analyzer ):
                 self.GenLepton2pt.Fill(event.genleps[i2].pt())
                 self.GenLepton2eta.Fill(event.genleps[i2].eta())
         # b-quarks from Higgs
-        if hasattr(event, "genbquarksFromH"):
-            if len(event.genbquarksFromH) >= 1:
-                self.GenHdecay.Fill(abs(event.genbquarksFromH[0].pdgId()))
-                self.GenHdR.Fill(deltaR(event.genbquarksFromH[0].eta(), event.genbquarksFromH[0].phi(), event.genbquarksFromH[1].eta(), event.genbquarksFromH[1].phi()))
-                i1, i2 = [0, 1] if event.genbquarksFromH[0].pt() > event.genbquarksFromH[1].pt() else [1, 0]
-                self.GenBquark1pt.Fill(event.genbquarksFromH[i1].pt())
-                self.GenBquark1eta.Fill(event.genbquarksFromH[i1].eta())
-                self.GenBquark2pt.Fill(event.genbquarksFromH[i2].pt())
-                self.GenBquark2eta.Fill(event.genbquarksFromH[i2].eta())
-        
+        if hasattr(event, "genbquarks"):
+            if len(event.genbquarks) == 1:
+                self.GenBquark1pt.Fill(event.genbquarks[0].pt())
+                self.GenBquark1eta.Fill(event.genbquarks[0].eta())
+            elif len(event.genbquarks) >= 2:
+                self.GenHdecay.Fill(abs(event.genbquarks[0].pdgId()))
+                self.GenHdR.Fill(deltaR(event.genbquarks[0].eta(), event.genbquarks[0].phi(), event.genbquarks[1].eta(), event.genbquarks[1].phi()))
+                self.GenHdPhi.Fill(deltaPhi(event.genbquarks[0].phi(), event.genbquarks[1].phi()))
+                i1, i2 = [0, 1] if event.genbquarks[0].pt() > event.genbquarks[1].pt() else [1, 0]
+                self.GenBquark1pt.Fill(event.genbquarks[i1].pt())
+                self.GenBquark1eta.Fill(event.genbquarks[i1].eta())
+                self.GenBquark2pt.Fill(event.genbquarks[i2].pt())
+                self.GenBquark2eta.Fill(event.genbquarks[i2].eta())
+            
         return True
     
