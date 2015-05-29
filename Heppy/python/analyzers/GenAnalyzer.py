@@ -52,7 +52,7 @@ class GenAnalyzer( Analyzer ):
     def process(self, event):
         
         if not hasattr(event, "genParticles"):
-            return False
+            return True
         # Mediator
         event.genPhi = None
         event.genChi = []
