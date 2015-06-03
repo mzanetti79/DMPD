@@ -386,7 +386,7 @@ globalVariables = [
     NTupleVariable('nTaus',  lambda x: len(x.selectedTaus), int, help='Number of selected taus'),
     NTupleVariable('nPhotons',  lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
     NTupleVariable('nJets',  lambda x: len(x.cleanJets) if not x.Category==1 else len(x.cleanJetsAK8), int, help='Number of cleaned jets'),
-    NTupleVariable('nBJets',  lambda x: len([jet for jet in x.cleanJets if abs(jet.partonFlavour()) == 5]), int, help='Number of cleaned jets'),
+    NTupleVariable('nBJets',  lambda x: len([jet for jet in x.cleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of cleaned b-jets'),
 ]
 
 
@@ -405,7 +405,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'jet1' : NTupleObject('jet1', jetType, help='leading jet'),
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'H' : NTupleObject('H', compositeType, help='Higgs boson candidate'),
+        'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
         },
     collections = {
       #'selectedMuons'     : NTupleCollection('muon', muonType, 3, help='Muons after the preselection'),
@@ -435,7 +435,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
         #'jet1' : NTupleObject('jet1', jetType, help='leading jet'),
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         'fakemet' : NTupleObject('fakemet', fourVectorType, help='fake MET in gamma + jets event obtained removing the photon'),
-        'H' : NTupleObject('H', compositeType, help='Higgs boson candidate'),
+        'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
         },
     collections = {
       #'selectedMuons'     : NTupleCollection('muon', muonType, 3, help='Muons after the preselection'),
@@ -466,7 +466,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         'fakemet' : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the muon'),
         'W' : NTupleObject('W', compositeType, help='W boson candidate'),
-        'H' : NTupleObject('H', compositeType, help='Higgs boson candidate'),
+        'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
         },
     collections = {
       'selectedMuons'     : NTupleCollection('muon', muonType, 1, help='Muons after the preselection'),
@@ -500,7 +500,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         'fakemet' : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the muons'),
         'Z' : NTupleObject('Z', compositeType, help='Z boson candidate'),
-        'H' : NTupleObject('H', compositeType, help='Higgs boson candidate'),
+        'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
         },
     collections = {
       'Leptons'           : NTupleCollection('lepton', muonType, 2, help='Muons and Electrons after the preselection'),
@@ -531,12 +531,13 @@ ZZhTreeProducer= cfg.Analyzer(
     globalObjects = {
         'A' : NTupleObject('A', compositeType, help='A boson candidate'),
         'Z' : NTupleObject('Z', compositeType, help='Z boson candidate'),
-        'h' : NTupleObject('h', compositeType, help='Higgs boson candidate'),
+        'H' : NTupleObject('h', compositeType, help='Higgs boson candidate'),
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         },
     collections = {
       'Leptons'           : NTupleCollection('lepton', muonType, 2, help='Muons and Electrons after the preselection'),
-      'cleanJetsAK8'      : NTupleCollection('jet', jetType, 2, help='fatJets after the preselection'),
+      'cleanJetsAK8'      : NTupleCollection('fatjet', jetType, 2, help='fatJets after the preselection'),
+      'SubJets'      : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
       }
     )    
 

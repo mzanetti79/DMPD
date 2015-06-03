@@ -42,7 +42,7 @@ class PreselectionAnalyzer( Analyzer ):
         # Count b-tagged subjets
         for i, j in enumerate(event.cleanJetsAK8):
             nSubJetTags = 0
-            subJets = j.subjets('SoftDrop')        
+            subJets = j.subjets('SoftDrop')
             for iw, wsub in enumerate(subJets):
                 if iw == 0:
                     j.flavour1 = wsub.hadronFlavour()
@@ -64,18 +64,18 @@ class PreselectionAnalyzer( Analyzer ):
         if not hasattr(event.cleanJetsAK8[0], "tau21") or not event.cleanJetsAK8[0].tau21 > self.cfg_ana.fatjet_tau21:
             return False
         
+        # Add subjets to the event
+        event.SubJets = event.cleanJetsAK8[0].subjets('SoftDrop')
         
         # Higgs candidate
-        #prunedJet = copy.deepcopy(event.cleanJetsAK8[0]) # Copy fatJet...
-        #prunedJet.setMass(prunedJet.userFloat("ak8PFJetsCHSPrunedLinks")) # ... and set the mass to the pruned mass
-        theH = event.cleanJetsAK8[0].p4()
-        theH.charge = event.cleanJetsAK8[0].charge()
-        theH.deltaR = deltaR(event.cleanJetsAK8[0].subJet1.eta(), event.cleanJetsAK8[0].subJet1.phi(), event.cleanJetsAK8[0].subJet2.eta(), event.cleanJetsAK8[0].subJet2.phi()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -1.
-        theH.deltaEta = abs(event.cleanJetsAK8[0].subJet1.eta() - event.cleanJetsAK8[0].subJet2.eta()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -9.
-        theH.deltaPhi = deltaPhi(event.cleanJetsAK8[0].subJet1.phi(), event.cleanJetsAK8[0].subJet2.phi()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -9.
-        theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
-        theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanJetsAK8[0].phi())
-        event.H = theH
+        theV = event.cleanJetsAK8[0].p4()
+        theV.charge = event.cleanJetsAK8[0].charge()
+        theV.deltaR = deltaR(event.SubJets[0].eta(), event.SubJets[0].phi(), event.SubJets[1].eta(), event.SubJets[1].phi())
+        theV.deltaEta = abs(event.SubJets[0].eta() - event.SubJets[1].eta())
+        theV.deltaPhi = deltaPhi(event.SubJets[0].phi(), event.SubJets[1].phi())
+        theV.deltaPhi_met = deltaPhi(theV.phi(), event.met.phi())
+        theV.deltaPhi_jet1 = deltaPhi(theV.phi(), event.cleanJetsAK8[0].phi())
+        event.V = theV
         
         return True
 
@@ -93,14 +93,14 @@ class PreselectionAnalyzer( Analyzer ):
 #            return False
         
         # Higgs candidate
-        theH = event.cleanJets[0].p4() + event.cleanJets[1].p4()
-        theH.charge = event.cleanJets[0].charge() + event.cleanJets[1].charge()
-        theH.deltaR = deltaR(event.cleanJets[0].eta(), event.cleanJets[0].phi(), event.cleanJets[1].eta(), event.cleanJets[1].phi())
-        theH.deltaEta = abs(event.cleanJets[0].eta() - event.cleanJets[1].eta())
-        theH.deltaPhi = deltaPhi(event.cleanJets[0].phi(), event.cleanJets[1].phi())
-        theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
-        theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanJets[0].phi())
-        event.H = theH
+        theV = event.cleanJets[0].p4() + event.cleanJets[1].p4()
+        theV.charge = event.cleanJets[0].charge() + event.cleanJets[1].charge()
+        theV.deltaR = deltaR(event.cleanJets[0].eta(), event.cleanJets[0].phi(), event.cleanJets[1].eta(), event.cleanJets[1].phi())
+        theV.deltaEta = abs(event.cleanJets[0].eta() - event.cleanJets[1].eta())
+        theV.deltaPhi = deltaPhi(event.cleanJets[0].phi(), event.cleanJets[1].phi())
+        theV.deltaPhi_met = deltaPhi(theV.phi(), event.met.phi())
+        theV.deltaPhi_jet1 = deltaPhi(theV.phi(), event.cleanJets[0].phi())
+        event.V = theV
         
         return True
     
@@ -114,14 +114,14 @@ class PreselectionAnalyzer( Analyzer ):
         #    return False
         
         # Higgs candidate
-        theH = event.cleanJets[0].p4()
-        theH.charge = event.cleanJets[0].charge()
-        theH.deltaR = -1.
-        theH.deltaEta = -9.
-        theH.deltaPhi = -9.
-        theH.deltaPhi_met = -9.
-        theH.deltaPhi_jet1 = -9.
-        event.H = theH
+        theV = event.cleanJets[0].p4()
+        theV.charge = event.cleanJets[0].charge()
+        theV.deltaR = -1.
+        theV.deltaEta = -9.
+        theV.deltaPhi = -9.
+        theV.deltaPhi_met = -9.
+        theV.deltaPhi_jet1 = -9.
+        event.V = theV
         
         return True
     
