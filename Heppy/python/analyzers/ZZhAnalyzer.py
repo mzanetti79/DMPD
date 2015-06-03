@@ -17,7 +17,6 @@ class ZZhAnalyzer( Analyzer ):
             for i, l in enumerate(ZZhLabels):
                 self.ZZhCounter.GetXaxis().SetBinLabel(i+1, l) 
         
-        
     def process(self, event):
         event.isZZh = False
         
@@ -57,33 +56,30 @@ class ZZhAnalyzer( Analyzer ):
         event.H = theH
         
         # Zprime candidate
-        theA = event.Z + event.h
-        theA.charge = event.Z.charge + event.h.charge
-        theA.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.h.eta(), event.h.phi())
-        theA.deltaEta = abs(event.Z.eta() - event.h.eta())
-        theA.deltaPhi = deltaPhi(event.Z.phi(), event.h.phi())
+        theA = event.Z + event.H
+        theA.charge = event.Z.charge + event.H.charge
+        theA.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.H.eta(), event.H.phi())
+        theA.deltaEta = abs(event.Z.eta() - event.H.eta())
+        theA.deltaPhi = deltaPhi(event.Z.phi(), event.H.phi())
         theA.deltaPhi_met = deltaPhi(theA.phi(), event.met.phi())
-        theA.deltaPhi_jet1 = deltaPhi(theA.phi(), event.h.phi())
+        theA.deltaPhi_jet1 = deltaPhi(theA.phi(), event.H.phi())
         event.A = theA
         
-#        for j in event.cleanJetsAK8:
-#            j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
-#            j.deltaPhi_jet1 = deltaPhi(j.phi(), event.cleanJetsAK8[0].phi())
-        
-        
-        
+        for j in event.cleanJetsAK8:
+            j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
+            j.deltaPhi_jet1 = deltaPhi(j.phi(), event.cleanJetsAK8[0].phi())
         
         # Estimate cuts
         if event.Z.mass() > self.cfg_ana.Zmass_low and event.Z.mass() < self.cfg_ana.Zmass_high:
             self.ZZhCounter.Fill(5) # Z mass
-            if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSPrunedLinks") > self.cfg_ana.fatJetMass_low and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSPrunedLinks") < self.cfg_ana.fatJetMass_high:
+            if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
                 self.ZZhCounter.Fill(6) # h mass
                 if event.met.pt() < self.cfg_ana.met_pt:
                     self.ZZhCounter.Fill(7) # MET
                     #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
-                    if event.cleanJetsAK8[0].nSubJets >= 1 and event.cleanJetsAK8[0].subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag_1:
+                    if event.cleanJetsAK8[0].SubJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
                         self.ZZhCounter.Fill(8) # b-Jet1
-                        if event.cleanJetsAK8[0].nSubJets >= 2 and event.cleanJetsAK8[0].subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag_2: 
+                        if event.cleanJetsAK8[0].SubJets[1].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
                             self.ZZhCounter.Fill(9) # b-Jet2
 
         return True

@@ -362,10 +362,11 @@ ZZhAnalyzer = cfg.Analyzer(
     Z_pt = 100.,
     Zmass_low = 75.,
     Zmass_high = 105.,
-    fatJetMass_low = 50.,
-    fatJetMass_high = 1e99,
-    fatJet_btag_1 = 0.423,
-    fatJet_btag_2 = 0.423,
+    fatjet_mass_algo = 'ak8PFJetsCHSSoftDropMass',
+    fatjet_mass_low = 100.,
+    fatjet_mass_high = 150.,
+    fatjet_btag_1 = 0.423,
+    fatjet_btag_2 = 0.423,
     met_pt = 200.,
     )
 
