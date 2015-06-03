@@ -44,17 +44,17 @@ class ZZhAnalyzer( Analyzer ):
         
         
         # Build candidates
+        if not hasattr(event, "SubJets"): event.SubJets = event.cleanJetsAK8[0].subjets('SoftDrop')
+        
         # Higgs candidate
-        #prunedJet = copy.deepcopy(event.cleanJetsAK8[0]) # Copy fatJet...
-        #prunedJet.setMass(prunedJet.userFloat("ak8PFJetsCHSPrunedLinks")) # ... and set the mass to the pruned mass
         theH = event.cleanJetsAK8[0].p4()
         theH.charge = event.cleanJetsAK8[0].charge()
-        theH.deltaR = deltaR(event.cleanJetsAK8[0].subJet1.eta(), event.cleanJetsAK8[0].subJet1.phi(), event.cleanJetsAK8[0].subJet2.eta(), event.cleanJetsAK8[0].subJet2.phi()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -1.
-        theH.deltaEta = abs(event.cleanJetsAK8[0].subJet1.eta() - event.cleanJetsAK8[0].subJet2.eta()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -9.
-        theH.deltaPhi = deltaPhi(event.cleanJetsAK8[0].subJet1.phi(), event.cleanJetsAK8[0].subJet2.phi()) if hasattr(event.cleanJetsAK8[0], "subJet2") else -9.
+        theH.deltaR = deltaR(event.SubJets[0].eta(), event.SubJets[0].phi(), event.SubJets[1].eta(), event.SubJets[1].phi())
+        theH.deltaEta = abs(event.SubJets[0].eta() - event.SubJets[1].eta())
+        theH.deltaPhi = deltaPhi(event.SubJets[0].phi(), event.SubJets[1].phi())
         theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
         theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanJetsAK8[0].phi())
-        event.h = theH
+        event.H = theH
         
         # Zprime candidate
         theA = event.Z + event.h
