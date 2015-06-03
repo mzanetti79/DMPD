@@ -23,7 +23,7 @@ class PreselectionAnalyzer( Analyzer ):
     
     
     def fillJetVariables(self, event):
-        for j in event.Jets + event.cleanJets + event.cleanFatJets:
+        for j in event.Jets + event.cleanJets: # + event.cleanFatJets: FIXME
             j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
             j.deltaPhi_jet1 = deltaPhi(j.phi(), event.Jets[0].phi())
         
@@ -142,7 +142,7 @@ class PreselectionAnalyzer( Analyzer ):
         # Categorization
         
         # Category 1
-        if self.selectFatJet(event):
+        if False and self.selectFatJet(event): #FIXME
             event.Category = 1
         # Category 2
         elif self.selectResolvedJet(event):
