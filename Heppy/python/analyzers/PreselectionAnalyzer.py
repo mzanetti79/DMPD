@@ -27,41 +27,38 @@ class PreselectionAnalyzer( Analyzer ):
             j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
             j.deltaPhi_jet1 = deltaPhi(j.phi(), event.Jets[0].phi())
         
-    
+            
     def selectFatJet(self, event):
         if not len(event.cleanJetsAK8) >= 1:
             return False
         if not event.cleanJetsAK8[0].pt() > self.cfg_ana.fatjet_pt: 
             return False
         
+        
         # Add n-subjettiness
         for i, j in enumerate(event.cleanJetsAK8):
-            j.tau21 = j.userFloat("NjettinessAK8:tau2")/j.userFloat("NjettinessAK8:tau1")
+            j.tau21 = j.userFloat("NjettinessAK8:tau2")/j.userFloat("NjettinessAK8:tau1") if not j.userFloat("NjettinessAK8:tau1") == 0 else -1.
         
-        
-             
-        #########
-        # FIXME dirty hack: count the number of ak4 b-tagged jet close instead
-        # Count number of b-tagged subjets
-        nSubJetTags = 0
-        for f in event.cleanJetsAK8:
-            subJets = []
-            for j in event.cleanJets:
-                if deltaR(f.eta(), f.phi(), j.eta(), j.phi())<0.8:
-                    subJets.append(j)
-            subJets.sort(key = lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
-            f.nSubJets = len(subJets)
-            if len(subJets) >= 1:
-                f.subJet1 = subJets[0]
-            if len(subJets) >= 2:
-                f.subJet2 = subJets[1]
-        #########
+        # Count b-tagged subjets
+        for i, j in enumerate(event.cleanJetsAK8):
+            nSubJetTags = 0
+            subJets = j.subjets('SoftDrop')        
+            for iw, wsub in enumerate(subJets):
+                if iw == 0:
+                    j.flavour1 = wsub.hadronFlavour()
+                    j.CSV1 = wsub.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
+                    if j.CSV1 > self.cfg_ana.fatjet_tag1:
+                        nSubJetTags += 1
+                elif iw == 1:
+                    j.flavour2 = wsub.hadronFlavour()
+                    j.CSV2 = wsub.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
+                    if j.CSV2 > self.cfg_ana.fatjet_tag2:
+                        nSubJetTags += 1
+            j.nSubJetTags = nSubJetTags
         
         # FatJet selections
-        if not event.cleanJetsAK8[0].nSubJets >= 1 or not event.cleanJetsAK8[0].subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag1:
+        if not nSubJetTags >= 2:
             return False
-#        if not event.cleanJetsAK8[0].nSubJets >= 2 or not event.cleanJetsAK8[0].subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_tag2:
-#            return False
         if not event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass:
             return False
         if not hasattr(event.cleanJetsAK8[0], "tau21") or not event.cleanJetsAK8[0].tau21 > self.cfg_ana.fatjet_tau21:
