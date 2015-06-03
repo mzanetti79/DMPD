@@ -168,42 +168,43 @@ jetAnalyzer = cfg.Analyzer(
     )
 
 #from PhysicsTools.Heppy.analyzers.objects.FatJetAnalyzer import FatJetAnalyzer
-#fatJetAnalyzer = cfg.Analyzer(
+#from Heppy.analyzers.FatJetAnalyzer import FatJetAnalyzer
+fatJetAnalyzer = cfg.Analyzer(
 
-#    class_object                = FatJetAnalyzer,
+    class_object                = JetAnalyzer,
 
-#    ### Jet - General
-#    ##############################
-#    jetCol                      = 'slimmedJetsAK8',
-#    jetPt                       = 50.,
-#    jetEta                      = 4.7,
-#    jetEtaCentral               = 2.5,
-#    jetLepDR                    = 0.8,
-#    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
-#    minLepPt                    = 10,
-#    relaxJetId                  = False,
-#    doPuId                      = False, # Not commissioned in 7.0.X
-#    doQG                        = False,
-#    recalibrateJets             = False,
-#    shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-#    smearJets                   = True,
-#    shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-#    cleanJetsFromFirstPhoton    = False,
-#    cleanJetsFromTaus           = False,
-#    cleanJetsFromIsoTracks      = False,
-#    jecPath                     = '',
-#    
-#    genJetCol                   = 'slimmedGenJets',
-#    rho                         = ('fixedGridRhoFastjetAll','',''),
-#    copyJetsByValue             = False, #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
-#    cleanSelectedLeptons        = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
-#    lepSelCut                   = lambda lep : True,
-#    recalibrationType           = 'AK4PFchs',
-#    alwaysCleanPhotons          = False,
-#    cleanGenJetsFromPhoton      = False,
-#    collectionPostFix           = ''    
-#    ### ====================== ###
-#    )
+    ### Jet - General
+    ##############################
+    jetCol                      = 'slimmedJetsAK8',
+    jetPt                       = 50.,
+    jetEta                      = 4.7,
+    jetEtaCentral               = 2.5,
+    jetLepDR                    = 0.8,
+    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
+    minLepPt                    = 10,
+    relaxJetId                  = False,
+    doPuId                      = False, # Not commissioned in 7.0.X
+    doQG                        = False,
+    recalibrateJets             = False,
+    shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    smearJets                   = True,
+    shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    cleanJetsFromFirstPhoton    = False,
+    cleanJetsFromTaus           = False,
+    cleanJetsFromIsoTracks      = False,
+    jecPath                     = '',
+    
+    genJetCol                   = 'slimmedGenJets',
+    rho                         = ('fixedGridRhoFastjetAll','',''),
+    copyJetsByValue             = False, #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
+    cleanSelectedLeptons        = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
+    lepSelCut                   = lambda lep : True,
+    recalibrationType           = 'AK8PFchs',
+    alwaysCleanPhotons          = False,
+    cleanGenJetsFromPhoton      = False,
+    collectionPostFix           = 'AK8'    
+    ### ====================== ###
+    )
 
 ##############################
 ### TAUANALYZER            ###
@@ -284,10 +285,12 @@ PreselectionAnalyzer = cfg.Analyzer(
     jet2_eta = 2.5,
     jet2_tag = -1e99,
     deltaPhi12 = 2.5,
+    enableFatJets = True,
     fatjet_pt = 250.,
     fatjet_tag1 = 0.423,
     fatjet_tag2 = 0.423,
     fatjet_mass = 50.,
+    fatjet_mass_algo = 'ak8PFJetsCHSSoftDropMass',
     fatjet_tau21 = -1.,
     jetveto_pt = 0.,
     jetveto_eta = 2.5,
@@ -547,8 +550,8 @@ sequence = [
     pileupAnalyzer,
     vertexAnalyzer,
     leptonAnalyzer,
+    fatJetAnalyzer,
     jetAnalyzer,
-    #fatJetAnalyzer,
     tauAnalyzer,
     photonAnalyzer,
     MEtAnalyzer, 
@@ -561,13 +564,13 @@ sequence = [
     GammaAnalyzer,
     WAnalyzer,
     ZAnalyzer,
-    #ZZhAnalyzer,
+    ZZhAnalyzer,
     ### Tree producers
     SignalRegionTreeProducer,
     GammaControlRegionTreeProducer,
     WControlRegionTreeProducer, 
     ZControlRegionTreeProducer,
-    #ZZhTreeProducer,
+    ZZhTreeProducer,
     ]
 
 ##############################
