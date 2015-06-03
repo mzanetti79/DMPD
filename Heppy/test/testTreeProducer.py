@@ -84,11 +84,12 @@ leptonAnalyzer = cfg.Analyzer(
 
     ### Electron selection - First step
     inclusive_electron_id       = 'POG_Cuts_ID_CSA14_25ns_v1_Veto',
-    inclusive_electron_pt       = 5,
+    inclusive_electron_pt       = 10,
     inclusive_electron_eta      = 2.5,
-    inclusive_electron_dxy      = 0.5,
-    inclusive_electron_dz       = 1.0,
-    inclusive_electron_lostHits = 1.0,
+    inclusive_electron_dxy      = 1.e99,
+    inclusive_electron_dz       = 1.e99,
+    inclusive_electron_lostHits = 9.0,
+    inclusive_electron_relIso   = 1.e99,
 
     ### Electron selection - Second step
     loose_electron_id           = 'POG_Cuts_ID_CSA14_25ns_v1_Veto',
@@ -109,11 +110,12 @@ leptonAnalyzer = cfg.Analyzer(
 
     ### Muon selection - First step
     inclusive_muon_id           = 'POG_ID_Loose',
-    inclusive_muon_pt           = 3,
+    inclusive_muon_pt           = 10,
     inclusive_muon_eta          = 2.4,
-    inclusive_muon_dxy          = 0.5,
-    inclusive_muon_dz           = 1.0,
-
+    inclusive_muon_dxy          = 1.e99,
+    inclusive_muon_dz           = 1.e99,
+    inclusive_muon_relIso       = 1.e99,
+    
     ### Muon selection - Second step
     loose_muon_id               = 'POG_ID_Loose',
     loose_muon_pt               = 10,
@@ -165,43 +167,43 @@ jetAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
-from PhysicsTools.Heppy.analyzers.objects.FatJetAnalyzer import FatJetAnalyzer
-fatJetAnalyzer = cfg.Analyzer(
+#from PhysicsTools.Heppy.analyzers.objects.FatJetAnalyzer import FatJetAnalyzer
+#fatJetAnalyzer = cfg.Analyzer(
 
-    class_object                = FatJetAnalyzer,
+#    class_object                = FatJetAnalyzer,
 
-    ### Jet - General
-    ##############################
-    jetCol                      = 'slimmedJetsAK8',
-    jetPt                       = 50.,
-    jetEta                      = 4.7,
-    jetEtaCentral               = 2.5,
-    jetLepDR                    = 0.8,
-    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
-    minLepPt                    = 10,
-    relaxJetId                  = False,
-    doPuId                      = False, # Not commissioned in 7.0.X
-    doQG                        = False,
-    recalibrateJets             = False,
-    shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-    smearJets                   = True,
-    shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-    cleanJetsFromFirstPhoton    = False,
-    cleanJetsFromTaus           = False,
-    cleanJetsFromIsoTracks      = False,
-    jecPath                     = '',
-    
-    genJetCol                   = 'slimmedGenJets',
-    rho                         = ('fixedGridRhoFastjetAll','',''),
-    copyJetsByValue             = False, #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
-    cleanSelectedLeptons        = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
-    lepSelCut                   = lambda lep : True,
-    recalibrationType           = 'AK4PFchs',
-    alwaysCleanPhotons          = False,
-    cleanGenJetsFromPhoton      = False,
-    collectionPostFix           = ''    
-    ### ====================== ###
-    )
+#    ### Jet - General
+#    ##############################
+#    jetCol                      = 'slimmedJetsAK8',
+#    jetPt                       = 50.,
+#    jetEta                      = 4.7,
+#    jetEtaCentral               = 2.5,
+#    jetLepDR                    = 0.8,
+#    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
+#    minLepPt                    = 10,
+#    relaxJetId                  = False,
+#    doPuId                      = False, # Not commissioned in 7.0.X
+#    doQG                        = False,
+#    recalibrateJets             = False,
+#    shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+#    smearJets                   = True,
+#    shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+#    cleanJetsFromFirstPhoton    = False,
+#    cleanJetsFromTaus           = False,
+#    cleanJetsFromIsoTracks      = False,
+#    jecPath                     = '',
+#    
+#    genJetCol                   = 'slimmedGenJets',
+#    rho                         = ('fixedGridRhoFastjetAll','',''),
+#    copyJetsByValue             = False, #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
+#    cleanSelectedLeptons        = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
+#    lepSelCut                   = lambda lep : True,
+#    recalibrationType           = 'AK4PFchs',
+#    alwaysCleanPhotons          = False,
+#    cleanGenJetsFromPhoton      = False,
+#    collectionPostFix           = ''    
+#    ### ====================== ###
+#    )
 
 ##############################
 ### TAUANALYZER            ###
@@ -213,7 +215,7 @@ tauAnalyzer = cfg.Analyzer(
 
     ### Tau - General
     ##############################
-    ptMin                       = 15.,
+    ptMin                       = 18.,
     etaMax                      = 2.3,
     dxyMax                      = 1000.,
     dzMax                       = 0.2,
@@ -362,6 +364,12 @@ ZZhAnalyzer = cfg.Analyzer(
     fatJet_btag_1 = 0.423,
     fatJet_btag_2 = 0.423,
     met_pt = 200.,
+    )
+
+from DMPD.Heppy.analyzers.SyncAnalyzer import SyncAnalyzer
+SyncAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzer,
     )
 
 globalVariables = [
@@ -540,25 +548,26 @@ sequence = [
     vertexAnalyzer,
     leptonAnalyzer,
     jetAnalyzer,
-    fatJetAnalyzer,
+    #fatJetAnalyzer,
     tauAnalyzer,
     photonAnalyzer,
     MEtAnalyzer, 
     #### Preselection Analyzers
     GenAnalyzer,
+    SyncAnalyzer,
     PreselectionAnalyzer,
     ### Analysis Analyzers
     SRAnalyzer,
     GammaAnalyzer,
     WAnalyzer,
     ZAnalyzer,
-    ZZhAnalyzer,
+    #ZZhAnalyzer,
     ### Tree producers
     SignalRegionTreeProducer,
     GammaControlRegionTreeProducer,
     WControlRegionTreeProducer, 
     ZControlRegionTreeProducer,
-    ZZhTreeProducer,
+    #ZZhTreeProducer,
     ]
 
 ##############################
@@ -1086,7 +1095,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###LOCAL COMPONENTS
 #selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
-selectedComponents = [sampleADDMonojet,sampleTTBar]
+selectedComponents = [sampleADDMonojet]
 #selectedComponents = [sampleTTBar]
 
 config = cfg.Config(
@@ -1107,7 +1116,7 @@ if __name__ == '__main__':
         'MonoX',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=1e99,
         )
     looper.loop()
     looper.write()
