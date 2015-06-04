@@ -77,9 +77,9 @@ class ZZhAnalyzer( Analyzer ):
                 if event.met.pt() < self.cfg_ana.met_pt:
                     self.ZZhCounter.Fill(7) # MET
                     #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
-                    if event.cleanJetsAK8[0].SubJets[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
+                    if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
                         self.ZZhCounter.Fill(8) # b-Jet1
-                        if event.cleanJetsAK8[0].SubJets[1].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
+                        if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
                             self.ZZhCounter.Fill(9) # b-Jet2
 
         return True

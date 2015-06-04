@@ -26,15 +26,8 @@ class PreselectionAnalyzer( Analyzer ):
         for j in event.Jets + event.cleanJets + event.cleanJetsAK8:
             j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
             j.deltaPhi_jet1 = deltaPhi(j.phi(), event.Jets[0].phi())
-        
-            
-    def selectFatJet(self, event):
-        if not len(event.cleanJetsAK8) >= 1:
-            return False
-        if not event.cleanJetsAK8[0].pt() > self.cfg_ana.fatjet_pt: 
-            return False
-        
-        
+    
+    def fillFatJetVariables(self, event):
         # Add n-subjettiness
         for i, j in enumerate(event.cleanJetsAK8):
             j.tau21 = j.userFloat("NjettinessAK8:tau2")/j.userFloat("NjettinessAK8:tau1") if not j.userFloat("NjettinessAK8:tau1") == 0 else -1.
@@ -55,6 +48,12 @@ class PreselectionAnalyzer( Analyzer ):
                     if j.CSV2 > self.cfg_ana.fatjet_tag2:
                         nSubJetTags += 1
             j.nSubJetTags = nSubJetTags
+            
+    def selectFatJet(self, event):
+        if not len(event.cleanJetsAK8) >= 1:
+            return False
+        if not event.cleanJetsAK8[0].pt() > self.cfg_ana.fatjet_pt: 
+            return False
         
         # FatJet selections
         if not nSubJetTags >= 2:
@@ -137,6 +136,9 @@ class PreselectionAnalyzer( Analyzer ):
         if len(event.cleanJets) < 1:
             return False
         self.Counter.Fill(1)
+        
+        # Make some interesting things available (tau21, sub-jet b-tagging...)
+        self.fillFatJetVariables(event)
         
         # Categorization
         

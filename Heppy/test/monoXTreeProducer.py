@@ -64,10 +64,11 @@ leptonAnalyzer = cfg.Analyzer(
 
     ### Lepton - General
     ##############################
-    doMuScleFitCorrections      = False, # 'rereco'
-    doRochesterCorrections      = False,
-    doElectronScaleCorrections  = False, # 'embedded' in 5.18 for regression
-    doSegmentBasedMuonCleaning  = False,
+    # energy scale corrections and ghost muon suppression (off by default)
+    doMuScleFitCorrections=False, # "rereco"
+    doRochesterCorrections=False,
+    doElectronScaleCorrections=False, # "embedded" in 5.18 for regression
+    doSegmentBasedMuonCleaning=False,
     # minimum deltaR between a loose electron and a loose muon (on overlaps, discard the electron)
     min_dr_electron_muon        = 0.02,
     # do MC matching
@@ -78,21 +79,21 @@ leptonAnalyzer = cfg.Analyzer(
     ##############################
     electrons                   = 'slimmedElectrons',
     rhoElectron                 = 'fixedGridRhoFastjetAll',
-    ele_isoCorr                 = 'rhoArea',
+    ele_isoCorr                 = 'deltaBeta',
     el_effectiveAreas           = 'Phys14_25ns_v1', #(can be 'Data2012' or 'Phys14_25ns_v1')
     ele_tightId                 = 'Cuts_2012',
 
     ### Electron selection - First step
-    inclusive_electron_id       = 'POG_Cuts_ID_CSA14_25ns_v1_Veto',
+    inclusive_electron_id       = 'POG_PHYS14_25ns_v1_Veto',
     inclusive_electron_pt       = 10,
     inclusive_electron_eta      = 2.5,
     inclusive_electron_dxy      = 1.e99,
     inclusive_electron_dz       = 1.e99,
     inclusive_electron_lostHits = 9.0,
-    inclusive_electron_relIso   = 1.e99,
+    inclusive_electron_relIso   = 0.15,
 
     ### Electron selection - Second step
-    loose_electron_id           = 'POG_Cuts_ID_CSA14_25ns_v1_Veto',
+    loose_electron_id           = 'POG_PHYS14_25ns_v1_Veto',
     loose_electron_pt           = 10,
     loose_electron_eta          = 2.5,
     loose_electron_dxy          = 0.05,
@@ -123,7 +124,17 @@ leptonAnalyzer = cfg.Analyzer(
     loose_muon_dxy              = 0.05,
     loose_muon_dz               = 0.2,
     loose_muon_relIso           = 0.2
-    ### ====================== ###
+    
+    # minimum deltaR between a loose electron and a loose muon (on overlaps, discard the electron)
+    min_dr_electron_muon = 0.02,
+    # Mini-isolation, with pT dependent cone: will fill in the miniRelIso, miniRelIsoCharged, miniRelIsoNeutral variables of the leptons (see https://indico.cern.ch/event/368826/ )
+    doMiniIsolation = False, # off by default since it requires access to all PFCandidates 
+    packedCandidates = 'packedPFCandidates',
+    miniIsolationPUCorr = 'rhoArea', # Allowed options: 'rhoArea' (EAs for 03 cone scaled by R^2), 'deltaBeta', 'raw' (uncorrected), 'weights' (delta beta weights; not validated)
+    miniIsolationVetoLeptons = None, # use 'inclusive' to veto inclusive leptons and their footprint in all isolation cones
+    # do MC matching 
+    do_mc_match = True, # note: it will in any case try it only on MC, not on data
+    match_inclusiveLeptons = False, # match to all inclusive leptons
     )
 
 ##############################
@@ -148,7 +159,7 @@ jetAnalyzer = cfg.Analyzer(
     doQG                        = False,
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-    smearJets                   = True,
+    smearJets                   = False,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -183,11 +194,11 @@ fatJetAnalyzer = cfg.Analyzer(
     jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
     minLepPt                    = 10,
     relaxJetId                  = False,
-    doPuId                      = False, # Not commissioned in 7.0.X
+    doPuId                      = True, # Not commissioned in 7.0.X
     doQG                        = False,
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
-    smearJets                   = True,
+    smearJets                   = False,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -244,7 +255,7 @@ photonAnalyzer = cfg.Analyzer(
     photons                     = 'slimmedPhotons',
     ptMin                       = 15,
     etaMax                      = 2.5,
-    gammaID                     = 'PhotonCutBasedIDLoose_CSA14',
+    gammaID                     = 'POG_PHYS14_25ns_Loose',
     do_mc_match                 = True,
     do_randomCone               = False,
     ### ====================== ###
