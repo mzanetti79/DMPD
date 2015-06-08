@@ -20,6 +20,7 @@ generatorAnalyzer= cfg.Analyzer(
     makeAllGenParticles = True, # Make also the list of all genParticles, for other analyzers to handle
     makeSplittedGenLists = True, # Make also the splitted lists
     allGenTaus = False, 
+    makeLHEweights = True,
     )
 
 ##############################
@@ -84,7 +85,7 @@ leptonAnalyzer = cfg.Analyzer(
     ele_tightId                 = 'Cuts_2012',
 
     ### Electron selection - First step
-    inclusive_electron_id       = 'POG_PHYS14_25ns_v1_Veto',
+    inclusive_electron_id       = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
     inclusive_electron_pt       = 10,
     inclusive_electron_eta      = 2.5,
     inclusive_electron_dxy      = 1.e99,
@@ -93,7 +94,7 @@ leptonAnalyzer = cfg.Analyzer(
     inclusive_electron_relIso   = 0.15,
 
     ### Electron selection - Second step
-    loose_electron_id           = 'POG_PHYS14_25ns_v1_Veto',
+    loose_electron_id           = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
     loose_electron_pt           = 10,
     loose_electron_eta          = 2.5,
     loose_electron_dxy          = 0.05,
@@ -123,18 +124,13 @@ leptonAnalyzer = cfg.Analyzer(
     loose_muon_eta              = 2.4,
     loose_muon_dxy              = 0.05,
     loose_muon_dz               = 0.2,
-    loose_muon_relIso           = 0.2
-    
-    # minimum deltaR between a loose electron and a loose muon (on overlaps, discard the electron)
-    min_dr_electron_muon = 0.02,
+    loose_muon_relIso           = 0.2,
+
     # Mini-isolation, with pT dependent cone: will fill in the miniRelIso, miniRelIsoCharged, miniRelIsoNeutral variables of the leptons (see https://indico.cern.ch/event/368826/ )
     doMiniIsolation = False, # off by default since it requires access to all PFCandidates 
     packedCandidates = 'packedPFCandidates',
     miniIsolationPUCorr = 'rhoArea', # Allowed options: 'rhoArea' (EAs for 03 cone scaled by R^2), 'deltaBeta', 'raw' (uncorrected), 'weights' (delta beta weights; not validated)
     miniIsolationVetoLeptons = None, # use 'inclusive' to veto inclusive leptons and their footprint in all isolation cones
-    # do MC matching 
-    do_mc_match = True, # note: it will in any case try it only on MC, not on data
-    match_inclusiveLeptons = False, # match to all inclusive leptons
     )
 
 ##############################
@@ -152,7 +148,7 @@ jetAnalyzer = cfg.Analyzer(
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
     jetLepDR                    = 0.4,
-    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the lepton
+    jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the lepton
     minLepPt                    = 10,
     relaxJetId                  = False,
     doPuId                      = True,
@@ -227,18 +223,30 @@ tauAnalyzer = cfg.Analyzer(
 
     ### Tau - General
     ##############################
-    ptMin                       = 18.,
-    etaMax                      = 2.3,
-    dxyMax                      = 1000.,
-    dzMax                       = 0.2,
-    vetoLeptons                 = True,
-    leptonVetoDR                = 0.4,
-    decayModeID                 = 'decayModeFindingNewDMs', # ignored if not set or ''
-    tauID                       = 'byLooseCombinedIsolationDeltaBetaCorr3Hits',
-    vetoLeptonsPOG              = False, # If True, the following two IDs are required
-    tauAntiMuonID               = 'againstMuonLoose3',
-    tauAntiElectronID           = 'againstElectronLooseMVA5',
-    tauLooseID                  = 'decayModeFinding',
+    inclusive_ptMin = 18,
+    inclusive_etaMax = 9999,
+    inclusive_dxyMax = 1000.,
+    inclusive_dzMax = 0.4,
+    inclusive_vetoLeptons = False,
+    inclusive_leptonVetoDR = 0.4,
+    inclusive_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
+    inclusive_tauID = "decayModeFindingNewDMs",
+    inclusive_vetoLeptonsPOG = False, # If True, the following two IDs are required
+    inclusive_tauAntiMuonID = "",
+    inclusive_tauAntiElectronID = "",
+    # loose hadronic tau selection
+    loose_ptMin = 18,
+    loose_etaMax = 9999,
+    loose_dxyMax = 1000.,
+    loose_dzMax = 0.2,
+    loose_vetoLeptons = True,
+    loose_leptonVetoDR = 0.4,
+    loose_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
+    loose_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
+    loose_vetoLeptonsPOG = False, # If True, the following two IDs are required
+    loose_tauAntiMuonID = "againstMuonLoose3",
+    loose_tauAntiElectronID = "againstElectronLooseMVA5",
+    loose_tauLooseID = "decayModeFindingNewDMs"
     ### ====================== ###
     )
 
@@ -603,6 +611,14 @@ output_service = cfg.Service(
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 from DMPD.Heppy.samples.Phys14.fileLists import samples
+
+sampleTest = cfg.Component(
+    files = ['file:/lustre/cmswork/zucchett/CMSSW_7_4_4/src/RSGravToZZToLLQQ_kMpl01_M-2000_TuneCUETP8M1_13TeV-pythia8.root'],
+    name='sampleTest',
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
 
 sampleADDMonojet = cfg.Component(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/80CF5456-B9EC-E411-93DA-002618FDA248.root'],
@@ -1111,8 +1127,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###LOCAL COMPONENTS
 #selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
-selectedComponents = [sampleADDMonojet]
-#selectedComponents = [sampleTTBar]
+#selectedComponents = [sampleADDMonojet]
+selectedComponents = [sampleTTBar]
 
 config = cfg.Config(
     components = selectedComponents,
