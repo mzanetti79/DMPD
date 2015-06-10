@@ -32,7 +32,7 @@ class ZZhAnalyzer( Analyzer ):
         if not hasattr(event, "Z"):
             return True
         self.ZZhCounter.Fill(2) # Z cand
-        if len(event.cleanJetsAK8)<1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt:
+        if len(event.cleanJetsAK8)<1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt or len(event.cleanJetsAK8[0].subjets('SoftDrop')) < 2:
             return True
         self.ZZhCounter.Fill(3) # Jet pT
         if event.Z.pt() < self.cfg_ana.Z_pt:

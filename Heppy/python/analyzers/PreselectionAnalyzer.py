@@ -56,7 +56,7 @@ class PreselectionAnalyzer( Analyzer ):
             return False
         
         # FatJet selections
-        if not nSubJetTags >= 2:
+        if not event.cleanJetsAK8[0].nSubJetTags >= 2:
             return False
         if not event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass:
             return False
