@@ -890,15 +890,6 @@ sampleDM_Monojet_M1000_V = cfg.Component(
     splitFactor=1
     )
 
-sampleDM_MonoB = cfg.Component(
-    ### DM_MonoB
-    files = samples['DM_MonoB']['files'],
-    name="DM_MonoB",
-    isMC=True,
-    isEmbed=False,
-    splitFactor=1
-    )
-
 sampleDM_MonoVbb = cfg.Component(
     ### DM_MonoVbb
     files = samples['DM_MonoVbb']['files'],
@@ -917,7 +908,8 @@ sampleDM_MonoH = cfg.Component(
     splitFactor=1
     )
 
-
+##################
+### ZZhToLLM
 
 sampleZZhToLLM1000 = cfg.Component(
     files = samples['ZZhToLLM1000']['files'],
@@ -951,6 +943,90 @@ sampleZZhToLLM4000 = cfg.Component(
     splitFactor=1
     )
 
+##################
+### ZZhToNuNuM
+
+sampleZZhToNuNuM1000 = cfg.Component(
+    files = samples['ZZhToNuNuM1000']['files'],
+    name="ZZhToNuNuM1000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToNuNuM2000 = cfg.Component(
+    files = samples['ZZhToNuNuM2000']['files'],
+    name="ZZhToNuNuM2000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToNuNuM3000 = cfg.Component(
+    files = samples['ZZhToNuNuM3000']['files'],
+    name="ZZhToNuNuM3000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleZZhToNuNuM4000 = cfg.Component(
+    files = samples['ZZhToNuNuM4000']['files'],
+    name="ZZhToNuNuM4000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+##################
+### DM_bb_M
+
+sampleDM_bb_M50 = cfg.Component(
+    ### DM_bb_M50
+    files = samples['DM_bb_M50']['files'],
+    name="DM_bb_M50",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_bb_M100 = cfg.Component(
+    ### DM_bb_M100
+    files = samples['DM_bb_M100']['files'],
+    name="DM_bb_M100",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_bb_M200 = cfg.Component(
+    ### DM_bb_M200
+    files = samples['DM_bb_M200']['files'],
+    name="DM_bb_M200",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_bb_M500 = cfg.Component(
+    ### DM_bb_M500
+    files = samples['DM_bb_M500']['files'],
+    name="DM_bb_M500",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleDM_bb_M1000 = cfg.Component(
+    ### DM_bb_M1000
+    files = samples['DM_bb_M1000']['files'],
+    name="DM_bb_M1000",
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+
 ##############################
 ### FWLITE                 ###
 ##############################
@@ -960,7 +1036,7 @@ preprocessor = CmsswPreprocessor("tagFatJets.py")
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### TEST (LOCAL)
-selectedComponents = [sampleTest]
+#selectedComponents = [sampleTest]
 
 #### FULL QCD
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf] 
@@ -988,6 +1064,15 @@ selectedComponents = [sampleTest]
 
 #### FULL DM-MonoJet
 #selectedComponents = [sampleDM_Monojet_M10_V,sampleDM_Monojet_M100_V,sampleDM_Monojet_M1000_V,sampleDM_Monojet_M1_AV,sampleDM_Monojet_M10_AV,sampleDM_Monojet_M100_AV,sampleDM_Monojet_M1000_AV] 
+
+#### FULL ZZhToLLM
+#selectedComponents = [sampleZZhToLLM1000,sampleZZhToLLM2000,sampleZZhToLLM3000,sampleZZhToLLM4000] 
+
+#### FULL ZZhToNuNuM
+#selectedComponents = [sampleZZhToNuNuM1000,sampleZZhToNuNuM2000,sampleZZhToNuNuM3000,sampleZZhToNuNuM4000] 
+
+#### FULL DM_bb_M
+#selectedComponents = [sampleDM_bb_M50,sampleDM_bb_M100,sampleDM_bb_M200,sampleDM_bb_M500,sampleDM_bb_M1000] 
 
 #### FULL List
 #selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf,
@@ -1044,7 +1129,6 @@ selectedComponents = [sampleTest]
 #selectedComponents = [sampleDM_Monojet_M100_AV] 
 #selectedComponents = [sampleDM_Monojet_M1000_AV] 
 
-#selectedComponents = [sampleDM_MonoB] 
 #selectedComponents = [sampleDM_MonoVbb] 
 #selectedComponents = [sampleDM_MonoH] 
 
@@ -1055,7 +1139,7 @@ selectedComponents = [sampleTest]
 #selectedComponents = [sampleZZhToLLM4000] 
 
 ###LOCAL COMPONENTS
-#selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
+#selectedComponents = [sampleDM_MonoVbb,sampleDM_MonoH] 
 
 config = cfg.Config(
     components = selectedComponents,
