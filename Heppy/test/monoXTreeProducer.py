@@ -80,27 +80,30 @@ leptonAnalyzer = cfg.Analyzer(
     ##############################
     electrons                   = 'slimmedElectrons',
     rhoElectron                 = 'fixedGridRhoFastjetAll',
-    ele_isoCorr                 = 'deltaBeta',
+    #ele_isoCorr                 = 'deltaBeta',
+    ele_isoCorr                 = 'rhoArea',
     el_effectiveAreas           = 'Phys14_25ns_v1', #(can be 'Data2012' or 'Phys14_25ns_v1')
     ele_tightId                 = 'Cuts_2012',
 
     ### Electron selection - First step
-    inclusive_electron_id       = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
+    inclusive_electron_id       = 'POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto',
+    #inclusive_electron_id       = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
     inclusive_electron_pt       = 10,
     inclusive_electron_eta      = 2.5,
     inclusive_electron_dxy      = 1.e99,
     inclusive_electron_dz       = 1.e99,
     inclusive_electron_lostHits = 9.0,
-    inclusive_electron_relIso   = 0.15,
+    inclusive_electron_isoCut   = lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.158721 ) or  ( electron.isEE() and electron.relIso03 < 0.177032 ) ) ,
+    inclusive_electron_relIso   = 1.e99,
 
     ### Electron selection - Second step
-    loose_electron_id           = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
+    loose_electron_id           = 'POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto',
     loose_electron_pt           = 10,
     loose_electron_eta          = 2.5,
     loose_electron_dxy          = 0.05,
     loose_electron_dz           = 0.2,
     loose_electron_lostHits     = 1.0,
-    loose_electron_relIso       = 0.15,
+    loose_electron_relIso       = 1.e99,
 
     ### Muon - General
     ##############################
@@ -116,6 +119,7 @@ leptonAnalyzer = cfg.Analyzer(
     inclusive_muon_eta          = 2.4,
     inclusive_muon_dxy          = 1.e99,
     inclusive_muon_dz           = 1.e99,
+    inclusive_muon_isoCut       = lambda muon : muon.relIso04 < 0.2,
     inclusive_muon_relIso       = 1.e99,
     
     ### Muon selection - Second step
@@ -229,8 +233,10 @@ tauAnalyzer = cfg.Analyzer(
     inclusive_dzMax = 0.4,
     inclusive_vetoLeptons = False,
     inclusive_leptonVetoDR = 0.4,
-    inclusive_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
-    inclusive_tauID = "decayModeFindingNewDMs",
+    #inclusive_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
+    #inclusive_tauID = "decayModeFindingNewDMs",
+    inclusive_decayModeID = "decayModeFinding", # ignored if not set or ""
+    inclusive_tauID = "decayModeFinding",
     inclusive_vetoLeptonsPOG = False, # If True, the following two IDs are required
     inclusive_tauAntiMuonID = "",
     inclusive_tauAntiElectronID = "",
@@ -241,7 +247,9 @@ tauAnalyzer = cfg.Analyzer(
     loose_dzMax = 0.2,
     loose_vetoLeptons = True,
     loose_leptonVetoDR = 0.4,
-    loose_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
+    #loose_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
+    #loose_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
+    loose_decayModeID = "decayModeFinding", # ignored if not set or ""
     loose_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
     loose_vetoLeptonsPOG = False, # If True, the following two IDs are required
     loose_tauAntiMuonID = "againstMuonLoose3",
@@ -1127,8 +1135,9 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###LOCAL COMPONENTS
 #selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH] 
 
-#selectedComponents = [sampleADDMonojet]
-selectedComponents = [sampleTTBar]
+selectedComponents = [sampleADDMonojet]
+#selectedComponents = [sampleTTBar]
+#selectedComponents = [sampleADDMonojet,sampleTTBar]
 
 config = cfg.Config(
     components = selectedComponents,
