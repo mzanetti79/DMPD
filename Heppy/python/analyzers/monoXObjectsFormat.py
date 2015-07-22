@@ -60,17 +60,21 @@ electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], 
 ])
 
 jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedLinks") if x.hasUserFloat("ak8PFJetsCHSPrunedLinks") else -1., float, help="Jet pruned mass"),
-    NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedLinks") if x.hasUserFloat("ak8PFJetsCHSTrimmedLinks") else -1., float, help="Jet trimmed mass"),
-    NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredLinks") if x.hasUserFloat("ak8PFJetsCHSFilteredLinks") else -1., float, help="Jet filtered mass"),
-    NTupleVariable("tau21",   lambda x : getattr(x, "tau21", -1.), float, help="n-subjettiness 2/1"),
-    NTupleVariable("CSV",   lambda x : x.btag('combinedInclusiveSecondaryVertexV2BJetTags') if x.btag('combinedInclusiveSecondaryVertexV2BJetTags') > -99. else x.subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') if hasattr(x, "subJet1") else -1000, float, help="Jet CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV1",   lambda x : x.subJet1.btag('combinedInclusiveSecondaryVertexV2BJetTags') if hasattr(x, "subJet1") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV2",   lambda x : x.subJet2.btag('combinedInclusiveSecondaryVertexV2BJetTags') if hasattr(x, "subJet2") else -1000, float, help="subJet CSV-IVF v2 discriminator"),
+    #NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedLinks") if x.hasUserFloat("ak8PFJetsCHSPrunedLinks") else -1., float, help="Jet pruned mass"),
+    #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedLinks") if x.hasUserFloat("ak8PFJetsCHSTrimmedLinks") else -1., float, help="Jet trimmed mass"),
+    #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredLinks") if x.hasUserFloat("ak8PFJetsCHSFilteredLinks") else -1., float, help="Jet filtered mass"),
+    NTupleVariable("softDropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -1., float, help="Jet SoftDrop mass"),
+    NTupleVariable("tau21",   lambda x : getattr(x, "tau21", -1), float, help="n-subjettiness 2/1"),
+    NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV1",   lambda x : getattr(x, "CSV1", -1), float, help="subJet 1 CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV2",   lambda x : getattr(x, "CSV2", -1), float, help="subJet 2 CSV-IVF v2 discriminator"),
+    NTupleVariable("nSubJetTags",   lambda x : getattr(x, "nSubJetTags", -1), int, help="Number of b-tagged subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
     #NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -99), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
-    NTupleVariable("flavour", lambda x : x.partonFlavour(), int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
+    NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
+    NTupleVariable("flavour1", lambda x : getattr(x, "flavour1", -1), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 1"),
+    NTupleVariable("flavour2", lambda x : getattr(x, "flavour2", -1), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 2"),
 #    NTupleVariable("motherPdgId", lambda x : x.mother().pdgId() if x.mother() else 0, int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
 #    NTupleVariable("mcMatchPdgId",  lambda x : getattr(x, 'mcMatchId', -99), int, mcOnly=False, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
     #NTupleVariable("mcPt",   lambda x : x.mcJet.pt() if getattr(x,"mcJet",None) else 0., mcOnly=True, help="p_{T} of associated gen jet"),
@@ -85,6 +89,11 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
     NTupleVariable("looseId",    lambda x : x.jetID("POG_PFID_Loose") , int, mcOnly=False,help="Jet POG Loose id"),
     NTupleVariable("mediumId",    lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
     NTupleVariable("tightId",    lambda x : x.jetID("POG_PFID_Tight") , int, mcOnly=False,help="Jet POG Tight id"),
+])
+
+subjetType = NTupleObjectType("subjet",  baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
+    NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
 ])
 
 tauType = NTupleObjectType("tau",  baseObjectTypes = [ particleType ], variables = [

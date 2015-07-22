@@ -52,7 +52,7 @@ class GenAnalyzer( Analyzer ):
     def process(self, event):
         
         if not hasattr(event, "genParticles"):
-            return False
+            return True
         # Mediator
         event.genPhi = None
         event.genChi = []
@@ -61,20 +61,20 @@ class GenAnalyzer( Analyzer ):
             if g.pdgId() == 9100000 or g.pdgId() == 9900032 or g.pdgId() == 1023:
                 event.genPhi = g
             if abs(g.pdgId()) == 9100022 or g.pdgId() == 9100012:
-                event.genChi.append(g)
+                chi.append(g)
         if event.genPhi:
             self.GenPhi1mass.Fill(event.genPhi.mass())
             self.GenPhi1pt.Fill(event.genPhi.pt())
             self.GenPhi1eta.Fill(event.genPhi.eta())
         if len(event.genChi) == 2:
-            i1, i2 = [0, 1] if event.genChi[0].pt() > event.genChi[1].pt() else [1, 0]
-            self.GenChi1mass.Fill(event.genChi[i1].mass())
-            self.GenChi1pt.Fill(event.genChi[i1].pt())
-            self.GenChi1eta.Fill(event.genChi[i1].eta())
-            self.GenChi2mass.Fill(event.genChi[i1].mass())
-            self.GenChi2pt.Fill(event.genChi[i1].pt())
-            self.GenChi2eta.Fill(event.genChi[i1].eta())
-            self.GenChi12dR.Fill(deltaR(event.genChi[0].eta(), event.genChi[0].phi(), event.genChi[1].eta(), event.genChi[1].phi()))
+            i1, i2 = [0, 1] if chi[0].pt() > chi[1].pt() else [1, 0]
+            self.GenChi1mass.Fill(chi[i1].mass())
+            self.GenChi1pt.Fill(chi[i1].pt())
+            self.GenChi1eta.Fill(chi[i1].eta())
+            self.GenChi2mass.Fill(chi[i1].mass())
+            self.GenChi2pt.Fill(chi[i1].pt())
+            self.GenChi2eta.Fill(chi[i1].eta())
+            self.GenChi12dR.Fill(deltaR(chi[0].eta(), chi[0].phi(), chi[1].eta(), chi[1].phi()))
         # Z
         if hasattr(event, "genVBosons"):
             if len(event.genVBosons) > 0:
