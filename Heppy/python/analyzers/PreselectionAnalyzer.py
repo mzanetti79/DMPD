@@ -138,7 +138,7 @@ class PreselectionAnalyzer( Analyzer ):
         return True
     
     def createZ(self, event, leptons):
-        if len(leptons) < 2 or leptons[0].charge() != leptons[1].charge():
+        if len(leptons) < 2 or leptons[0].charge() == leptons[1].charge():
             return False
         theZ = leptons[0].p4() + leptons[1].p4()
         theZ.charge = leptons[0].charge() + leptons[1].charge()
@@ -166,6 +166,17 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWCR = False
         event.isTCR = False
         event.isGCR = False
+        event.isZtoEE = False
+        event.isZtoMM = False
+        event.isWtoEN = False
+        event.isWtoMN = False
+        
+        # Build clean collections
+        event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
+        event.xcleanTaus    = event.selectedTaus
+        event.xcleanPhotons = event.selectedPhotons
+        event.xcleanJets    = event.cleanJets
+        event.xcleanJetsAK8 = event.cleanJetsAK8
         
         self.Counter.Fill(-1)
         # Trigger
@@ -176,35 +187,50 @@ class PreselectionAnalyzer( Analyzer ):
             return False
         self.Counter.Fill(1)
         
-        # Count Leptons
+        # Count Leptons and select Regions
         if len(event.selectedLeptons) >= 2:
             # TTbar Control Region: two OF, OS leptons
             if len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
+                event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 event.isTCR = True
+                
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.createZ(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
+                event.xcleanLeptons = event.selectedElectrons
+                event.isZtoEE = True
                 event.isZCR = True
+                
             elif len(event.selectedMuons) >= 2 and event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
                 self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
+                event.xcleanLeptons = event.selectedMuons
+                event.isZtoMM = True
                 event.isZCR = True
+                
         elif len(event.selectedLeptons) == 1:
             if len(event.selectedElectrons) == 1:
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
+                event.xcleanLeptons = event.selectedElectrons
+                event.isWtoEN = True
                 event.isWCR = True
+                
             elif len(event.selectedMuons) == 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
+                event.xcleanLeptons = event.selectedMuons
+                event.isWtoMN = True
                 event.isWCR = True
+                
         elif len(event.selectedPhotons) >= 1:
             self.addFakeMet(event, [event.selectedPhotons[0]])
             event.isGCR = True
         else:
             self.addFakeMet(event, [])
             event.isSR = True
+        
         
         
         return True

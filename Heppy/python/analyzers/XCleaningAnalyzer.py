@@ -101,12 +101,10 @@ class XCleaningAnalyzer( Analyzer ):
 
         return True
 
-    def process(self, event):
-        event.xcleanTaus    = event.selectedTaus
-        event.xcleanJets    = event.cleanJets
-        event.xcleanJetsAK8 = event.cleanJetsAK8
-        event.Leptons       = event.selectedMuons + event.selectedElectrons
 
+
+    def process(self, event):
+        
         self.crossCleanTaus(event)
 
         self.crossCleanJets(event)
