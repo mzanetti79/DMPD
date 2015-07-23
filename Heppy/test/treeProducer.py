@@ -397,18 +397,21 @@ SignalRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isSR,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables,
+    globalVariables = globalVariables + [
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+    ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'V'         : NTupleObject('V', compositeType, help='Boson candidate'),
-        },
+    },
     collections = {
-      'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
-      'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-      'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-      'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
-      }
-    )
+        'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
+        'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+        'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
+    }
+)
 
 
 ##############################
@@ -423,22 +426,26 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZtoEE, int, help='Z -> mu mu flag'),
-        NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag')
+        NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag'),
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
+        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
         'Z'         : NTupleObject('Z', compositeType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
-        },
+    },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
         'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
-        }
-    )
+    }
+)
 
 
 ##############################
@@ -453,22 +460,26 @@ WControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalVariables + [
         NTupleVariable('isWtoEN',  lambda x: x.isWtoEN, int, help='W -> mu nu flag'),
-        NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag')
+        NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
+        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'W'         : NTupleObject('W', compositeType, help='W boson candidate'),
         #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
-        },
+    },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
         'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
-        }
-    )
+    }
+)
 
 
 ##################################
@@ -481,20 +492,25 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isTCR,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables,
+    globalVariables = globalVariables + [
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+    ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in ttbar events obtained removing the leptons'),
+        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in ttbar events obtained removing the leptons'),
         #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
-        },
+    },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon and Electron collection'),
         'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
-        }
-    )
+    }
+)
 
 ##############################
 ### G CONTROL REGION TREE  ###
@@ -506,12 +522,17 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isGCR,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables,
+    globalVariables = globalVariables + [
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+    ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in gamma + jets event obtained removing the photon'),
+        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
-        },
+    },
     collections = {
         #'selectedMuons'       : NTupleCollection('muon', muonType, 4, help='Muons after the preselection'),
         #'selectedElectrons'   : NTupleCollection('electron', electronType, 4, help='Electrons after the preselection'),
@@ -520,8 +541,8 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJets collection'),
         #'SubJets'             : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
-        }
-    )
+    }
+)
 
 
 ##############################
