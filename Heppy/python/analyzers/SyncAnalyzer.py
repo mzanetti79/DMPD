@@ -7,7 +7,7 @@ import ROOT
 import sys
 
 class SyncAnalyzer( Analyzer ):
-    '''Sync plot'''
+    '''Make plots to keep track of the event numbers'''
     
     def beginLoop(self,setup):
         super(SyncAnalyzer,self).beginLoop(setup)
@@ -46,7 +46,7 @@ class SyncAnalyzer( Analyzer ):
                                 self.Sync.Fill(6)
                                 if len(event.selectedPhotons) == 0:
                                     self.Sync.Fill(7)
-                                    if self.cfg_ana.print: print "%d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
+                                    if self.cfg_ana.verbose: print "%d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
     
     
     
@@ -71,7 +71,7 @@ class SyncAnalyzer( Analyzer ):
                                         self.Sync.Fill(8)
                                         if event.fakemet.pt() > 200:
                                             self.Sync.Fill(9)
-                                            if self.cfg_ana.print: print "ZCR %d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
+                                            if self.cfg_ana.verbose: print "ZCR %d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
     
     
     
@@ -95,7 +95,7 @@ class SyncAnalyzer( Analyzer ):
                                         self.Sync.Fill(8)
                                         if event.fakemet.pt() > 200:
                                             self.Sync.Fill(9)
-                                            if self.cfg_ana.print: print "WCR %d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
+                                            if self.cfg_ana.verbose: print "WCR %d:%d:%d" % ( event.input.eventAuxiliary().id().run(), event.input.eventAuxiliary().id().luminosityBlock(), event.input.eventAuxiliary().id().event() )
 
     
     

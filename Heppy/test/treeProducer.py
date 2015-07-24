@@ -327,6 +327,13 @@ XCleaningAnalyzer = cfg.Analyzer(
     ele_fatjet_dr= 0.4,
     )
 
+from DMPD.Heppy.analyzers.SyncAnalyzer import SyncAnalyzer
+PreselectionAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzer,
+    verbose = False,
+    )
+
 #from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
 #ZZhAnalyzer = cfg.Analyzer(
 #    verbose = False,
