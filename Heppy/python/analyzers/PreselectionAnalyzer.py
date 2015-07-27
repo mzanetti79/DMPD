@@ -14,7 +14,7 @@ class PreselectionAnalyzer( Analyzer ):
         super(PreselectionAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            Labels = ["Trigger", "#Jets > 1", "Jet cuts"]
+            Labels = ["Trigger"]
             self.Counter = ROOT.TH1F("Counter", "Counter", 8, 0, 8)
             for i, l in enumerate(Labels):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
@@ -138,8 +138,6 @@ class PreselectionAnalyzer( Analyzer ):
         return True
     
     def createZ(self, event, leptons):
-        if len(leptons) < 2 or leptons[0].charge() == leptons[1].charge():
-            return False
         theZ = leptons[0].p4() + leptons[1].p4()
         theZ.charge = leptons[0].charge() + leptons[1].charge()
         theZ.deltaR = deltaR(leptons[0].eta(), leptons[0].phi(), leptons[1].eta(), leptons[1].phi())
@@ -159,6 +157,11 @@ class PreselectionAnalyzer( Analyzer ):
         theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )
         event.W = theW
         return True
+    
+#    def createA(self, event):
+#        if event.isZCR:
+#            theA = lepton.p4() + event.met.p4()
+#        return True
     
     def process(self, event):
         event.isSR = False
@@ -183,9 +186,9 @@ class PreselectionAnalyzer( Analyzer ):
         self.Counter.Fill(0)
         
         # Check if there is at least one jet
-        if len(event.cleanJets) < 1 and len(event.cleanJetsAK8) < 1:
-            return False
-        self.Counter.Fill(1)
+        #if len(event.cleanJets) < 1:# and len(event.cleanJetsAK8) < 1:
+        #    return False
+        #self.Counter.Fill(1)
         
         # Count Leptons and select Regions
         if len(event.selectedLeptons) >= 2:
@@ -230,7 +233,6 @@ class PreselectionAnalyzer( Analyzer ):
         else:
             self.addFakeMet(event, [])
             event.isSR = True
-        
         
         
         return True

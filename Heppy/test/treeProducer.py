@@ -315,7 +315,7 @@ XCleaningAnalyzer = cfg.Analyzer(
     class_object = XCleaningAnalyzer,
     mu_clean_pt  = 20.,
     mu_clean_id  = 'POG_ID_Tight',
-    mu_clean_iso = lambda x : x.relIso04 < 0.2,
+    mu_clean_iso = lambda x : x.relIso04 < 0.12,
     mu_tau_dr    = 0.4,
     mu_jet_dr    = 0.4,
     mu_fatjet_dr = 0.4,
@@ -328,10 +328,9 @@ XCleaningAnalyzer = cfg.Analyzer(
     )
 
 from DMPD.Heppy.analyzers.SyncAnalyzer import SyncAnalyzer
-PreselectionAnalyzer = cfg.Analyzer(
+SyncAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = SyncAnalyzer,
-    verbose = False,
     )
 
 #from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
@@ -376,6 +375,32 @@ PreselectionAnalyzer = cfg.Analyzer(
 #    jetveto_eta = 2.5,
 #    )
 
+
+from DMPD.Heppy.analyzers.SyncAnalyzerSR import SyncAnalyzerSR
+SyncAnalyzerSR = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzerSR,
+    )
+
+from DMPD.Heppy.analyzers.SyncAnalyzerGCR import SyncAnalyzerGCR
+SyncAnalyzerGCR = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzerGCR,
+    )
+
+from DMPD.Heppy.analyzers.SyncAnalyzerZCR import SyncAnalyzerZCR
+SyncAnalyzerZCR = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzerZCR,
+    )
+
+from DMPD.Heppy.analyzers.SyncAnalyzerWCR import SyncAnalyzerWCR
+SyncAnalyzerWCR = cfg.Analyzer(
+    verbose = False,
+    class_object = SyncAnalyzerWCR,
+    )
+
+
 globalVariables = [
     NTupleVariable('isSR',      lambda x: x.isSR, int, help='Signal Region flag'),
     NTupleVariable('isZCR',     lambda x: x.isZCR, int, help='Z+jets Control Region flag'),
@@ -410,7 +435,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        #'V'         : NTupleObject('V', compositeType, help='Boson candidate'),
+        #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
     },
     collections = {
         'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
@@ -442,8 +467,8 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
-        'Z'         : NTupleObject('Z', compositeType, help='Z boson candidate'),
-        #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
+        'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
+        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
@@ -476,8 +501,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
-        'W'         : NTupleObject('W', compositeType, help='W boson candidate'),
-        #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
+        'W'         : NTupleObject('W', candidateType, help='W boson candidate'),
+        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
@@ -508,7 +533,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in ttbar events obtained removing the leptons'),
-        #'V'         : NTupleObject('V', compositeType, help='Higgs boson candidate'),
+        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon and Electron collection'),
@@ -538,7 +563,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in gamma + jets event obtained removing the photon'),
-        #'V' : NTupleObject('V', compositeType, help='Higgs boson candidate'),
+        #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
         #'selectedMuons'       : NTupleCollection('muon', muonType, 4, help='Muons after the preselection'),
@@ -567,9 +592,9 @@ ZZhTreeProducer= cfg.Analyzer(
         NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> mu mu flag')
     ],
     globalObjects = {
-        'A' : NTupleObject('A', compositeType, help='A boson candidate'),
-        'Z' : NTupleObject('Z', compositeType, help='Z boson candidate'),
-        'H' : NTupleObject('h', compositeType, help='Higgs boson candidate'),
+        'A' : NTupleObject('A', candidateType, help='A boson candidate'),
+        'Z' : NTupleObject('Z', candidateType, help='Z boson candidate'),
+        'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
         'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         },
     collections = {
@@ -597,10 +622,10 @@ sequence = [
     fatJetAnalyzer,
     GenAnalyzer,
     #### Preselection Analyzers
-    #SyncAnalyzerSR,
-    #SyncAnalyzerGCR,
-    #SyncAnalyzerZCR,
-    #SyncAnalyzerWCR,
+    SyncAnalyzerSR,
+    SyncAnalyzerGCR,
+    SyncAnalyzerZCR,
+    SyncAnalyzerWCR,
     PreselectionAnalyzer,
     ##### Analysis Analyzers
 #    ZeroLeptonAnalyzer,
@@ -611,6 +636,7 @@ sequence = [
 #    ZZhAnalyzer,
     ##### Categorization Analyzers
     XCleaningAnalyzer,
+    SyncAnalyzer,
 #    CategorizationAnalyzer,
     ##### Tree producers
     SignalRegionTreeProducer,
@@ -640,59 +666,90 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
 from DMPD.Heppy.samples.Spring15.fileLists import samples
 
-sampleDYJetsToLL_M50_HT100to200_v1 = cfg.Component(
-    ### DYJetsToLL
-    files = samples['DYJetsToLL_M50_HT100to200_v1']['files'],
-    name='DYJetsToLL_M50_HT100to200_v1',
-    isMC=True,
-    isEmbed=False,
-    splitFactor=50
-    )
+#sampleDYJetsToLL_M50_HT100to200_v1 = cfg.Component(
+#    ### DYJetsToLL
+#    files = samples['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1']['files'],
+#    name='DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1',
+#    isMC=True,
+#    isEmbed=False,
+#    splitFactor=50
+#    )
 
-sampleDYJetsToLL_M50_HT100to200_v2 = cfg.Component(
-    ### DYJetsToLL
-    files = samples['DYJetsToLL_M50_HT100to200_v2']['files'],
-    name='DYJetsToLL_M50_HT100to200_v2',
-    isMC=True,
-    isEmbed=False,
-    splitFactor=50
-    )
+#sampleDYJetsToLL_M50_HT100to200_v2 = cfg.Component(
+#    ### DYJetsToLL
+#    files = samples['DYJetsToLL_M50_HT100to200_v2']['files'],
+#    name='DYJetsToLL_M50_HT100to200_v2',
+#    isMC=True,
+#    isEmbed=False,
+#    splitFactor=50
+#    )
 
-sampleDYJetsToLL_M50_HT400to600_v1 = cfg.Component(
-    ### DYJetsToLL
-    files = samples['DYJetsToLL_M50_HT400to600_v1']['files'],
-    name='DYJetsToLL_M50_HT400to600_v1',
-    isMC=True,
-    isEmbed=False,
-    splitFactor=50
-    )
+#sampleDYJetsToLL_M50_HT400to600_v1 = cfg.Component(
+#    ### DYJetsToLL
+#    files = samples['DYJetsToLL_M50_HT400to600_v1']['files'],
+#    name='DYJetsToLL_M50_HT400to600_v1',
+#    isMC=True,
+#    isEmbed=False,
+#    splitFactor=50
+#    )
 
-sampleDYJetsToLL_M50_HT600toInf_v1 = cfg.Component(
-    ### DYJetsToLL
-    files = samples['DYJetsToLL_M50_HT600toInf_v1']['files'],
-    name='DYJetsToLL_M50_HT600toInf_v1',
-    isMC=True,
-    isEmbed=False,
-    splitFactor=50
-    )
+#sampleDYJetsToLL_M50_HT600toInf_v1 = cfg.Component(
+#    ### DYJetsToLL
+#    files = samples['DYJetsToLL_M50_HT600toInf_v1']['files'],
+#    name='DYJetsToLL_M50_HT600toInf_v1',
+#    isMC=True,
+#    isEmbed=False,
+#    splitFactor=50
+#    )
 
-sampleDYJetsToLL_M50_HT600toInf_v2 = cfg.Component(
-    ### DYJetsToLL
-    files = samples['DYJetsToLL_M50_HT600toInf_v2']['files'],
-    name='DYJetsToLL_M50_HT600toInf_v2',
+#sampleDYJetsToLL_M50_HT600toInf_v2 = cfg.Component(
+#    ### DYJetsToLL
+#    files = samples['DYJetsToLL_M50_HT600toInf_v2']['files'],
+#    name='DYJetsToLL_M50_HT600toInf_v2',
+#    isMC=True,
+#    isEmbed=False,
+#    splitFactor=50
+#    )
+
+sampleSYNCH_ADDMonojet = cfg.Component(
+    files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/80CF5456-B9EC-E411-93DA-002618FDA248.root'],
+    name='ADDMonojet',
     isMC=True,
     isEmbed=False,
-    splitFactor=50
+    splitFactor=1
     )
 
 sampleSYNCH_TTBar = cfg.Component(
-   files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/0A9E2CED-C9EC-E411-A8E4-003048FFCBA8.root'],
-   name='TTBar',
-   isMC=True,
-   isEmbed=False,
-   splitFactor=1
-   )
+    files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/0A9E2CED-C9EC-E411-A8E4-003048FFCBA8.root'],
+    name='TTBar',
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
 
+sampleSYNCH_DYJetsToLL = cfg.Component(
+    files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/04963444-D107-E511-B245-02163E00F339.root'],
+    name='DYJetsToLL',
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleSYNCH_WJetsToLNu = cfg.Component(
+    files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/6408230F-9F08-E511-A1A6-D4AE526A023A.root'],
+    name='WJetsToLNu',
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
+
+sampleSYNCH_RSGravitonToGaGa = cfg.Component(
+    files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/189277BA-DCEC-E411-B3B8-0025905B859E.root'],
+    name='RSGravitonToGaGa',
+    isMC=True,
+    isEmbed=False,
+    splitFactor=1
+    )
 ##############################
 ### FWLITE                 ###
 ##############################
@@ -759,7 +816,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleTToLeptons_tchannel]
 #selectedComponents = [sampleTbarToLeptons_tchannel]
 
-#selectedComponents = [sampleDYJetsToLL_M50_HT100to200]
+#selectedComponents = [DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1]
 #selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
 #selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
 #selectedComponents = [sampleDYJetsToLL_M50_HT600toInf]
@@ -805,8 +862,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleADDMonojet,sampleTTBar]
 
 #selectedComponents = [sampleSYNCH_ADDMonojet]
-selectedComponents = [sampleSYNCH_TTBar]
-#selectedComponents = [sampleSYNCH_DYJetsToLL]
+#selectedComponents = [sampleSYNCH_TTBar]
+selectedComponents = [sampleSYNCH_DYJetsToLL]
 #selectedComponents = [sampleSYNCH_WJetsToLNu]
 #selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
 
@@ -830,7 +887,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=10000,
+        nEvents=100000,
         )
     looper.loop()
     looper.write()

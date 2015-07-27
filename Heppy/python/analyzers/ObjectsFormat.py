@@ -5,15 +5,29 @@ from PhysicsTools.Heppy.analyzers.core.autovars import *
 from PhysicsTools.Heppy.analyzers.objects.autophobj  import *
 
 
-compositeType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("mt",   lambda x : getattr(x, "mT", -999.), int, help="transverse mass"),
-    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -999.), int, help="charge"),
-    NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -999.), float, help="delta R"),
-    NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -999.), float, help="delta Eta"),
-    NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -999.), float, help="delta Phi"),
-    #NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -999.), float, help="delta Phi with met"),
-    #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -999.), float, help="delta Phi with leading jet"),
+candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
+    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
+    NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
+    NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
+    NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
+    #NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="delta Phi with met"),
+    #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="delta Phi with leading jet"),
 ])
+
+
+candidateFullType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
+    NTupleVariable("cmass",   lambda x : getattr(x, "mC", -1.), int, help="collinear mass"),
+    NTupleVariable("kmass",   lambda x : getattr(x, "mK", -1.), int, help="Mass with kinematic fit"),
+    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
+    NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
+    NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
+    NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
+    #NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="delta Phi with met"),
+    #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="delta Phi with leading jet"),
+])
+
 
 leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], variables = [
 
