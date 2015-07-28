@@ -158,10 +158,32 @@ class PreselectionAnalyzer( Analyzer ):
         event.W = theW
         return True
     
-#    def createA(self, event):
-#        if event.isZCR:
-#            theA = lepton.p4() + event.met.p4()
-#        return True
+    def createA(self, event):
+        if event.isZCR:
+            theA = event.Z.pt() + event.cleanJetsAK8[0].p4()
+            theA.mT = theA.mass()
+            theA.mC = theA.mass()
+            # Pseudo-kin fit
+            theH = event.cleanJetsAK8[0].p4()
+            theH.SetM(125.0)
+            theA.mK = (event.Z.pt() + theH).mass()
+            print theA.mC, theA.mK
+        elif event.isWCR:
+            theA = event.xcleanLeptons[0].pt() + event.met.p4() + event.cleanJetsAK8[0].p4()
+            theA.mT = math.sqrt( 2.*event.xcleanLeptons[0].et()*event.met.pt()*(1.-math.cos( deltaPhi(event.xcleanLeptons[0].phi(), event.met.phi()) )) )
+            theA.mC = 0.
+            theA.mK = 0.
+        else:
+            theA = event.met.p4() + event.cleanJetsAK8[0].p4()
+            theA.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
+            theA.mC = 0.
+            theA.mK = 0.
+#TLorentzVector h, Z;
+#h.SetPtEtaPhiM(j_pt, j_eta, j_phi, j_mass);
+#Z.SetPtEtaPhiM(met_pt, -j_eta, met_phi-3.1415, 91.18);
+#//Z.SetPz(-h.Pz());
+#return (h+Z).M();
+        return True
     
     def process(self, event):
         event.isSR = False
@@ -191,49 +213,62 @@ class PreselectionAnalyzer( Analyzer ):
         #self.Counter.Fill(1)
         
         # Count Leptons and select Regions
+        
+        ### Two leptons
         if len(event.selectedLeptons) >= 2:
-            # TTbar Control Region: two OF, OS leptons
+            ###   TTbar Control Region   ###
             if len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
                 event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 event.isTCR = True
-                
+            
+            ###   Z(ee) Control Region   ###
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.createZ(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 event.xcleanLeptons = event.selectedElectrons
                 event.isZtoEE = True
                 event.isZCR = True
-                
+            
+            ###   Z(mm) Control Region   ###
             elif len(event.selectedMuons) >= 2 and event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
                 self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 event.xcleanLeptons = event.selectedMuons
                 event.isZtoMM = True
                 event.isZCR = True
-                
+        
+        ### One lepton
         elif len(event.selectedLeptons) == 1:
+            ###   W(enu) Control Region   ###
             if len(event.selectedElectrons) == 1:
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
                 event.xcleanLeptons = event.selectedElectrons
                 event.isWtoEN = True
                 event.isWCR = True
-                
+            
+            ###   W(mnu) Control Region   ###
             elif len(event.selectedMuons) == 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
                 event.xcleanLeptons = event.selectedMuons
                 event.isWtoMN = True
                 event.isWCR = True
-                
+        
+        ### One photon
         elif len(event.selectedPhotons) >= 1:
             self.addFakeMet(event, [event.selectedPhotons[0]])
             event.isGCR = True
+        
+        ### No leptons nor photons
         else:
             self.addFakeMet(event, [])
             event.isSR = True
         
+        # AZh
+        if len(event.cleanJetsAK8) > 0:
+            self.createA(event)
         
         return True
     
