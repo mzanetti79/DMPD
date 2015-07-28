@@ -763,7 +763,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
 
 selectedComponents = [
-    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1,
+    #sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1,#DEAD
     sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
     sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v1,
     sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
@@ -821,7 +821,7 @@ selectedComponents = [
 #    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
 #    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
 #    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
-    sampleTTJets_madgraphMLM_pythia8_v2,
+#    sampleTTJets_madgraphMLM_pythia8_v2,
     sampleTT_powheg_pythia8_v2,
     sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
     sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
