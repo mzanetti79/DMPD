@@ -832,7 +832,7 @@ selectedComponents = [
     sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
     sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
     sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
-    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
+#    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
 #    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
 #    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
 #    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
@@ -868,7 +868,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=100000,
+        nEvents=10000,
         )
     looper.loop()
     looper.write()
