@@ -200,11 +200,11 @@ class PreselectionAnalyzer( Analyzer ):
             theA.mK = (event.xcleanLeptons[0].p4() + kmet + kH).mass()
         else:
             theA = event.met.p4() + event.cleanJetsAK8[0].p4()
-#            theA.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
-#            cmet = event.met.p4()
-#            cmet.SetPz( -event.cleanJetsAK8[0].pz() )
-#            theA.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
-#            theA.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
+            theA.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
+            cmet = event.met.p4()
+            cmet.SetPz( -event.cleanJetsAK8[0].pz() )
+            theA.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
+            theA.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
         event.A = theA
         return True
     
