@@ -4,6 +4,7 @@ import ROOT
 from PhysicsTools.Heppy.analyzers.core.autovars import *
 from PhysicsTools.Heppy.analyzers.objects.autophobj  import *
 
+lorentzVectorType = NTupleObjectType("lorentzVector", baseObjectTypes = [ fourVectorType ], variables = [])
 
 candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
