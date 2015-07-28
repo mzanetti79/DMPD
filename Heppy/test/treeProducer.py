@@ -437,7 +437,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='SignalRegionTreeProducer',
     treename='SR',
-    filter = lambda x: x.isSR,
+    filter = lambda x: x.isSR and x.met.pt()>100,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -469,7 +469,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='ZControlRegionTreeProducer',
     treename='ZCR',
-    filter = lambda x: x.isZCR,
+    filter = lambda x: x.isZCR and x.fakemet.pt()>100,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -508,7 +508,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='WControlRegionTreeProducer',
     treename='WCR',
-    filter = lambda x: x.isWCR,
+    filter = lambda x: x.isWCR and x.fakemet.pt()>100,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -547,7 +547,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='TTbarControlRegionTreeProducer',
     treename='TCR',
-    filter = lambda x: x.isTCR,
+    filter = lambda x: x.isTCR and x.fakemet.pt()>100,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -581,7 +581,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='GammaControlRegionTreeProducer',
     treename='GCR',
-    filter = lambda x: x.isGCR,
+    filter = lambda x: x.isGCR and x.fakemet.pt()>100,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -701,52 +701,7 @@ output_service = cfg.Service(
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
-from DMPD.Heppy.samples.Spring15.fileLists import samples
-
-#sampleDYJetsToLL_M50_HT100to200_v1 = cfg.Component(
-#    ### DYJetsToLL
-#    files = samples['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1']['files'],
-#    name='DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1',
-#    isMC=True,
-#    isEmbed=False,
-#    splitFactor=50
-#    )
-
-#sampleDYJetsToLL_M50_HT100to200_v2 = cfg.Component(
-#    ### DYJetsToLL
-#    files = samples['DYJetsToLL_M50_HT100to200_v2']['files'],
-#    name='DYJetsToLL_M50_HT100to200_v2',
-#    isMC=True,
-#    isEmbed=False,
-#    splitFactor=50
-#    )
-
-#sampleDYJetsToLL_M50_HT400to600_v1 = cfg.Component(
-#    ### DYJetsToLL
-#    files = samples['DYJetsToLL_M50_HT400to600_v1']['files'],
-#    name='DYJetsToLL_M50_HT400to600_v1',
-#    isMC=True,
-#    isEmbed=False,
-#    splitFactor=50
-#    )
-
-#sampleDYJetsToLL_M50_HT600toInf_v1 = cfg.Component(
-#    ### DYJetsToLL
-#    files = samples['DYJetsToLL_M50_HT600toInf_v1']['files'],
-#    name='DYJetsToLL_M50_HT600toInf_v1',
-#    isMC=True,
-#    isEmbed=False,
-#    splitFactor=50
-#    )
-
-#sampleDYJetsToLL_M50_HT600toInf_v2 = cfg.Component(
-#    ### DYJetsToLL
-#    files = samples['DYJetsToLL_M50_HT600toInf_v2']['files'],
-#    name='DYJetsToLL_M50_HT600toInf_v2',
-#    isMC=True,
-#    isEmbed=False,
-#    splitFactor=50
-#    )
+from DMPD.Heppy.samples.Spring15.fileSamples import *
 
 sampleSYNCH_ADDMonojet = cfg.Component(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/80CF5456-B9EC-E411-93DA-002618FDA248.root'],
@@ -787,6 +742,7 @@ sampleSYNCH_RSGravitonToGaGa = cfg.Component(
     isEmbed=False,
     splitFactor=1
     )
+
 ##############################
 ### FWLITE                 ###
 ##############################
@@ -799,112 +755,100 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ### TEST (LOCAL)
 #selectedComponents = [sampleTest]
 
-#### FULL QCD
-#selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf]
-
-#### FULL DYJetsToLL
-#selectedComponents = [sampleDYJetsToLL_M50_HT100to200_v1,sampleDYJetsToLL_M50_HT100to200_v2,sampleDYJetsToLL_M50_HT400to600_v1,sampleDYJetsToLL_M50_HT600toInf_v1,sampleDYJetsToLL_M50_HT600toInf_v2]
-
-#### FULL GJets
-#selectedComponents = [sampleGJets_HT100to200,sampleGJets_HT200to400,sampleGJets_HT400to600,sampleGJets_HT600toInf]
-
-#### FULL TT
-#selectedComponents = [sampleTT,sampleTTJets]
-
-#### FULL T
-#selectedComponents = [sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTbarToLeptons_schannel,sampleTToLeptons_tchannel,sampleTbarToLeptons_tchannel]
-
-#### FULL WJetsToLNu
-#selectedComponents = [sampleWJetsToLNu_HT100to200,sampleWJetsToLNu_HT200to400,sampleWJetsToLNu_HT400to600,sampleWJetsToLNu_HT600toInf]
-
-#### FULL ZJetsToNuNu
-#selectedComponents = [sampleZJetsToNuNu_HT100to200,sampleZJetsToNuNu_HT200to400,sampleZJetsToNuNu_HT400to600,sampleZJetsToNuNu_HT600toInf]
-
-#### FULL ZH_HToBB_ZToNuNu
-#selectedComponents = [sampleZH_HToBB_ZToNuNu]
-
-#### FULL DM-MonoJet
-#selectedComponents = [sampleDM_Monojet_M10_V,sampleDM_Monojet_M100_V,sampleDM_Monojet_M1000_V,sampleDM_Monojet_M1_AV,sampleDM_Monojet_M10_AV,sampleDM_Monojet_M100_AV,sampleDM_Monojet_M1000_AV]
-
-#### FULL List
-#selectedComponents = [sampleQCD_HT100To250,sampleQCD_HT250To500,sampleQCD_HT500To1000,sampleQCD_HT1000ToInf,
-                      #sampleDYJetsToLL_M50_HT100to200,sampleDYJetsToLL_M50_HT200to400,sampleDYJetsToLL_M50_HT400to600,sampleDYJetsToLL_M50_HT600toInf,
-                      #sampleGJets_HT100to200,sampleGJets_HT200to400,sampleGJets_HT400to600,sampleGJets_HT600toInf,
-                      #sampleTT,sampleTTJets,
-                      #sampleT_tWchannel,sampleTbar_tWchannel,sampleTToLeptons_schannel,sampleTbarToLeptons_schannel,sampleTToLeptons_tchannel,sampleTbarToLeptons_tchannel,
-                      #sampleWJetsToLNu_HT100to200,sampleWJetsToLNu_HT200to400,sampleWJetsToLNu_HT400to600,sampleWJetsToLNu_HT600toInf,
-                      #sampleZJetsToNuNu_HT100to200,sampleZJetsToNuNu_HT200to400,sampleZJetsToNuNu_HT400to600,sampleZJetsToNuNu_HT600toInf,
-                      #sampleZH_HToBB_ZToNuNu,
-                      #sampleDM_Monojet_M10_V,sampleDM_Monojet_M100_V,sampleDM_Monojet_M1000_V,sampleDM_Monojet_M1_AV,sampleDM_Monojet_M10_AV,sampleDM_Monojet_M100_AV,sampleDM_Monojet_M1000_AV]
-
-
-#### SINGLE COMPONENTS
-#selectedComponents = [sampleQCD_HT100To250]
-#selectedComponents = [sampleQCD_HT250To500]
-#selectedComponents = [sampleQCD_HT500To1000]
-#selectedComponents = [sampleQCD_HT1000ToInf]
-
-#selectedComponents = [sampleTT]
-#selectedComponents = [sampleTTJets]
-#selectedComponents = [sampleT_tWchannel]
-#selectedComponents = [sampleTbar_tWchannel]
-#selectedComponents = [sampleTToLeptons_schannel]
-#selectedComponents = [sampleTbarToLeptons_schannel]
-#selectedComponents = [sampleTToLeptons_tchannel]
-#selectedComponents = [sampleTbarToLeptons_tchannel]
-
-#selectedComponents = [DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1]
-#selectedComponents = [sampleDYJetsToLL_M50_HT200to400]
-#selectedComponents = [sampleDYJetsToLL_M50_HT400to600]
-#selectedComponents = [sampleDYJetsToLL_M50_HT600toInf]
-
-#selectedComponents = [sampleGJets_HT100to200]
-#selectedComponents = [sampleGJets_HT200to400]
-#selectedComponents = [sampleGJets_HT400to600]
-#selectedComponents = [sampleGJets_HT600toInf]
-
-#selectedComponents = [sampleWJetsToLNu_HT100to200]
-#selectedComponents = [sampleWJetsToLNu_HT200to400]
-#selectedComponents = [sampleWJetsToLNu_HT400to600]
-#selectedComponents = [sampleWJetsToLNu_HT600toInf]
-
-#selectedComponents = [sampleZJetsToNuNu_HT100to200]
-#selectedComponents = [sampleZJetsToNuNu_HT200to400]
-#selectedComponents = [sampleZJetsToNuNu_HT400to600]
-#selectedComponents = [sampleZJetsToNuNu_HT600toInf]
-
-#selectedComponents = [sampleDM_Monojet_M10_V]
-#selectedComponents = [sampleDM_Monojet_M100_V]
-#selectedComponents = [sampleDM_Monojet_M1000_V]
-#selectedComponents = [sampleDM_Monojet_M1_AV]
-#selectedComponents = [sampleDM_Monojet_M10_AV]
-#selectedComponents = [sampleDM_Monojet_M100_AV]
-#selectedComponents = [sampleDM_Monojet_M1000_AV]
-
-#selectedComponents = [sampleDM_MonoB]
-#selectedComponents = [sampleDM_MonoVbb]
-#selectedComponents = [sampleDM_MonoH]
-
-#### FULL ZZhToLL
-#selectedComponents = [sampleZZhToLLM1000]
-#selectedComponents = [sampleZZhToLLM2000]
-#selectedComponents = [sampleZZhToLLM3000]
-#selectedComponents = [sampleZZhToLLM4000]
-
-###LOCAL COMPONENTS
-#selectedComponents = [sampleDM_MonoB,sampleDM_MonoVbb,sampleDM_MonoH]
-
-#selectedComponents = [sampleADDMonojet]
-#selectedComponents = [sampleTTBar]
-#selectedComponents = [sampleADDMonojet,sampleTTBar]
-
 #selectedComponents = [sampleSYNCH_ADDMonojet]
 #selectedComponents = [sampleSYNCH_TTBar]
-selectedComponents = [sampleSYNCH_DYJetsToLL]
+#selectedComponents = [sampleSYNCH_DYJetsToLL]
 #selectedComponents = [sampleSYNCH_WJetsToLNu]
 #selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
-
 #selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
+
+selectedComponents = [
+    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1,
+    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v1,
+    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v1,
+    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v1,
+    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
+    sampleGJets_HT_100To200_madgraphMLM_pythia8_v1,
+    sampleGJets_HT_100To200_madgraphMLM_pythia8_v2,
+    sampleGJets_HT_200To400_madgraphMLM_pythia8_v1,
+    sampleGJets_HT_200To400_madgraphMLM_pythia8_v2,
+    sampleGJets_HT_400To600_madgraphMLM_pythia8_v1,
+    sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_1000to1500_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_100to200_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_200to300_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
+#    sampleQCD_Pt_1000to1400_pythia8_v1,
+#    sampleQCD_Pt_10to15_pythia8_v2,
+#    sampleQCD_Pt_120to170_pythia8_v1,
+#    sampleQCD_Pt_1400to1800_pythia8_v1,
+#    sampleQCD_Pt_15to30_pythia8_v2,
+#    sampleQCD_Pt_170to300_pythia8_v2,
+#    sampleQCD_Pt_1800to2400_pythia8_v1,
+#    sampleQCD_Pt_2400to3200_pythia8_v1,
+#    sampleQCD_Pt_300to470_pythia8_v1,
+#    sampleQCD_Pt_30to50_pythia8_v2,
+#    sampleQCD_Pt_3200toInf_pythia8_v1,
+#    sampleQCD_Pt_470to600_pythia8_v2,
+#    sampleQCD_Pt_50to80_pythia8_v2,
+#    sampleQCD_Pt_5to10_pythia8_v2,
+#    sampleQCD_Pt_600to800_pythia8_v3,
+#    sampleQCD_Pt_800to1000_pythia8_v2,
+#    sampleQCD_Pt_80to120_pythia8_v1,
+    sampleST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1,
+    sampleST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1,
+    sampleST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1,
+    sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1,
+    sampleST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
+#    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
+    sampleTTJets_madgraphMLM_pythia8_v2,
+    sampleTT_powheg_pythia8_v2,
+    sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
+    sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
+    sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3,
+    sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
+    sampleWW_pythia8_v1,
+    sampleWZ_pythia8_v1,
+    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
+    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
+    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
+    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
+#    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
+    sampleZZ_pythia8_v3,
+]
+
 
 config = cfg.Config(
     components = selectedComponents,
