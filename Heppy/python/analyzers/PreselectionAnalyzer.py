@@ -4,7 +4,7 @@ from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
 import copy
 import math
 import ROOT
-import sys
+import os, sys
 
 class PreselectionAnalyzer( Analyzer ):
     '''
@@ -123,6 +123,37 @@ class PreselectionAnalyzer( Analyzer ):
 #        return True
 #    
     
+    def addJetVariables(self, event):
+        for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
+            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
+            j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
+        for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
+            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
+            j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
+        
+        
+        
+    def addJESUncertainty(self, event):
+        path = "%s/src/CMGTools/RootTools/data/jec" % os.environ['CMSSW_BASE'];
+        globalTag = "GR_70_V2_AN1"
+        jetFlavour = "AK4PFchs"
+        print "ziolupo!"
+        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
+        print "madai"
+        for i, j in enumerate(event.xcleanJets):
+            print i, j
+            JetUncertainty.setJetEta(j.eta())
+            JetUncertainty.setJetPt(j.pt())
+            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
+            print "daimo"
+        jetFlavour = "AK8PFchs"
+        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
+        for i, j in enumerate(event.xcleanJetsAK8):
+            JetUncertainty.setJetEta(j.eta())
+            JetUncertainty.setJetPt(j.pt())
+            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
+    
+    
     def addFakeMet(self, event, particles):
         # Copy regular met
         event.fakemet = copy.deepcopy(event.met)
@@ -136,6 +167,8 @@ class PreselectionAnalyzer( Analyzer ):
         
         event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px, py)))
         return True
+    
+    
     
     def createZ(self, event, leptons):
         theZ = leptons[0].p4() + leptons[1].p4()
@@ -208,6 +241,8 @@ class PreselectionAnalyzer( Analyzer ):
         event.A = theA
         return True
     
+    
+    
     def process(self, event):
         event.isSR = False
         event.isZCR = False
@@ -230,13 +265,8 @@ class PreselectionAnalyzer( Analyzer ):
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
 #        event.xcleanJetsAK8JERDown = event.cleanJetsAK8JERDown
         
-        for i, j in enumerate(event.xcleanJets+event.xcleanJetsAK8):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
-            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
-            j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
-        for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
-            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
-            j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
-            
+        self.addJetVariables(event)
+        #self.addJESUncertainty(event)
         
         self.Counter.Fill(-1)
         # Trigger
