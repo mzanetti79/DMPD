@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import ROOT
+import copy
 import PhysicsTools.HeppyCore.framework.config as cfg
 from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.ObjectsFormat import *
@@ -180,8 +181,10 @@ jetAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
-jetAnalyzerJERUp =  jetAnalyzer.clone(shiftJER = +1)
-jetAnalyzerJERDown =  jetAnalyzer.clone(shiftJER = -1)
+jetAnalyzerJERUp = copy.deepcopy(jetAnalyzer)
+jetAnalyzerJERUp.shiftJER = +1
+jetAnalyzerJERDown = copy.deepcopy(jetAnalyzer)
+jetAnalyzerJERDown.shiftJER = -1
 
 fatJetAnalyzer = cfg.Analyzer(
 
@@ -220,8 +223,10 @@ fatJetAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
-fatJetAnalyzerJERUp =  fatJetAnalyzer.clone(shiftJER = +1)
-fatJetAnalyzerJERDown =  fatJetAnalyzer.clone(shiftJER = -1)
+fatJetAnalyzerJERUp = copy.deepcopy(fatJetAnalyzer)
+fatJetAnalyzerJERUp.shiftJER = +1
+fatJetAnalyzerJERDown = copy.deepcopy(fatJetAnalyzer)
+fatJetAnalyzerJERDown.shiftJER = -1
 
 ##############################
 ### TAUANALYZER            ###
@@ -442,16 +447,17 @@ SignalRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
+        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
-        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
+#        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
+#        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
-        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+#        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
+#        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
     }
 )
 
@@ -479,17 +485,18 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
+        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
-        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
+#        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
+#        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
-        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+#        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
+#        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
     }
 )
 
@@ -517,17 +524,18 @@ WControlRegionTreeProducer= cfg.Analyzer(
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'W'         : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
+        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
         'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
-        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
+#        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
+#        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
-        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+#        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
+#        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
     }
 )
 
@@ -557,11 +565,12 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon and Electron collection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
-        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+#        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
+#        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
-        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+#        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
+#        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
     }
 )
 
@@ -591,11 +600,12 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
         #'selectedElectrons'   : NTupleCollection('electron', electronType, 4, help='Electrons after the preselection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
-        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+#        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
+#        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
-        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+#        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
+#        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
     }
 )
 

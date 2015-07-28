@@ -49,7 +49,7 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     ### MUON SPECIFIC VARS
 
     # Mini Isolations variable ratio
-    NTupleVariable("miniIso", lambda x : x.miniRelIso if x.isMuon() else -99., float, help="Muon Rel Mini-Iso, pile-up corrected"),
+    NTupleVariable("miniIso", lambda x : x.miniRelIso if x.isMuon() else -9., float, help="Muon Rel Mini-Iso, pile-up corrected"),
 
     ### ELECTRON/MUON VARS
 
@@ -74,9 +74,9 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
 muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variables = [
     NTupleVariable("charge", lambda x : x.charge(), int, help="Muon charge"),
     # Identification
-    NTupleVariable("looseId",  lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else -99., int, help="Muon POG Loose id" ),
-    NTupleVariable("mediumId", lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else -99., int, help="Muon POG Medium id"),
-    NTupleVariable("tightId",  lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else -99., int, help="Muon POG Tight id"),
+    NTupleVariable("looseId",  lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else -9, int, help="Muon POG Loose id" ),
+    NTupleVariable("mediumId", lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else -9, int, help="Muon POG Medium id"),
+    NTupleVariable("tightId",  lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else -9, int, help="Muon POG Tight id"),
     # Relative Isolations fixed ratia / variable ratio
     NTupleVariable("relIso03",   lambda x : x.relIso03, help="Muon PF Rel Iso, R=0.3, pile-up corrected"),
     NTupleVariable("relIso04",   lambda x : x.relIso04, help="Muon PF Rel Iso, R=0.4, pile-up corrected"),
@@ -90,10 +90,10 @@ muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variable
 electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], variables = [
     NTupleVariable("charge",   lambda x : x.charge(), int, help="Electron charge"),
     # Identification
-    NTupleVariable("vetoId",   lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Veto") if abs(x.pdgId())==11 else -99., int, help="Electron POG Cut-based Veto id"),
-    NTupleVariable("looseId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Loose") if abs(x.pdgId())==11 else -99., int, help="Electron POG Cut-based Loose id"),
-    NTupleVariable("mediumId", lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Medium") if abs(x.pdgId())==11 else -99., int, help="Electron POG Cut-based Medium id"),
-    NTupleVariable("tightId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Tight") if abs(x.pdgId())==11 else -99., int, help="Electron POG Cut-based Tight id"),
+    NTupleVariable("vetoId",   lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Veto") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Veto id"),
+    NTupleVariable("looseId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Loose") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Loose id"),
+    NTupleVariable("mediumId", lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Medium") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Medium id"),
+    NTupleVariable("tightId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Tight") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Tight id"),
     # Isolations with the two radia
     NTupleVariable("relIso03",  lambda x : x.relIso03, help="Electron PF Rel Iso, R=0.3, pile-up corrected"),
     NTupleVariable("relIso04",  lambda x : x.relIso04, help="Electron PF Rel Iso, R=0.4, pile-up corrected"),
@@ -101,8 +101,8 @@ electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], 
 
 jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
-    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -999.), float, help="dPhi between jet and met"),
-    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -999.), float, help="dPhi between jet and leading jet"),
+    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
+    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
     #NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -999.), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
     NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
 #    NTupleVariable("motherPdgId", lambda x : x.mother().pdgId() if x.mother() else 0, int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
@@ -122,21 +122,21 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
 ])
 
 fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -99., float, help="Jet pruned mass"),
-    #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -99., float, help="Jet trimmed mass"),
-    #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -99., float, help="Jet filtered mass"),
-    NTupleVariable("softDropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -99., float, help="Jet SoftDrop mass"),
+    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -9., float, help="Jet pruned mass"),
+    #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -9., float, help="Jet trimmed mass"),
+    #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -9., float, help="Jet filtered mass"),
+    NTupleVariable("softDropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -9., float, help="Jet SoftDrop mass"),
     NTupleVariable("tau21",   lambda x : x.userFloat("NjettinessAK8:tau2")/x.userFloat("NjettinessAK8:tau1") if not x.userFloat("NjettinessAK8:tau1") == 0 else -1., float, help="n-subjettiness 2/1"),
     NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV1",   lambda x : x.subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 0 else -99., float, help="subJet 1 CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV2",   lambda x : x.subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 1 else -99., float, help="subJet 2 CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV1",   lambda x : x.subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 0 else -9., float, help="subJet 1 CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV2",   lambda x : x.subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 1 else -9., float, help="subJet 2 CSV-IVF v2 discriminator"),
     #NTupleVariable("nSubJetTags",   lambda x : getattr(x, "nSubJetTags", -999.), int, help="Number of b-tagged subjets"),
-    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -999.), float, help="dPhi between jet and met"),
-    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -999.), float, help="dPhi between jet and leading jet"),
+    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
+    NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
     #NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -999.), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
     NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
-    NTupleVariable("flavour1", lambda x : x.subjets('SoftDrop')[0].hadronFlavour() if len(x.subjets('SoftDrop')) > 0 else -9., int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 1"),
-    NTupleVariable("flavour2", lambda x : x.subjets('SoftDrop')[1].hadronFlavour() if len(x.subjets('SoftDrop')) > 1 else -9., int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 2"),
+    NTupleVariable("flavour1", lambda x : x.subjets('SoftDrop')[0].hadronFlavour() if len(x.subjets('SoftDrop')) > 0 else -9, int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 1"),
+    NTupleVariable("flavour2", lambda x : x.subjets('SoftDrop')[1].hadronFlavour() if len(x.subjets('SoftDrop')) > 1 else -9, int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 2"),
 #    NTupleVariable("motherPdgId", lambda x : x.mother().pdgId() if x.mother() else 0, int,     mcOnly=False, help="parton flavour (physics definition, i.e. including b's from shower)"),
 #    NTupleVariable("mcMatchPdgId",  lambda x : getattr(x, 'mcMatchId', -999.), int, mcOnly=False, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
     #NTupleVariable("mcPt",   lambda x : x.mcJet.pt() if getattr(x,"mcJet",None) else 0., mcOnly=True, help="p_{T} of associated gen jet"),
@@ -193,7 +193,7 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 ])
 
 metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -99., float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
+    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1., float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
 #    NTupleVariable("uncorrected",    lambda x : x.uncorrectedPt(), float, mcOnly=False, help="missing energy significance"), #uncorrected met
 #    NTupleVariable("phf",     lambda x : x.NeutralEMFraction(), float, mcOnly=False, help="neutral electromagnetic energy fraction"),
 #    NTupleVariable("nhf",     lambda x : x.NeutralHadEtFraction(), float, mcOnly=False, help="neutral hadron energy fraction"),

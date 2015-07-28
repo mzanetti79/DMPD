@@ -109,6 +109,6 @@ class XCleaningAnalyzer( Analyzer ):
 
         self.crossCleanJets(event)
 
-        self.crossCleanJetsAK8(event)
+        #self.crossCleanJetsAK8(event)
 
         return True
