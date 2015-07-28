@@ -181,23 +181,23 @@ class PreselectionAnalyzer( Analyzer ):
             theA.mK = (event.Z + kH).mass()
         elif event.isWCR:
             theA = event.xcleanLeptons[0].p4() + event.met.p4() + event.cleanJetsAK8[0].p4()
-#            pz = 0.
-#            a = 80.4**2 - event.xcleanLeptons[0].mass()**2 + 2.*event.xcleanLeptons[0].px()*event.met.px() + 2.*event.xcleanLeptons[0].py()*event.met.py()
-#            A = 4*( event.xcleanLeptons[0].energy()**2 - event.xcleanLeptons[0].pz()**2 )
-#            B = -4*a*event.xcleanLeptons[0].pz()
-#            C = 4*event.xcleanLeptons[0].energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
-#            D = B**2 - 4*A*C
-#            if D>0:
-#                pz = min((-B+math.sqrt(D))/(2*A), (-B-math.sqrt(D))/(2*A))
-#            else:
-#                pz = -B/(2*A)
-#            kmet = event.met.p4()
-#            kmet.SetPz(pz)
-#            theA.mT = (event.xcleanLeptons[0].p4() + kmet + event.cleanJetsAK8[0].p4()).mass()
-#            cmet = event.met.p4()
-#            cmet.SetPz(event.xcleanLeptons[0].pz())
-#            theA.mC = (event.xcleanLeptons[0].p4() + cmet + event.cleanJetsAK8[0].p4()).mass()
-#            theA.mK = (event.xcleanLeptons[0].p4() + kmet + kH).mass()
+            pz = 0.
+            a = 80.4**2 - event.xcleanLeptons[0].mass()**2 + 2.*event.xcleanLeptons[0].px()*event.met.px() + 2.*event.xcleanLeptons[0].py()*event.met.py()
+            A = 4*( event.xcleanLeptons[0].energy()**2 - event.xcleanLeptons[0].pz()**2 )
+            B = -4*a*event.xcleanLeptons[0].pz()
+            C = 4*event.xcleanLeptons[0].energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
+            D = B**2 - 4*A*C
+            if D>0:
+                pz = min((-B+math.sqrt(D))/(2*A), (-B-math.sqrt(D))/(2*A))
+            else:
+                pz = -B/(2*A)
+            kmet = event.met.p4()
+            kmet.SetPz(pz)
+            theA.mT = (event.xcleanLeptons[0].p4() + kmet + event.cleanJetsAK8[0].p4()).mass()
+            cmet = event.met.p4()
+            cmet.SetPz(event.xcleanLeptons[0].pz())
+            theA.mC = (event.xcleanLeptons[0].p4() + cmet + event.cleanJetsAK8[0].p4()).mass()
+            theA.mK = (event.xcleanLeptons[0].p4() + kmet + kH).mass()
         else:
             theA = event.met.p4() + event.cleanJetsAK8[0].p4()
 #            theA.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
