@@ -38,7 +38,7 @@ sampleQCD_Pt_80to120_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_80to120_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1 = cfg.Component(
@@ -78,7 +78,7 @@ sampleQCD_Pt_2400to3200_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_2400to3200_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1 = cfg.Component(
@@ -134,7 +134,7 @@ sampleQCD_Pt_30to50_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_30to50_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1 = cfg.Component(
@@ -150,7 +150,7 @@ sampleGJets_HT_100To200_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "GJets_HT_100To200_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleGJets_HT_100To200_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -158,7 +158,7 @@ sampleGJets_HT_100To200_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "GJets_HT_100To200_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -222,7 +222,7 @@ sampleQCD_Pt_1000to1400_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_1000to1400_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1 = cfg.Component(
@@ -238,7 +238,7 @@ sampleQCD_Pt_300to470_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_300to470_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_Pt_5to10_pythia8_v2 = cfg.Component(
@@ -246,7 +246,7 @@ sampleQCD_Pt_5to10_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_5to10_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1 = cfg.Component(
@@ -262,7 +262,7 @@ sampleQCD_Pt_470to600_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_470to600_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleTT_powheg_pythia8_v2 = cfg.Component(
@@ -286,7 +286,7 @@ sampleQCD_HT_200to300_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "QCD_HT_200to300_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -302,7 +302,7 @@ sampleGJets_HT_200To400_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "GJets_HT_200To400_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_HT_500to700_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -310,7 +310,7 @@ sampleQCD_HT_500to700_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "QCD_HT_500to700_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleGJets_HT_200To400_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -318,7 +318,7 @@ sampleGJets_HT_200To400_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "GJets_HT_200To400_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1 = cfg.Component(
@@ -334,7 +334,7 @@ sampleQCD_HT_1000to1500_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "QCD_HT_1000to1500_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_Pt_10to15_pythia8_v2 = cfg.Component(
@@ -342,7 +342,7 @@ sampleQCD_Pt_10to15_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_10to15_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_HT_100to200_madgraphMLM_pythia8_v2 = cfg.Component(
@@ -350,7 +350,7 @@ sampleQCD_HT_100to200_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "QCD_HT_100to200_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -390,7 +390,7 @@ sampleQCD_Pt_1400to1800_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_1400to1800_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleWZ_pythia8_v1 = cfg.Component(
@@ -430,7 +430,7 @@ sampleGJets_HT_400To600_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "GJets_HT_400To600_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -438,7 +438,7 @@ sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "QCD_HT_700to1000_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -446,7 +446,7 @@ sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "QCD_HT_1500to2000_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3 = cfg.Component(
@@ -486,7 +486,7 @@ sampleQCD_Pt_3200toInf_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_3200toInf_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_Pt_15to30_pythia8_v2 = cfg.Component(
@@ -494,7 +494,7 @@ sampleQCD_Pt_15to30_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_15to30_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_Pt_170to300_pythia8_v2 = cfg.Component(
@@ -502,7 +502,7 @@ sampleQCD_Pt_170to300_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_170to300_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1 = cfg.Component(
@@ -534,7 +534,7 @@ sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "GJets_HT_600ToInf_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1 = cfg.Component(
@@ -550,7 +550,7 @@ sampleQCD_Pt_1800to2400_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_1800to2400_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -590,7 +590,7 @@ sampleQCD_Pt_600to800_pythia8_v3 = cfg.Component(
 	name       = "QCD_Pt_600to800_pythia8_v3",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1 = cfg.Component(
@@ -598,7 +598,7 @@ sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1 = cfg.Component(
 	name       = "QCD_HT_2000toInf_madgraphMLM_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2 = cfg.Component(
@@ -622,7 +622,7 @@ sampleQCD_HT_300to500_madgraphMLM_pythia8_v2 = cfg.Component(
 	name       = "QCD_HT_300to500_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2 = cfg.Component(
@@ -638,7 +638,7 @@ sampleQCD_Pt_120to170_pythia8_v1 = cfg.Component(
 	name       = "QCD_Pt_120to170_pythia8_v1",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleTTJets_madgraphMLM_pythia8_v2 = cfg.Component(
@@ -662,7 +662,7 @@ sampleQCD_Pt_50to80_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_50to80_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 
 sampleQCD_Pt_800to1000_pythia8_v2 = cfg.Component(
@@ -670,6 +670,6 @@ sampleQCD_Pt_800to1000_pythia8_v2 = cfg.Component(
 	name       = "QCD_Pt_800to1000_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor=50,
+	splitFactor=20,
 )
 

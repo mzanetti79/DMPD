@@ -6,6 +6,15 @@ from PhysicsTools.Heppy.analyzers.core.AutoFillTreeProducer  import *
 from DMPD.Heppy.analyzers.ObjectsFormat import *
 cfg.Analyzer.nosubdir=True
 
+
+##############################
+### LHEANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.gen.LHEAnalyzer import LHEAnalyzer
+lheAnalyzer= cfg.Analyzer(
+    class_object=LHEAnalyzer,
+    )
+
 ##############################
 ### GENANALYZER         ###
 ##############################
@@ -25,6 +34,17 @@ generatorAnalyzer= cfg.Analyzer(
     )
 
 ##############################
+### PDFANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.gen.PDFWeightsAnalyzer import PDFWeightsAnalyzer
+pdfAnalyzer= cfg.Analyzer(
+    class_object=PDFWeightsAnalyzer,
+    doPDFWeights = True,
+    doPDFVars = True,
+    PDFWeights = ["cteq6ll", "MSTW2008nlo68cl"],
+    )
+
+##############################
 ### TRIGGERANALYZER        ###
 ##############################
 from PhysicsTools.Heppy.analyzers.core.TriggerBitAnalyzer import TriggerBitAnalyzer
@@ -34,8 +54,12 @@ triggerAnalyzer= cfg.Analyzer(
     #grouping several paths into a single flag
     # v* can be used to ignore the version of a path
     triggerBits={
-    'MET':['HLT_PFHT350_PFMET120_NoiseCleaned_v1','HLT_PFMET170_NoiseCleaned_v1','HLT_PFMET120_NoiseCleaned_BTagCSV07_v1'],
-    'JET':['HLT_PFJet260_v1'],
+        'MET':['HLT_PFMET170_NoiseCleaned_v*','HLT_PFMET120_NoiseCleaned_BTagCSV07_v*','HLT_PFHT350_PFMET120_NoiseCleaned_v*'],
+        'JET':['HLT_PFJet260_v*'],
+        'SingleMu':['HLT_Mu50_v*'],
+        'SingleElectron':['HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
+        'DoubleMu':['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
+        'DoubleElectron':['HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
     },
 #   processName='HLT',
 #   outprefix='HLT'
@@ -643,7 +667,9 @@ ZZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
+    lheAnalyzer,
     generatorAnalyzer,
+    pdfAnalyzer,
     triggerAnalyzer,
     pileupAnalyzer,
     vertexAnalyzer,
@@ -752,28 +778,12 @@ sampleSYNCH_RSGravitonToGaGa = cfg.Component(
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
-### TEST (LOCAL)
-#selectedComponents = [sampleTest]
-
-#selectedComponents = [sampleSYNCH_ADDMonojet]
-#selectedComponents = [sampleSYNCH_TTBar]
-#selectedComponents = [sampleSYNCH_DYJetsToLL]
-#selectedComponents = [sampleSYNCH_WJetsToLNu]
-#selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
-#selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
-
 selectedComponents = [
-    #sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v1,#DEAD
     sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v1,
     sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v1,
     sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v1,
     sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
-    sampleGJets_HT_100To200_madgraphMLM_pythia8_v1,
     sampleGJets_HT_100To200_madgraphMLM_pythia8_v2,
-    sampleGJets_HT_200To400_madgraphMLM_pythia8_v1,
     sampleGJets_HT_200To400_madgraphMLM_pythia8_v2,
     sampleGJets_HT_400To600_madgraphMLM_pythia8_v1,
     sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1,
@@ -829,9 +839,9 @@ selectedComponents = [
     sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
     sampleWW_pythia8_v1,
     sampleWZ_pythia8_v1,
-    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
-    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
-    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
+#    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
+#    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
+#    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
 #    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
 #    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
 #    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
@@ -849,6 +859,16 @@ selectedComponents = [
     sampleZZ_pythia8_v3,
 ]
 
+
+### TEST (LOCAL)
+#selectedComponents = [sampleTest]
+
+#selectedComponents = [sampleSYNCH_ADDMonojet]
+#selectedComponents = [sampleSYNCH_TTBar]
+#selectedComponents = [sampleSYNCH_DYJetsToLL]
+selectedComponents = [sampleSYNCH_WJetsToLNu]
+#selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
+#selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
 
 config = cfg.Config(
     components = selectedComponents,
