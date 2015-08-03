@@ -7,6 +7,6 @@ replace tau.tauID(self.cfg_ana.loose_tauID) with tau.tauID(self.cfg_ana.loose_ta
 add loose_tauIDnHits = 0, argument (L166)
 
 ###PhotonAnalyzer.py
-set EffectiveArea03[2] to 0.078, 0.0629, 0.0264, 0.0462, 0.0740, 0.0924, 0.1484
+set EffectiveArea03[2] to 0.0896, 0.0762, 0.0383, 0.0534, 0.0846, 0.1032, 0.1598
 ###Photon.py
 set "conversionVeto": [False,False]
