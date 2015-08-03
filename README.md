@@ -1,7 +1,7 @@
 # DMPD
 DM analysis framework of the CMS PD group
 
-## Manual changes to Heppy
+## Manual changes to Heppy for Syncronization
 ###TauAnalyzer.py
 replace tau.tauID(self.cfg_ana.loose_tauID) with tau.tauID(self.cfg_ana.loose_tauID) < self.cfg_ana.loose_tauIDnHits (L89, 108)
 add loose_tauIDnHits = 0, argument (L166)
