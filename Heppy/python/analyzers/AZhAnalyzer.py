@@ -37,14 +37,20 @@ class AZhAnalyzer( Analyzer ):
     
     def isHEEP(self, e):
         if not e.pt() > 35.: return False
+        
+        if hasattr(e.gsfTrack(),"trackerExpectedHitsInner"):
+		        nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits()
+        else:
+		        nMissingHits = e.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS)
+        
         if abs(e.superCluster().eta()) < 1.4442:
             if not e.ecalDriven(): return False
             if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.004: return False
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
             if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
             #if not e.sigmaIetaIeta() < 0: return False
-            if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
-            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            if not e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
+            if not nMissingHits <= 1: return False
             if not abs(e.dxy()) < 0.02: return False
         elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
             if not e.ecalDriven(): return False
@@ -52,8 +58,8 @@ class AZhAnalyzer( Analyzer ):
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
             if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
             if not e.sigmaIetaIeta() < 0.03: return False
-            #if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0: return False
-            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            #if not e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0: return False
+            if not nMissingHits <= 1: return False
             if not abs(e.dxy()) < 0.05: return False
         else: return False
         return True
@@ -72,12 +78,13 @@ class AZhAnalyzer( Analyzer ):
         self.Z2LLCounter.Fill(0) # Trigger
         self.Z2NNCounter.Fill(0)
         
+        
         #########################
         #    Part 1: Leptons    #
         #########################
         
         # Separate inclusive lepton collections
-        event.highptElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and isHEEP(x)]
+        event.highptElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.isHEEP(x)]
         event.highptMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.muonID("POG_ID_HighPt")]
         event.highptLeptons = []
         
@@ -171,7 +178,14 @@ class AZhAnalyzer( Analyzer ):
             event.A.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
             event.A.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
         
-        self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
+        if event.isZ2LL:
+            self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
+        else:
+            self.addFakeMet(event, [])
+        
+        if (event.isZ2LL and event.Z.pt()) < self.cfg_ana.Z_pt or (event.isZ2NN and event.met.pt() < self.cfg_ana.met_pt):
+            return True
+        
         
         # Fill tree
         event.isAZh = True
@@ -184,25 +198,21 @@ class AZhAnalyzer( Analyzer ):
                 self.Z2LLCounter.Fill(4)
                 if event.Z.mass() > 75 and event.Z.mass() < 105:
                     self.Z2LLCounter.Fill(5)
-                    if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
+                    if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 100 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
                         self.Z2LLCounter.Fill(6)
-                            #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
-                            if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
-                                self.Z2LLCounter.Fill(7)
-                                # b-Jet2
-                                if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
-                                    self.Z2LLCounter.Fill(8)
+                        if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+                            self.Z2LLCounter.Fill(7)
+                            if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
+                                self.Z2LLCounter.Fill(8)
         if event.isZ2NN: 
             if event.met.pt() > 200:
                 self.Z2NNCounter.Fill(3)
                 if event.cleanJetsAK8[0].deltaPhi_met>2.5:
-                    if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
+                    if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 100 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
                         self.Z2NNCounter.Fill(4)
-                            #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
-                            if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
-                                self.Z2NNCounter.Fill(5)
-                                # b-Jet2
-                                if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
-                                    self.Z2NNCounter.Fill(6)
+                        if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+                            self.Z2NNCounter.Fill(5)
+                            if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
+                                self.Z2NNCounter.Fill(6)
         return True
 

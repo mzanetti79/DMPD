@@ -372,21 +372,16 @@ SyncAnalyzer = cfg.Analyzer(
     class_object = SyncAnalyzer,
     )
 
-from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
-ZZhAnalyzer = cfg.Analyzer(
+from DMPD.Heppy.analyzers.AZhAnalyzer import AZhAnalyzer
+AZhAnalyzer = cfg.Analyzer(
     verbose = False,
-    class_object = ZZhAnalyzer,
+    class_object = AZhAnalyzer,
+    elec1pt = 40.,
+    elec2pt = 40.,
     muon1pt = 40.,
-    muon1id = "POG_ID_Tight",
-    fatjet_pt = 250.,
-    Z_pt = 100.,
-    Zmass_low = 75.,
-    Zmass_high = 105.,
-    fatjet_mass_algo = 'ak8PFJetsCHSSoftDropMass',
-    fatjet_mass_low = 100.,
-    fatjet_mass_high = 150.,
-    fatjet_btag_1 = 0.423,
-    fatjet_btag_2 = 0.423,
+    muon2pt = 40.,
+    fatjet_pt = 200.,
+    Z_pt = 200.,
     met_pt = 200.,
     )
 
@@ -457,6 +452,10 @@ globalVariables = [
     NTupleVariable('nFatJets',  lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',    lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
 #    NTupleVariable('nBFatJets', lambda x: len([jet for jet in x.xcleanJetsAK8 if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b- fat jets'),
+    NTupleVariable('nBgen',    lambda x: len(x.genbquarks) if x.genbquarks else -1, int, help='Number of b-quarks at generator level'),
+    NTupleVariable('nBlhe',    lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
+    NTupleVariable('lheHT',    lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
+    NTupleVariable('lheVpt',    lambda x: getattr(x, "lheV_pt", -1.), int, help='Boson pt at LHE level'),
 ]
 
 
@@ -647,30 +646,30 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 AZhTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='AZhTreeProducer',
-    treename='ZZh',
+    treename='AZh',
     filter = lambda x: x.isAZh,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
-        NTupleVariable('isZtoLL',  lambda x: x.isZ2LL, int, help='Z -> ll flag')
-        NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag')
-        NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag')
-        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nunu flag')
+        NTupleVariable('isZtoLL',  lambda x: x.isZ2LL, int, help='Z -> ll flag'),
+        NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag'),
+        NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
+        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nunu flag'),
         NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
         NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
         NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
         NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'A' : NTupleObject('A', candidateType, help='A boson candidate'),
-        'Z' : NTupleObject('Z', candidateType, help='Z boson candidate'),
+        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
         #'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         },
     collections = {
         'highptLeptons'           : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
-        'xcleanJets'        : NTupleCollection('jet', jetType, 3, help='Jets after the preselection'),
-        'xcleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
+        #'xcleanJets'        : NTupleCollection('jet', jetType, 3, help='Jets after the preselection'),
+        'cleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
         #'SubJets'           : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
         }
     )
@@ -682,7 +681,7 @@ AZhTreeProducer= cfg.Analyzer(
 sequence = [
     lheAnalyzer,
     generatorAnalyzer,
-    pdfAnalyzer,
+    #pdfAnalyzer,
     triggerAnalyzer,
     pileupAnalyzer,
     vertexAnalyzer,
@@ -709,18 +708,18 @@ sequence = [
 #    OneLeptonAnalyzer,
 #    TwoLeptonOSSFAnalyzer,
 #    TwoLeptonOSDFAnalyzer,
-#    ZZhAnalyzer,
     ##### Categorization Analyzers
     XCleaningAnalyzer,
     SyncAnalyzer,
 #    CategorizationAnalyzer,
+    AZhAnalyzer,
     ##### Tree producers
     SignalRegionTreeProducer,
     ZControlRegionTreeProducer,
     WControlRegionTreeProducer,
     TTbarControlRegionTreeProducer,
     GammaControlRegionTreeProducer,
-#    ZZhTreeProducer,
+    AZhTreeProducer,
     ]
 
 ##############################
@@ -791,7 +790,8 @@ sampleSYNCH_RSGravitonToGaGa = cfg.MCComponent(
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
-#selectedComponents = [
+selectedComponents = [
+    sampleDYJetsToLL_M50_amcatnloFXFX_pythia8_v3,
 #    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
 #    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
 #    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
@@ -808,69 +808,69 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
 #    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
 #    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
-##    sampleQCD_Pt_1000to1400_pythia8_v1,
-##    sampleQCD_Pt_10to15_pythia8_v2,
-##    sampleQCD_Pt_120to170_pythia8_v1,
-##    sampleQCD_Pt_1400to1800_pythia8_v1,
-##    sampleQCD_Pt_15to30_pythia8_v2,
-##    sampleQCD_Pt_170to300_pythia8_v2,
-##    sampleQCD_Pt_1800to2400_pythia8_v1,
-##    sampleQCD_Pt_2400to3200_pythia8_v1,
-##    sampleQCD_Pt_300to470_pythia8_v1,
-##    sampleQCD_Pt_30to50_pythia8_v2,
-##    sampleQCD_Pt_3200toInf_pythia8_v1,
-##    sampleQCD_Pt_470to600_pythia8_v2,
-##    sampleQCD_Pt_50to80_pythia8_v2,
-##    sampleQCD_Pt_5to10_pythia8_v2,
-##    sampleQCD_Pt_600to800_pythia8_v3,
-##    sampleQCD_Pt_800to1000_pythia8_v2,
-##    sampleQCD_Pt_80to120_pythia8_v1,
+#    sampleQCD_Pt_1000to1400_pythia8_v1,
+#    sampleQCD_Pt_10to15_pythia8_v2,
+#    sampleQCD_Pt_120to170_pythia8_v1,
+#    sampleQCD_Pt_1400to1800_pythia8_v1,
+#    sampleQCD_Pt_15to30_pythia8_v2,
+#    sampleQCD_Pt_170to300_pythia8_v2,
+#    sampleQCD_Pt_1800to2400_pythia8_v1,
+#    sampleQCD_Pt_2400to3200_pythia8_v1,
+#    sampleQCD_Pt_300to470_pythia8_v1,
+#    sampleQCD_Pt_30to50_pythia8_v2,
+#    sampleQCD_Pt_3200toInf_pythia8_v1,
+#    sampleQCD_Pt_470to600_pythia8_v2,
+#    sampleQCD_Pt_50to80_pythia8_v2,
+#    sampleQCD_Pt_5to10_pythia8_v2,
+#    sampleQCD_Pt_600to800_pythia8_v3,
+#    sampleQCD_Pt_800to1000_pythia8_v2,
+#    sampleQCD_Pt_80to120_pythia8_v1,
 #    sampleST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1,
 #    sampleST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1,
 #    sampleST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1,
 #    sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1,
 #    sampleST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
-##    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
-##    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
-##    sampleTTJets_madgraphMLM_pythia8_v2,
-#    sampleTT_powheg_pythia8_v2,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1,
+    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
+    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+#    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
+#    sampleTTJets_madgraphMLM_pythia8_v2,
+    sampleTT_powheg_pythia8_v2,
+    sampleWJetsToLNu_amcatnloFXFX_pythia8_v1,
 #    sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
 #    sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
 #    sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3,
 #    sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
-#    sampleWW_pythia8_v1,
-#    sampleWZ_pythia8_v1,
-##    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
-##    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
-##    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
-##    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
-##    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
-#    sampleZZ_pythia8_v3,
-#]
+    sampleWW_pythia8_v1,
+    sampleWZ_pythia8_v1,
+#    sampleZH_HToBB_ZToLL_M125_amcatnloFXFX_madspin_pythia8_v1,
+#    sampleZH_HToBB_ZToLL_M125_powheg_pythia8_v1,
+#    sampleZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
+    sampleZZ_pythia8_v3,
+]
 
 
 ### TEST (LOCAL)
@@ -879,7 +879,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sampleSYNCH_ADDMonojet]
 #selectedComponents = [sampleSYNCH_TTBar]
 #selectedComponents = [sampleSYNCH_DYJetsToLL]
-selectedComponents = [sampleSYNCH_WJetsToLNu]
+#selectedComponents = [sampleSYNCH_WJetsToLNu]
 #selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
 #selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
 
@@ -901,7 +901,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=100000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()

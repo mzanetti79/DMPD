@@ -72,7 +72,7 @@ class SyncAnalyzer( Analyzer ):
                                   event.selectedMuons[1].pt() > 10 and event.selectedMuons[1].muonID('POG_ID_Loose') and event.selectedMuons[1].relIso04 < 0.20 and \
                                   event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
                                     self.ZCR.Fill(7)
-                                    if event.Z.mass() > 60 and event.Z.mass() < 120:
+                                    if event.theZ.mass() > 60 and event.theZ.mass() < 120:
                                         self.ZCR.Fill(8)
                                         if event.fakemet.pt() > 200:
                                             self.ZCR.Fill(9)
@@ -96,7 +96,7 @@ class SyncAnalyzer( Analyzer ):
                                 self.WCR.Fill(6)
                                 if len(event.selectedPhotons) == 0:
                                     self.WCR.Fill(7)
-                                    if event.W.mT > 50:
+                                    if event.theW.mT > 50:
                                         self.WCR.Fill(8)
                                         if event.fakemet.pt() > 200:
                                             self.WCR.Fill(9)

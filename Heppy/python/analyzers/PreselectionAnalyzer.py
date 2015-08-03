@@ -130,7 +130,9 @@ class PreselectionAnalyzer( Analyzer ):
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
-            j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
+            j.dR_subjets = -1.
+            if len(j.subjets('SoftDrop')) >= 2:
+                j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
         
         
         
@@ -282,8 +284,6 @@ class PreselectionAnalyzer( Analyzer ):
             self.addFakeMet(event, [])
             event.isSR = True
         
-        # AZh
-        self.createA(event)
         
         return True
     
