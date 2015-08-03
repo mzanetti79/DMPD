@@ -644,26 +644,33 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 ###  Zprime -> Zh -> llbb  ###
 ##############################
 
-ZZhTreeProducer= cfg.Analyzer(
+AZhTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
-    name='ZZhTreeProducer',
+    name='AZhTreeProducer',
     treename='ZZh',
-    filter = lambda x: x.isZZh,
+    filter = lambda x: x.isAZh,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
-        NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> mu mu flag')
+        NTupleVariable('isZtoLL',  lambda x: x.isZ2LL, int, help='Z -> ll flag')
+        NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag')
+        NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag')
+        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nunu flag')
+        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
         'A' : NTupleObject('A', candidateType, help='A boson candidate'),
         'Z' : NTupleObject('Z', candidateType, help='Z boson candidate'),
-        'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
-        'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        #'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
+        #'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         },
     collections = {
-        'Leptons'           : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
+        'highptLeptons'           : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
         'xcleanJets'        : NTupleCollection('jet', jetType, 3, help='Jets after the preselection'),
-        'xcleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 2, help='fatJets after the preselection'),
+        'xcleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
         #'SubJets'           : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
         }
     )

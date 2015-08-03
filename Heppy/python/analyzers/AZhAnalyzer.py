@@ -171,6 +171,8 @@ class AZhAnalyzer( Analyzer ):
             event.A.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
             event.A.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
         
+        self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
+        
         # Fill tree
         event.isAZh = True
         

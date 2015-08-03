@@ -6,7 +6,7 @@ import math
 import ROOT
 
 class ZZhAnalyzer( Analyzer ):
-    '''Analyzer for the Z' -> Zh -> llbb analysis'''
+    '''Analyzer for the Z' -> Zh -> (ll/nunu)bb analysis'''
 
     def beginLoop(self,setup):
         super(ZZhAnalyzer,self).beginLoop(setup)
@@ -16,7 +16,31 @@ class ZZhAnalyzer( Analyzer ):
             self.ZZhCounter = ROOT.TH1F("ZZhCounter", "ZZhCounter", len(ZZhLabels), 0, len(ZZhLabels))
             for i, l in enumerate(ZZhLabels):
                 self.ZZhCounter.GetXaxis().SetBinLabel(i+1, l) 
-        
+    
+    def isHEEP(self, e):
+        if not e.pt() > 35.: return False
+        if abs(e.superCluster().eta()) < 1.4442:
+            if not e.ecalDriven(): return False
+            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.004: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
+            #if not e.sigmaIetaIeta() < 0: return False
+            if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
+            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            if not abs(e.dxy()) < 0.02: return False
+        elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+            if not e.ecalDriven(): return False
+            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.006: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
+            if not e.sigmaIetaIeta() < 0.03: return False
+            #if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0: return False
+            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            if not abs(e.dxy()) < 0.05: return False
+        else: return False
+        return True
+    
+    
     def process(self, event):
         event.isZZh = False
         
@@ -28,6 +52,14 @@ class ZZhAnalyzer( Analyzer ):
         if not len(event.inclusiveLeptons)>=2:
             return True
         self.ZZhCounter.Fill(1) # Lep > 2
+        
+        # Separate inclusive lepton collections
+        event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
+        event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.muonID("POG_ID_Loose")]
+        
+        # Categoriazation
+        if len(event.inclusiveMuons) > 0 and event.inclusiveMuons[0].pt() > self.cfg_ana.muon1pt and event.inclusiveMuons.muonID(self.cfg_ana.muon1id)
+        
         # Select first lepton
         if not hasattr(event, "Z"):
             return True
