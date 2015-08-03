@@ -186,6 +186,7 @@ jetAnalyzer = cfg.Analyzer(
     doQG                        = False,
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    addJECShifts                = False,
     smearJets                   = False,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
@@ -228,6 +229,7 @@ fatJetAnalyzer = cfg.Analyzer(
     doQG                        = False,
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
+    addJECShifts                = False,
     smearJets                   = False,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
@@ -269,7 +271,7 @@ tauAnalyzer = cfg.Analyzer(
     inclusive_vetoLeptons = False,
     inclusive_leptonVetoDR = 0.4,
     #inclusive_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
-    #inclusive_tauID = "decayModeFindingNewDMs",
+    #inclusive_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
     inclusive_decayModeID = "decayModeFinding", # ignored if not set or ""
     inclusive_tauID = "byCombinedIsolationDeltaBetaCorrRaw3Hits",
     inclusive_tauIDnHits = 5,
@@ -310,7 +312,8 @@ photonAnalyzer = cfg.Analyzer(
     photons                     = 'slimmedPhotons',
     ptMin                       = 15,
     etaMax                      = 2.5,
-    gammaID                     = 'POG_PHYS14_25ns_Loose_hardcoded',
+    gammaID                     = 'POG_PHYS14_25ns_Loose',#'POG_PHYS14_25ns_Loose_hardcoded',
+    gamma_isoCorr               = 'rhoArea',
     do_mc_match                 = True,
     do_randomCone               = False,
     rhoPhoton                   = 'fixedGridRhoFastjetAll',
@@ -326,10 +329,6 @@ MEtAnalyzer = METAnalyzer.defaultConfig
 ##############################
 ### DM ANALYZERS           ###
 ##############################
-
-### GLOBAL CUTS
-met_pt_cut = 100. # met or fakemet
-jet_met_deltaphi_cut = 0. # wrt met or fakemet
 
 from DMPD.Heppy.analyzers.GenAnalyzer import GenAnalyzer
 GenAnalyzer = cfg.Analyzer(
@@ -348,6 +347,11 @@ from DMPD.Heppy.analyzers.XCleaningAnalyzer import XCleaningAnalyzer
 XCleaningAnalyzer = cfg.Analyzer(
     verbose=False,
     class_object = XCleaningAnalyzer,
+    cleanTaus = True,
+    cleanJets = True,
+    cleanJetsAK8 = False,
+    cleanFromMuons = True,
+    cleanFromElectrons = False,
     mu_clean_pt  = 20.,
     mu_clean_id  = 'POG_ID_Tight',
     mu_clean_iso = lambda x : x.relIso04 < 0.12,
@@ -729,7 +733,7 @@ from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
 from DMPD.Heppy.samples.Spring15.fileSamples import *
 
-sampleSYNCH_ADDMonojet = cfg.Component(
+sampleSYNCH_ADDMonojet = cfg.MCComponent(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/80CF5456-B9EC-E411-93DA-002618FDA248.root'],
     name='ADDMonojet',
     isMC=True,
@@ -737,7 +741,7 @@ sampleSYNCH_ADDMonojet = cfg.Component(
     splitFactor=1
     )
 
-sampleSYNCH_TTBar = cfg.Component(
+sampleSYNCH_TTBar = cfg.MCComponent(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/0A9E2CED-C9EC-E411-A8E4-003048FFCBA8.root'],
     name='TTBar',
     isMC=True,
@@ -745,7 +749,7 @@ sampleSYNCH_TTBar = cfg.Component(
     splitFactor=1
     )
 
-sampleSYNCH_DYJetsToLL = cfg.Component(
+sampleSYNCH_DYJetsToLL = cfg.MCComponent(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/04963444-D107-E511-B245-02163E00F339.root'],
     name='DYJetsToLL',
     isMC=True,
@@ -753,15 +757,15 @@ sampleSYNCH_DYJetsToLL = cfg.Component(
     splitFactor=1
     )
 
-sampleSYNCH_WJetsToLNu = cfg.Component(
+sampleSYNCH_WJetsToLNu = cfg.MCComponent(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/6408230F-9F08-E511-A1A6-D4AE526A023A.root'],
     name='WJetsToLNu',
-    isMC=True,
+    isMC=False,
     isEmbed=False,
     splitFactor=1
     )
 
-sampleSYNCH_RSGravitonToGaGa = cfg.Component(
+sampleSYNCH_RSGravitonToGaGa = cfg.MCComponent(
     files = ['file:/lustre/cmsdata/DM/DMS13TeVSynch/189277BA-DCEC-E411-B3B8-0025905B859E.root'],
     name='RSGravitonToGaGa',
     isMC=True,
@@ -778,86 +782,86 @@ sampleSYNCH_RSGravitonToGaGa = cfg.Component(
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
-selectedComponents = [
-    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
-    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
-    sampleGJets_HT_100To200_madgraphMLM_pythia8_v2,
-    sampleGJets_HT_200To400_madgraphMLM_pythia8_v2,
-    sampleGJets_HT_400To600_madgraphMLM_pythia8_v1,
-    sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1,
-    sampleQCD_HT_1000to1500_madgraphMLM_pythia8_v2,
-    sampleQCD_HT_100to200_madgraphMLM_pythia8_v2,
-    sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1,
-    sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1,
-    sampleQCD_HT_200to300_madgraphMLM_pythia8_v2,
-    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
-    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
-    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
-#    sampleQCD_Pt_1000to1400_pythia8_v1,
-#    sampleQCD_Pt_10to15_pythia8_v2,
-#    sampleQCD_Pt_120to170_pythia8_v1,
-#    sampleQCD_Pt_1400to1800_pythia8_v1,
-#    sampleQCD_Pt_15to30_pythia8_v2,
-#    sampleQCD_Pt_170to300_pythia8_v2,
-#    sampleQCD_Pt_1800to2400_pythia8_v1,
-#    sampleQCD_Pt_2400to3200_pythia8_v1,
-#    sampleQCD_Pt_300to470_pythia8_v1,
-#    sampleQCD_Pt_30to50_pythia8_v2,
-#    sampleQCD_Pt_3200toInf_pythia8_v1,
-#    sampleQCD_Pt_470to600_pythia8_v2,
-#    sampleQCD_Pt_50to80_pythia8_v2,
-#    sampleQCD_Pt_5to10_pythia8_v2,
-#    sampleQCD_Pt_600to800_pythia8_v3,
-#    sampleQCD_Pt_800to1000_pythia8_v2,
-#    sampleQCD_Pt_80to120_pythia8_v1,
-    sampleST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1,
-    sampleST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1,
-    sampleST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1,
-    sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1,
-    sampleST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
-#    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
-#    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
-#    sampleTTJets_madgraphMLM_pythia8_v2,
-    sampleTT_powheg_pythia8_v2,
-    sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
-    sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
-    sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3,
-    sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
-    sampleWW_pythia8_v1,
-    sampleWZ_pythia8_v1,
-#    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
-#    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
-#    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
-#    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
-    sampleZZ_pythia8_v3,
-]
+#selectedComponents = [
+#    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
+#    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
+#    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
+#    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
+#    sampleGJets_HT_100To200_madgraphMLM_pythia8_v2,
+#    sampleGJets_HT_200To400_madgraphMLM_pythia8_v2,
+#    sampleGJets_HT_400To600_madgraphMLM_pythia8_v1,
+#    sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1,
+#    sampleQCD_HT_1000to1500_madgraphMLM_pythia8_v2,
+#    sampleQCD_HT_100to200_madgraphMLM_pythia8_v2,
+#    sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1,
+#    sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1,
+#    sampleQCD_HT_200to300_madgraphMLM_pythia8_v2,
+#    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
+#    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
+#    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
+##    sampleQCD_Pt_1000to1400_pythia8_v1,
+##    sampleQCD_Pt_10to15_pythia8_v2,
+##    sampleQCD_Pt_120to170_pythia8_v1,
+##    sampleQCD_Pt_1400to1800_pythia8_v1,
+##    sampleQCD_Pt_15to30_pythia8_v2,
+##    sampleQCD_Pt_170to300_pythia8_v2,
+##    sampleQCD_Pt_1800to2400_pythia8_v1,
+##    sampleQCD_Pt_2400to3200_pythia8_v1,
+##    sampleQCD_Pt_300to470_pythia8_v1,
+##    sampleQCD_Pt_30to50_pythia8_v2,
+##    sampleQCD_Pt_3200toInf_pythia8_v1,
+##    sampleQCD_Pt_470to600_pythia8_v2,
+##    sampleQCD_Pt_50to80_pythia8_v2,
+##    sampleQCD_Pt_5to10_pythia8_v2,
+##    sampleQCD_Pt_600to800_pythia8_v3,
+##    sampleQCD_Pt_800to1000_pythia8_v2,
+##    sampleQCD_Pt_80to120_pythia8_v1,
+#    sampleST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1,
+#    sampleST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1,
+#    sampleST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1,
+#    sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1,
+#    sampleST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
+##    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
+##    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
+##    sampleTTJets_madgraphMLM_pythia8_v2,
+#    sampleTT_powheg_pythia8_v2,
+#    sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
+#    sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
+#    sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3,
+#    sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
+#    sampleWW_pythia8_v1,
+#    sampleWZ_pythia8_v1,
+##    sampleZH_HToBB_ZToLL_M120_amcatnloFXFX_madspin_pythia8_v1,
+##    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v1,
+##    sampleZH_HToBB_ZToNuNu_M120_amcatnloFXFX_madspin_pythia8_v2,
+##    sampleZJetsToNuNu_HT_400To600_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
+##    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
+#    sampleZZ_pythia8_v3,
+#]
 
 
 ### TEST (LOCAL)
@@ -888,7 +892,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=10000,
+        nEvents=100000,
         )
     looper.loop()
     looper.write()
