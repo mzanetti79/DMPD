@@ -5,17 +5,35 @@ import copy
 import math
 import ROOT
 
-class ZZhAnalyzer( Analyzer ):
+class AZhAnalyzer( Analyzer ):
     '''Analyzer for the Z' -> Zh -> (ll/nunu)bb analysis'''
 
     def beginLoop(self,setup):
-        super(ZZhAnalyzer,self).beginLoop(setup)
+        super(AZhAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
-            ZZhLabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "#slash{E}_{T}", "b-tag 1", "b-tag 2"]
-            self.ZZhCounter = ROOT.TH1F("ZZhCounter", "ZZhCounter", len(ZZhLabels), 0, len(ZZhLabels))
-            for i, l in enumerate(ZZhLabels):
-                self.ZZhCounter.GetXaxis().SetBinLabel(i+1, l) 
+            Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
+            Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
+            self.Z2LLCounter = ROOT.TH1F("ZtoLLCounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
+            self.Z2NNCounter = ROOT.TH1F("ZtoNNCounter", "", len(Z2NNlabels), 0, len(Z2NNlabels))
+            for i, l in enumerate(Z2LLlabels):
+                self.Z2LLCounter.GetXaxis().SetBinLabel(i+1, l)
+            for i, l in enumerate(Z2NNlabels):
+                self.Z2NNCounter.GetXaxis().SetBinLabel(i+1, l)
+    
+    def addFakeMet(self, event, particles):
+        # Copy regular met
+        event.fakemet = copy.deepcopy(event.met)
+        px, py = event.met.px(), event.met.py()
+        for i, p in enumerate(particles):
+            if not p:
+                continue
+            else:
+                px += p.px()
+                py += p.py()
+        
+        event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px, py)))
+        return True
     
     def isHEEP(self, e):
         if not e.pt() > 35.: return False
@@ -42,77 +60,147 @@ class ZZhAnalyzer( Analyzer ):
     
     
     def process(self, event):
-        event.isZZh = False
+        event.isAZh = False
+        event.isZ2EE = False
+        event.isZ2MM = False
+        event.isZ2NN = False
         
-#        self.genAnalysis(event)
+        self.Z2LLCounter.Fill(-1) # All
+        self.Z2NNCounter.Fill(-1)
         
-        self.ZZhCounter.Fill(-1) # All
-        self.ZZhCounter.Fill(0) # Trigger
-        # Leptons >= 2
-        if not len(event.inclusiveLeptons)>=2:
-            return True
-        self.ZZhCounter.Fill(1) # Lep > 2
+        
+        self.Z2LLCounter.Fill(0) # Trigger
+        self.Z2NNCounter.Fill(0)
+        
+        #########################
+        #    Part 1: Leptons    #
+        #########################
         
         # Separate inclusive lepton collections
-        event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
-        event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.muonID("POG_ID_Loose")]
+        event.highptElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and isHEEP(x)]
+        event.highptMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.muonID("POG_ID_HighPt")]
+        event.highptLeptons = []
         
         # Categoriazation
-        if len(event.inclusiveMuons) > 0 and event.inclusiveMuons[0].pt() > self.cfg_ana.muon1pt and event.inclusiveMuons.muonID(self.cfg_ana.muon1id)
+        if len(event.highptElectrons) >= 2 and event.highptElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptElectrons[1].pt() > self.cfg_ana.elec2pt:
+            event.isZ2EE = True
+        elif len(event.highptMuons) >= 2 and event.highptMuons[0].pt() > self.cfg_ana.muon1pt and event.highptMuons[1].pt() > self.cfg_ana.muon2pt:
+            event.isZ2MM = True
+        elif len(event.selectedMuons) + len(event.selectedElectrons) == 0:
+            event.isZ2NN = True
+        else:
+            return True
         
-        # Select first lepton
-        if not hasattr(event, "Z"):
+        event.isZ2LL = event.isZ2EE or event.isZ2MM
+        
+        if event.isZ2LL: self.Z2LLCounter.Fill(1) # Lep > 2
+        if event.isZ2NN: self.Z2NNCounter.Fill(1) # Lep veto
+        
+        # Build Z candidate
+        if event.isZ2EE and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
+            event.highptLeptons = event.highptElectrons
+        elif event.isZ2MM and event.highptMuons[0].charge() != event.highptMuons[1].charge():
+            event.highptLeptons = event.highptMuons
+        elif event.isZ2NN:
+            event.highptLeptons = []
+        else:
             return True
-        self.ZZhCounter.Fill(2) # Z cand
-        if len(event.cleanJetsAK8)<1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt or len(event.cleanJetsAK8[0].subjets('SoftDrop')) < 2:
+        
+        if event.isZ2LL: self.Z2LLCounter.Fill(2) # Z cand
+        
+        #########################
+        #    Part 2: Jets       #
+        #########################
+        
+        if len(event.cleanJetsAK8)<1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt:
             return True
-        self.ZZhCounter.Fill(3) # Jet pT
-        if event.Z.pt() < self.cfg_ana.Z_pt:
-            return True
-        self.ZZhCounter.Fill(4) # Z pT
+        
+        if event.isZ2LL: self.Z2LLCounter.Fill(3) # Jet pT
+        if event.isZ2NN: self.Z2NNCounter.Fill(2) # Jet pT
+        
+        #########################
+        #   Part 3: Candidates  #
+        #########################
+        
+        # Z candidate
+        if len(event.highptLeptons) >= 2:
+            event.Z = event.highptLeptons[0].p4() + event.highptLeptons[1].p4()
+            event.Z.charge = event.highptLeptons[0].charge() + event.highptLeptons[1].charge()
+            event.Z.deltaR = deltaR(event.highptLeptons[0].eta(), event.highptLeptons[0].phi(), event.highptLeptons[1].eta(), event.highptLeptons[1].phi())
+            event.Z.deltaEta = abs(event.highptLeptons[0].eta() - event.highptLeptons[1].eta())
+            event.Z.deltaPhi = deltaPhi(event.highptLeptons[0].phi(), event.highptLeptons[1].phi())
+        
+        # h candidate with pseudo-kin fit
+        kH = event.cleanJetsAK8[0].p4()
+        k = 125.0/event.cleanJetsAK8[0].mass()#.userFloat("ak8PFJetsCHSSoftDropMass")
+        kH.SetE( event.cleanJetsAK8[0].energy()*k )
+        kH.SetPx( event.cleanJetsAK8[0].px()*k )
+        kH.SetPy( event.cleanJetsAK8[0].py()*k )
+        kH.SetPz( event.cleanJetsAK8[0].pz()*k )
+        
+        # A/Z' candidate
+        if event.isZ2LL:
+            event.A = event.Z + event.cleanJetsAK8[0].p4()
+            event.A.mT = event.A.mass()
+            event.A.mC = event.A.mass()
+            event.A.mK = (event.Z + kH).mass()
+        elif len(event.highptLeptons) == 1:
+            event.A = event.highptLeptons[0].p4() + event.met.p4() + event.cleanJetsAK8[0].p4()
+            pz = 0.
+            a = 80.4**2 - event.highptLeptons[0].mass()**2 + 2.*event.highptLeptons[0].px()*event.met.px() + 2.*event.highptLeptons[0].py()*event.met.py()
+            A = 4*( event.highptLeptons[0].energy()**2 - event.highptLeptons[0].pz()**2 )
+            B = -4*a*event.highptLeptons[0].pz()
+            C = 4*event.highptLeptons[0].energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
+            D = B**2 - 4*A*C
+            if D>0:
+                pz = min((-B+math.sqrt(D))/(2*A), (-B-math.sqrt(D))/(2*A))
+            else:
+                pz = -B/(2*A)
+            kmet = event.met.p4()
+            kmet.SetPz(pz)
+            event.A.mT = (event.highptLeptons[0].p4() + kmet + event.cleanJetsAK8[0].p4()).mass()
+            cmet = event.met.p4()
+            cmet.SetPz(event.highptLeptons[0].pz())
+            event.A.mC = (event.highptLeptons[0].p4() + cmet + event.cleanJetsAK8[0].p4()).mass()
+            event.A.mK = (event.highptLeptons[0].p4() + kmet + kH).mass()
+        else:
+            event.A = event.met.p4() + event.cleanJetsAK8[0].p4()
+            event.A.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
+            cmet = event.met.p4()
+            cmet.SetPz( -event.cleanJetsAK8[0].pz() )
+            event.A.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
+            event.A.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
+        
         # Fill tree
-        event.isZZh = True
+        event.isAZh = True
         
         
-        # Build candidates
-        if not hasattr(event, "SubJets"): event.SubJets = event.cleanJetsAK8[0].subjets('SoftDrop')
         
-        # Higgs candidate
-        theH = event.cleanJetsAK8[0].p4()
-        theH.charge = event.cleanJetsAK8[0].charge()
-        theH.deltaR = deltaR(event.SubJets[0].eta(), event.SubJets[0].phi(), event.SubJets[1].eta(), event.SubJets[1].phi())
-        theH.deltaEta = abs(event.SubJets[0].eta() - event.SubJets[1].eta())
-        theH.deltaPhi = deltaPhi(event.SubJets[0].phi(), event.SubJets[1].phi())
-        theH.deltaPhi_met = deltaPhi(theH.phi(), event.met.phi())
-        theH.deltaPhi_jet1 = deltaPhi(theH.phi(), event.cleanJetsAK8[0].phi())
-        event.H = theH
-        
-        # Zprime candidate
-        theA = event.Z + event.H
-        theA.charge = event.Z.charge + event.H.charge
-        theA.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.H.eta(), event.H.phi())
-        theA.deltaEta = abs(event.Z.eta() - event.H.eta())
-        theA.deltaPhi = deltaPhi(event.Z.phi(), event.H.phi())
-        theA.deltaPhi_met = deltaPhi(theA.phi(), event.met.phi())
-        theA.deltaPhi_jet1 = deltaPhi(theA.phi(), event.H.phi())
-        event.A = theA
-        
-        for j in event.cleanJetsAK8:
-            j.deltaPhi_met = deltaPhi(j.phi(), event.met.phi())
-            j.deltaPhi_jet1 = deltaPhi(j.phi(), event.cleanJetsAK8[0].phi())
-        
-        # Estimate cuts
-        if event.Z.mass() > self.cfg_ana.Zmass_low and event.Z.mass() < self.cfg_ana.Zmass_high:
-            self.ZZhCounter.Fill(5) # Z mass
-            if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
-                self.ZZhCounter.Fill(6) # h mass
-                if event.met.pt() < self.cfg_ana.met_pt:
-                    self.ZZhCounter.Fill(7) # MET
-                    #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
-                    if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
-                        self.ZZhCounter.Fill(8) # b-Jet1
-                        if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
-                            self.ZZhCounter.Fill(9) # b-Jet2
-
+        # ---------- Estimate cuts ----------
+        if event.isZ2LL: 
+            if event.Z.pt() > 200:
+                self.Z2LLCounter.Fill(4)
+                if event.Z.mass() > 75 and event.Z.mass() < 105:
+                    self.Z2LLCounter.Fill(5)
+                    if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
+                        self.Z2LLCounter.Fill(6)
+                            #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
+                            if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
+                                self.Z2LLCounter.Fill(7)
+                                # b-Jet2
+                                if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
+                                    self.Z2LLCounter.Fill(8)
+        if event.isZ2NN: 
+            if event.met.pt() > 200:
+                self.Z2NNCounter.Fill(3)
+                if event.cleanJetsAK8[0].deltaPhi_met>2.5:
+                    if event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) > self.cfg_ana.fatjet_mass_low and event.cleanJetsAK8[0].userFloat(self.cfg_ana.fatjet_mass_algo) < self.cfg_ana.fatjet_mass_high:
+                        self.Z2NNCounter.Fill(4)
+                            #if event.cleanJetsAK8[0].btag('combinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatJet_btag:
+                            if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_1:
+                                self.Z2NNCounter.Fill(5)
+                                # b-Jet2
+                                if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > self.cfg_ana.fatjet_btag_2: 
+                                    self.Z2NNCounter.Fill(6)
         return True
 
