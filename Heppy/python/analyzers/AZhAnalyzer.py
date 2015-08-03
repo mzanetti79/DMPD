@@ -17,6 +17,29 @@ class ZZhAnalyzer( Analyzer ):
             for i, l in enumerate(ZZhLabels):
                 self.ZZhCounter.GetXaxis().SetBinLabel(i+1, l) 
     
+    def isHEEP(self, e):
+        if not e.pt() > 35.: return False
+        if abs(e.superCluster().eta()) < 1.4442:
+            if not e.ecalDriven(): return False
+            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.004: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
+            #if not e.sigmaIetaIeta() < 0: return False
+            if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
+            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            if not abs(e.dxy()) < 0.02: return False
+        elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+            if not e.ecalDriven(): return False
+            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.006: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
+            if not e.sigmaIetaIeta() < 0.03: return False
+            #if not e.e2x5()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0: return False
+            if not e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() <= 1: return False
+            if not abs(e.dxy()) < 0.05: return False
+        else: return False
+        return True
+    
     
     def process(self, event):
         event.isZZh = False
