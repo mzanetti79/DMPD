@@ -133,25 +133,21 @@ class PreselectionAnalyzer( Analyzer ):
         
         
         
-    def addJESUncertainty(self, event):
-        path = "%s/src/CMGTools/RootTools/data/jec" % os.environ['CMSSW_BASE'];
-        globalTag = "GR_70_V2_AN1"
-        jetFlavour = "AK4PFchs"
-        print "ziolupo!"
-        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
-        print "madai"
-        for i, j in enumerate(event.xcleanJets):
-            print i, j
-            JetUncertainty.setJetEta(j.eta())
-            JetUncertainty.setJetPt(j.pt())
-            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
-            print "daimo"
-        jetFlavour = "AK8PFchs"
-        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
-        for i, j in enumerate(event.xcleanJetsAK8):
-            JetUncertainty.setJetEta(j.eta())
-            JetUncertainty.setJetPt(j.pt())
-            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
+#    def addJESUncertainty(self, event):
+#        path = "%s/src/CMGTools/RootTools/data/jec" % os.environ['CMSSW_BASE'];
+#        globalTag = "GR_70_V2_AN1"
+#        jetFlavour = "AK4PFchs"
+#        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
+#        for i, j in enumerate(event.xcleanJets):
+#            JetUncertainty.setJetEta(j.eta())
+#            JetUncertainty.setJetPt(j.pt())
+#            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
+#        jetFlavour = "AK8PFchs"
+#        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
+#        for i, j in enumerate(event.xcleanJetsAK8):
+#            JetUncertainty.setJetEta(j.eta())
+#            JetUncertainty.setJetPt(j.pt())
+#            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
     
     
     def addFakeMet(self, event, particles):
@@ -177,7 +173,7 @@ class PreselectionAnalyzer( Analyzer ):
         theZ.deltaEta = abs(leptons[0].eta() - leptons[1].eta())
         theZ.deltaPhi = deltaPhi(leptons[0].phi(), leptons[1].phi())
         #theZ.deltaPhi_met = deltaPhi(theZ.phi(), event.met.phi())
-        event.Z = theZ
+        event.theZ = theZ
         return True
     
     def createW(self, event, lepton):
@@ -188,7 +184,7 @@ class PreselectionAnalyzer( Analyzer ):
         theW.deltaPhi = deltaPhi(lepton.phi(), event.met.phi())
         theW.deltaPhi_met = deltaPhi(lepton.phi(), event.met.phi())
         theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )
-        event.W = theW
+        event.theW = theW
         return True
     
     def createA(self, event):
@@ -277,7 +273,11 @@ class PreselectionAnalyzer( Analyzer ):
         #    return False
         #self.Counter.Fill(1)
         
-        # Count Leptons and select Regions
+        
+        ########################################
+        ### Count Leptons and select Regions ###
+        ########################################
+        
         
         ### Two leptons
         if len(event.selectedLeptons) >= 2:

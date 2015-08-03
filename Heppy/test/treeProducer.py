@@ -372,21 +372,23 @@ SyncAnalyzer = cfg.Analyzer(
     class_object = SyncAnalyzer,
     )
 
-#from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
-#ZZhAnalyzer = cfg.Analyzer(
-#    verbose = False,
-#    class_object = ZZhAnalyzer,
-#    fatjet_pt = 250.,
-#    Z_pt = 100.,
-#    Zmass_low = 75.,
-#    Zmass_high = 105.,
-#    fatjet_mass_algo = 'ak8PFJetsCHSSoftDropMass',
-#    fatjet_mass_low = 100.,
-#    fatjet_mass_high = 150.,
-#    fatjet_btag_1 = 0.423,
-#    fatjet_btag_2 = 0.423,
-#    met_pt = 200.,
-#    )
+from DMPD.Heppy.analyzers.ZZhAnalyzer import ZZhAnalyzer
+ZZhAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = ZZhAnalyzer,
+    muon1pt = 40.,
+    muon1id = "POG_ID_Tight",
+    fatjet_pt = 250.,
+    Z_pt = 100.,
+    Zmass_low = 75.,
+    Zmass_high = 105.,
+    fatjet_mass_algo = 'ak8PFJetsCHSSoftDropMass',
+    fatjet_mass_low = 100.,
+    fatjet_mass_high = 150.,
+    fatjet_btag_1 = 0.423,
+    fatjet_btag_2 = 0.423,
+    met_pt = 200.,
+    )
 
 
 #from DMPD.Heppy.analyzers.CategorizationAnalyzer import CategorizationAnalyzer
@@ -475,7 +477,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
-        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
@@ -511,9 +513,9 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
-        'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
+        'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
-        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
@@ -550,9 +552,9 @@ WControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
-        'W'         : NTupleObject('W', candidateType, help='W boson candidate'),
+        'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
-        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
