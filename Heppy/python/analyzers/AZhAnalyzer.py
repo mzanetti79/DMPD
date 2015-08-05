@@ -13,7 +13,7 @@ class AZhAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd()
             Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
-            Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
+            Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
             self.Z2LLCounter = ROOT.TH1F("ZtoLLCounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
             self.Z2NNCounter = ROOT.TH1F("ZtoNNCounter", "", len(Z2NNlabels), 0, len(Z2NNlabels))
             for i, l in enumerate(Z2LLlabels):
@@ -183,7 +183,7 @@ class AZhAnalyzer( Analyzer ):
         else:
             self.addFakeMet(event, [])
         
-        if (event.isZ2LL and event.Z.pt()) < self.cfg_ana.Z_pt or (event.isZ2NN and event.met.pt() < self.cfg_ana.met_pt):
+        if ((event.isZ2LL and event.Z.pt()) < self.cfg_ana.Z_pt) or ((event.isZ2NN and event.met.pt() < self.cfg_ana.met_pt)):
             return True
         
         
