@@ -1,8 +1,17 @@
 import PhysicsTools.HeppyCore.framework.config as cfg
-from DMPD.Heppy.samples.Data.fileLists import samples
+from DMPD.Heppy.samples.Data.fileLists import datasamples
 
-sampleSingleMuon_Run2015B_17Jul2015_v1 = cfg.DataComponent(
-        files      = samples["SingleMuon_Run2015B_17Jul2015_v1"]["files"],
+sampleSingleMuon_Run2015B_17Jul2015_v1 = cfg.Component(
+        files      = datasamples["SingleMuon_Run2015B_17Jul2015_v1"]["files"],
         name       = "SingleMuon_Run2015B_17Jul2015_v1",
+        splitFactor= 10,
 )
 
+
+samplesSingleMuon_Run2015B_PromptReco_v1 = cfg.Component(
+        files      = datasamples["SingleMuon_Run2015B_PromptReco_v1"]["files"],
+        name       = "SingleMuon_Run2015B_PromptReco_v1",
+        isMC       = False,
+	      isEmbed    = False,
+        splitFactor= 20,
+)
