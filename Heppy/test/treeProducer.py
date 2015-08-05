@@ -324,8 +324,28 @@ photonAnalyzer = cfg.Analyzer(
 ### METANALYZER            ###
 ##############################
 from PhysicsTools.Heppy.analyzers.objects.METAnalyzer import METAnalyzer
-MEtAnalyzer = METAnalyzer.defaultConfig
+MEtAnalyzer = cfg.Analyzer(
 
+    class_object = METAnalyzer,
+    
+    ### MET - General
+    ##############################
+    metCollection     = "slimmedMETs",
+    noPUMetCollection = "slimmedMETs",
+    copyMETsByValue = False,
+    recalibrate = True,
+    jetAnalyzerCalibrationPostFix = "",
+    doTkMet = False,
+    doMetNoPU = True,  
+    doMetNoMu = False,  
+    doMetNoEle = False,  
+    doMetNoPhoton = False,  
+    candidates='packedPFCandidates',
+    candidatesTypes='std::vector<pat::PackedCandidate>',
+    dzMax = 0.1,
+    collectionPostFix = "",
+    ### ====================== ###
+    )
 ##############################
 ### DM ANALYZERS           ###
 ##############################
@@ -444,6 +464,7 @@ globalVariables = [
     NTupleVariable('isTCR',     lambda x: x.isTCR, int, help='ttbar Control Region flag'),
     NTupleVariable('isGCR',     lambda x: x.isGCR, int, help='Gamma+jets Control Region flag'),
     #NTupleVariable('Cat',       lambda x: x.Category, int, help='Category 1/2/3'),
+    NTupleVariable('nPV',       lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('nMuons',    lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
     NTupleVariable('nElectrons',lambda x: len(x.selectedElectrons), int, help='Number of selected electrons'),
     NTupleVariable('nTaus',     lambda x: len(x.xcleanTaus), int, help='Number of xcleaned taus'),
@@ -739,7 +760,7 @@ output_service = cfg.Service(
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
-from DMPD.Heppy.samples.Spring15.fileSamples import *
+#from DMPD.Heppy.samples.Spring15.fileSamples import *
 from DMPD.Heppy.samples.Data.fileSamples import *
 
 sampleSYNCH_ADDMonojet = cfg.MCComponent(
@@ -872,7 +893,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
 #    sampleZZ_pythia8_v3,
 #]
-selectedComponents = [sampleSingleMuon_Run2015B_17Jul2015_v1]
+selectedComponents = [samplesSingleMuon_Run2015B_PromptReco_v1]
 
 ### TEST (LOCAL)
 #selectedComponents = [sampleTest]
@@ -902,7 +923,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=100000000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
