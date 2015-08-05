@@ -335,7 +335,7 @@ MEtAnalyzer = cfg.Analyzer(
     copyMETsByValue = False,
     recalibrate = True,
     jetAnalyzerCalibrationPostFix = "",
-    doTkMet = False,
+    doTkMet = True,
     doMetNoPU = True,  
     doMetNoMu = False,  
     doMetNoEle = False,  
@@ -346,9 +346,12 @@ MEtAnalyzer = cfg.Analyzer(
     collectionPostFix = "",
     ### ====================== ###
     )
+
 ##############################
 ### DM ANALYZERS           ###
 ##############################
+
+fake_met_cut = 0
 
 from DMPD.Heppy.analyzers.GenAnalyzer import GenAnalyzer
 GenAnalyzer = cfg.Analyzer(
@@ -487,15 +490,15 @@ SignalRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='SignalRegionTreeProducer',
     treename='SR',
-    filter = lambda x: x.isSR and x.met.pt()>100,
+    filter = lambda x: x.isSR and x.met.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
@@ -525,14 +528,14 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZtoEE, int, help='Z -> mu mu flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag'),
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in Z events obtained removing the leptons'),
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
@@ -564,14 +567,14 @@ WControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalVariables + [
         NTupleVariable('isWtoEN',  lambda x: x.isWtoEN, int, help='W -> mu nu flag'),
         NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in W -> mu nu event obtained removing the lepton'),
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
@@ -601,14 +604,14 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in ttbar events obtained removing the leptons'),
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
@@ -635,14 +638,15 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        #'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        #'fakemet'   : NTupleObject('fakemet', fourVectorType, help='fake MET in gamma + jets event obtained removing the photon'),
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'tkMetPVchs': 
+        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
@@ -676,12 +680,15 @@ AZhTreeProducer= cfg.Analyzer(
         NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
         NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nunu flag'),
-        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
+#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
+#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
+#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
+        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        
+        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
