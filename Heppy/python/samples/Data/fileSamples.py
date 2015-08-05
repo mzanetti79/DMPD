@@ -11,7 +11,5 @@ sampleSingleMuon_Run2015B_17Jul2015_v1 = cfg.Component(
 samplesSingleMuon_Run2015B_PromptReco_v1 = cfg.Component(
         files      = datasamples["SingleMuon_Run2015B_PromptReco_v1"]["files"],
         name       = "SingleMuon_Run2015B_PromptReco_v1",
-        isMC       = False,
-	      isEmbed    = False,
         splitFactor= 20,
 )

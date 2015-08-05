@@ -5,11 +5,13 @@ from array import array
 from ROOT import TFile, TH1
 
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
-from DMPD.Heppy.samples.Spring15.fileLists import samples
-#from DMPD.Heppy.samples.Data.fileLists import samples
+#from DMPD.Heppy.samples.Spring15.fileLists import samples
+from DMPD.Heppy.samples.Data.fileLists import datasamples
+
+samples = datasamples
 
 #heppy_output_dir = '/lustre/cmsdata/DM/ntuples/Prod_v03/'
-heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Test/'
+heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/TestMulti/'
 
 
 if not os.path.exists(heppy_output_dir+'weighted'):
@@ -22,9 +24,9 @@ for ref_file_name in samples.keys():
     #print "##################################################"
 
     # Unweighted input
-    ref_file_name_with_path = heppy_output_dir+ref_file_name+'/Loop/tree.root'
+    ref_file_name_with_path = heppy_output_dir+ref_file_name+'/tree.root'
     if not os.path.exists(ref_file_name_with_path): 
-        print "  WARNING: file does not exist, continuing"
+        print "  WARNING: file", ref_file_name_with_path, "does not exist, continuing"
         continue
     
     # Weighted output
