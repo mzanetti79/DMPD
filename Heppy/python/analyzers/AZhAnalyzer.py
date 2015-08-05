@@ -130,12 +130,14 @@ class AZhAnalyzer( Analyzer ):
         #########################
         
         # Z candidate
-        if len(event.highptLeptons) >= 2:
+        if event.isZ2LL:
             event.Z = event.highptLeptons[0].p4() + event.highptLeptons[1].p4()
             event.Z.charge = event.highptLeptons[0].charge() + event.highptLeptons[1].charge()
             event.Z.deltaR = deltaR(event.highptLeptons[0].eta(), event.highptLeptons[0].phi(), event.highptLeptons[1].eta(), event.highptLeptons[1].phi())
             event.Z.deltaEta = abs(event.highptLeptons[0].eta() - event.highptLeptons[1].eta())
             event.Z.deltaPhi = deltaPhi(event.highptLeptons[0].phi(), event.highptLeptons[1].phi())
+        else:
+            event.Z = event.met.p4()
         
         # h candidate with pseudo-kin fit
         kH = event.cleanJetsAK8[0].p4()
