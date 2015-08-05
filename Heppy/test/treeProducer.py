@@ -54,12 +54,12 @@ triggerAnalyzer= cfg.Analyzer(
     #grouping several paths into a single flag
     # v* can be used to ignore the version of a path
     triggerBits={
-        'MET':['HLT_PFMET170_NoiseCleaned_v*','HLT_PFMET120_NoiseCleaned_BTagCSV07_v*','HLT_PFHT350_PFMET120_NoiseCleaned_v*'],
-        'JET':['HLT_PFJet260_v*'],
-        'SingleMu':['HLT_Mu50_v*'],
-        'SingleElectron':['HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
-        'DoubleMu':['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
-        'DoubleElectron':['HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
+        'SingleMu'       : ['HLT_Mu50_v*', 'HLT_IsoMu24_eta2p1_v*', 'HLT_IsoMu27_v*'],
+        'SingleElectron' : ['HLT_Ele105_CaloIdVT_GsfTrkIdT_v*', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*'],
+        'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
+        'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
+        'MET'            : ['HLT_PFMET170_NoiseCleaned_v*','HLT_PFMET120_NoiseCleaned_BTagCSV07_v*','HLT_PFHT350_PFMET120_NoiseCleaned_v*'],
+        #'JET'            : ['HLT_PFJet260_v*'],
     },
 #   processName='HLT',
 #   outprefix='HLT'
@@ -461,11 +461,11 @@ SyncAnalyzerWCR = cfg.Analyzer(
 
 
 globalVariables = [
-    NTupleVariable('isSR',      lambda x: x.isSR, int, help='Signal Region flag'),
-    NTupleVariable('isZCR',     lambda x: x.isZCR, int, help='Z+jets Control Region flag'),
-    NTupleVariable('isWCR',     lambda x: x.isWCR, int, help='W+jets Control Region flag'),
-    NTupleVariable('isTCR',     lambda x: x.isTCR, int, help='ttbar Control Region flag'),
-    NTupleVariable('isGCR',     lambda x: x.isGCR, int, help='Gamma+jets Control Region flag'),
+    #NTupleVariable('isSR',      lambda x: x.isSR, int, help='Signal Region flag'),
+    #NTupleVariable('isZCR',     lambda x: x.isZCR, int, help='Z+jets Control Region flag'),
+    #NTupleVariable('isWCR',     lambda x: x.isWCR, int, help='W+jets Control Region flag'),
+    #NTupleVariable('isTCR',     lambda x: x.isTCR, int, help='ttbar Control Region flag'),
+    #NTupleVariable('isGCR',     lambda x: x.isGCR, int, help='Gamma+jets Control Region flag'),
     #NTupleVariable('Cat',       lambda x: x.Category, int, help='Category 1/2/3'),
     NTupleVariable('nPV',       lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('nMuons',    lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
@@ -522,7 +522,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='ZControlRegionTreeProducer',
     treename='ZCR',
-    filter = lambda x: x.isZCR and x.fakemet.pt()>100,
+    filter = lambda x: x.isZCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -561,7 +561,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='WControlRegionTreeProducer',
     treename='WCR',
-    filter = lambda x: x.isWCR and x.fakemet.pt()>100,
+    filter = lambda x: x.isWCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -600,7 +600,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='TTbarControlRegionTreeProducer',
     treename='TCR',
-    filter = lambda x: x.isTCR and x.fakemet.pt()>100,
+    filter = lambda x: x.isTCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -634,7 +634,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='GammaControlRegionTreeProducer',
     treename='GCR',
-    filter = lambda x: x.isGCR and x.fakemet.pt()>100,
+    filter = lambda x: x.isGCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
     globalVariables = globalVariables + [
@@ -645,7 +645,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        'tkMetPVchs': 
+#        'tkMetPVchs': 
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
@@ -687,7 +687,6 @@ AZhTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-        
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
@@ -900,7 +899,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
 #    sampleZZ_pythia8_v3,
 #]
-selectedComponents = [samplesSingleMuon_Run2015B_PromptReco_v1]
+selectedComponents = [sampleSYNCH_DYJetsToLL]
 
 ### TEST (LOCAL)
 #selectedComponents = [sampleTest]
