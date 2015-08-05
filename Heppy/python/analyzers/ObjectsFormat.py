@@ -195,8 +195,12 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
     #NTupleVariable("mcMatchId",  lambda x : x.mcMatchId, int, mcOnly=True, help="Match to source from hard scatter (pdgId of heaviest particle in chain, 25 for H, 6 for t, 23/24 for W/Z), zero if non-prompt or fake"),
 ])
 
-metType = NTupleObjectType("met",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1., float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
+metType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [])
+
+metFullType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [
+    NTupleVariable("calo_pt",    lambda x : x.caloMETPt(), float, mcOnly=False, help="CaloMET pt"), #does not work if not CaloMET
+    NTupleVariable("calo_phi",    lambda x : x.caloMETPhi(), float, mcOnly=False, help="CaloMET phi"), #does not work if not CaloMET
+#    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1., float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
 #    NTupleVariable("uncorrected",    lambda x : x.uncorrectedPt(), float, mcOnly=False, help="missing energy significance"), #uncorrected met
 #    NTupleVariable("phf",     lambda x : x.NeutralEMFraction(), float, mcOnly=False, help="neutral electromagnetic energy fraction"),
 #    NTupleVariable("nhf",     lambda x : x.NeutralHadEtFraction(), float, mcOnly=False, help="neutral hadron energy fraction"),
