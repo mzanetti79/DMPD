@@ -221,9 +221,9 @@ fatJetAnalyzer = cfg.Analyzer(
     jetPt                       = 50.,
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
-    jetLepDR                    = 0.8,
-    jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet -> resolving it later
-    minLepPt                    = 10,
+    jetLepDR                    = 1.0,
+    jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the jet -> resolving it later
+    minLepPt                    = 20,
     relaxJetId                  = False,
     doPuId                      = True, # Not commissioned in 7.0.X
     doQG                        = False,
@@ -404,8 +404,8 @@ AZhAnalyzer = cfg.Analyzer(
     muon1pt = 40.,
     muon2pt = 40.,
     fatjet_pt = 200.,
-    Z_pt = 200.,
-    met_pt = 200.,
+    Z_pt = 0.,#200.,
+    met_pt = 0.,#200.,
     )
 
 
@@ -498,7 +498,8 @@ SignalRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
@@ -534,7 +535,8 @@ ZControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
@@ -573,7 +575,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
@@ -610,7 +613,8 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
@@ -644,8 +648,8 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
-#        'tkMetPVchs': 
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
@@ -686,7 +690,8 @@ AZhTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
