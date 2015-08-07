@@ -11,16 +11,18 @@ parser.add_option("-d", "--dataFile", action="store", type="string", default=Fal
 parser.add_option("-m", "--mcFile", action="store", type="string", default=False, dest="mcFileName")
 parser.add_option("-r", "--mcReweightedFile", action="store", type="string", default=False, dest="mcReweightedFileName")
 parser.add_option("-p", "--plot", action="store", default=False, dest="doPlot")
-parser.add_option("-s", "--save", action="store", default=True, dest="doSave")
+parser.add_option("-s", "--save", action="store_true", default=True, dest="doSave")
 
 (options, args) = parser.parse_args()
 
-dataFileName = options.dataFile
-mcFileName = options.mcFile
+dataFileName = options.dataFileName
+mcFileName = options.mcFileName
 mcReweightedFileName = options.mcReweightedFileName
 doPlot = options.doPlot
 doSave = options.doSave
 
+print "\n\n\n"
+print dataFileName, mcFileName, mcReweightedFileName
 
 
 dataFile = TFile(dataFileName, "READ")

@@ -11,7 +11,7 @@ samples = datasamples.copy()
 samples.update(mcsamples)
 
 #heppy_output_dir = '/lustre/cmsdata/DM/ntuples/Prod_v03/'
-heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Batch/'
+heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Batch2/'
 
 
 if not os.path.exists(heppy_output_dir+'weighted'):

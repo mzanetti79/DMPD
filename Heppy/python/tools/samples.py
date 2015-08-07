@@ -32,9 +32,10 @@ sample = {
         'label' : "W + jets",
         'weight': 1.,
     },
-    'TT_powheg' : {
+    'TTbar' : {
         'order' : 3,
-        'files' : ['TT_powheg_pythia8_v2'],
+        #'files' : ['TT_powheg_pythia8_v2'],
+        'files' : ['TTJets_madgraphMLM_pythia8_v2'],
         'fillcolor' : 798,
         'fillstyle' : 1001,
         'linecolor' : 798,
