@@ -606,7 +606,7 @@ sampleTTJets_madgraphMLM_pythia8_v2 = cfg.MCComponent(
 	name       = "TTJets_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor= 20,
+	splitFactor= 100,
 )
 
 sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1 = cfg.MCComponent(
