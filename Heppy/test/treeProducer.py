@@ -54,11 +54,11 @@ triggerAnalyzer= cfg.Analyzer(
     #grouping several paths into a single flag
     # v* can be used to ignore the version of a path
     triggerBits={
-        'SingleMu'       : ['HLT_Mu50_v*', 'HLT_IsoMu24_eta2p1_v*', 'HLT_IsoMu27_v*'],
-        'SingleElectron' : ['HLT_Ele105_CaloIdVT_GsfTrkIdT_v*', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*'],
+        'SingleMu'       : ['HLT_IsoMu24_eta2p1_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
+        'SingleElectron' : ['HLT_Ele27_eta2p1_WPLoose_Gsf_v1', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
-        'MET'            : ['HLT_PFMET170_NoiseCleaned_v*','HLT_PFMET120_NoiseCleaned_BTagCSV07_v*','HLT_PFHT350_PFMET120_NoiseCleaned_v*'],
+        'MET'            : ['HLT_PFMET120_NoiseCleaned_BTagCSV07_v*', 'HLT_PFHT350_PFMET120_NoiseCleaned_v*', 'HLT_PFMET170_NoiseCleaned_v*'],
         #'JET'            : ['HLT_PFJet260_v*'],
     },
 #   processName='HLT',
@@ -479,7 +479,8 @@ globalVariables = [
     NTupleVariable('genNb',    lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
     NTupleVariable('lheNb',    lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
     NTupleVariable('lheHT',    lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
-    NTupleVariable('lheVpt',    lambda x: getattr(x, "lheV_pt", -1.), int, help='Boson pt at LHE level'),
+    NTupleVariable('lheVpt',    lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
+    NTupleVariable('rho',    lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
 ]
 
 
@@ -825,6 +826,9 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 selectedComponents = [
 #    samplesSingleMuon_Run2015B_PromptReco_v1,
+#    sampleSingleMuon_Run2015B_17Jul2015_v1,
+#    sampleSingleElectron_Run2015B_17Jul2015_v1,
+    sampleSingleElectron_Run2015B_PromptReco_v1,
 #    sampleDYJetsToLL_M50_amcatnloFXFX_pythia8_v3,
 ##    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
 ##    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
@@ -904,7 +908,7 @@ selectedComponents = [
 ##    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
 ##    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
 #    sampleZZ_pythia8_v3,
-  sampleTTJets_madgraphMLM_pythia8_v2
+#  sampleTTJets_madgraphMLM_pythia8_v2
 ]
 
 #selectedComponents = [sampleSYNCH_DYJetsToLL]
