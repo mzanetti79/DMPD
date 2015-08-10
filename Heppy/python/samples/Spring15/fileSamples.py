@@ -606,7 +606,7 @@ sampleTTJets_madgraphMLM_pythia8_v2 = cfg.MCComponent(
 	name       = "TTJets_madgraphMLM_pythia8_v2",
 	isMC       = True,
 	isEmbed    = False,
-	splitFactor= 100,
+	splitFactor= 20,
 )
 
 sampleST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1 = cfg.MCComponent(
@@ -633,3 +633,34 @@ sampleQCD_Pt_800to1000_pythia8_v2 = cfg.MCComponent(
 	splitFactor= 20,
 )
 
+sampleZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1 = cfg.MCComponent(
+	files      = mcsamples["ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1"]["files"],
+	name       = "ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1",
+	isMC       = True,
+	isEmbed    = False,
+	splitFactor= 20,
+)
+
+sampleZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1 = cfg.MCComponent(
+	files      = mcsamples["ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1"]["files"],
+	name       = "ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1",
+	isMC       = True,
+	isEmbed    = False,
+	splitFactor= 20,
+)
+
+sampleZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1 = cfg.MCComponent(
+	files      = mcsamples["ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1"]["files"],
+	name       = "ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1",
+	isMC       = True,
+	isEmbed    = False,
+	splitFactor= 20,
+)
+
+sampleZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1 = cfg.MCComponent(
+	files      = mcsamples["ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1"]["files"],
+	name       = "ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1",
+	isMC       = True,
+	isEmbed    = False,
+	splitFactor= 20,
+)
