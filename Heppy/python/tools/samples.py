@@ -3,8 +3,8 @@ from collections import OrderedDict
 sample = {
     'Data' : {
         'order' : 0,
-        #'files' : ['SingleMuon_Run2015B_PromptReco_v1'],
-        'files' : ['SingleMuon_Run2015B_17Jul2015_v1'],
+        #'files' : ['SingleElectron_Run2015B_17Jul2015_v1'],
+        'files' : ['SingleMuon_Run2015B_17Jul2015_v1', 'SingleMuon_Run2015B_PromptReco_v1'],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os
+import os, multiprocessing
 from array import array
 from ROOT import TFile, TH1
 
@@ -11,7 +11,7 @@ samples = datasamples.copy()
 samples.update(mcsamples)
 
 #heppy_output_dir = '/lustre/cmsdata/DM/ntuples/Prod_v03/'
-heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Batch2/'
+heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Batch/'
 
 
 if not os.path.exists(heppy_output_dir+'weighted'):
@@ -24,6 +24,12 @@ for ref_file_name in samples.keys():
     #print "##################################################"
     
     isMC = not '2015' in ref_file_name
+    isPromptReco = 'PromptReco' in ref_file_name
+    
+    if not isPromptReco:
+        continue
+    if not 'SingleMuon' in ref_file_name:
+        continue
     
     # Unweighted input
     ref_file_name_with_path = heppy_output_dir+ref_file_name+'/Loop/tree.root'
@@ -89,7 +95,8 @@ for ref_file_name in samples.keys():
                 if event%1000==0 or event==nev-1: print "  TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
                 #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
-                
+                    
+                # Weights
                 if isMC:
                     # Cross section
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
@@ -102,7 +109,12 @@ for ref_file_name in samples.keys():
                     # Total
                     eventWeight[0] = xsWeight[0] * pileupWeight[0]
                 else:
-                    eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
+                    if isPromptReco and obj.run<=251585: # Filter PromptReco events
+                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
+                    else:
+                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
+                
+                
                 # Fill the branches
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
