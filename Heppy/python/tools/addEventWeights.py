@@ -70,9 +70,26 @@ for ref_file_name in samples.keys():
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
+        
+        # Directories
+        if obj.IsFolder():
+            subdir = obj.GetName()
+            print " \ Directory", subdir, ":"
+            new_file.mkdir(subdir)
+            new_file.cd(subdir)
+            for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
+                obj = subkey.ReadObj()
+                if obj.IsA().InheritsFrom("TH1"):
+                    print "   + TH1:", obj.GetName()
+                    obj.Scale(weightXS)
+                    obj.SetBinContent(0, totalEntries)
+                    new_file.cd(subdir)
+                    obj.Write()
+            new_file.cd("")
+            
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
-            print "  TH1:", obj.GetName()
+            print " + TH1:", obj.GetName()
             new_file.cd()
             if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
@@ -80,6 +97,7 @@ for ref_file_name in samples.keys():
             obj.SetBinContent(0, totalEntries)
             new_file.cd()
             obj.Write()
+        
         # Copy trees
         elif obj.IsA().InheritsFrom("TTree"):
             nev = obj.GetEntriesFast()
@@ -92,7 +110,7 @@ for ref_file_name in samples.keys():
             
             # looping over events
             for event in range(0, obj.GetEntries()):
-                if event%1000==0 or event==nev-1: print "  TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
+                if event%1000==0 or event==nev-1: print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
                 #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
                     
@@ -109,10 +127,10 @@ for ref_file_name in samples.keys():
                     # Total
                     eventWeight[0] = xsWeight[0] * pileupWeight[0]
                 else:
-                    if isPromptReco and obj.run<=251585: # Filter PromptReco events
-                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
-                    else:
-                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
+#                    if isPromptReco and obj.run<=251585: # Filter PromptReco events
+#                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
+#                    else:
+                    eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
                 
                 
                 # Fill the branches
@@ -124,6 +142,6 @@ for ref_file_name in samples.keys():
             new_tree.Write()
             print " "
         else:
-            print "- Unknown object or Directory:", obj.GetName()
+            print "- Unknown object:", obj.GetName()
     new_file.Close() 
 
