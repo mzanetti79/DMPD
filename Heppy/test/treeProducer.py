@@ -347,6 +347,30 @@ MEtAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
+
+MEtNoHFAnalyzer = cfg.Analyzer(
+
+    class_object = METAnalyzer,
+    
+    ### MET - General
+    ##############################
+    metCollection     = "slimmedMETsNoHF",
+    noPUMetCollection = "slimmedMETsNoHF",
+    copyMETsByValue = False,
+    recalibrate = False,
+    jetAnalyzerCalibrationPostFix = "",
+    doTkMet = False,
+    doMetNoPU = False,  
+    doMetNoMu = False,  
+    doMetNoEle = False,  
+    doMetNoPhoton = False,  
+    candidates='packedPFCandidates',
+    candidatesTypes='std::vector<pat::PackedCandidate>',
+    dzMax = 0.1,
+    collectionPostFix = "NoHF",
+    ### ====================== ###
+    )
+
 ##############################
 ### DM ANALYZERS           ###
 ##############################
@@ -500,6 +524,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
+        #'metNoHF'       : NTupleObject('metNoHF',  metType, help='PF MET, after default type 1 corrections'),
         'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
@@ -719,6 +744,7 @@ sequence = [
     pileupAnalyzer,
     vertexAnalyzer,
     MEtAnalyzer,
+    #MEtNoHFAnalyzer,
     photonAnalyzer,
     leptonAnalyzer,
     tauAnalyzer,
@@ -824,11 +850,15 @@ sampleSYNCH_RSGravitonToGaGa = cfg.MCComponent(
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
-selectedComponents = [
-#    samplesSingleMuon_Run2015B_PromptReco_v1,
+#selectedComponents = [
+#    sampleSingleMuon_Run2015B_PromptReco_v1,
 #    sampleSingleMuon_Run2015B_17Jul2015_v1,
+#    sampleSingleElectron_Run2015B_PromptReco_v1,
 #    sampleSingleElectron_Run2015B_17Jul2015_v1,
-    sampleSingleElectron_Run2015B_PromptReco_v1,
+#    sampleDoubleMuon_Run2015B_PromptReco_v1,
+#    sampleDoubleMuon_Run2015B_17Jul2015_v1,
+#    sampleDoubleEG_Run2015B_PromptReco_v1,
+#    sampleDoubleEG_Run2015B_17Jul2015_v1,
 #    sampleDYJetsToLL_M50_amcatnloFXFX_pythia8_v3,
 ##    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
 ##    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
@@ -909,9 +939,9 @@ selectedComponents = [
 ##    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
 #    sampleZZ_pythia8_v3,
 #  sampleTTJets_madgraphMLM_pythia8_v2
-]
+#]
 
-#selectedComponents = [sampleSYNCH_DYJetsToLL]
+selectedComponents = [sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1]
 
 ### TEST (LOCAL)
 #selectedComponents = [sampleTest]
@@ -922,6 +952,9 @@ selectedComponents = [
 #selectedComponents = [sampleSYNCH_WJetsToLNu]
 #selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
 #selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
+
+from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
+preprocessor = CmsswPreprocessor("corMETFromMiniAOD.py")
 
 config = cfg.Config(
     components = selectedComponents,
