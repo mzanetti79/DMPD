@@ -52,8 +52,8 @@ def processFile(dir_name):
     # Weighted output
     new_file_name = target + "/" + dir_name + ".root"
     if os.path.exists(new_file_name):
-        print "  WARNING: weighted file exists, continuing", new_file_name
-        return True
+        print "  WARNING: weighted file exists, overwriting", new_file_name
+        #return True
     
     new_file = TFile(new_file_name, "RECREATE")
     new_file.cd()
@@ -71,7 +71,7 @@ def processFile(dir_name):
     puFile = TFile(ref_pu_file, "READ")
     puData = puFile.Get("data")
     puMC = puFile.Get("mc")
-    print "PU histogram entries: data", puData.GetEntries(), "MC", puMC.GetEntries()
+    print "PU histogram entries: data", puData.GetEntries(), ", MC", puMC.GetEntries()
     
     # Variables declaration
     eventWeight = array('f',[1.0])  # global event weight
@@ -82,23 +82,7 @@ def processFile(dir_name):
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
-        
-        # Directories
-        if obj.IsFolder():
-            subdir = obj.GetName()
-            print " \ Directory", subdir, ":"
-            new_file.mkdir(subdir)
-            new_file.cd(subdir)
-            for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
-                obj = subkey.ReadObj()
-                if obj.IsA().InheritsFrom("TH1"):
-                    print "   + TH1:", obj.GetName()
-                    obj.Scale(weightXS)
-                    obj.SetBinContent(0, totalEntries)
-                    new_file.cd(subdir)
-                    obj.Write()
-            new_file.cd("")
-            
+          
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
             print " + TH1:", obj.GetName()
@@ -153,6 +137,23 @@ def processFile(dir_name):
             new_file.cd()
             new_tree.Write()
             print " "
+        
+        # Directories
+        elif obj.IsFolder():
+            subdir = obj.GetName()
+            print " \ Directory", subdir, ":"
+            new_file.mkdir(subdir)
+            new_file.cd(subdir)
+            for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
+                subobj = subkey.ReadObj()
+                if subobj.IsA().InheritsFrom("TH1"):
+                    print "   + TH1:", subobj.GetName()
+                    subobj.Scale(weightXS)
+                    subobj.SetBinContent(0, totalEntries)
+                    new_file.cd(subdir)
+                    subobj.Write()
+            new_file.cd("..")
+        
         else:
             print "- Unknown object:", obj.GetName()
     new_file.Close() 
