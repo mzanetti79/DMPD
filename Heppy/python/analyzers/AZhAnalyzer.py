@@ -36,6 +36,7 @@ class AZhAnalyzer( Analyzer ):
         return True
     
     def isHEEP(self, e):
+        e.isHEEP = False
         if not e.pt() > 35.: return False
         
         if hasattr(e.gsfTrack(),"trackerExpectedHitsInner"):
@@ -62,6 +63,7 @@ class AZhAnalyzer( Analyzer ):
             if not nMissingHits <= 1: return False
             if not abs(e.dxy()) < 0.05: return False
         else: return False
+        e.isHEEP = True
         return True
     
     
@@ -85,7 +87,7 @@ class AZhAnalyzer( Analyzer ):
         
         # Separate inclusive lepton collections
         event.highptElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.isHEEP(x)]
-        event.highptMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.muonID("POG_ID_HighPt")]
+        event.highptMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()]
         event.highptLeptons = []
         
         # Categoriazation
@@ -104,9 +106,9 @@ class AZhAnalyzer( Analyzer ):
         if event.isZ2NN: self.Z2NNCounter.Fill(1) # Lep veto
         
         # Build Z candidate
-        if event.isZ2EE and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
+        if event.isZ2EE: # and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
             event.highptLeptons = event.highptElectrons
-        elif event.isZ2MM and event.highptMuons[0].charge() != event.highptMuons[1].charge():
+        elif event.isZ2MM: # and event.highptMuons[0].charge() != event.highptMuons[1].charge():
             event.highptLeptons = event.highptMuons
         elif event.isZ2NN:
             event.highptLeptons = []
@@ -138,6 +140,7 @@ class AZhAnalyzer( Analyzer ):
             event.Z.deltaPhi = deltaPhi(event.highptLeptons[0].phi(), event.highptLeptons[1].phi())
         else:
             event.Z = event.met.p4()
+        
         
         # h candidate with pseudo-kin fit
         kH = event.cleanJetsAK8[0].p4()
