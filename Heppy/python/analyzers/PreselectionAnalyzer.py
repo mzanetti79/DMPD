@@ -104,7 +104,7 @@ class PreselectionAnalyzer( Analyzer ):
             event.eventWeight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
         else:
             event.eventWeight = 1.
-        print event
+        
         # Build clean collections
         event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
         event.xcleanTaus    = event.selectedTaus
