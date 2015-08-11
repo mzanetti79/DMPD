@@ -10,53 +10,65 @@ from DMPD.Heppy.samples.Data.fileLists import datasamples
 samples = datasamples.copy()
 samples.update(mcsamples)
 
-#heppy_output_dir = '/lustre/cmsdata/DM/ntuples/Prod_v03/'
-heppy_output_dir = '/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/test/Batch/'
+ref_pu_file = "/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/python/tools/PU.root"
+
+import optparse
+usage = "usage: %prog [options]"
+parser = optparse.OptionParser(usage)
+parser.add_option("-i", "--input", action="store", type="string", dest="origin", default="")
+parser.add_option("-o", "--output", action="store", type="string", dest="target", default="")
+
+(options, args) = parser.parse_args()
+
+origin = options.origin
+target = options.target
 
 
-if not os.path.exists(heppy_output_dir+'weighted'):
-    print 'Output dir does not exist, creating it'
-    os.makedirs(heppy_output_dir+'weighted')
 
-for ref_file_name in samples.keys():
+if not os.path.exists(origin):
+    print "Origin dir", origin, "does not exist, aborting..."
+    exit()
+if not os.path.exists(target):
+    print "Target dir", target,"does not exist, aborting..."
+    exit()
+
+
+
+def processFile(dir_name):
+    
     #print "##################################################"
-    print "\n", ref_file_name.replace(heppy_output_dir, ''), ":"
+    print "\n", dir_name, ":"
     #print "##################################################"
     
-    isMC = not '2015' in ref_file_name
-    isPromptReco = 'PromptReco' in ref_file_name
-    
-    if not isPromptReco:
-        continue
-    if not 'SingleMuon' in ref_file_name:
-        continue
+    isMC = not '2015' in dir_name
+    isPromptReco = 'PromptReco' in dir_name
     
     # Unweighted input
-    ref_file_name_with_path = heppy_output_dir+ref_file_name+'/Loop/tree.root'
-    if not os.path.exists(ref_file_name_with_path): 
-        print "  WARNING: file", ref_file_name_with_path, "does not exist, continuing"
-        continue
+    ref_file_name = origin + "/" + dir_name + "/Loop/tree.root"
+    if not os.path.exists(ref_file_name): 
+        print "  WARNING: file", ref_file_name, "does not exist, continuing"
+        return True
     
     # Weighted output
-    new_file_name_with_path = heppy_output_dir+"weighted/"+ref_file_name+".root"
-    if os.path.exists(new_file_name_with_path):
-        print "  WARNING: weighted file exists, continuing"
-        continue
+    new_file_name = target + "/" + dir_name + ".root"
+    if os.path.exists(new_file_name):
+        print "  WARNING: weighted file exists, continuing", new_file_name
+        return True
     
-    new_file = TFile(new_file_name_with_path, "RECREATE")
+    new_file = TFile(new_file_name, "RECREATE")
     new_file.cd()
     
     # Get event number
-    ref_file = TFile(ref_file_name_with_path, "READ")
+    ref_file = TFile(ref_file_name, "READ")
     ref_hist = ref_file.Get('Counter')
     totalEntries = ref_hist.GetBinContent(0)
     if isMC:
-        weightXS = samples[ref_file_name]['xsec']/totalEntries
+        weightXS = samples[dir_name]['xsec']/totalEntries
     else:
         weightXS = 1.
     
     # PU reweighting
-    puFile = TFile("./PU.root", "READ")
+    puFile = TFile(ref_pu_file, "READ")
     puData = puFile.Get("data")
     puMC = puFile.Get("mc")
     print "PU histogram entries: data", puData.GetEntries(), "MC", puMC.GetEntries()
@@ -145,3 +157,13 @@ for ref_file_name in samples.keys():
             print "- Unknown object:", obj.GetName()
     new_file.Close() 
 
+
+
+
+
+for d in os.listdir(origin):
+    if d.startswith('.') or 'Chunk' in d:
+        continue
+    if not d in samples:
+        continue
+    processFile(d)
