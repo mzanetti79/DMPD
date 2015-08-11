@@ -22,7 +22,19 @@ sampleSingleElectron_Run2015B_17Jul2015_v1 = cfg.Component(
 sampleSingleElectron_Run2015B_PromptReco_v1 = cfg.Component(
         files      = datasamples["SingleElectron_Run2015B_PromptReco_v1"]["files"],
         name       = "SingleElectron_Run2015B_PromptReco_v1",
-        splitFactor= 20,
+        splitFactor= 10,
+)
+
+sampleDoubleMuon_Run2015B_17Jul2015_v1 = cfg.Component(
+        files      = datasamples["DoubleMuon_Run2015B_17Jul2015_v1"]["files"],
+        name       = "DoubleMuon_Run2015B_17Jul2015_v1",
+        splitFactor= 10,
+)
+
+sampleDoubleMuon_Run2015B_PromptReco_v1 = cfg.Component(
+        files      = datasamples["DoubleMuon_Run2015B_PromptReco_v1"]["files"],
+        name       = "DoubleMuon_Run2015B_PromptReco_v1",
+        splitFactor= 10,
 )
 
 sampleDoubleEG_Run2015B_17Jul2015_v1 = cfg.Component(
