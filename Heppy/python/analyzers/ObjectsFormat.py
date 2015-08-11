@@ -33,7 +33,7 @@ candidateFullType = NTupleObjectType("candidate", baseObjectTypes = [ fourVector
 leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], variables = [
 
     ### GLOBAL VARS
-
+    
     # Is Muon/Electron
     NTupleVariable("isElectron",   lambda x : True if x.isElectron() else False, int, help="Electron flag" ),
     NTupleVariable("isMuon",   lambda x : True if x.isMuon() else False, int, help="Muon flag" ),
@@ -58,7 +58,8 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
     NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
     NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
-
+    NTupleVariable("highPtId",   lambda x : x.muonID("POG_ID_HighPt") if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),
+    
     ### ELECTRON SPECIFIC VARS
     #NTupleVariable("MvaIdNonTrig",   lambda x : x.electronID("POG_MVA_ID_NonTrig") if x.isElectron() else -99., int, help="MVA Electron id NonTrig" ),
     #NTupleVariable("MvaIdTrig",   lambda x : x.electronID("POG_MVA_ID_Trig") if x.isElectron() else -99., int, help="MVA Electron id Trig" ),
