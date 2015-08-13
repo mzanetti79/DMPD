@@ -23,7 +23,16 @@ parser.add_option("-o", "--output", action="store", type="string", dest="target"
 origin = options.origin
 target = options.target
 
-
+json = {
+ "251244": [[85, 86], [88, 93], [96, 121], [123, 156], [158, 428], [430, 442]],
+ "251251": [[1, 31], [33, 97], [99, 167]],
+ "251252": [[1, 283], [285, 505], [507, 554]],
+ "251561": [[1, 94]],
+ "251562": [[1, 439], [443, 691]],
+ "251643": [[1, 216], [222, 606]],
+ "251721": [[21, 36]],
+ "251883": [[56, 56], [58, 60], [62, 144], [156, 437]]
+}
 
 if not os.path.exists(origin):
     print "Origin dir", origin, "does not exist, aborting..."
@@ -34,6 +43,15 @@ if not os.path.exists(target):
 
 
 
+def isJSON(run, lumi):
+    runstr = "%d" % run
+    if not runstr in json:
+        return False
+    else:
+        if any(l <= lumi <= u for [l, u] in json[runstr]):
+            return True
+    return False
+
 def processFile(dir_name):
     
     #print "##################################################"
@@ -41,7 +59,7 @@ def processFile(dir_name):
     #print "##################################################"
     
     isMC = not '2015' in dir_name
-    isPromptReco = 'PromptReco' in dir_name
+    #if isMC: return True
     
     # Unweighted input
     ref_file_name = origin + "/" + dir_name + "/Loop/tree.root"
@@ -106,7 +124,7 @@ def processFile(dir_name):
             
             # looping over events
             for event in range(0, obj.GetEntries()):
-                if event%1000==0 or event==nev-1: print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
+                if event%10000==0 or event==nev-1: print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
                 #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
                     
@@ -123,10 +141,9 @@ def processFile(dir_name):
                     # Total
                     eventWeight[0] = xsWeight[0] * pileupWeight[0]
                 else:
-#                    if isPromptReco and obj.run<=251585: # Filter PromptReco events
-#                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
-#                    else:
                     eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
+                    if not isJSON(obj.run, obj.lumi):
+                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
                 
                 
                 # Fill the branches
@@ -161,10 +178,16 @@ def processFile(dir_name):
 
 
 
-
+jobs = []
 for d in os.listdir(origin):
     if d.startswith('.') or 'Chunk' in d:
         continue
     if not d in samples:
         continue
-    processFile(d)
+    p = multiprocessing.Process(target=processFile, args=(d,))
+    jobs.append(p)
+    p.start()
+#    processFile(d)
+    
+print "\nDone."
+
