@@ -145,10 +145,7 @@ class AZhAnalyzer( Analyzer ):
         # h candidate with pseudo-kin fit
         kH = event.cleanJetsAK8[0].p4()
         k = 125.0/event.cleanJetsAK8[0].mass()#.userFloat("ak8PFJetsCHSSoftDropMass")
-        kH.SetE( event.cleanJetsAK8[0].energy()*k )
-        kH.SetPx( event.cleanJetsAK8[0].px()*k )
-        kH.SetPy( event.cleanJetsAK8[0].py()*k )
-        kH.SetPz( event.cleanJetsAK8[0].pz()*k )
+        kH = ROOT.reco.Particle.LorentzVector(event.cleanJetsAK8[0].px()*k, event.cleanJetsAK8[0].py()*k, event.cleanJetsAK8[0].pz()*k, event.cleanJetsAK8[0].energy()*k)
         
         # A/Z' candidate
         if event.isZ2LL:
