@@ -105,6 +105,7 @@ class PreselectionAnalyzer( Analyzer ):
         else:
             event.eventWeight = 1.
         
+        
         # Build clean collections
         event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
         event.xcleanTaus    = event.selectedTaus
@@ -115,6 +116,10 @@ class PreselectionAnalyzer( Analyzer ):
 #        event.xcleanJetsAK8JERUp   = event.cleanJetsAK8JERUp
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
 #        event.xcleanJetsAK8JERDown = event.cleanJetsAK8JERDown
+        
+        # Swap MET and MET3.0 collections
+        event.pfmet = copy.deepcopy(event.met)
+        event.met.setP4(event.metNoHF)
         
         self.addJetVariables(event)
         #self.addJESUncertainty(event)
