@@ -59,7 +59,6 @@ def processFile(dir_name):
     #print "##################################################"
     
     isMC = not '2015' in dir_name
-    #if isMC: return True
     
     # Unweighted input
     ref_file_name = origin + "/" + dir_name + "/Loop/tree.root"
