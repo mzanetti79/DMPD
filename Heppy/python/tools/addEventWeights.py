@@ -52,7 +52,7 @@ def isJSON(run, lumi):
             return True
     return False
 
-def processFile(dir_name):
+def processFile(dir_name, verbose=False):
     
     #print "##################################################"
     print "\n", dir_name, ":"
@@ -88,7 +88,7 @@ def processFile(dir_name):
     puFile = TFile(ref_pu_file, "READ")
     puData = puFile.Get("data")
     puMC = puFile.Get("mc")
-    print "PU histogram entries: data", puData.GetEntries(), ", MC", puMC.GetEntries()
+    if verbose: print "PU histogram entries: data", puData.GetEntries(), ", MC", puMC.GetEntries()
     
     # Variables declaration
     eventWeight = array('f',[1.0])  # global event weight
@@ -102,7 +102,7 @@ def processFile(dir_name):
           
         # Copy and rescale histograms
         if obj.IsA().InheritsFrom("TH1"):
-            print " + TH1:", obj.GetName()
+            if verbose: print " + TH1:", obj.GetName()
             new_file.cd()
             if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
@@ -123,7 +123,7 @@ def processFile(dir_name):
             
             # looping over events
             for event in range(0, obj.GetEntries()):
-                if event%10000==0 or event==nev-1: print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
+                if verbose and (event%10000==0 or event==nev-1): print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
                 #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
                     
@@ -152,18 +152,18 @@ def processFile(dir_name):
                 
             new_file.cd()
             new_tree.Write()
-            print " "
+            if verbose: print " "
         
         # Directories
         elif obj.IsFolder():
             subdir = obj.GetName()
-            print " \ Directory", subdir, ":"
+            if verbose: print " \ Directory", subdir, ":"
             new_file.mkdir(subdir)
             new_file.cd(subdir)
             for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
                 subobj = subkey.ReadObj()
                 if subobj.IsA().InheritsFrom("TH1"):
-                    print "   + TH1:", subobj.GetName()
+                    if verbose: print "   + TH1:", subobj.GetName()
                     subobj.Scale(weightXS)
                     subobj.SetBinContent(0, totalEntries)
                     new_file.cd(subdir)
@@ -171,7 +171,7 @@ def processFile(dir_name):
             new_file.cd("..")
         
         else:
-            print "- Unknown object:", obj.GetName()
+            if verbose: print "- Unknown object:", obj.GetName()
     new_file.Close() 
 
 
@@ -183,10 +183,10 @@ for d in os.listdir(origin):
         continue
     if not d in samples:
         continue
-    p = multiprocessing.Process(target=processFile, args=(d,))
+    p = multiprocessing.Process(target=processFile, args=(d,False,))
     jobs.append(p)
     p.start()
-#    processFile(d)
+#    processFile(d, True)
     
 print "\nDone."
 
