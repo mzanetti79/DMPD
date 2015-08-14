@@ -3,8 +3,7 @@ from collections import OrderedDict
 sample = {
     'Data' : {
         'order' : 0,
-        #'files' : ['SingleElectron_Run2015B_17Jul2015_v1'],
-        'files' : ['SingleMuon_Run2015B_17Jul2015_v1', 'SingleMuon_Run2015B_PromptReco_v1'],
+        'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1'],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
@@ -12,7 +11,7 @@ sample = {
         'label' : "Data",
         'weight': 1.,
     },
-    'DYJetsToLL_amcatnlo' : {
+    'DYJetsToLL' : {
         'order' : 1,
         'files' : ['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
         'fillcolor' : 418,
@@ -22,7 +21,8 @@ sample = {
         'label' : "Z(ll) + jets",
         'weight': 1.,
     },
-    'WJetsToLNu_amcatnlo' : {
+    
+    'WJetsToLNu' : {
         'order' : 2,
         'files' : ['WJetsToLNu_amcatnloFXFX_pythia8_v1'],
         'fillcolor' : 881,
@@ -40,17 +40,37 @@ sample = {
         'fillstyle' : 1001,
         'linecolor' : 798,
         'linestyle' : 1,
-        'label' : "t#bar{t}, single t",
+        'label' : "t#bar{t}",#, single t
+        'weight': 1.,
+    },
+    'ST' : {
+        'order' : 4,
+        'files' : ['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1','ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1','ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1','ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
+        'fillcolor' : 801,
+        'fillstyle' : 1001,
+        'linecolor' : 801,
+        'linestyle' : 1,
+        'label' : "single t",
         'weight': 1.,
     },
     'VV' : {
-        'order' : 4,
+        'order' : 5,
         'files' : ['ZZ_pythia8_v3','WZ_pythia8_v1','WW_pythia8_v1'],
         'fillcolor' : 602,
         'fillstyle' : 1001,
         'linecolor' : 602,
         'linestyle' : 1,
         'label' : "VV",
+        'weight': 1.,
+    },
+    'QCD' : {
+        'order' : 6,
+        'files' : ['QCD_HT_1000to1500_madgraphMLM_pythia8_v2','QCD_HT_1500to2000_madgraphMLM_pythia8_v1','QCD_HT_2000toInf_madgraphMLM_pythia8_v1'],
+        'fillcolor' : 920,
+        'fillstyle' : 1001,
+        'linecolor' : 920,
+        'linestyle' : 1,
+        'label' : "QCD",
         'weight': 1.,
     },
     # Signals 623 625 628 629 633 634 635 636

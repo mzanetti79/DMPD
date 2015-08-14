@@ -55,17 +55,31 @@ triggerAnalyzer= cfg.Analyzer(
     # v* can be used to ignore the version of a path
     triggerBits={
         'SingleMu'       : ['HLT_IsoMu24_eta2p1_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
-        'SingleElectron' : ['HLT_Ele27_eta2p1_WPLoose_Gsf_v1', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
+        'SingleElectron' : ['HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele27_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MET'            : ['HLT_PFMET120_NoiseCleaned_BTagCSV07_v*', 'HLT_PFHT350_PFMET120_NoiseCleaned_v*', 'HLT_PFMET170_NoiseCleaned_v*'],
         #'JET'            : ['HLT_PFJet260_v*'],
+        "METFilters"         : [ "Flag_METFilters" ],
+        "HBHENoiseFilter"    : [ "Flag_HBHENoiseFilter" ],
+        "CSCTightHaloFilter" : [ "Flag_CSCTightHaloFilter" ],
+        "goodVertices"       : [ "Flag_goodVertices" ],
+        "eeBadScFilter"      : [ "Flag_eeBadScFilter" ],
     },
 #   processName='HLT',
 #   outprefix='HLT'
     #setting 'unrollbits' to true will not only store the OR for each set of trigger bits but also the individual bits
     #caveat: this does not unroll the version numbers
     unrollbits=True
+    )
+
+##############################
+### JSONANALYZER         ###
+##############################
+from PhysicsTools.Heppy.analyzers.core.JSONAnalyzer import JSONAnalyzer
+jsonAnalyzer = cfg.Analyzer(
+    verbose=False,
+    class_object=JSONAnalyzer,
     )
 
 ##############################
@@ -333,30 +347,6 @@ MEtAnalyzer = cfg.Analyzer(
     metCollection     = "slimmedMETs",
     noPUMetCollection = "slimmedMETs",
     copyMETsByValue = False,
-    recalibrate = True,
-    jetAnalyzerCalibrationPostFix = "",
-    doTkMet = True,
-    doMetNoPU = True,  
-    doMetNoMu = False,  
-    doMetNoEle = False,  
-    doMetNoPhoton = False,  
-    candidates='packedPFCandidates',
-    candidatesTypes='std::vector<pat::PackedCandidate>',
-    dzMax = 0.1,
-    collectionPostFix = "",
-    ### ====================== ###
-    )
-
-
-MEtNoHFAnalyzer = cfg.Analyzer(
-
-    class_object = METAnalyzer,
-    
-    ### MET - General
-    ##############################
-    metCollection     = "slimmedMETsNoHF",
-    noPUMetCollection = "slimmedMETsNoHF",
-    copyMETsByValue = False,
     recalibrate = False,
     jetAnalyzerCalibrationPostFix = "",
     doTkMet = False,
@@ -367,7 +357,22 @@ MEtNoHFAnalyzer = cfg.Analyzer(
     candidates='packedPFCandidates',
     candidatesTypes='std::vector<pat::PackedCandidate>',
     dzMax = 0.1,
-    collectionPostFix = "NoHF",
+    collectionPostFix = "",
+    ### ====================== ###
+    )
+
+from DMPD.Heppy.analyzers.METNoHFAnalyzer import METNoHFAnalyzer
+METNoHFAnalyzer = cfg.Analyzer(
+
+    class_object = METNoHFAnalyzer,
+    
+    ### MET - General
+    ##############################
+    recalibrate = False,
+    jetAnalyzerCalibrationPostFix = "",
+    candidates='packedPFCandidates',
+    candidatesTypes='std::vector<pat::PackedCandidate>',
+    collectionPostFix = "",
     ### ====================== ###
     )
 
@@ -523,9 +528,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        #'metNoHF'       : NTupleObject('metNoHF',  metType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
@@ -561,8 +566,9 @@ ZControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
@@ -601,8 +607,9 @@ WControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
@@ -639,8 +646,9 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
@@ -674,8 +682,9 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
@@ -716,8 +725,9 @@ AZhTreeProducer= cfg.Analyzer(
 #        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET, after default type 1 corrections'),
-        'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
+        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
+        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
@@ -737,6 +747,7 @@ AZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
+    #jsonAnalyzer,
     lheAnalyzer,
     generatorAnalyzer,
     #pdfAnalyzer,
@@ -744,7 +755,7 @@ sequence = [
     pileupAnalyzer,
     vertexAnalyzer,
     MEtAnalyzer,
-    #MEtNoHFAnalyzer,
+    METNoHFAnalyzer,
     photonAnalyzer,
     leptonAnalyzer,
     tauAnalyzer,
@@ -851,31 +862,35 @@ sampleSYNCH_RSGravitonToGaGa = cfg.MCComponent(
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 selectedComponents = [
-    sampleSingleMuon_Run2015B_PromptReco_v1,
-    sampleSingleMuon_Run2015B_17Jul2015_v1,
-    sampleSingleElectron_Run2015B_PromptReco_v1,
-    sampleSingleElectron_Run2015B_17Jul2015_v1,
-    sampleDoubleMuon_Run2015B_PromptReco_v1,
-    sampleDoubleMuon_Run2015B_17Jul2015_v1,
-    sampleDoubleEG_Run2015B_PromptReco_v1,
-    sampleDoubleEG_Run2015B_17Jul2015_v1,
-    sampleDYJetsToLL_M50_amcatnloFXFX_pythia8_v3,
-#    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
-#    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
-#    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
-#    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
+#    sampleSingleMuon_Run2015B_PromptReco_v1,
+#    sampleSingleMuon_Run2015B_17Jul2015_v1,
+#    sampleSingleElectron_Run2015B_PromptReco_v1,
+#    sampleSingleElectron_Run2015B_17Jul2015_v1,
+#    sampleDoubleMuon_Run2015B_PromptReco_v1,
+#    sampleDoubleMuon_Run2015B_17Jul2015_v1,
+#    sampleDoubleEG_Run2015B_PromptReco_v1,
+#    sampleDoubleEG_Run2015B_17Jul2015_v1,
+#    sampleDYJetsToLL_M50_amcatnloFXFX_pythia8_v3,
+    sampleDYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2,
+    sampleDYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2,
+    sampleZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1,
+    sampleZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1,
+    sampleZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1,
+    sampleZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1,
 #    sampleGJets_HT_100To200_madgraphMLM_pythia8_v2,
 #    sampleGJets_HT_200To400_madgraphMLM_pythia8_v2,
 #    sampleGJets_HT_400To600_madgraphMLM_pythia8_v1,
 #    sampleGJets_HT_600ToInf_madgraphMLM_pythia8_v1,
 #    sampleQCD_HT_1000to1500_madgraphMLM_pythia8_v2,
-#    sampleQCD_HT_100to200_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_100to200_madgraphMLM_pythia8_v2,
 #    sampleQCD_HT_1500to2000_madgraphMLM_pythia8_v1,
 #    sampleQCD_HT_2000toInf_madgraphMLM_pythia8_v1,
-#    sampleQCD_HT_200to300_madgraphMLM_pythia8_v2,
-#    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
-#    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
-#    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_200to300_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_300to500_madgraphMLM_pythia8_v2,
+    sampleQCD_HT_500to700_madgraphMLM_pythia8_v1,
+    sampleQCD_HT_700to1000_madgraphMLM_pythia8_v1,
 #    sampleQCD_Pt_1000to1400_pythia8_v1,
 #    sampleQCD_Pt_10to15_pythia8_v2,
 #    sampleQCD_Pt_120to170_pythia8_v1,
@@ -912,32 +927,32 @@ selectedComponents = [
 #    sampleTTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3,
 #    sampleTTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1,
 #    sampleTTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1,
-    sampleTTJets_madgraphMLM_pythia8_v2,
+#    sampleTTJets_madgraphMLM_pythia8_v2,
     #sampleTT_powheg_pythia8_v2,
-    sampleWJetsToLNu_amcatnloFXFX_pythia8_v1,
+#    sampleWJetsToLNu_amcatnloFXFX_pythia8_v1,
 #    sampleWJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1,
 #    sampleWJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1,
 #    sampleWJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3,
 #    sampleWJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1,
-    sampleWW_pythia8_v1,
-    sampleWZ_pythia8_v1,
+#    sampleWW_pythia8_v1,
+#    sampleWZ_pythia8_v1,
 #    sampleZH_HToBB_ZToLL_M125_amcatnloFXFX_madspin_pythia8_v1,
 #    sampleZH_HToBB_ZToLL_M125_powheg_pythia8_v1,
 #    sampleZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
-#    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
-    sampleZZ_pythia8_v3,
+    sampleZprimeToZhToZlephbb_narrow_M1000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1200_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1400_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1600_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M1800_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M2000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M2500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M3000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M3500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M4000_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M600_madgraph_v1,
+    sampleZprimeToZhToZlephbb_narrow_M800_madgraph_v1,
+#    sampleZZ_pythia8_v3,
 ]
 
 #selectedComponents = [sampleZprimeToZhToZlephbb_narrow_M4500_madgraph_v1]
@@ -951,6 +966,8 @@ selectedComponents = [
 #selectedComponents = [sampleSYNCH_WJetsToLNu]
 #selectedComponents = [sampleSYNCH_RSGravitonToGaGa]
 #selectedComponents = [sampleSYNCH_ADDMonojet,sampleSYNCH_TTBar,sampleSYNCH_DYJetsToLL,sampleSYNCH_WJetsToLNu,sampleSYNCH_RSGravitonToGaGa]
+#selectedComponents = [sampleSingleMuon_Run2015B_PromptReco_v1,sampleSingleMuon_Run2015B_17Jul2015_v1]
+#selectedComponents = [sampleSingleElectron_Run2015B_PromptReco_v1,sampleSingleElectron_Run2015B_17Jul2015_v1]
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("corMETFromMiniAOD.py")
