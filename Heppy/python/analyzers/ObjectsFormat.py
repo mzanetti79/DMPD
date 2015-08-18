@@ -127,7 +127,7 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -9., float, help="Jet pruned mass"),
     #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -9., float, help="Jet trimmed mass"),
     #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -9., float, help="Jet filtered mass"),
-    NTupleVariable("softDropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -9., float, help="Jet SoftDrop mass"),
+    NTupleVariable("softdropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -9., float, help="Jet SoftDrop mass"),
     NTupleVariable("dR_subjets",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),

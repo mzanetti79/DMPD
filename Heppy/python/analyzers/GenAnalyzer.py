@@ -28,7 +28,7 @@ class GenAnalyzer( Analyzer ):
             self.GenChi12dR = ROOT.TH1F("GenChi12dR", ";#chi_{1, 2} #Delta R", 50, 0, 5.)
             
             self.GenZdecay = ROOT.TH1F("GenZdecay", ";Z daughter pdgId", 25, 0.5, 25.5)
-            self.GenZmass = ROOT.TH1F("GenZmass", ";m_{Z} [GeV]", 100, 0., 200.)
+            self.GenZmass = ROOT.TH1F("GenZmass", ";m_{Z} [GeV]", 1000, 0., 1000.)
             self.GenZpt = ROOT.TH1F("GenZpt", ";Z p_{T} [GeV]", 250, 0., 2500.)
             self.GenZeta = ROOT.TH1F("GenZeta", ";Z #eta", 50, -5, 5.)
             self.GenZdR = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 50, 0, 5.)

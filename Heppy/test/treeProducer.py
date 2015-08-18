@@ -55,16 +55,11 @@ triggerAnalyzer= cfg.Analyzer(
     # v* can be used to ignore the version of a path
     triggerBits={
         'SingleMu'       : ['HLT_IsoMu24_eta2p1_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
-        'SingleElectron' : ['HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele27_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
+        'SingleElectron' : ['HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],#'HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele27_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele32_eta2p1_WPLoose_Gsf_v*', 'HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MET'            : ['HLT_PFMET120_NoiseCleaned_BTagCSV07_v*', 'HLT_PFHT350_PFMET120_NoiseCleaned_v*', 'HLT_PFMET170_NoiseCleaned_v*'],
         #'JET'            : ['HLT_PFJet260_v*'],
-        "METFilters"         : [ "Flag_METFilters" ],
-        "HBHENoiseFilter"    : [ "Flag_HBHENoiseFilter" ],
-        "CSCTightHaloFilter" : [ "Flag_CSCTightHaloFilter" ],
-        "goodVertices"       : [ "Flag_goodVertices" ],
-        "eeBadScFilter"      : [ "Flag_eeBadScFilter" ],
     },
 #   processName='HLT',
 #   outprefix='HLT'
@@ -72,6 +67,20 @@ triggerAnalyzer= cfg.Analyzer(
     #caveat: this does not unroll the version numbers
     unrollbits=True
     )
+
+filterAnalyzer= cfg.Analyzer(
+    verbose=False,
+    class_object=TriggerBitAnalyzer,
+    triggerBits = {
+        'FILTERS' : [ "Flag_HBHENoiseFilter", "Flag_CSCTightHaloFilter", "Flag_hcalLaserEventFilter", "Flag_EcalDeadCellTriggerPrimitiveFilter", "Flag_goodVertices", "Flag_trackingFailureFilter", "Flag_eeBadScFilter", "Flag_ecalLaserCorrFilter", "Flag_trkPOGFilters", "Flag_trkPOG_manystripclus53X", "Flag_trkPOG_toomanystripclus53X", "Flag_trkPOG_logErrorTooManyClusters", "Flag_METFilters" ],
+    },
+    processName = 'PAT',
+    outprefix = 'Flag',
+    #setting 'unrollbits' to true will not only store the OR for each set of trigger bits but also the individual bits
+    #caveat: this does not unroll the version numbers
+    unrollbits=True
+    )
+
 
 ##############################
 ### JSONANALYZER         ###
@@ -239,7 +248,7 @@ fatJetAnalyzer = cfg.Analyzer(
     jetLepArbitration           = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps -> keeping the jet -> resolving it later
     minLepPt                    = 20,
     relaxJetId                  = False,
-    doPuId                      = True, # Not commissioned in 7.0.X
+    doPuId                      = False, # Not commissioned in 7.0.X
     doQG                        = False,
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
@@ -428,10 +437,10 @@ from DMPD.Heppy.analyzers.AZhAnalyzer import AZhAnalyzer
 AZhAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = AZhAnalyzer,
-    elec1pt = 40.,
-    elec2pt = 40.,
-    muon1pt = 40.,
-    muon2pt = 40.,
+    elec1pt = 115.,
+    elec2pt = 20.,
+    muon1pt = 50.,
+    muon2pt = 20.,
     fatjet_pt = 200.,
     Z_pt = 0.,#200.,
     met_pt = 0.,#200.,
@@ -737,7 +746,7 @@ AZhTreeProducer= cfg.Analyzer(
     collections = {
         'highptLeptons'           : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
         #'xcleanJets'        : NTupleCollection('jet', jetType, 3, help='Jets after the preselection'),
-        'cleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
+        'cleanJetsAK8'     : NTupleCollection('fatjet', fatjetType, 2, help='fatJets after the preselection'),
         #'SubJets'           : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
         }
     )
@@ -752,6 +761,7 @@ sequence = [
     generatorAnalyzer,
     #pdfAnalyzer,
     triggerAnalyzer,
+    filterAnalyzer,
     pileupAnalyzer,
     vertexAnalyzer,
     MEtAnalyzer,
@@ -813,23 +823,23 @@ from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
 from DMPD.Heppy.samples.Data.fileLists import datasamples
 
 maxlsftime   = 7.5  # in hours
-eventspersec = 10.5 # in ev/s
+eventspersec = 5 # in ev/s
 
 sample = {}
 for i in datasamples:
-    sample[i] = cfg.DataComponent(
+    sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
-        #splitFactor = datasamples[i]['nevents']/(maxlsftime*3600*eventspersec),
+        splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
 for i in mcsamples:
     sample[i] = cfg.MCComponent(
         files   = mcsamples[i]['files'],
         name    = i,
-	    isMC    = True,
-	    isEmbed = False,
-	    splitFactor = int(mcsamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
+	      isMC    = True,
+	      isEmbed = False,
+	      splitFactor = int(mcsamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
 ##############################
@@ -841,28 +851,21 @@ for i in mcsamples:
 
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
+### MC ###
 selectedComponents = [
-#    sample['SingleMuon_Run2015B_PromptReco_v1'],
-#    sample['SingleMuon_Run2015B_17Jul2015_v1'],
-#    sample['SingleElectron_Run2015B_PromptReco_v1'],
-#    sample['SingleElectron_Run2015B_17Jul2015_v1'],
-#    sample['DoubleMuon_Run2015B_PromptReco_v1'],
-#    sample['DoubleMuon_Run2015B_17Jul2015_v1'],
-#    sample['DoubleEG_Run2015B_PromptReco_v1'],
-#    sample['DoubleEG_Run2015B_17Jul2015_v1'],
-#    sample['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
+    sample['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
     sample['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2'],
     sample['DYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2'],
     sample['DYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2'],
     sample['DYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2'],
-    sample['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1'],
-    sample['ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1'],
-    sample['ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1'],
-    sample['ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
-    sample['GJets_HT_100To200_madgraphMLM_pythia8_v2'],
-    sample['GJets_HT_200To400_madgraphMLM_pythia8_v2'],
-    sample['GJets_HT_400To600_madgraphMLM_pythia8_v1'],
-    sample['GJets_HT_600ToInf_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
+#    sample['GJets_HT_100To200_madgraphMLM_pythia8_v2'],
+#    sample['GJets_HT_200To400_madgraphMLM_pythia8_v2'],
+#    sample['GJets_HT_400To600_madgraphMLM_pythia8_v1'],
+#    sample['GJets_HT_600ToInf_madgraphMLM_pythia8_v1'],
 #    sample['QCD_HT_1000to1500_madgraphMLM_pythia8_v2'],
 #    sample['QCD_HT_100to200_madgraphMLM_pythia8_v2'],
 #    sample['QCD_HT_1500to2000_madgraphMLM_pythia8_v1'],
@@ -888,11 +891,11 @@ selectedComponents = [
 #    sample['QCD_Pt_600to800_pythia8_v3'],
 #    sample['QCD_Pt_800to1000_pythia8_v2'],
 #    sample['QCD_Pt_80to120_pythia8_v1'],
-    sample['ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
-    sample['ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1'],
-    sample['ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1'],
-    sample['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1'],
-    sample['ST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1'],
+#    sample['ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1'],
+#    sample['ST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1'],
 #    sample['TTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1'],
 #    sample['TTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1'],
 #    sample['TTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1'],
@@ -908,18 +911,55 @@ selectedComponents = [
 #    sample['TTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1'],
 #    sample['TTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1'],
     sample['TTJets_madgraphMLM_pythia8_v2'],
-    sample['TT_powheg_pythia8_v2'],
-    sample['WJetsToLNu_amcatnloFXFX_pythia8_v1'],
-    sample['WJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1'],
-    sample['WJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1'],
-    sample['WJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3'],
-    sample['WJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1'],
+#    sample['TT_powheg_pythia8_v2'],
+#    sample['WJetsToLNu_amcatnloFXFX_pythia8_v1'],
+#    sample['WJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1'],
+#    sample['WJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1'],
+#    sample['WJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3'],
+#    sample['WJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1'],
     sample['WW_pythia8_v1'],
     sample['WZ_pythia8_v1'],
     sample['ZZ_pythia8_v3'],
 #    sample['ZH_HToBB_ZToLL_M125_amcatnloFXFX_madspin_pythia8_v1'],
-#    sample['ZH_HToBB_ZToLL_M125_powheg_pythia8_v1'],
+    sample['ZH_HToBB_ZToLL_M125_powheg_pythia8_v1'],
 #    sample['ZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+]
+
+
+
+### DATA ###
+#selectedComponents = [
+#    sample['SingleMuon_Run2015B_PromptReco_v1'],
+#    sample['SingleElectron_Run2015B_PromptReco_v1'],
+#    sample['DoubleMuon_Run2015B_PromptReco_v1'],
+#    sample['DoubleEG_Run2015B_PromptReco_v1'],
+#    sample['MET_Run2015B_PromptReco_v1'],
+#    sample['SingleMuon_Run2015B_17Jul2015_v1'],
+#    sample['SingleElectron_Run2015B_17Jul2015_v1'],
+#    sample['DoubleMuon_Run2015B_17Jul2015_v1'],
+#    sample['DoubleEG_Run2015B_17Jul2015_v1'],
+#    sample['MET_Run2015B_17Jul2015_v1'],
+#]
+#filterAnalyzer.processName = 'RECO'
+
+
+
+#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+
+#selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
@@ -933,10 +973,7 @@ selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
-]
-
-
-#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],]
+#]
 
 ### TEST (LOCAL)
 #selectedComponents = [sample['Test'],]
@@ -947,8 +984,10 @@ selectedComponents = [
 #selectedComponents = [sample['SYNCH_WJetsToLNu'],]
 #selectedComponents = [sample['SYNCH_RSGravitonToGaGa'],]
 #selectedComponents = [sample['SYNCH_ADDMonojet'],sample['SYNCH_TTBar'],sample['SYNCH_DYJetsToLL'],sample['SYNCH_WJetsToLNu'],sample['SYNCH_RSGravitonToGaGa'],]
-#selectedComponents = [sample['SingleMuon_Run2015B_PromptReco_v1'],sample['SingleMuon_Run2015B_17Jul2015_v1'],]
-#selectedComponents = [sample['SingleElectron_Run2015B_PromptReco_v1'],sample['SingleElectron_Run2015B_17Jul2015_v1'],]
+#selectedComponents = [sample['SingleMuon_Run2015B_17Jul2015_v1'],]
+#selectedComponents = [sample['DoubleMuon_Run2015B_PromptReco_v1'],]
+#selectedComponents = [sample['SingleElectron_Run2015B_17Jul2015_v1'],]
+
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("corMETFromMiniAOD.py")

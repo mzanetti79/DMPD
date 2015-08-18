@@ -33,21 +33,24 @@ class METNoHFAnalyzer( Analyzer ):
     def makeMETNoHF(self, event):
 
         pfcands = self.handles['cmgCand'].product()
+        px = py = 0
+        for i, x in enumerate(pfcands):
+            if x.fromPV()>0 and abs(x.eta()) < 3.0:
+                px += x.px()
+                py += x.py()
+        px += - event.met.shiftedPx(0)
+        py += - event.met.shiftedPy(0)
         
-        pfcandsNoHF = [ x for x in pfcands if x.fromPV()>0 and abs(x.eta()) < 3.0 ]
-        
-        px = - sum([x.px() for x in pfcandsNoHF])
-        py = - sum([x.py() for x in pfcandsNoHF])
+#        px = - sum([x.px() for x in pfcands if x.fromPV()>0 and abs(x.eta()) < 3.0]) - event.met.shiftedPx(0)
+#        py = - sum([x.py() for x in pfcands if x.fromPV()>0 and abs(x.eta()) < 3.0]) - event.met.shiftedPy(0)
         
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJetSmearing'+self.cfg_ana.jetAnalyzerCalibrationPostFix):
             deltaMetSmear = getattr(event, 'deltaMetFromJetSmearing'+self.cfg_ana.jetAnalyzerCalibrationPostFix)
-            print deltaMetSmear[0],deltaMetSmear[1]
             px += deltaMetSmear[0]
             py += deltaMetSmear[1]
 
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJEC'+self.cfg_ana.jetAnalyzerCalibrationPostFix):
             deltaMetJEC = getattr(event, 'deltaMetFromJEC'+self.cfg_ana.jetAnalyzerCalibrationPostFix)
-            print deltaMetJEC[0],deltaMetJEC[1]
             px += deltaMetJEC[0]
             py += deltaMetJEC[1]
 
