@@ -13,12 +13,13 @@ class PreselectionAnalyzer( Analyzer ):
     def beginLoop(self,setup):
         super(PreselectionAnalyzer,self).beginLoop(setup)
         if "outputfile" in setup.services:
-            setup.services["outputfile"].file.cd()
+            setup.services["outputfile"].file.mkdir("Counters")
+            setup.services["outputfile"].file.cd("Counters")
             Labels = ["Trigger"]
             self.Counter = ROOT.TH1F("Counter", "Counter", 8, 0, 8)
             for i, l in enumerate(Labels):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
-    
+            setup.services["outputfile"].file.cd("..")
     
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
@@ -119,6 +120,7 @@ class PreselectionAnalyzer( Analyzer ):
         
         # Swap MET and MET3.0 collections
         event.pfmet = copy.deepcopy(event.met)
+        #if hasattr(event, "metNoHF"): 
         event.met.setP4(event.metNoHF)
         
         self.addJetVariables(event)

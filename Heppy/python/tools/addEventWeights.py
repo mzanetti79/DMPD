@@ -52,6 +52,7 @@ def isJSON(run, lumi):
             return True
     return False
 
+
 def processFile(dir_name, verbose=False):
     
     #print "##################################################"
@@ -77,7 +78,7 @@ def processFile(dir_name, verbose=False):
     
     # Get event number
     ref_file = TFile(ref_file_name, "READ")
-    ref_hist = ref_file.Get('Counter')
+    ref_hist = ref_file.Get('Counters/Counter')
     totalEntries = ref_hist.GetBinContent(0)
     if isMC:
         weightXS = samples[dir_name]['xsec']/totalEntries
@@ -126,24 +127,26 @@ def processFile(dir_name, verbose=False):
                 if verbose and (event%10000==0 or event==nev-1): print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
                 #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
-                    
+                
+                # Initialize
+                eventWeight[0] = xsWeight[0] = pileupWeight[0] = 1.
+                
                 # Weights
                 if isMC:
                     # Cross section
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
                     # PU reweighting
                     nbin = puData.FindBin(obj.nPV)
-                    if puMC.GetBinContent(nbin) > 0.:
-                        pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin)
-                    else:
-                        pileupWeight[0] = 0.
-                    # Total
-                    eventWeight[0] = xsWeight[0] * pileupWeight[0]
+                    pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
+                # Data
                 else:
-                    eventWeight[0] = pileupWeight[0] = xsWeight[0] = 1.
-                    if not isJSON(obj.run, obj.lumi):
-                        eventWeight[0] = pileupWeight[0] = xsWeight[0] = 0.
+                    # Check JSON
+                    if not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
+                    # Filter by PD
+                    else: xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
+                # Total
+                eventWeight[0] = xsWeight[0] * pileupWeight[0]
                 
                 # Fill the branches
                 eventWeightBranch.Fill()
@@ -188,5 +191,5 @@ for d in os.listdir(origin):
     p.start()
 #    processFile(d, True)
     
-print "\nDone."
+#print "\nDone."
 
