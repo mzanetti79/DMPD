@@ -142,6 +142,8 @@ def processFile(dir_name, verbose=False):
                 else:
                     # Check JSON
                     if not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
+                    # Filters
+                    #elif not (obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0. #obj.Flag_BIT_Flag_HBHENoiseFilter and 
                     # Filter by PD
                     else: xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
@@ -167,8 +169,9 @@ def processFile(dir_name, verbose=False):
                 subobj = subkey.ReadObj()
                 if subobj.IsA().InheritsFrom("TH1"):
                     if verbose: print "   + TH1:", subobj.GetName()
-                    subobj.Scale(weightXS)
-                    subobj.SetBinContent(0, totalEntries)
+                    if not 'Eff' in subdir:
+                        subobj.Scale(weightXS)
+                        subobj.SetBinContent(0, totalEntries)
                     new_file.cd(subdir)
                     subobj.Write()
             new_file.cd("..")
