@@ -11,60 +11,55 @@ class AZhAnalyzer( Analyzer ):
 
     def beginLoop(self, setup):
         super(AZhAnalyzer, self).beginLoop(setup)
+        self.Hist = {}
+        pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
+        dRbins = [0., 0.025, 0.05, 0.075, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.75, 1.0]
+        Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
+        Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
+        
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.cd("Counters")
-            Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
-            Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
-            self.Z2EECounter = ROOT.TH1F("ZtoEECounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
-            self.Z2MMCounter = ROOT.TH1F("ZtoMMCounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
-            self.Z2NNCounter = ROOT.TH1F("ZtoNNCounter", "", len(Z2NNlabels), 0, len(Z2NNlabels))
+            self.Hist["Z2EECounter"] = ROOT.TH1F("ZtoEECounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
+            self.Hist["Z2MMCounter"] = ROOT.TH1F("ZtoMMCounter", "", len(Z2LLlabels), 0, len(Z2LLlabels))
+            self.Hist["Z2NNCounter"] = ROOT.TH1F("ZtoNNCounter", "", len(Z2NNlabels), 0, len(Z2NNlabels))
             for i, l in enumerate(Z2LLlabels):
-                self.Z2EECounter.GetXaxis().SetBinLabel(i+1, l)
-                self.Z2MMCounter.GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["Z2EECounter"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["Z2MMCounter"].GetXaxis().SetBinLabel(i+1, l)
             for i, l in enumerate(Z2NNlabels):
-                self.Z2NNCounter.GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["Z2NNCounter"].GetXaxis().SetBinLabel(i+1, l)
+            setup.services["outputfile"].file.cd("..")
+            setup.services["outputfile"].file.mkdir("Leptons")
+            setup.services["outputfile"].file.cd("Leptons")
+            for i, n in enumerate(["Elec1", "Elec2", "Muon1", "Muon2"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["ElecZdR", "MuonZdR"]):
+                self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
             setup.services["outputfile"].file.cd("..")
             setup.services["outputfile"].file.mkdir("Eff")
             setup.services["outputfile"].file.cd("Eff")
-            pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
-            self.Elec1 = ROOT.TH1F("Elec1", "", len(pTbins)-1, array('f', pTbins))
-            self.EffElecHEEP1 = ROOT.TH1F("EffElecHEEP1", "", len(pTbins)-1, array('f', pTbins))
-            self.Elec2 = ROOT.TH1F("Elec2", "", len(pTbins)-1, array('f', pTbins))
-            self.EffElecHEEP2 = ROOT.TH1F("EffElecHEEP2", "", len(pTbins)-1, array('f', pTbins))
-            self.Muon1 = ROOT.TH1F("Muon1", "", len(pTbins)-1, array('f', pTbins))
-            self.EffMuonHighPt1 = ROOT.TH1F("EffMuonHighPt1", "", len(pTbins)-1, array('f', pTbins))
-            self.Muon2 = ROOT.TH1F("Muon2", "", len(pTbins)-1, array('f', pTbins))
-            self.EffMuonHighPt2 = ROOT.TH1F("EffMuonHighPt2", "", len(pTbins)-1, array('f', pTbins))
-            dRbins = [0., 0.025, 0.05, 0.075, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.75, 1.0]
-            self.ElecZdR = ROOT.TH1F("ElecZdR", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR = ROOT.TH1F("EffElecZdR", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR_Loose = ROOT.TH1F("EffElecZdR_Loose", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR_Tight = ROOT.TH1F("EffElecZdR_Tight", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR_HEEP = ROOT.TH1F("EffElecZdR_HEEP", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR_HEEPpfIso = ROOT.TH1F("EffElecZdR_HEEPpfIso", "", len(dRbins)-1, array('f', dRbins))
-            self.EffElecZdR_HEEPminiIso = ROOT.TH1F("EffElecZdR_HEEPminiIso", "", len(dRbins)-1, array('f', dRbins))
-            self.MuonZdR = ROOT.TH1F("MuonZdR", "", len(dRbins)-1, array('f', dRbins))
-            self.EffMuonZdR = ROOT.TH1F("EffMuonZdR", "", len(dRbins)-1, array('f', dRbins))
-            self.EffMuonZdR_Loose_Loose = ROOT.TH1F("EffMuonZdR_Loose_Loose", "", len(dRbins)-1, array('f', dRbins))
-            self.EffMuonZdR_HighPt_Loose = ROOT.TH1F("EffMuonZdR_HighPt_Loose", "", len(dRbins)-1, array('f', dRbins))
-            self.EffMuonZdR_HighPt_HighPt = ROOT.TH1F("EffMuonZdR_HighPt_HighPt", "", len(dRbins)-1, array('f', dRbins))
-            self.EffMuonZdR_Tight_Tight = ROOT.TH1F("EffMuonZdR_Tight_Tight", "", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["EffElecHEEP1", "EffElecHEEP2", "EffMuonHighPt1", "EffMuonHighPt2"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["EffElecZdR", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEPpfIso", "EffElecZdR_HEEPminiIso", "EffMuonZdR", "EffMuonZdR_Loose_Loose", "EffMuonZdR_HighPt_Loose", "EffMuonZdR_HighPt_HighPt", "EffMuonZdR_Tight_Tight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
+            for n, h in self.Hist.iteritems():
+                h.Sumw2()
+
             
     def endLoop(self, setup):
-        self.EffElecHEEP1.Divide(self.Elec1)
-        self.EffElecHEEP2.Divide(self.Elec2)
-        self.EffMuonHighPt1.Divide(self.Muon1)
-        self.EffMuonHighPt2.Divide(self.Muon2)
-        self.EffElecZdR_Loose.Divide(self.ElecZdR)
-        self.EffElecZdR_Tight.Divide(self.ElecZdR)
-        self.EffElecZdR_HEEP.Divide(self.ElecZdR)
-        self.EffElecZdR_HEEPpfIso.Divide(self.ElecZdR)
-        self.EffElecZdR_HEEPminiIso.Divide(self.ElecZdR)
-        self.EffMuonZdR.Divide(self.MuonZdR)
-        self.EffMuonZdR_Loose_Loose.Divide(self.MuonZdR)
-        self.EffMuonZdR_HighPt_Loose.Divide(self.MuonZdR)
-        self.EffMuonZdR_HighPt_HighPt.Divide(self.MuonZdR)
-        self.EffMuonZdR_Tight_Tight.Divide(self.MuonZdR)
+        self.Hist["EffElecHEEP1"].Divide(self.Hist["Elec1"])
+        self.Hist["EffElecHEEP2"].Divide(self.Hist["Elec2"])
+        self.Hist["EffMuonHighPt1"].Divide(self.Hist["Muon1"])
+        self.Hist["EffMuonHighPt2"].Divide(self.Hist["Muon2"])
+        self.Hist["EffElecZdR_Loose"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffElecZdR_Tight"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffElecZdR_HEEP"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffElecZdR_HEEPpfIso"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffElecZdR_HEEPminiIso"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffMuonZdR"].Divide(self.Hist["MuonZdR"])
+        self.Hist["EffMuonZdR_Loose_Loose"].Divide(self.Hist["MuonZdR"])
+        self.Hist["EffMuonZdR_HighPt_Loose"].Divide(self.Hist["MuonZdR"])
+        self.Hist["EffMuonZdR_HighPt_HighPt"].Divide(self.Hist["MuonZdR"])
+        self.Hist["EffMuonZdR_Tight_Tight"].Divide(self.Hist["MuonZdR"])
         
         
         
@@ -78,19 +73,19 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.highptElectrons):
                     if deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                self.Elec1.Fill(event.genleps[i1].pt())
-                self.Elec2.Fill(event.genleps[i2].pt())
-                self.ElecZdR.Fill(genZdR)
+                self.Hist["Elec1"].Fill(event.genleps[i1].pt())
+                self.Hist["Elec2"].Fill(event.genleps[i2].pt())
+                self.Hist["ElecZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
-                    if event.highptElectrons[l1].isHEEP: self.EffElecHEEP1.Fill(event.genleps[i1].pt())
-                    if event.highptElectrons[l2].isHEEP: self.EffElecHEEP2.Fill(event.genleps[i2].pt())    
+                    if event.highptElectrons[l1].isHEEP: self.Hist["EffElecHEEP1"].Fill(event.genleps[i1].pt())
+                    if event.highptElectrons[l2].isHEEP: self.Hist["EffElecHEEP2"].Fill(event.genleps[i2].pt())    
                     # deltaR
-                    self.EffElecZdR.Fill(genZdR)
-                    if event.highptElectrons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose') and event.highptElectrons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose'): self.EffElecZdR_Loose.Fill(genZdR)
-                    if event.highptElectrons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight') and event.highptElectrons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight'): self.EffElecZdR_Tight.Fill(genZdR)
-                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP: self.EffElecZdR_HEEP.Fill(genZdR)
-                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP and event.highptElectrons[l1].miniRelIso<0.1 and event.highptElectrons[l2].miniRelIso<0.1: self.EffElecZdR_HEEPminiIso.Fill(genZdR)
-                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP and event.highptElectrons[l1].relIso03<0.15 and event.highptElectrons[l2].relIso03<0.15: self.EffElecZdR_HEEPpfIso.Fill(genZdR)
+                    self.Hist["EffElecZdR"].Fill(genZdR)
+                    if event.highptElectrons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose') and event.highptElectrons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose'): self.Hist["EffElecZdR_Loose"].Fill(genZdR)
+                    if event.highptElectrons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight') and event.highptElectrons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight'): self.Hist["EffElecZdR_Tight"].Fill(genZdR)
+                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP: self.Hist["EffElecZdR_HEEP"].Fill(genZdR)
+                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP and event.highptElectrons[l1].miniRelIso<0.1 and event.highptElectrons[l2].miniRelIso<0.1: self.Hist["EffElecZdR_HEEPminiIso"].Fill(genZdR)
+                    if event.highptElectrons[l1].isHEEP and event.highptElectrons[l2].isHEEP and event.highptElectrons[l1].relIso03<0.15 and event.highptElectrons[l2].relIso03<0.15: self.Hist["EffElecZdR_HEEPpfIso"].Fill(genZdR)
                     
                 
             # Muons
@@ -98,18 +93,18 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.highptMuons):
                     if deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                self.Muon1.Fill(event.genleps[i1].pt())
-                self.Muon2.Fill(event.genleps[i2].pt())
-                self.MuonZdR.Fill(genZdR)
+                self.Hist["Muon1"].Fill(event.genleps[i1].pt())
+                self.Hist["Muon2"].Fill(event.genleps[i2].pt())
+                self.Hist["MuonZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
-                    if event.highptMuons[l1].muonID("POG_ID_HighPt"): self.EffMuonHighPt1.Fill(event.genleps[i1].pt())
-                    if event.highptMuons[l2].muonID("POG_ID_HighPt"): self.EffMuonHighPt2.Fill(event.genleps[i2].pt())
+                    if event.highptMuons[l1].muonID("POG_ID_HighPt"): self.Hist["EffMuonHighPt1"].Fill(event.genleps[i1].pt())
+                    if event.highptMuons[l2].muonID("POG_ID_HighPt"): self.Hist["EffMuonHighPt2"].Fill(event.genleps[i2].pt())
                     # deltaR
-                    self.EffMuonZdR.Fill(genZdR)
-                    if event.highptMuons[l1].muonID("POG_ID_Loose") and event.highptMuons[l2].muonID("POG_ID_Loose"): self.EffMuonZdR_Loose_Loose.Fill(genZdR)
-                    if event.highptMuons[l1].muonID("POG_ID_HighPt") or event.highptMuons[l2].muonID("POG_ID_HighPt"): self.EffMuonZdR_HighPt_Loose.Fill(genZdR)
-                    if event.highptMuons[l1].muonID("POG_ID_HighPt") and event.highptMuons[l2].muonID("POG_ID_HighPt"): self.EffMuonZdR_HighPt_HighPt.Fill(genZdR)
-                    if event.highptMuons[l1].muonID("POG_ID_Tight") and event.highptMuons[l2].muonID("POG_ID_Tight"): self.EffMuonZdR_Tight_Tight.Fill(genZdR)
+                    self.Hist["EffMuonZdR"].Fill(genZdR)
+                    if event.highptMuons[l1].muonID("POG_ID_Loose") and event.highptMuons[l2].muonID("POG_ID_Loose"): self.Hist["EffMuonZdR_Loose_Loose"].Fill(genZdR)
+                    if event.highptMuons[l1].muonID("POG_ID_HighPt") or event.highptMuons[l2].muonID("POG_ID_HighPt"): self.Hist["EffMuonZdR_HighPt_Loose"].Fill(genZdR)
+                    if event.highptMuons[l1].muonID("POG_ID_HighPt") and event.highptMuons[l2].muonID("POG_ID_HighPt"): self.Hist["EffMuonZdR_HighPt_HighPt"].Fill(genZdR)
+                    if event.highptMuons[l1].muonID("POG_ID_Tight") and event.highptMuons[l2].muonID("POG_ID_Tight"): self.Hist["EffMuonZdR_Tight_Tight"].Fill(genZdR)
 
     
     
@@ -164,14 +159,14 @@ class AZhAnalyzer( Analyzer ):
         event.isZ2MM = False
         event.isZ2NN = False
          # All
-        self.Z2EECounter.Fill(-1)
-        self.Z2MMCounter.Fill(-1)
-        self.Z2NNCounter.Fill(-1)
+        self.Hist["Z2EECounter"].Fill(-1)
+        self.Hist["Z2MMCounter"].Fill(-1)
+        self.Hist["Z2NNCounter"].Fill(-1)
         
          # Trigger
-        if event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v: self.Z2EECounter.Fill(0)
-        if event.HLT_BIT_HLT_Mu45_eta2p1_v: self.Z2MMCounter.Fill(0)
-        if event.HLT_BIT_HLT_PFMET170_NoiseCleaned_v: self.Z2NNCounter.Fill(0)
+        if event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v: self.Hist["Z2EECounter"].Fill(0)
+        if event.HLT_BIT_HLT_Mu45_eta2p1_v: self.Hist["Z2MMCounter"].Fill(0)
+        if event.HLT_BIT_HLT_PFMET170_NoiseCleaned_v: self.Hist["Z2NNCounter"].Fill(0)
         
         #########################
         #    Part 1: Leptons    #
@@ -202,9 +197,9 @@ class AZhAnalyzer( Analyzer ):
         event.isZ2LL = event.isZ2EE or event.isZ2MM
         
          # Lep > 2 / Veto
-        if event.isZ2EE: self.Z2EECounter.Fill(1)
-        if event.isZ2MM: self.Z2MMCounter.Fill(1)
-        if event.isZ2NN: self.Z2NNCounter.Fill(1)
+        if event.isZ2EE: self.Hist["Z2EECounter"].Fill(1)
+        if event.isZ2MM: self.Hist["Z2MMCounter"].Fill(1)
+        if event.isZ2NN: self.Hist["Z2NNCounter"].Fill(1)
         
         # Build Z candidate
         if event.isZ2EE and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
@@ -230,8 +225,8 @@ class AZhAnalyzer( Analyzer ):
             return True
         
         # Z cand
-        if event.isZ2EE: self.Z2EECounter.Fill(2)
-        if event.isZ2MM: self.Z2MMCounter.Fill(2)
+        if event.isZ2EE: self.Hist["Z2EECounter"].Fill(2)
+        if event.isZ2MM: self.Hist["Z2MMCounter"].Fill(2)
         
         
         #FIXME
@@ -253,9 +248,9 @@ class AZhAnalyzer( Analyzer ):
         
         if len(event.cleanJetsAK8) < 1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt:
             return True
-        if event.isZ2EE: self.Z2EECounter.Fill(3)
-        if event.isZ2MM: self.Z2MMCounter.Fill(3)
-        if event.isZ2NN: self.Z2NNCounter.Fill(2)
+        if event.isZ2EE: self.Hist["Z2EECounter"].Fill(3)
+        if event.isZ2MM: self.Hist["Z2MMCounter"].Fill(3)
+        if event.isZ2NN: self.Hist["Z2NNCounter"].Fill(2)
         
         
         #########################
@@ -319,30 +314,30 @@ class AZhAnalyzer( Analyzer ):
 #        if len(event.cleanJetsAK8) <= 1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt: #FIXME
 #            event.cleanJetsAK8.pop()
 #            return True
-#        if event.isZ2EE: self.Z2EECounter.Fill(3)
-#        if event.isZ2MM: self.Z2MMCounter.Fill(3)
-#        if event.isZ2NN: self.Z2NNCounter.Fill(2)
+#        if event.isZ2EE: self.Hist["Z2EECounter"].Fill(3)
+#        if event.isZ2MM: self.Hist["Z2MMCounter"].Fill(3)
+#        if event.isZ2NN: self.Hist["Z2NNCounter"].Fill(2)
         
         if event.isZ2LL: 
             if event.Z.pt() > 200:
-                self.Z2EECounter.Fill(4) if event.isZ2EE else self.Z2MMCounter.Fill(4)
+                self.Hist["Z2EECounter"].Fill(4) if event.isZ2EE else self.Hist["Z2MMCounter"].Fill(4)
                 if event.Z.mass() > 75 and event.Z.mass() < 105:
-                    self.Z2EECounter.Fill(5) if event.isZ2EE else self.Z2MMCounter.Fill(5)
+                    self.Hist["Z2EECounter"].Fill(5) if event.isZ2EE else self.Hist["Z2MMCounter"].Fill(5)
                     if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 90 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
-                        self.Z2EECounter.Fill(6) if event.isZ2EE else self.Z2MMCounter.Fill(6)
+                        self.Hist["Z2EECounter"].Fill(6) if event.isZ2EE else self.Hist["Z2MMCounter"].Fill(6)
                         if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
-                            self.Z2EECounter.Fill(7) if event.isZ2EE else self.Z2MMCounter.Fill(7)
+                            self.Hist["Z2EECounter"].Fill(7) if event.isZ2EE else self.Hist["Z2MMCounter"].Fill(7)
                             if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
-                                self.Z2EECounter.Fill(8) if event.isZ2EE else self.Z2MMCounter.Fill(8)
+                                self.Hist["Z2EECounter"].Fill(8) if event.isZ2EE else self.Hist["Z2MMCounter"].Fill(8)
         if event.isZ2NN: 
             if event.met.pt() > 200:
-                self.Z2NNCounter.Fill(3)
+                self.Hist["Z2NNCounter"].Fill(3)
                 if event.cleanJetsAK8[0].deltaPhi_met>2.5:
                     if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 90 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
-                        self.Z2NNCounter.Fill(4)
+                        self.Hist["Z2NNCounter"].Fill(4)
                         if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
-                            self.Z2NNCounter.Fill(5)
+                            self.Hist["Z2NNCounter"].Fill(5)
                             if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
-                                self.Z2NNCounter.Fill(6)
+                                self.Hist["Z2NNCounter"].Fill(6)
         return True
 
