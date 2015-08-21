@@ -164,7 +164,7 @@ class AZhAnalyzer( Analyzer ):
             self.Hist["EffHEEP_EB"].AddBinContent(3)
             if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
             self.Hist["EffHEEP_EB"].AddBinContent(4)
-            if not e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
+            if not (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): return False
             self.Hist["EffHEEP_EB"].AddBinContent(5)
             if not nMissingHits <= 1: return False
             self.Hist["EffHEEP_EB"].AddBinContent(6)
