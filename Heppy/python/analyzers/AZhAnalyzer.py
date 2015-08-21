@@ -70,6 +70,7 @@ class AZhAnalyzer( Analyzer ):
         self.Hist["EffMuonPt_HighPt"].Divide(self.Hist["MuonPt"])
         self.Hist["EffElecEta_HEEP"].Divide(self.Hist["ElecEta"])
         self.Hist["EffMuonEta_HighPt"].Divide(self.Hist["MuonEta"])
+        self.Hist["EffElecZdR"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_Loose"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_Tight"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_HEEP"].Divide(self.Hist["ElecZdR"])
@@ -99,8 +100,8 @@ class AZhAnalyzer( Analyzer ):
                     elif l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
                 self.Hist["ElecPt"].Fill(event.genleps[i1].pt())
                 self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
-                self.Hist["ElecEta"].Fill(event.genleps[i1].pt())
-                self.Hist["ElecEta"].Fill(event.genleps[i2].pt())
+                self.Hist["ElecEta"].Fill(event.genleps[i1].eta())
+                self.Hist["ElecEta"].Fill(event.genleps[i2].eta())
                 self.Hist["ElecZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
                     if event.inclusiveLeptons[l1].isHEEP:
