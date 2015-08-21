@@ -15,7 +15,7 @@ class AZhAnalyzer( Analyzer ):
         
         Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
         Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
-        HEEPlabels = ["#eta range", "isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}^{seed}", "H/E", "#sigma_{i#eta i#eta}", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|", "All"]
+        HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|"]
         pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
         dRbins = [0., 0.025, 0.05, 0.075, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.75, 1.0]
         if "outputfile" in setup.services:
@@ -36,9 +36,12 @@ class AZhAnalyzer( Analyzer ):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
             for i, n in enumerate(["ElecZdR", "MuonZdR"]):
                 self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
-            self.Hist["HEEP"] = ROOT.TH1F("HEEP", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["HEEP_EB"] = ROOT.TH1F("HEEP_EB", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["HEEP_EE"] = ROOT.TH1F("HEEP_EE", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
             for i, l in enumerate(HEEPlabels):
-                self.Hist["HEEP"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["HEEP_EB"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["HEEP_EE"].GetXaxis().SetBinLabel(i+1, l)
+            self.Hist["HEEP_EE"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             setup.services["outputfile"].file.cd("..")
             #
             setup.services["outputfile"].file.mkdir("Eff")
@@ -47,9 +50,12 @@ class AZhAnalyzer( Analyzer ):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             for i, n in enumerate(["EffElecZdR", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEPpfIso", "EffElecZdR_HEEPminiIso", "EffMuonZdR", "EffMuonZdR_Loose_Loose", "EffMuonZdR_HighPt_Loose", "EffMuonZdR_HighPt_HighPt", "EffMuonZdR_Tight_Tight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
-            self.Hist["EffHEEP"] = ROOT.TH1F("EffHEEP", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["EffHEEP_EB"] = ROOT.TH1F("EffHEEP_EB", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["EffHEEP_EE"] = ROOT.TH1F("EffHEEP_EE", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
             for i, l in enumerate(HEEPlabels):
-                self.Hist["EffHEEP"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["EffHEEP_EB"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["EffHEEP_EE"].GetXaxis().SetBinLabel(i+1, l)
+            self.Hist["EffHEEP_EE"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
@@ -70,7 +76,9 @@ class AZhAnalyzer( Analyzer ):
         self.Hist["EffMuonZdR_HighPt_Loose"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_HighPt_HighPt"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_Tight_Tight"].Divide(self.Hist["MuonZdR"])
-        self.Hist["EffHEEP"].Divide(self.Hist["HEEP"])
+        self.Hist["EffHEEP_EB"].Divide(self.Hist["HEEP_EB"])
+        self.Hist["EffHEEP_EE"].Divide(self.Hist["HEEP_EE"])
+        
         
         
     def fillGenPlots(self, event):
@@ -136,48 +144,46 @@ class AZhAnalyzer( Analyzer ):
         e.isHEEP = False
         if not e.pt() > 35.: return False
         
-        for i in range(self.Hist["HEEP"].GetNbinsX()): self.Hist["HEEP"].AddBinContent(i+1)
-        
         if hasattr(e.gsfTrack(),"trackerExpectedHitsInner"):
 		        nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits()
         else:
 		        nMissingHits = e.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS)
         
         if abs(e.superCluster().eta()) < 1.4442:
-            self.Hist["EffHEEP"].AddBinContent(1)
+            for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
             if not e.ecalDriven(): return False
-            self.Hist["EffHEEP"].AddBinContent(2)
+            self.Hist["EffHEEP_EB"].AddBinContent(1)
             if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.004: return False
-            self.Hist["EffHEEP"].AddBinContent(3)
+            self.Hist["EffHEEP_EB"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            self.Hist["EffHEEP"].AddBinContent(4)
+            self.Hist["EffHEEP_EB"].AddBinContent(3)
             if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
-            self.Hist["EffHEEP"].AddBinContent(6)
+            self.Hist["EffHEEP_EB"].AddBinContent(4)
             if not e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83: return False
-            self.Hist["EffHEEP"].AddBinContent(7)
+            self.Hist["EffHEEP_EB"].AddBinContent(5)
             if not nMissingHits <= 1: return False
-            self.Hist["EffHEEP"].AddBinContent(8)
+            self.Hist["EffHEEP_EB"].AddBinContent(6)
             if not abs(e.dxy()) < 0.02: return False
-            self.Hist["EffHEEP"].AddBinContent(9)
+            self.Hist["EffHEEP_EB"].AddBinContent(7)
         elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-            self.Hist["EffHEEP"].AddBinContent(1)
+            for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
             if not e.ecalDriven(): return False
-            self.Hist["EffHEEP"].AddBinContent(2)
+            self.Hist["EffHEEP_EE"].AddBinContent(1)
             if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.006: return False
-            self.Hist["EffHEEP"].AddBinContent(3)
+            self.Hist["EffHEEP_EE"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            self.Hist["EffHEEP"].AddBinContent(4)
+            self.Hist["EffHEEP_EE"].AddBinContent(3)
             if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
-            self.Hist["EffHEEP"].AddBinContent(5)
+            self.Hist["EffHEEP_EE"].AddBinContent(4)
             if not e.sigmaIetaIeta() < 0.03: return False
-            self.Hist["EffHEEP"].AddBinContent(7)
+            self.Hist["EffHEEP_EE"].AddBinContent(5)
             if not nMissingHits <= 1: return False
-            self.Hist["EffHEEP"].AddBinContent(8)
+            self.Hist["EffHEEP_EE"].AddBinContent(6)
             if not abs(e.dxy()) < 0.05: return False
-            self.Hist["EffHEEP"].AddBinContent(9)
+            self.Hist["EffHEEP_EE"].AddBinContent(7)
         else:
             return False
-        self.Hist["EffHEEP"].AddBinContent(10)
+
         e.isHEEP = True
         return True
     
