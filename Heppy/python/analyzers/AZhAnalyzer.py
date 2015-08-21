@@ -93,10 +93,10 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
+                self.Hist["Elec1"].Fill(event.genleps[i1].pt())
+                self.Hist["Elec2"].Fill(event.genleps[i2].pt())
+                self.Hist["ElecZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
-                    self.Hist["Elec1"].Fill(event.genleps[i1].pt())
-                    self.Hist["Elec2"].Fill(event.genleps[i2].pt())
-                    self.Hist["ElecZdR"].Fill(genZdR)
                     if event.inclusiveLeptons[l1].isHEEP: self.Hist["EffElec1_HEEP"].Fill(event.genleps[i1].pt())
                     if event.inclusiveLeptons[l2].isHEEP: self.Hist["EffElec2_HEEP"].Fill(event.genleps[i2].pt())    
                     # deltaR
@@ -113,10 +113,10 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
+                self.Hist["Muon1"].Fill(event.genleps[i1].pt())
+                self.Hist["Muon2"].Fill(event.genleps[i2].pt())
+                self.Hist["MuonZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
-                    self.Hist["Muon1"].Fill(event.genleps[i1].pt())
-                    self.Hist["Muon2"].Fill(event.genleps[i2].pt())
-                    self.Hist["MuonZdR"].Fill(genZdR)
                     if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt"): self.Hist["EffMuon1_HighPt"].Fill(event.genleps[i1].pt())
                     if event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"): self.Hist["EffMuon2_HighPt"].Fill(event.genleps[i2].pt())
                     # deltaR
