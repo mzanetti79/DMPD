@@ -144,6 +144,11 @@ class AZhAnalyzer( Analyzer ):
         e.isHEEP = False
         if not e.pt() > 35.: return False
         
+        if e.superCluster().isNonnull() and e.superCluster().seed().isNonnull():
+            dEtaInSeed = e.deltaEtaSuperClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta()
+        else:
+            dEtaInSeed = 1.e99
+        
         if hasattr(e.gsfTrack(),"trackerExpectedHitsInner"):
 		        nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits()
         else:
@@ -153,7 +158,7 @@ class AZhAnalyzer( Analyzer ):
             for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
             if not e.ecalDriven(): return False
             self.Hist["EffHEEP_EB"].AddBinContent(1)
-            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.004: return False
+            if not abs(dEtaInSeed) < 0.004: return False
             self.Hist["EffHEEP_EB"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
             self.Hist["EffHEEP_EB"].AddBinContent(3)
@@ -169,7 +174,7 @@ class AZhAnalyzer( Analyzer ):
             for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
             if not e.ecalDriven(): return False
             self.Hist["EffHEEP_EE"].AddBinContent(1)
-            if not abs(e.deltaEtaSuperClusterTrackAtVtx()) < 0.006: return False
+            if not abs(dEtaInSeed) < 0.006: return False
             self.Hist["EffHEEP_EE"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
             self.Hist["EffHEEP_EE"].AddBinContent(3)
