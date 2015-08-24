@@ -13,7 +13,7 @@ class AZhAnalyzer( Analyzer ):
         super(AZhAnalyzer, self).beginLoop(setup)
         self.Hist = {}
         
-        Z2LLlabels = ["Trigger", "#Lep #geq 2", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
+        Z2LLlabels = ["Trigger", "#Lep Id", "Lep Iso", "Z cand", "Jet p_{T}", "Z p_{T}", "Z mass", "h mass", "b-tag 1", "b-tag 2"]
         Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
         HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|"]
         pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
@@ -98,12 +98,12 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                self.Hist["ElecPt"].Fill(event.genleps[i1].pt())
-                self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
-                self.Hist["ElecEta"].Fill(event.genleps[i1].eta())
-                self.Hist["ElecEta"].Fill(event.genleps[i2].eta())
-                self.Hist["ElecZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
+                    self.Hist["ElecPt"].Fill(event.genleps[i1].pt())
+                    self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
+                    self.Hist["ElecEta"].Fill(event.genleps[i1].eta())
+                    self.Hist["ElecEta"].Fill(event.genleps[i2].eta())
+                    self.Hist["ElecZdR"].Fill(genZdR)
                     if event.inclusiveLeptons[l1].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i1].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i1].eta())
@@ -124,12 +124,12 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                self.Hist["MuonPt"].Fill(event.genleps[i1].pt())
-                self.Hist["MuonPt"].Fill(event.genleps[i2].pt())
-                self.Hist["MuonEta"].Fill(event.genleps[i1].pt())
-                self.Hist["MuonEta"].Fill(event.genleps[i2].pt())
-                self.Hist["MuonZdR"].Fill(genZdR)
                 if l1 >= 0 and l2 >= 0:
+                    self.Hist["MuonPt"].Fill(event.genleps[i1].pt())
+                    self.Hist["MuonPt"].Fill(event.genleps[i2].pt())
+                    self.Hist["MuonEta"].Fill(event.genleps[i1].pt())
+                    self.Hist["MuonEta"].Fill(event.genleps[i2].pt())
+                    self.Hist["MuonZdR"].Fill(genZdR)
                     if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt"):
                         self.Hist["EffMuonPt_HighPt"].Fill(event.genleps[i1].pt())
                         self.Hist["EffMuonEta_HighPt"].Fill(event.genleps[i1].eta())
@@ -161,55 +161,72 @@ class AZhAnalyzer( Analyzer ):
         event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px, py)))
         return True
     
-    def isHEEP(self, e):
+    
+    
+    def isHEEP(self, e, doPlot=True):
         e.isHEEP = False
-        if not e.isElectron() or not e.pt() > 35.: return False
+        if not e.isElectron(): return False # or not e.pt() > 35.
         
-        if e.superCluster().isNonnull() and e.superCluster().seed().isNonnull():
-            dEtaInSeed = e.deltaEtaSuperClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta()
-        else:
-            dEtaInSeed = 1.e99
+        #dEtaInSeed = e.deltaEtaSuperClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta() if e.superCluster().isNonnull() and e.superCluster().seed().isNonnull() else  1.e99
+        #nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() if hasattr(e.gsfTrack(),"trackerExpectedHitsInner") else e.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS)
         
-        if hasattr(e.gsfTrack(),"trackerExpectedHitsInner"):
-		        nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits()
-        else:
-		        nMissingHits = e.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS)
+        # Plot
+        if doPlot and e.et() > 35.:
+            if abs(e.superCluster().eta()) < 1.4442:
+                for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
+                if e.ecalDrivenSeed(): self.Hist["EffHEEP_EB"].AddBinContent(1)
+                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: self.Hist["EffHEEP_EB"].AddBinContent(2)
+                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffHEEP_EB"].AddBinContent(3)
+                if e.hadronicOverEm() < 1./e.energy() + 0.05: self.Hist["EffHEEP_EB"].AddBinContent(4)
+                if (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): self.Hist["EffHEEP_EB"].AddBinContent(5)
+                if e.lostInner() <= 1: self.Hist["EffHEEP_EB"].AddBinContent(6)
+                if abs(e.dxy()) < 0.02: self.Hist["EffHEEP_EB"].AddBinContent(7)
+            elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+                for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
+                if e.ecalDrivenSeed(): self.Hist["EffHEEP_EE"].AddBinContent(1)
+                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: self.Hist["EffHEEP_EE"].AddBinContent(2)
+                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffHEEP_EE"].AddBinContent(3)
+                if e.hadronicOverEm() < 5./e.energy() + 0.05: self.Hist["EffHEEP_EE"].AddBinContent(4)
+                if e.sigmaIetaIeta() < 0.03: self.Hist["EffHEEP_EE"].AddBinContent(5)
+                if e.lostInner() <= 1: self.Hist["EffHEEP_EE"].AddBinContent(6)
+                if abs(e.dxy()) < 0.05: self.Hist["EffHEEP_EE"].AddBinContent(7)
+        
         
         if abs(e.superCluster().eta()) < 1.4442:
-            for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
-            if not e.ecalDriven(): return False
-            self.Hist["EffHEEP_EB"].AddBinContent(1)
-            if not abs(dEtaInSeed) < 0.004: return False
-            self.Hist["EffHEEP_EB"].AddBinContent(2)
+            #for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
+            if not e.ecalDrivenSeed(): return False
+            #if doPlot: self.Hist["EffHEEP_EB"].AddBinContent(1)
+            if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: return False
+            #self.Hist["EffHEEP_EB"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            self.Hist["EffHEEP_EB"].AddBinContent(3)
+            #self.Hist["EffHEEP_EB"].AddBinContent(3)
             if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
-            self.Hist["EffHEEP_EB"].AddBinContent(4)
+            #self.Hist["EffHEEP_EB"].AddBinContent(4)
             if not (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): return False
-            self.Hist["EffHEEP_EB"].AddBinContent(5)
-            if not nMissingHits <= 1: return False
-            self.Hist["EffHEEP_EB"].AddBinContent(6)
+            #self.Hist["EffHEEP_EB"].AddBinContent(5)
+            if not e.lostInner() <= 1: return False
+            #self.Hist["EffHEEP_EB"].AddBinContent(6)
             if not abs(e.dxy()) < 0.02: return False
-            self.Hist["EffHEEP_EB"].AddBinContent(7)
+            #self.Hist["EffHEEP_EB"].AddBinContent(7)
         elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-            for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
-            if not e.ecalDriven(): return False
-            self.Hist["EffHEEP_EE"].AddBinContent(1)
-            if not abs(dEtaInSeed) < 0.006: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(2)
+            #for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
+            if not e.ecalDrivenSeed(): return False
+            #self.Hist["EffHEEP_EE"].AddBinContent(1)
+            if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: return False
+            #self.Hist["EffHEEP_EE"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(3)
+            #self.Hist["EffHEEP_EE"].AddBinContent(3)
             if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(4)
+            #self.Hist["EffHEEP_EE"].AddBinContent(4)
             if not e.sigmaIetaIeta() < 0.03: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(5)
-            if not nMissingHits <= 1: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(6)
+            #self.Hist["EffHEEP_EE"].AddBinContent(5)
+            if not e.lostInner() <= 1: return False
+            #self.Hist["EffHEEP_EE"].AddBinContent(6)
             if not abs(e.dxy()) < 0.05: return False
-            self.Hist["EffHEEP_EE"].AddBinContent(7)
+            #self.Hist["EffHEEP_EE"].AddBinContent(7)
         else:
             return False
-
+        
         e.isHEEP = True
         return True
     
@@ -219,12 +236,16 @@ class AZhAnalyzer( Analyzer ):
         event.isZ2EE = False
         event.isZ2MM = False
         event.isZ2NN = False
+        event.cleanFatJets = [] #ROOT.pat.Jet()
+        event.A = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        event.fakemet = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        
          # All
         self.Hist["Z2EECounter"].AddBinContent(0)
         self.Hist["Z2MMCounter"].AddBinContent(0)
         self.Hist["Z2NNCounter"].AddBinContent(0)
         
-         # Trigger
+        # Trigger
         if event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v: self.Hist["Z2EECounter"].AddBinContent(1)
         if event.HLT_BIT_HLT_Mu45_eta2p1_v: self.Hist["Z2MMCounter"].AddBinContent(1)
         if event.HLT_BIT_HLT_PFMET170_NoiseCleaned_v: self.Hist["Z2NNCounter"].AddBinContent(1)
@@ -235,43 +256,44 @@ class AZhAnalyzer( Analyzer ):
         
         # Preliminary operations
         for i, l in enumerate(event.inclusiveLeptons): self.isHEEP(l)
-        #for i, m in enumerate(event.highptMuons): print m.pt(), m.tunePMuonBestTrack().pt()
+        
         self.fillGenPlots(event)
         
-        # Separate inclusive lepton collections
-        event.highptElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.isHEEP(x)] # and self.isHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
-        event.highptMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
+        # Build collections
+        # Id
+        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.isHEEP(x)] # and self.isHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
+        event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
+        
+        if len(event.highptIdElectrons) >= 2: self.Hist["Z2EECounter"].AddBinContent(2)
+        if len(event.highptIdMuons) >= 2: self.Hist["Z2MMCounter"].AddBinContent(2)
+        
+        # Iso
+        event.highptIdIsoElectrons = [x for x in event.highptIdElectrons if x.miniRelIso<0.1]
+        event.highptIdIsoMuons = [x for x in event.highptIdMuons if x.miniRelIso<0.1]
+        
+        if len(event.highptIdIsoElectrons) >= 2: self.Hist["Z2EECounter"].AddBinContent(3)
+        if len(event.highptIdIsoMuons) >= 2: self.Hist["Z2MMCounter"].AddBinContent(3)
+        
+        #for i, m in enumerate(event.highptMuons):
+        #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
+        
         event.highptLeptons = []
-        event.highptElectrons.sort(key = lambda l : l.pt(), reverse = True)
-        event.highptMuons.sort(key = lambda l : l.pt(), reverse = True)
+        event.highptIdIsoElectrons.sort(key = lambda l : l.pt(), reverse = True)
+        event.highptIdIsoMuons.sort(key = lambda l : l.pt(), reverse = True)
         
         
         # Categorization
-        if len(event.highptElectrons) >= 2 and event.highptElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptElectrons[1].pt() > self.cfg_ana.elec2pt:
+        if len(event.highptIdIsoElectrons) >= 2 and event.highptIdIsoElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdIsoElectrons[1].pt() > self.cfg_ana.elec2pt: #and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
+            event.highptLeptons = event.highptIdIsoElectrons
             event.isZ2EE = True
-        elif len(event.highptMuons) >= 2 and event.highptMuons[0].pt() > self.cfg_ana.muon1pt and event.highptMuons[1].pt() > self.cfg_ana.muon2pt:
+        elif len(event.highptIdIsoMuons) >= 2 and event.highptIdIsoMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdIsoMuons[1].pt() > self.cfg_ana.muon2pt: #and event.highptMuons[0].charge() != event.highptMuons[1].charge():
+            event.highptLeptons = event.highptIdIsoMuons
             event.isZ2MM = True
-        elif len(event.selectedMuons) + len(event.selectedElectrons) == 0:
+        elif len(event.highptIdIsoElectrons) + len(event.highptIdIsoMuons) == 0:
             event.isZ2NN = True
         else:
             return True
-        
         event.isZ2LL = event.isZ2EE or event.isZ2MM
-        
-         # Lep > 2 / Veto
-        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(2)
-        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(2)
-        if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(2)
-        
-        # Build Z candidate
-        if event.isZ2EE and event.highptElectrons[0].charge() != event.highptElectrons[1].charge():
-            event.highptLeptons = event.highptElectrons
-        elif event.isZ2MM and event.highptMuons[0].charge() != event.highptMuons[1].charge():
-            event.highptLeptons = event.highptMuons
-        elif event.isZ2NN:
-            event.highptLeptons = []
-        else:
-            return True
         
         # Z candidate
         if event.isZ2LL:
@@ -287,31 +309,27 @@ class AZhAnalyzer( Analyzer ):
             return True
         
         # Z cand
-        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(3)
-        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(3)
+        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(4)
+        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(4)
+        if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(2)
         
-        
-        #FIXME
-        event.A = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
-        event.fakemet = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         event.isAZh = True
         
         #########################
         #    Part 2: Jets       #
         #########################
         
-#        print "###########", "Muon" if event.isZ2MM else "ELE"
-#        for i, j in enumerate(event.highptLeptons): print i, j.pt(), j.eta(), j.phi(), j.isMuon()
-#        for i, j in enumerate(event.cleanJetsAK8): print i, j.pt(), j.eta(), j.phi()
-        
-        #FIXME
-#        if len(event.cleanJetsAK8) < 1:
-#            event.cleanJetsAK8.append( ROOT.pat.Jet() )
-        
-        if len(event.cleanJetsAK8) < 1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt:
+        for i, j in enumerate(event.cleanJetsAK8):
+            if j.pt() >= self.cfg_ana.fatjet_pt:
+                if not event.isZ2LL or (event.isZ2LL and ( deltaR(event.highptLeptons[0].eta(), event.highptLeptons[0].phi(), j.eta(), j.phi()) > 1.0 and deltaR(event.highptLeptons[1].eta(), event.highptLeptons[1].phi(), j.eta(), j.phi()) > 1.0 ) ):
+                    event.cleanFatJets.append(j)
+        event.cleanFatJets.sort(key = lambda j : j.pt(), reverse = True)
+
+        if len(event.cleanFatJets) < 1:
             return True
-        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(4)
-        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(4)
+        
+        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(5)
+        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(5)
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(3)
         
         
@@ -320,21 +338,21 @@ class AZhAnalyzer( Analyzer ):
         #########################
         
         # h candidate with pseudo-kin fit
-        kH = event.cleanJetsAK8[0].p4()
-        k = 125.0/event.cleanJetsAK8[0].mass() if event.cleanJetsAK8[0].mass() > 0 else 0. #.userFloat("ak8PFJetsCHSSoftDropMass")
-        kH = ROOT.reco.Particle.LorentzVector(event.cleanJetsAK8[0].px()*k, event.cleanJetsAK8[0].py()*k, event.cleanJetsAK8[0].pz()*k, event.cleanJetsAK8[0].energy()*k)
+        kH = event.cleanFatJets[0].p4()
+        k = 125.0/event.cleanFatJets[0].mass() if event.cleanFatJets[0].mass() > 0 else 0. #.userFloat("ak8PFJetsCHSSoftDropMass")
+        kH = ROOT.reco.Particle.LorentzVector(event.cleanFatJets[0].px()*k, event.cleanFatJets[0].py()*k, event.cleanFatJets[0].pz()*k, event.cleanFatJets[0].energy()*k)
         
         # A/Z' candidate
         if event.isZ2LL:
-            event.A = event.Z + event.cleanJetsAK8[0].p4()
+            event.A = event.Z + event.cleanFatJets[0].p4()
             event.A.mT = event.A.mass()
             event.A.mC = event.A.mass()
             event.A.mK = (event.Z + kH).mass()
-            event.A.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.cleanJetsAK8[0].eta(), event.cleanJetsAK8[0].phi())
-            event.A.deltaEta = abs(event.Z.eta() - event.cleanJetsAK8[0].eta())
-            event.A.deltaPhi = deltaPhi(event.Z.phi(), event.cleanJetsAK8[0].phi())
+            event.A.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.cleanFatJets[0].eta(), event.cleanFatJets[0].phi())
+            event.A.deltaEta = abs(event.Z.eta() - event.cleanFatJets[0].eta())
+            event.A.deltaPhi = deltaPhi(event.Z.phi(), event.cleanFatJets[0].phi())
         elif len(event.highptLeptons) == 1:
-            event.A = event.highptLeptons[0].p4() + event.met.p4() + event.cleanJetsAK8[0].p4()
+            event.A = event.highptLeptons[0].p4() + event.met.p4() + event.cleanFatJets[0].p4()
             pz = 0.
             a = 80.4**2 - event.highptLeptons[0].mass()**2 + 2.*event.highptLeptons[0].px()*event.met.px() + 2.*event.highptLeptons[0].py()*event.met.py()
             A = 4*( event.highptLeptons[0].energy()**2 - event.highptLeptons[0].pz()**2 )
@@ -347,17 +365,17 @@ class AZhAnalyzer( Analyzer ):
                 pz = -B/(2*A)
             kmet = event.met.p4()
             kmet.SetPz(pz)
-            event.A.mT = (event.highptLeptons[0].p4() + kmet + event.cleanJetsAK8[0].p4()).mass()
+            event.A.mT = (event.highptLeptons[0].p4() + kmet + event.cleanFatJets[0].p4()).mass()
             cmet = event.met.p4()
             cmet.SetPz(event.highptLeptons[0].pz())
-            event.A.mC = (event.highptLeptons[0].p4() + cmet + event.cleanJetsAK8[0].p4()).mass()
+            event.A.mC = (event.highptLeptons[0].p4() + cmet + event.cleanFatJets[0].p4()).mass()
             event.A.mK = (event.highptLeptons[0].p4() + kmet + kH).mass()
         else:
-            event.A = event.met.p4() + event.cleanJetsAK8[0].p4()
-            event.A.mT = math.sqrt( 2.*event.cleanJetsAK8[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanJetsAK8[0].phi(), event.met.phi()) )) )
+            event.A = event.met.p4() + event.cleanFatJets[0].p4()
+            event.A.mT = math.sqrt( 2.*event.cleanFatJets[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.cleanFatJets[0].phi(), event.met.phi()) )) )
             cmet = event.met.p4()
-            cmet.SetPz( -event.cleanJetsAK8[0].pz() )
-            event.A.mC = (cmet + event.cleanJetsAK8[0].p4()).mass()
+            cmet.SetPz( -event.cleanFatJets[0].pz() )
+            event.A.mC = (cmet + event.cleanFatJets[0].p4()).mass()
             event.A.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
         
         if event.isZ2LL:
@@ -373,33 +391,27 @@ class AZhAnalyzer( Analyzer ):
         event.isAZh = True
         
         # ---------- Estimate cuts ----------
-#        if len(event.cleanJetsAK8) <= 1 or event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt: #FIXME
-#            event.cleanJetsAK8.pop()
-#            return True
-#        if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(4)
-#        if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(4)
-#        if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(3)
         
         if event.isZ2LL: 
             if event.Z.pt() > 200:
-                self.Hist["Z2EECounter"].AddBinContent(5) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(5)
-                if event.Z.mass() > 75 and event.Z.mass() < 105:
-                    self.Hist["Z2EECounter"].AddBinContent(6) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(6)
-                    if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 90 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
-                        self.Hist["Z2EECounter"].AddBinContent(7) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(7)
-                        if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
-                            self.Hist["Z2EECounter"].AddBinContent(8) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(8)
-                            if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
-                                self.Hist["Z2EECounter"].AddBinContent(9) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9)
+                self.Hist["Z2EECounter"].AddBinContent(6) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(6)
+                if event.Z.mass() > 60 and event.Z.mass() < 120:
+                    self.Hist["Z2EECounter"].AddBinContent(7) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(7)
+                    if event.cleanFatJets[0].userFloat("ak8PFJetsCHSSoftDropMass") > 95 and event.cleanFatJets[0].userFloat("ak8PFJetsCHSSoftDropMass") < 135:
+                        self.Hist["Z2EECounter"].AddBinContent(8) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(8)
+                        if event.cleanFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+                            self.Hist["Z2EECounter"].AddBinContent(9) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9)
+                            if event.cleanFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
+                                self.Hist["Z2EECounter"].AddBinContent(10) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(10)
         if event.isZ2NN: 
             if event.met.pt() > 200:
                 self.Hist["Z2NNCounter"].AddBinContent(4)
-                if event.cleanJetsAK8[0].deltaPhi_met>2.5:
-                    if event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") > 90 and event.cleanJetsAK8[0].userFloat("ak8PFJetsCHSSoftDropMass") < 150:
+                if event.cleanFatJets[0].deltaPhi_met>2.5:
+                    if event.cleanFatJets[0].userFloat("ak8PFJetsCHSSoftDropMass") > 95 and event.cleanFatJets[0].userFloat("ak8PFJetsCHSSoftDropMass") < 135:
                         self.Hist["Z2NNCounter"].AddBinContent(5)
-                        if event.cleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+                        if event.cleanFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
                             self.Hist["Z2NNCounter"].AddBinContent(6)
-                            if event.cleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
+                            if event.cleanFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: 
                                 self.Hist["Z2NNCounter"].AddBinContent(7)
         return True
 
