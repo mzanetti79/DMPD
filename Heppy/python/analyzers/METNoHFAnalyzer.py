@@ -38,8 +38,8 @@ class METNoHFAnalyzer( Analyzer ):
             if x.fromPV()>0 and abs(x.eta()) < 3.0:
                 px += x.px()
                 py += x.py()
-        px += - event.met.shiftedPx(0)
-        py += - event.met.shiftedPy(0)
+        #px += - event.met.shiftedPx(0)
+        #py += - event.met.shiftedPy(0)
         
 #        px = - sum([x.px() for x in pfcands if x.fromPV()>0 and abs(x.eta()) < 3.0]) - event.met.shiftedPx(0)
 #        py = - sum([x.py() for x in pfcands if x.fromPV()>0 and abs(x.eta()) < 3.0]) - event.met.shiftedPy(0)
