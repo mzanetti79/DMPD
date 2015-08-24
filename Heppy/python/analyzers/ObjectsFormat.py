@@ -8,7 +8,7 @@ lorentzVectorType = NTupleObjectType("lorentzVector", baseObjectTypes = [ fourVe
 
 candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
-    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
+    NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
     NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
     NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
     NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
@@ -21,7 +21,7 @@ candidateFullType = NTupleObjectType("candidate", baseObjectTypes = [ fourVector
     NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
     NTupleVariable("cmass",   lambda x : getattr(x, "mC", -1.), int, help="collinear mass"),
     NTupleVariable("kmass",   lambda x : getattr(x, "mK", -1.), int, help="Mass with kinematic fit"),
-    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
+    NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
     NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
     NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
     NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
@@ -124,18 +124,18 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
 ])
 
 fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -9., float, help="Jet pruned mass"),
-    #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -9., float, help="Jet trimmed mass"),
-    #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -9., float, help="Jet filtered mass"),
-    NTupleVariable("softdropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -9., float, help="Jet SoftDrop mass"),
-    NTupleVariable("dR_subjets",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
+    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -1., float, help="Jet pruned mass"),
+    #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -1., float, help="Jet trimmed mass"),
+    #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -1., float, help="Jet filtered mass"),
+    NTupleVariable("softdropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -1., float, help="Jet SoftDrop mass"),
+    NTupleVariable("dR",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
     #NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -999.), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
     NTupleVariable("tau21",   lambda x : x.userFloat("NjettinessAK8:tau2")/x.userFloat("NjettinessAK8:tau1") if not x.userFloat("NjettinessAK8:tau1") == 0 else -1., float, help="n-subjettiness 2/1"),
     NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV1",   lambda x : x.subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 0 else -9., float, help="subJet 1 CSV-IVF v2 discriminator"),
-    NTupleVariable("CSV2",   lambda x : x.subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 1 else -9., float, help="subJet 2 CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV1",   lambda x : x.subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 0 else -1., float, help="subJet 1 CSV-IVF v2 discriminator"),
+    NTupleVariable("CSV2",   lambda x : x.subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 CSV-IVF v2 discriminator"),
     #NTupleVariable("nSubJetTags",   lambda x : getattr(x, "nSubJetTags", -999.), int, help="Number of b-tagged subjets"),
     NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
     NTupleVariable("flavour1", lambda x : x.subjets('SoftDrop')[0].hadronFlavour() if len(x.subjets('SoftDrop')) > 0 else -9, int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the subjet 1"),
