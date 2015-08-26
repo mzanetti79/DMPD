@@ -317,7 +317,7 @@ class AZhAnalyzer( Analyzer ):
             event.Z.deltaEta = abs(event.highptLeptons[0].eta() - event.highptLeptons[1].eta())
             event.Z.deltaPhi = deltaPhi(event.highptLeptons[0].phi(), event.highptLeptons[1].phi())
             # Z candidate
-            if event.Z.mass() < 50. or event.highptLeptons[0].charge() != event.highptLeptons[1].charge():
+            if event.Z.mass() < 50. or event.highptLeptons[0].charge() == event.highptLeptons[1].charge():
                 return True
             if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(6)
             if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(6)
