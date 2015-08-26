@@ -32,50 +32,52 @@ class AZhAnalyzer( Analyzer ):
             #
             setup.services["outputfile"].file.mkdir("Leptons")
             setup.services["outputfile"].file.cd("Leptons")
+            self.Hist["ElecBarrelHEEP"] = ROOT.TH1F("ElecBarrelHEEP", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["ElecEndcapHEEP"] = ROOT.TH1F("ElecEndcapHEEP", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
+            for i, l in enumerate(HEEPlabels):
+                self.Hist["ElecBarrelHEEP"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["ElecEndcapHEEP"].GetXaxis().SetBinLabel(i+1, l)
+            self.Hist["ElecEndcapHEEP"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             for i, n in enumerate(["ElecPt", "MuonPt"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
             for i, n in enumerate(["ElecEta", "MuonEta"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Events", 60, -3., 3.)
             for i, n in enumerate(["ElecZdR", "MuonZdR"]):
                 self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
-            self.Hist["HEEP_EB"] = ROOT.TH1F("HEEP_EB", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
-            self.Hist["HEEP_EE"] = ROOT.TH1F("HEEP_EE", ";;Events", len(HEEPlabels), 0, len(HEEPlabels))
-            for i, l in enumerate(HEEPlabels):
-                self.Hist["HEEP_EB"].GetXaxis().SetBinLabel(i+1, l)
-                self.Hist["HEEP_EE"].GetXaxis().SetBinLabel(i+1, l)
-            self.Hist["HEEP_EE"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             setup.services["outputfile"].file.cd("..")
             #
             setup.services["outputfile"].file.mkdir("Eff")
             setup.services["outputfile"].file.cd("Eff")
+            self.Hist["EffElecBarrelHEEP"] = ROOT.TH1F("EffElecBarrelHEEP", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
+            self.Hist["EffElecEndcapHEEP"] = ROOT.TH1F("EffElecEndcapHEEP", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
+            for i, l in enumerate(HEEPlabels):
+                self.Hist["EffElecBarrelHEEP"].GetXaxis().SetBinLabel(i+1, l)
+                self.Hist["EffElecEndcapHEEP"].GetXaxis().SetBinLabel(i+1, l)
+            self.Hist["EffElecEndcapHEEP"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             for i, n in enumerate(["EffElecPt_HEEP", "EffMuonPt_HighPt"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             for i, n in enumerate(["EffElecEta_HEEP", "EffMuonEta_HighPt"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
             for i, n in enumerate(["EffElecZdR", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEPpfIso", "EffElecZdR_HEEPminiIso", "EffMuonZdR", "EffMuonZdR_Tracker_Tracker", "EffMuonZdR_Loose_Loose", "EffMuonZdR_HighPt_Tracker", "EffMuonZdR_HighPt_Loose", "EffMuonZdR_HighPt_HighPt", "EffMuonZdR_Tight_Tight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
-            self.Hist["EffHEEP_EB"] = ROOT.TH1F("EffHEEP_EB", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
-            self.Hist["EffHEEP_EE"] = ROOT.TH1F("EffHEEP_EE", ";;Efficiency", len(HEEPlabels), 0, len(HEEPlabels))
-            for i, l in enumerate(HEEPlabels):
-                self.Hist["EffHEEP_EB"].GetXaxis().SetBinLabel(i+1, l)
-                self.Hist["EffHEEP_EE"].GetXaxis().SetBinLabel(i+1, l)
-            self.Hist["EffHEEP_EE"].GetXaxis().SetBinLabel(5, "#sigma_{i#eta i#eta}")
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
 
             
     def endLoop(self, setup):
+        self.Hist["EffElecBarrelHEEP"].Divide(self.Hist["ElecBarrelHEEP"])
+        self.Hist["EffElecEndcapHEEP"].Divide(self.Hist["ElecEndcapHEEP"])
         self.Hist["EffElecPt_HEEP"].Divide(self.Hist["ElecPt"])
-        self.Hist["EffMuonPt_HighPt"].Divide(self.Hist["MuonPt"])
         self.Hist["EffElecEta_HEEP"].Divide(self.Hist["ElecEta"])
-        self.Hist["EffMuonEta_HighPt"].Divide(self.Hist["MuonEta"])
         self.Hist["EffElecZdR"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_Loose"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_Tight"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_HEEP"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_HEEPpfIso"].Divide(self.Hist["ElecZdR"])
         self.Hist["EffElecZdR_HEEPminiIso"].Divide(self.Hist["ElecZdR"])
+        self.Hist["EffMuonPt_HighPt"].Divide(self.Hist["MuonPt"])
+        self.Hist["EffMuonEta_HighPt"].Divide(self.Hist["MuonEta"])
         self.Hist["EffMuonZdR"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_Tracker_Tracker"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_Loose_Loose"].Divide(self.Hist["MuonZdR"])
@@ -83,8 +85,6 @@ class AZhAnalyzer( Analyzer ):
         self.Hist["EffMuonZdR_HighPt_Loose"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_HighPt_HighPt"].Divide(self.Hist["MuonZdR"])
         self.Hist["EffMuonZdR_Tight_Tight"].Divide(self.Hist["MuonZdR"])
-        self.Hist["EffHEEP_EB"].Divide(self.Hist["HEEP_EB"])
-        self.Hist["EffHEEP_EE"].Divide(self.Hist["HEEP_EE"])
         
         
         
@@ -98,7 +98,7 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                if l1 >= 0 and l2 >= 0:
+                if l1 >= 0 and l2 >= 0 and event.genleps[i1].pt() > 115. and event.genleps[i2].pt() > 35.:
                     self.Hist["ElecPt"].Fill(event.genleps[i1].pt())
                     self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
                     self.Hist["ElecEta"].Fill(event.genleps[i1].eta())
@@ -124,7 +124,7 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                if l1 >= 0 and l2 >= 0:
+                if l1 >= 0 and l2 >= 0 and event.genleps[i1].pt() > 50. and event.genleps[i2].pt() > 20.:
                     self.Hist["MuonPt"].Fill(event.genleps[i1].pt())
                     self.Hist["MuonPt"].Fill(event.genleps[i2].pt())
                     self.Hist["MuonEta"].Fill(event.genleps[i1].pt())
@@ -165,65 +165,46 @@ class AZhAnalyzer( Analyzer ):
     
     def isHEEP(self, e, doPlot=True):
         e.isHEEP = False
-        if not e.isElectron(): return False # or not e.pt() > 35.
-        
-        #dEtaInSeed = e.deltaEtaSuperClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta() if e.superCluster().isNonnull() and e.superCluster().seed().isNonnull() else  1.e99
-        #nMissingHits = e.gsfTrack().trackerExpectedHitsInner().numberOfLostHits() if hasattr(e.gsfTrack(),"trackerExpectedHitsInner") else e.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS)
+        if not e.isElectron() or not e.et() > 35.: return False
         
         # Plot
-        if doPlot and e.et() > 35.:
+        if doPlot:
             if abs(e.superCluster().eta()) < 1.4442:
-                for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
-                if e.ecalDrivenSeed(): self.Hist["EffHEEP_EB"].AddBinContent(1)
-                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: self.Hist["EffHEEP_EB"].AddBinContent(2)
-                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffHEEP_EB"].AddBinContent(3)
-                if e.hadronicOverEm() < 1./e.energy() + 0.05: self.Hist["EffHEEP_EB"].AddBinContent(4)
-                if (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): self.Hist["EffHEEP_EB"].AddBinContent(5)
-                if e.lostInner() <= 1: self.Hist["EffHEEP_EB"].AddBinContent(6)
-                if abs(e.dxy()) < 0.02: self.Hist["EffHEEP_EB"].AddBinContent(7)
+                for i in range(self.Hist["ElecBarrelHEEP"].GetNbinsX()): self.Hist["ElecBarrelHEEP"].AddBinContent(i+1)
+                if e.ecalDrivenSeed(): self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
+                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
+                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
+                if e.hadronicOverEm() < 1./e.energy() + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
+                if (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
+                if e.lostInner() <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
+                if abs(e.dxy()) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
             elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-                for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
-                if e.ecalDrivenSeed(): self.Hist["EffHEEP_EE"].AddBinContent(1)
-                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: self.Hist["EffHEEP_EE"].AddBinContent(2)
-                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffHEEP_EE"].AddBinContent(3)
-                if e.hadronicOverEm() < 5./e.energy() + 0.05: self.Hist["EffHEEP_EE"].AddBinContent(4)
-                if e.sigmaIetaIeta() < 0.03: self.Hist["EffHEEP_EE"].AddBinContent(5)
-                if e.lostInner() <= 1: self.Hist["EffHEEP_EE"].AddBinContent(6)
-                if abs(e.dxy()) < 0.05: self.Hist["EffHEEP_EE"].AddBinContent(7)
+                for i in range(self.Hist["ElecEndcapHEEP"].GetNbinsX()): self.Hist["ElecEndcapHEEP"].AddBinContent(i+1)
+                if e.ecalDrivenSeed(): self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
+                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
+                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
+                if e.hadronicOverEm() < 5./e.energy() + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
+                if e.sigmaIetaIeta() < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
+                if e.lostInner() <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
+                if abs(e.dxy()) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
         
         
         if abs(e.superCluster().eta()) < 1.4442:
-            #for i in range(self.Hist["HEEP_EB"].GetNbinsX()): self.Hist["HEEP_EB"].AddBinContent(i+1)
             if not e.ecalDrivenSeed(): return False
-            #if doPlot: self.Hist["EffHEEP_EB"].AddBinContent(1)
             if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(3)
             if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(4)
             if not (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(5)
             if not e.lostInner() <= 1: return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(6)
             if not abs(e.dxy()) < 0.02: return False
-            #self.Hist["EffHEEP_EB"].AddBinContent(7)
         elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-            #for i in range(self.Hist["HEEP_EE"].GetNbinsX()): self.Hist["HEEP_EE"].AddBinContent(i+1)
             if not e.ecalDrivenSeed(): return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(1)
             if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(2)
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(3)
             if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(4)
             if not e.sigmaIetaIeta() < 0.03: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(5)
             if not e.lostInner() <= 1: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(6)
             if not abs(e.dxy()) < 0.05: return False
-            #self.Hist["EffHEEP_EE"].AddBinContent(7)
         else:
             return False
         
