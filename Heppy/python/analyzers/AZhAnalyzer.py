@@ -68,26 +68,6 @@ class AZhAnalyzer( Analyzer ):
     def endLoop(self, setup):
         for n, h in self.Hist.iteritems():
             if n.startswith("Eff"): h.Divide(self.Hist[ n.split("_", 1)[0].replace("Eff", "") ])
-#        name = h.split("_", 1)[0].replace("Eff", "")
-#        self.Hist["EffElecBarrelHEEP"].Divide(self.Hist["ElecBarrelHEEP"])
-#        self.Hist["EffElecEndcapHEEP"].Divide(self.Hist["ElecEndcapHEEP"])
-#        self.Hist["EffElecPt_HEEP"].Divide(self.Hist["ElecPt"])
-#        self.Hist["EffElecEta_HEEP"].Divide(self.Hist["ElecEta"])
-#        self.Hist["EffElecZdR"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffElecZdR_Loose"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffElecZdR_Tight"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffElecZdR_HEEP"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffElecZdR_HEEP_pfIso"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffElecZdR_HEEP_miniIso"].Divide(self.Hist["ElecZdR"])
-#        self.Hist["EffMuonPt_Highpt"].Divide(self.Hist["MuonPt"])
-#        self.Hist["EffMuonEta_Highpt"].Divide(self.Hist["MuonEta"])
-#        self.Hist["EffMuonZdR"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Tracker_Tracker"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Loose_Loose"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Highpt_Tracker"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Highpt_Loose"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Highpt_Highpt"].Divide(self.Hist["MuonZdR"])
-#        self.Hist["EffMuonZdR_Tight_Tight"].Divide(self.Hist["MuonZdR"])
         
         
         
@@ -264,8 +244,6 @@ class AZhAnalyzer( Analyzer ):
         #########################
         #    Part 1: Leptons    #
         #########################
-        
-        
         
         # Lepton collections
         if len([x for x in event.inclusiveLeptons if x.isElectron()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.elec2pt: self.Hist["Z2EECounter"].AddBinContent(2)
