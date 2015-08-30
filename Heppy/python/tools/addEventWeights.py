@@ -107,7 +107,9 @@ def processFile(dir_name, verbose=False):
             new_file.cd()
             if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
-            obj.Scale(weightXS)
+            if "Counter" in obj.GetName():
+                obj.Sumw2() #FIXME
+                obj.Scale(weightXS)
             obj.SetBinContent(0, totalEntries)
             new_file.cd()
             obj.Write()
