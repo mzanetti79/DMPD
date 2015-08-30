@@ -16,10 +16,10 @@ class GenAnalyzer( Analyzer ):
             setup.services["outputfile"].file.mkdir("Gen")
             setup.services["outputfile"].file.cd("Gen")
             
-            self.GenPhi1mass = ROOT.TH1F("GenPhi1mass", ";#Phi mass [GeV]", 1000, 0., 5000.)
-            self.GenPhi1pt = ROOT.TH1F("GenPhi1pt", ";#Phi p_{T} [GeV]", 500, 0., 500.)
+            self.GenPhi1mass = ROOT.TH1F("GenPhi1mass", ";m_{X} [GeV]", 1000, 0., 5000.)
+            self.GenPhi1pt = ROOT.TH1F("GenPhi1pt", ";X p_{T} [GeV]", 500, 0., 1000.)
             self.GenPhi1eta = ROOT.TH1F("GenPhi1eta", ";#Phi #eta", 50, -5, 5.)
-            self.GenChi1mass = ROOT.TH1F("GenChi1mass", ";#chi_{1} mass [GeV]", 1000, 0., 100.)
+            self.GenChi1mass = ROOT.TH1F("GenChi1mass", ";#chi_{1} mass [GeV]", 1000, 0., 1000.)
             self.GenChi1pt = ROOT.TH1F("GenChi1pt", ";#chi_{1} p_{T} [GeV]", 500, 0., 500.)
             self.GenChi1eta = ROOT.TH1F("GenChi1eta", ";#chi_{1} #eta", 50, -5, 5.)
             self.GenChi2mass = ROOT.TH1F("GenChi2mass", ";#chi_{2} mass [GeV]", 1000, 0., 100.)
@@ -28,10 +28,10 @@ class GenAnalyzer( Analyzer ):
             self.GenChi12dR = ROOT.TH1F("GenChi12dR", ";#chi_{1, 2} #Delta R", 50, 0, 5.)
             
             self.GenZdecay = ROOT.TH1F("GenZdecay", ";Z daughter pdgId", 25, 0.5, 25.5)
-            self.GenZmass = ROOT.TH1F("GenZmass", ";m_{Z} [GeV]", 1000, 0., 1000.)
+            self.GenZmass = ROOT.TH1F("GenZmass", ";m_{Z} [GeV]", 150, 0., 150.)
             self.GenZpt = ROOT.TH1F("GenZpt", ";Z p_{T} [GeV]", 250, 0., 2500.)
             self.GenZeta = ROOT.TH1F("GenZeta", ";Z #eta", 50, -5, 5.)
-            self.GenZdR = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 50, 0, 5.)
+            self.GenZdR = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 60, 0, 3.)
             self.GenHdecay = ROOT.TH1F("GenHdecay", ";H daughter pdgId", 25, 0.5, 25.5)
             self.GenHmass = ROOT.TH1F("GenHmass", ";m_{H} [GeV]", 1000, 100., 150.)
             self.GenHpt = ROOT.TH1F("GenHpt", ";H p_{T} [GeV]", 250, 0., 2500.)
@@ -46,6 +46,7 @@ class GenAnalyzer( Analyzer ):
             self.GenBquark1eta = ROOT.TH1F("GenBquark1eta", ";b-quark 1 #eta", 50, -5, 5.)
             self.GenBquark2pt = ROOT.TH1F("GenBquark2pt", ";b-quark 2 p_{T} [GeV]", 250, 0., 2500.)
             self.GenBquark2eta = ROOT.TH1F("GenBquark2eta", ";b-quark 2 #eta", 50, -5, 5.)
+            #FIXME set Sumw2()
             
             setup.services["outputfile"].file.cd()
     
@@ -57,7 +58,7 @@ class GenAnalyzer( Analyzer ):
         event.genChi = []
         
         for g in event.genParticles:
-            if g.pdgId() == 9100000 or g.pdgId() == 9900032 or g.pdgId() == 1023:
+            if g.pdgId() == 9100000 or g.pdgId() == 9900032 or g.pdgId() == 9000001 or abs(g.pdgId()) == 9000002 or g.pdgId() == 1023:
                 event.genPhi = g
             if abs(g.pdgId()) == 9100022 or g.pdgId() == 9100012:
                 event.genChi.append(g)

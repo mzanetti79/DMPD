@@ -22,7 +22,7 @@ from PhysicsTools.Heppy.analyzers.gen.GeneratorAnalyzer import GeneratorAnalyzer
 generatorAnalyzer= cfg.Analyzer(
     verbose=False,
     class_object=GeneratorAnalyzer,
-    stableBSMParticleIds = [ 1000022, 9100000, 9100012, 9100022, -9100022, 9900032, 1023 ], # BSM particles that can appear with status <= 2 and should be kept
+    stableBSMParticleIds = [ 1000022, 9100000, 9000001, 9000002, -9000002, 9100012, 9100022, -9100022, 9900032, 1023 ], # BSM particles that can appear with status <= 2 and should be kept
     # Particles of which we want to save the pre-FSR momentum (a la status 3).
     # Note that for quarks and gluons the post-FSR doesn't make sense,
     # so those should always be in the list
@@ -969,7 +969,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 
 
-selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1'],]
 
 #selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
