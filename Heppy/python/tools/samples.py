@@ -37,12 +37,12 @@ sample = {
     'ZJetsToNuNu_HT' : {
         'order' : 1,
         'files' : ['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
-        'fillcolor' : 418,
+        'fillcolor' : 856,
         'fillstyle' : 1001,
-        'linecolor' : 418,
+        'linecolor' : 856,#856
         'linestyle' : 1,
         'label' : "Z(#nu#nu) + jets",
-        'weight': 1.,
+        'weight': 3., #FIXME
         'plot': True,
     },
     'WJetsToLNu' : {
@@ -52,7 +52,7 @@ sample = {
         'fillstyle' : 1001,
         'linecolor' : 881,
         'linestyle' : 1,
-        'label' : "W + jets",
+        'label' : "W(l#nu) + jets",
         'weight': 1.,
         'plot': True,
     },
