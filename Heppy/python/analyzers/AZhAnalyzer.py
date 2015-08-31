@@ -43,7 +43,9 @@ class AZhAnalyzer( Analyzer ):
             for i, n in enumerate(["ElecEta", "MuonEta"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Events", 60, -3., 3.)
             for i, n in enumerate(["ElecZdR", "MuonZdR"]):
-                self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["ElecZpt", "MuonZpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
             setup.services["outputfile"].file.cd("..")
             #
             setup.services["outputfile"].file.mkdir("Eff")
@@ -59,7 +61,7 @@ class AZhAnalyzer( Analyzer ):
             for i, n in enumerate(["EffElecEta_HEEP", "EffMuonEta_Highpt"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
             for i, n in enumerate(["EffElecZdR_Loose", "EffElecZdR_Loose_pfIso", "EffElecZdR_Loose_miniIso", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_pfIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_pfIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_pfIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_pfIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight"]):
-                self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
             for i, n in enumerate(["EffElecZpt_Loose", "EffElecZpt_Loose_pfIso", "EffElecZpt_Loose_miniIso", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_pfIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_pfIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_pfIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_pfIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             # Set Sumw2
