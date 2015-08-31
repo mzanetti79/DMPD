@@ -1099,7 +1099,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-100To200_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/E85E0EE3-1840-E511-B893-B083FED18596.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-100To200_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/E88B214B-5C3B-E511-BB40-001D09FD0D10.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-100To200_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/EC016852-1740-E511-9639-00266CFFC848.root' ],
-        'xsec'    : 93.49, # Cross-section after matching: 93.49 +- 2.78  pb
+        'xsec'    : 280.47, # Cross-section after matching: 93.49 +- 2.78  pb
         'nevents' : 5148193.,
         },
 
@@ -1272,7 +1272,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-200To400_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/ECABBBA3-9D33-E511-AD73-008CFA00EFE0.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-200To400_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/F27E63E1-A332-E511-9189-00259073E38A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-200To400_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/FEBCC27C-3133-E511-9C21-02163E014B3E.root' ],
-        'xsec'    : 26.12, # Cross-section after matching: 26.12 +- 0.86 pb
+        'xsec'    : 78.36, # Cross-section after matching: 26.12 +- 0.86 pb
         'nevents' : 5032927.,
         },
 
@@ -1312,7 +1312,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-400To600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/F4CEEEC6-2F2A-E511-B247-0025905C3E38.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-400To600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/F6470EBD-7B2A-E511-8B8B-001F296564FE.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-400To600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/F6ECFCC5-2F2A-E511-BFA5-0025905C4300.root' ],
-        'xsec'    : 3.648, # Cross-section after matching: 3.648+-0.125 pb
+        'xsec'    : 10.944, # Cross-section after matching: 3.648+-0.125 pb
         'nevents' : 1014139.,
         },
 
@@ -1376,7 +1376,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-600ToInf_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/FE833884-CF32-E511-9ACD-D48564594FB4.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-600ToInf_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/FEAE39DE-9E32-E511-AA88-00221982C61D.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZJetsToNuNu_HT-600ToInf_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/FEE58544-FC31-E511-A460-B083FED40671.root' ],
-        'xsec'    : 2.21, # Cross-section after matching: 1.401 +- 0.049  pb
+        'xsec'    : 4.203, # Cross-section after matching: 1.401 +- 0.049  pb
         'nevents' : 1015904.,
         },
 
