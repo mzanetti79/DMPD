@@ -60,6 +60,8 @@ class AZhAnalyzer( Analyzer ):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
             for i, n in enumerate(["EffElecZdR_Loose", "EffElecZdR_Loose_pfIso", "EffElecZdR_Loose_miniIso", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_pfIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_pfIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_pfIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_pfIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["EffElecZpt_Loose", "EffElecZpt_Loose_pfIso", "EffElecZpt_Loose_miniIso", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_pfIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_pfIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_pfIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_pfIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
@@ -76,6 +78,8 @@ class AZhAnalyzer( Analyzer ):
             i1, i2 = [0, 1] if event.genleps[0].pt() > event.genleps[1].pt() else [1, 0]
             l1, l2 = -1, -1
             genZdR = deltaR(event.genleps[i1].eta(), event.genleps[i1].phi(), event.genleps[i2].eta(), event.genleps[i2].phi())
+            genZpt = (event.genleps[i1].p4() + event.genleps[i2].p4()).pt()
+            
             # Electrons
             if abs(event.genleps[0].pdgId()) == 11:
                 for i, l in enumerate(event.inclusiveLeptons):
@@ -97,18 +101,29 @@ class AZhAnalyzer( Analyzer ):
                     pfIso = event.inclusiveLeptons[l1].relIso03<0.15 and event.inclusiveLeptons[l2].relIso03<0.15
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
                     self.Hist["ElecZdR"].Fill(genZdR)
+                    self.Hist["ElecZpt"].Fill(genZpt)
                     if event.inclusiveLeptons[l1].isHEEP and event.inclusiveLeptons[l2].isHEEP:
                         self.Hist["EffElecZdR_HEEP"].Fill(genZdR)
-                        if pfIso: self.Hist["EffElecZdR_HEEP_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffElecZdR_HEEP_miniIso"].Fill(genZdR)
+                        self.Hist["EffElecZpt_HEEP"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElecZdR_HEEP_pfIso"].Fill(genZdR)
+                            self.Hist["EffElecZpt_HEEP_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElecZdR_HEEP_miniIso"].Fill(genZdR)
+                            self.Hist["EffElecZpt_HEEP_miniIso"].Fill(genZpt)
                     if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose'):
                         self.Hist["EffElecZdR_Loose"].Fill(genZdR)
-                        if pfIso: self.Hist["EffElecZdR_Loose_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffElecZdR_Loose_miniIso"].Fill(genZdR)
+                        self.Hist["EffElecZpt_Loose"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElecZdR_Loose_pfIso"].Fill(genZdR)
+                            self.Hist["EffElecZpt_Loose_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElecZdR_Loose_miniIso"].Fill(genZdR)
+                            self.Hist["EffElecZpt_Loose_miniIso"].Fill(genZpt)
                     if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight'):
                         self.Hist["EffElecZdR_Tight"].Fill(genZdR)
+                        self.Hist["EffElecZpt_Tight"].Fill(genZpt)
                     
-                
             # Muons
             if abs(event.genleps[0].pdgId()) == 13:
                 for i, l in enumerate(event.inclusiveLeptons):
@@ -127,24 +142,49 @@ class AZhAnalyzer( Analyzer ):
                     pfIso = event.inclusiveLeptons[l1].relIso04<0.20 and event.inclusiveLeptons[l2].relIso04<0.20
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
                     self.Hist["MuonZdR"].Fill(genZdR)
+                    self.Hist["MuonZpt"].Fill(genZpt)
                     if event.inclusiveLeptons[l1].isTrackerMuon() and event.inclusiveLeptons[l2].isTrackerMuon():
                         self.Hist["EffMuonZdR_TrackerTracker"].Fill(genZdR)
-                        if pfIso: self.Hist["EffMuonZdR_TrackerTracker_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffMuonZdR_TrackerTracker_miniIso"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_TrackerTracker"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffMuonZdR_TrackerTracker_pfIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_TrackerTracker_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffMuonZdR_TrackerTracker_miniIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_TrackerTracker_miniIso"].Fill(genZpt)
                     if event.inclusiveLeptons[l1].muonID("POG_ID_Loose") and event.inclusiveLeptons[l2].muonID("POG_ID_Loose"):
                         self.Hist["EffMuonZdR_LooseLoose"].Fill(genZdR)
-                        if pfIso: self.Hist["EffMuonZdR_LooseLoose_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffMuonZdR_LooseLoose_miniIso"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_LooseLoose"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffMuonZdR_LooseLoose_pfIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_LooseLoose_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffMuonZdR_LooseLoose_miniIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_LooseLoose_miniIso"].Fill(genZpt)
                     if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")) and event.inclusiveLeptons[l1].isTrackerMuon() and event.inclusiveLeptons[l2].isTrackerMuon():
                         self.Hist["EffMuonZdR_HighptTracker"].Fill(genZdR)
-                        if pfIso: self.Hist["EffMuonZdR_HighptTracker_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffMuonZdR_HighptTracker_miniIso"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_HighptTracker"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffMuonZdR_HighptTracker_pfIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptTracker_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffMuonZdR_HighptTracker_miniIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptTracker_miniIso"].Fill(genZpt)
                     if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")) and event.inclusiveLeptons[l1].muonID("POG_ID_Loose") and event.inclusiveLeptons[l2].muonID("POG_ID_Loose"):
                         self.Hist["EffMuonZdR_HighptLoose"].Fill(genZdR)
-                        if pfIso: self.Hist["EffMuonZdR_HighptLoose_pfIso"].Fill(genZdR)
-                        if miniIso: self.Hist["EffMuonZdR_HighptLoose_miniIso"].Fill(genZdR)
-                    if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"): self.Hist["EffMuonZdR_HighptHighpt"].Fill(genZdR)
-                    if event.inclusiveLeptons[l1].muonID("POG_ID_Tight") and event.inclusiveLeptons[l2].muonID("POG_ID_Tight"): self.Hist["EffMuonZdR_TightTight"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_HighptLoose"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffMuonZdR_HighptLoose_pfIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptLoose_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffMuonZdR_HighptLoose_miniIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptLoose_miniIso"].Fill(genZpt)
+                    if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
+                        self.Hist["EffMuonZdR_HighptHighpt"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_HighptHighpt"].Fill(genZpt)
+                    if event.inclusiveLeptons[l1].muonID("POG_ID_Tight") and event.inclusiveLeptons[l2].muonID("POG_ID_Tight"):
+                        self.Hist["EffMuonZdR_TightTight"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_TightTight"].Fill(genZpt)
 
     
     
