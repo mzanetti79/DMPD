@@ -33,7 +33,7 @@ class GenAnalyzer( Analyzer ):
             self.GenZeta = ROOT.TH1F("GenZeta", ";Z #eta", 50, -5, 5.)
             self.GenZdR = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 60, 0, 3.)
             self.GenHdecay = ROOT.TH1F("GenHdecay", ";H daughter pdgId", 25, 0.5, 25.5)
-            self.GenHmass = ROOT.TH1F("GenHmass", ";m_{H} [GeV]", 1000, 100., 150.)
+            self.GenHmass = ROOT.TH1F("GenHmass", ";m_{H} [GeV]", 100, 120., 130.)
             self.GenHpt = ROOT.TH1F("GenHpt", ";H p_{T} [GeV]", 250, 0., 2500.)
             self.GenHeta = ROOT.TH1F("GenHeta", ";H #eta", 50, -5, 5.)
             self.GenHdR = ROOT.TH1F("GenHdR", ";b-quarks #Delta R", 50, 0, 5.)
@@ -48,7 +48,21 @@ class GenAnalyzer( Analyzer ):
             self.GenBquark2eta = ROOT.TH1F("GenBquark2eta", ";b-quark 2 #eta", 50, -5, 5.)
             #FIXME set Sumw2()
             
-            setup.services["outputfile"].file.cd()
+            setup.services["outputfile"].file.cd("..")
+            
+
+            setup.services["outputfile"].file.mkdir("Gen")
+            setup.services["outputfile"].file.cd("Gen")
+            self.LheZpt = ROOT.TH1F("LheZpt", ";Z p_{T} [GeV]", 250, 0., 2500.)
+            self.LheHT = ROOT.TH1F("LheHT", ";HT [GeV]", 150, 0., 1500.)
+            self.LheNj = ROOT.TH1F("LheNj", ";Number of partons", 6, -0.5, 5.5)
+            self.LheNb = ROOT.TH1F("LheNb", ";Number of b-quarks", 6, -0.5, 5.5)
+            self.LheNc = ROOT.TH1F("LheNc", ";Number of c-quarks", 6, -0.5, 5.5)
+            self.LheNl = ROOT.TH1F("LheNl", ";Number of light quarks", 6, -0.5, 5.5)
+            self.LheNg = ROOT.TH1F("LheNg", ";Number of gluons", 6, -0.5, 5.5)
+            setup.services["outputfile"].file.cd("..")
+            
+            
     
     def process(self, event):
         
@@ -111,6 +125,20 @@ class GenAnalyzer( Analyzer ):
                 self.GenBquark1eta.Fill(event.genbquarks[i1].eta())
                 self.GenBquark2pt.Fill(event.genbquarks[i2].pt())
                 self.GenBquark2eta.Fill(event.genbquarks[i2].eta())
+        
+        
+        ### LHE event ###
+        if not hasattr(event, "lheV_pt"):
+            return True
             
+        self.LheZpt.Fill(event.lheV_pt)
+        self.LheHT.Fill(event.lheHT)
+        self.LheNj.Fill(event.lheNj)
+        self.LheNb.Fill(event.lheNb)
+        self.LheNc.Fill(event.lheNc)
+        self.LheNl.Fill(event.lheNl)
+        self.LheNg.Fill(event.lheNg)
+        
+        
         return True
     
