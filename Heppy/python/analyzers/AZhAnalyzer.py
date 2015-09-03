@@ -87,19 +87,19 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isElectron() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                if l1 >= 0 and event.genleps[i1].pt() > self.cfg_ana.elec1pt:
+                if l1 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.elec1pt:
                     self.Hist["ElecPt"].Fill(event.genleps[i1].pt())
                     self.Hist["ElecEta"].Fill(event.genleps[i1].eta())
                     if event.inclusiveLeptons[l1].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i1].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i1].eta())
-                if l2 >= 0 and event.genleps[i2].pt() > self.cfg_ana.elec2pt:
+                if l2 >= 0 and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt:
                     self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
                     self.Hist["ElecEta"].Fill(event.genleps[i2].eta())
                     if event.inclusiveLeptons[l2].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i2].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i2].eta())
-                if l1 >= 0 and l2 >= 0 and event.genleps[i1].pt() > self.cfg_ana.elec1pt and event.genleps[i2].pt() > self.cfg_ana.elec2pt:
+                if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt+15:
                     pfIso = event.inclusiveLeptons[l1].relIso03<0.15 and event.inclusiveLeptons[l2].relIso03<0.15
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
                     self.Hist["ElecZdR"].Fill(genZdR)
@@ -131,14 +131,15 @@ class AZhAnalyzer( Analyzer ):
                 for i, l in enumerate(event.inclusiveLeptons):
                     if l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i1].eta(), event.genleps[i1].phi())<0.1 and abs(1-l.pt()/event.genleps[i1].pt()) < 0.3: l1 = i
                     elif l.isMuon() and deltaR(l.eta(), l.phi(), event.genleps[i2].eta(), event.genleps[i2].phi())<0.1 and abs(1-l.pt()/event.genleps[i2].pt()) < 0.3: l2 = i
-                if l1 >= 0 and l2 >= 0 and event.genleps[i1].pt() > self.cfg_ana.muon1pt and event.genleps[i2].pt() > self.cfg_ana.muon2pt:
+                if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.muon2pt:
+                    
                     if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
                         self.Hist["MuonPt"].Fill(event.genleps[i1].pt())
                         self.Hist["MuonEta"].Fill(event.genleps[i1].eta())
                         if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt"):
                             self.Hist["EffMuonPt_Highpt"].Fill(event.genleps[i1].pt())
                             self.Hist["EffMuonEta_Highpt"].Fill(event.genleps[i1].eta())
-                        if event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
+                        elif event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
                             self.Hist["EffMuonPt_Highpt"].Fill(event.genleps[i2].pt())
                             self.Hist["EffMuonEta_Highpt"].Fill(event.genleps[i2].eta())
                     pfIso = event.inclusiveLeptons[l1].relIso04<0.20 and event.inclusiveLeptons[l2].relIso04<0.20
@@ -217,7 +218,7 @@ class AZhAnalyzer( Analyzer ):
                 if e.ecalDrivenSeed(): self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
                 if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
                 if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
-                if e.hadronicOverEm() < 1./e.energy() + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
+                if e.hadronicOverEm() < 1./e.superCluster().energy() + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
                 if (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
                 if e.lostInner() <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
                 if abs(e.dxy()) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
@@ -226,7 +227,7 @@ class AZhAnalyzer( Analyzer ):
                 if e.ecalDrivenSeed(): self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
                 if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
                 if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
-                if e.hadronicOverEm() < 5./e.energy() + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
+                if e.hadronicOverEm() < 5./e.superCluster().energy() + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
                 if e.sigmaIetaIeta() < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
                 if e.lostInner() <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
                 if abs(e.dxy()) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
@@ -236,7 +237,7 @@ class AZhAnalyzer( Analyzer ):
             if not e.ecalDrivenSeed(): return False
             if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: return False
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            if not e.hadronicOverEm() < 1./e.energy() + 0.05: return False
+            if not e.hadronicOverEm() < 1./e.superCluster().energy() + 0.05: return False
             if not (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): return False
             if not e.lostInner() <= 1: return False
             if not abs(e.dxy()) < 0.02: return False
@@ -244,7 +245,7 @@ class AZhAnalyzer( Analyzer ):
             if not e.ecalDrivenSeed(): return False
             if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: return False
             if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            if not e.hadronicOverEm() < 5./e.energy() + 0.05: return False
+            if not e.hadronicOverEm() < 5./e.superCluster().energy() + 0.05: return False
             if not e.sigmaIetaIeta() < 0.03: return False
             if not e.lostInner() <= 1: return False
             if not abs(e.dxy()) < 0.05: return False
@@ -272,7 +273,7 @@ class AZhAnalyzer( Analyzer ):
         
         ### Preliminary operations ###
         # Attach electron HEEP Id
-        for i, l in enumerate(event.inclusiveLeptons): self.isHEEP(l)
+        for i, l in enumerate(event.inclusiveLeptons): self.isHEEP(l, i==0)
         self.fillGenPlots(event)
         
         # Trigger
