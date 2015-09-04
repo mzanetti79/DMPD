@@ -51,8 +51,8 @@ class GenAnalyzer( Analyzer ):
             setup.services["outputfile"].file.cd("..")
             
 
-            setup.services["outputfile"].file.mkdir("Gen")
-            setup.services["outputfile"].file.cd("Gen")
+            setup.services["outputfile"].file.mkdir("Lhe")
+            setup.services["outputfile"].file.cd("Lhe")
             self.LheZpt = ROOT.TH1F("LheZpt", ";Z p_{T} [GeV]", 250, 0., 2500.)
             self.LheHT = ROOT.TH1F("LheHT", ";HT [GeV]", 150, 0., 1500.)
             self.LheNj = ROOT.TH1F("LheNj", ";Number of partons", 6, -0.5, 5.5)
@@ -72,9 +72,9 @@ class GenAnalyzer( Analyzer ):
         event.genChi = []
         
         for g in event.genParticles:
-            if g.pdgId() == 9100000 or g.pdgId() == 9900032 or g.pdgId() == 9000001 or abs(g.pdgId()) == 9000002 or g.pdgId() == 1023:
+            if g.pdgId() in self.cfg_ana.phi:
                 event.genPhi = g
-            if abs(g.pdgId()) == 9100022 or g.pdgId() == 9100012:
+            if g.pdgId() in self.cfg_ana.chi:
                 event.genChi.append(g)
         if hasattr(event, "genPhi"):
             self.GenPhi1mass.Fill(event.genPhi.mass())
