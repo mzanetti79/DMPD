@@ -101,7 +101,14 @@ pileupAnalyzer = PileUpAnalyzer.defaultConfig
 ### VERTEXANALYZER         ###
 ##############################
 from PhysicsTools.Heppy.analyzers.objects.VertexAnalyzer import VertexAnalyzer
-vertexAnalyzer = VertexAnalyzer.defaultConfig
+vertexAnalyzer = cfg.Analyzer(
+    verbose=False,
+    class_object=VertexAnalyzer,
+    vertexWeight = None,
+    fixedWeight = 1,
+    doHists = False,
+    keepFailingEvents = True,
+    )
 
 ##############################
 ### LEPTONANALYZER         ###
@@ -241,7 +248,7 @@ fatJetAnalyzer = cfg.Analyzer(
     ### Jet - General
     ##############################
     jetCol                      = 'slimmedJetsAK8',
-    jetPt                       = 50.,
+    jetPt                       = 200.,
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
     jetLepDR                    = 1.0,
@@ -386,7 +393,7 @@ METNoHFAnalyzer = cfg.Analyzer(
     )
 
 ##############################
-### DM ANALYZERS           ###
+### ANALYSIS ANALYZERS     ###
 ##############################
 
 fake_met_cut = 0
@@ -394,8 +401,8 @@ fake_met_cut = 0
 from DMPD.Heppy.analyzers.GenAnalyzer import GenAnalyzer
 GenAnalyzer = cfg.Analyzer(
     class_object = GenAnalyzer,
-    mediator = [9100000, 9900032, 1023],
-    darkmatter = [9100022, -9100022, 9100012],
+    phi = [9100000, 9900032, 9000001, 9000002, -9000002, 1023],
+    chi = [9100022, -9100022, 9100012],
     )
 
 from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
@@ -433,15 +440,25 @@ SyncAnalyzer = cfg.Analyzer(
     class_object = SyncAnalyzer,
     )
 
-from DMPD.Heppy.analyzers.AZhAnalyzer import AZhAnalyzer
-AZhAnalyzer = cfg.Analyzer(
+from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
+SRAnalyzer = cfg.Analyzer(
     verbose = False,
-    class_object = AZhAnalyzer,
+    class_object = SRAnalyzer,
+    jetAlgo = "ak8PFJetsCHSPrunedMass",
+    )
+
+from DMPD.Heppy.analyzers.XZhAnalyzer import XZhAnalyzer
+XZhAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = XZhAnalyzer,
     elec1pt = 115.,
     elec2pt = 35.,
     muon1pt = 50.,
     muon2pt = 20.,
     fatjet_pt = 200.,
+    jetlep_dR = 0.8,
+    Z_mass_low = 70.,
+    Z_mass_high = 110.,
     Z_pt = 0.,#200.,
     met_pt = 0.,#200.,
     jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
@@ -499,27 +516,28 @@ SyncAnalyzerWCR = cfg.Analyzer(
     )
 
 
-globalVariables = [
+globalEventVariables = [
     #NTupleVariable('isSR',      lambda x: x.isSR, int, help='Signal Region flag'),
     #NTupleVariable('isZCR',     lambda x: x.isZCR, int, help='Z+jets Control Region flag'),
     #NTupleVariable('isWCR',     lambda x: x.isWCR, int, help='W+jets Control Region flag'),
     #NTupleVariable('isTCR',     lambda x: x.isTCR, int, help='ttbar Control Region flag'),
     #NTupleVariable('isGCR',     lambda x: x.isGCR, int, help='Gamma+jets Control Region flag'),
     #NTupleVariable('Cat',       lambda x: x.Category, int, help='Category 1/2/3'),
-    NTupleVariable('nPV',       lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
-    NTupleVariable('nMuons',    lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
-    NTupleVariable('nElectrons',lambda x: len(x.selectedElectrons), int, help='Number of selected electrons'),
-    NTupleVariable('nTaus',     lambda x: len(x.xcleanTaus), int, help='Number of xcleaned taus'),
-    NTupleVariable('nPhotons',  lambda x: len(x.xcleanPhotons), int, help='Number of selected photons'),
-    NTupleVariable('nJets',     lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
-    NTupleVariable('nFatJets',  lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
-    NTupleVariable('nBJets',    lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
-#    NTupleVariable('nBFatJets', lambda x: len([jet for jet in x.xcleanJetsAK8 if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b- fat jets'),
-    NTupleVariable('genNb',    lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
-    NTupleVariable('lheNb',    lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
-    NTupleVariable('lheHT',    lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
-    NTupleVariable('lheVpt',    lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
-    NTupleVariable('rho',    lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
+    NTupleVariable('lheNb',            lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
+    NTupleVariable('lheHT',            lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
+    NTupleVariable('lheVpt',           lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
+    NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
+    NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
+    NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
+]
+globalDMVariables = globalEventVariables + [
+    NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
+    NTupleVariable('nElectrons',       lambda x: len(x.selectedElectrons), int, help='Number of selected electrons'),
+    NTupleVariable('nTaus',            lambda x: len(x.xcleanTaus), int, help='Number of xcleaned taus'),
+    NTupleVariable('nPhotons',         lambda x: len(x.xcleanPhotons), int, help='Number of selected photons'),
+    NTupleVariable('nJets',            lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
+    NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
+    NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
 ]
 
 
@@ -533,11 +551,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isSR and x.met.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables + [
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-    ],
+    globalVariables = globalDMVariables + [],
     globalObjects = {
+        'theX'      : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
         'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
@@ -567,20 +583,16 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isZCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables + [
+    globalVariables = globalDMVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZtoEE, int, help='Z -> mu mu flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag'),
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
+        'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
         'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
-        'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
@@ -608,20 +620,16 @@ WControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isWCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables + [
+    globalVariables = globalDMVariables + [
         NTupleVariable('isWtoEN',  lambda x: x.isWtoEN, int, help='W -> mu nu flag'),
         NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
     ],
     globalObjects = {
+        'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
         'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
-        'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
@@ -649,12 +657,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isTCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables + [
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
-    ],
+    globalVariables = globalDMVariables + [],
     globalObjects = {
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
         'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
@@ -685,12 +688,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isGCR and x.fakemet.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalVariables + [
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
-    ],
+    globalVariables = globalDMVariables + [],
     globalObjects = {
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
         'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
@@ -714,52 +712,34 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 
 
 ##############################
-###  Zprime -> Zh -> llbb  ###
+### X -> Zh -> (ll/nunu)bb ###
 ##############################
 
-AZhTreeProducer= cfg.Analyzer(
+XZhTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
-    name='AZhTreeProducer',
-    treename='AZh',
-    filter = lambda x: x.isAZh,
+    name='XZhTreeProducer',
+    treename='XZh',
+    filter = lambda x: x.isXZh,
     verbose=False,
     vectorTree = False,
-    globalVariables =  [
-        NTupleVariable('isZtoLL',  lambda x: x.isZ2LL, int, help='Z -> ll flag'),
+    globalVariables = globalEventVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
-        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nunu flag'),
-        NTupleVariable('nPV',       lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
-        NTupleVariable('nMuons',    lambda x: len(x.highptIdIsoMuons), int, help='Number of selected muons'),
-        NTupleVariable('nElectrons',lambda x: len(x.highptIdIsoElectrons), int, help='Number of selected electrons'),
-        NTupleVariable('nTaus',     lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
-        NTupleVariable('nPhotons',  lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
-        NTupleVariable('nJets',     lambda x: len(x.highptFatJets), int, help='Number of xcleaned jets'),
-        NTupleVariable('genNb',    lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
-        NTupleVariable('lheNb',    lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
-        NTupleVariable('lheHT',    lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
-        NTupleVariable('lheVpt',    lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
-        NTupleVariable('rho',    lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
-#        NTupleVariable('met_pt',    lambda x: x.met.pt(), float, help='Missing energy'),
-#        NTupleVariable('met_phi',   lambda x: x.met.phi(), float, help='Missing energy azimuthal coordinate'),
-#        NTupleVariable('fakemet_pt',    lambda x: x.fakemet.pt(), float, help='fake Missing energy'),
-#        NTupleVariable('fakemet_phi',   lambda x: x.fakemet.phi(), float, help='fake Missing energy azimuthal coordinate'),
+        NTupleVariable('nMuons',           lambda x: len(x.highptIdIsoMuons), int, help='Number of selected muons'),
+        NTupleVariable('nElectrons',       lambda x: len(x.highptIdIsoMuons), int, help='Number of selected electrons'),
+        NTupleVariable('nTaus',            lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
+        NTupleVariable('nPhotons',         lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
+        NTupleVariable('nJets',            lambda x: len(x.cleanJets), int, help='Number of xcleaned jets'),
+        NTupleVariable('nFatJets',         lambda x: len(x.highptFatJets), int, help='Number of xcleaned fat jets'),
     ],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
-        'pfmet'     : NTupleObject('pfmet',  metType, help='PF MET, after default type 1 corrections'),
-        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
-        'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
-        'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        'X'         : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
-        #'H' : NTupleObject('h', candidateType, help='Higgs boson candidate'),
-        #'met' : NTupleObject('met',  metType, help='PF E_{T}^{miss}, after default type 1 corrections'),
+        'met'       : NTupleObject('met',  metType, help='PF MET, after default type 1 corrections'),
         },
     collections = {
         'highptLeptons' : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
-        #'xcleanJets' : NTupleCollection('jet', jetType, 3, help='Jets after the preselection'),
         'highptFatJets' : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
-        #'SubJets' : NTupleCollection('jet', subjetType, 2, help='subJets of the leading fatJet'),
         }
     )
 
@@ -804,14 +784,15 @@ sequence = [
     XCleaningAnalyzer,
     SyncAnalyzer,
 #    CategorizationAnalyzer,
-    AZhAnalyzer,
+    SRAnalyzer,
+    XZhAnalyzer,
     ##### Tree producers
     SignalRegionTreeProducer,
     ZControlRegionTreeProducer,
     WControlRegionTreeProducer,
     TTbarControlRegionTreeProducer,
     GammaControlRegionTreeProducer,
-    AZhTreeProducer,
+    XZhTreeProducer,
     ]
 
 ##############################
@@ -970,9 +951,9 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 
 #selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
-selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1'],]
+#selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1'],]
 
-#selectedComponents = [
+selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
@@ -982,11 +963,12 @@ selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgrap
 #    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
-#]
+##    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
+]
 
 ### TEST (LOCAL)
 #selectedComponents = [sample['Test'],]
