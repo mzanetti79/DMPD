@@ -17,7 +17,7 @@ class GenAnalyzer( Analyzer ):
             setup.services["outputfile"].file.mkdir("Gen")
             setup.services["outputfile"].file.cd("Gen")
             
-            self.Hist["GenPhi1mass"]"] = ROOT.TH1F("GenPhi1mass", ";m_{X} [GeV]", 1000, 0., 5000.)
+            self.Hist["GenPhi1mass"] = ROOT.TH1F("GenPhi1mass", ";m_{X} [GeV]", 1000, 0., 5000.)
             self.Hist["GenPhi1pt"] = ROOT.TH1F("GenPhi1pt", ";X p_{T} [GeV]", 500, 0., 1000.)
             self.Hist["GenPhi1eta"] = ROOT.TH1F("GenPhi1eta", ";#Phi #eta", 50, -5, 5.)
             self.Hist["GenChi1mass"] = ROOT.TH1F("GenChi1mass", ";#chi_{1} mass [GeV]", 1000, 0., 1000.)
