@@ -6,11 +6,11 @@ import math
 import ROOT
 from array import array
 
-class AZhAnalyzer( Analyzer ):
-    '''Analyzer for the Z' -> Zh -> (ll/nunu)bb analysis'''
+class XZhAnalyzer( Analyzer ):
+    '''Analyzer for the X -> Zh -> (ll/nunu)bb analysis'''
 
     def beginLoop(self, setup):
-        super(AZhAnalyzer, self).beginLoop(setup)
+        super(XZhAnalyzer, self).beginLoop(setup)
         self.Hist = {}
         
         Z2LLlabels = ["Trigger", "Lep #geq 2", "Lep Id", "Lep Iso", "Z cand", "Z mass", "Z p_{T}", "Jet p_{T}", "h mass", "b-tag 1", "b-tag 2"]
@@ -207,7 +207,7 @@ class AZhAnalyzer( Analyzer ):
     
     
     
-    def isHEEP(self, e, doPlot=True):
+    def addHEEP(self, e, doPlot=False):
         e.isHEEP = False
         if not e.isElectron() or not e.et() > 35.: return False
         
@@ -257,13 +257,13 @@ class AZhAnalyzer( Analyzer ):
     
     
     def process(self, event):
-        event.isAZh = False
+        event.isXZh = False
         event.isZ2EE = False
         event.isZ2MM = False
         event.isZ2NN = False
         event.highptFatJets = [] #ROOT.pat.Jet()
         event.Z = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
-        event.A = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         event.fakemet = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         
          # All
@@ -273,7 +273,7 @@ class AZhAnalyzer( Analyzer ):
         
         ### Preliminary operations ###
         # Attach electron HEEP Id
-        for i, l in enumerate(event.inclusiveLeptons): self.isHEEP(l, i==0)
+        for i, l in enumerate(event.inclusiveLeptons): self.addHEEP(l, i==0)
         self.fillGenPlots(event)
         
         # Trigger
@@ -290,7 +290,7 @@ class AZhAnalyzer( Analyzer ):
         elif len([x for x in event.inclusiveLeptons if x.isMuon()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.muon2pt: self.Hist["Z2MMCounter"].AddBinContent(2)
         
         # Id
-        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.isHEEP(x)] # and self.isHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
+        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.addHEEP(x)] # and self.isHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
         event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
         
         if len(event.highptIdElectrons) >= 2 and event.highptIdElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdElectrons[1].pt() > self.cfg_ana.elec2pt: self.Hist["Z2EECounter"].AddBinContent(3)
@@ -350,7 +350,7 @@ class AZhAnalyzer( Analyzer ):
             if event.isZ2EE: self.Hist["Z2EECounter"].AddBinContent(8)
             if event.isZ2MM: self.Hist["Z2MMCounter"].AddBinContent(8)
         
-        event.isAZh = True
+        event.isXZh = True
         
         #########################
         #    Part 2: Jets       #
@@ -381,15 +381,15 @@ class AZhAnalyzer( Analyzer ):
         
         # A/Z' candidate
         if event.isZ2LL:
-            event.A = event.Z + event.highptFatJets[0].p4()
-            event.A.mT = event.A.mass()
-            event.A.mC = event.A.mass()
-            event.A.mK = (event.Z + kH).mass()
-            event.A.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
-            event.A.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
-            event.A.deltaPhi = deltaPhi(event.Z.phi(), event.highptFatJets[0].phi())
+            event.X = event.Z + event.highptFatJets[0].p4()
+            event.X.mT = event.X.mass()
+            event.X.mC = event.X.mass()
+            event.X.mK = (event.Z + kH).mass()
+            event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
+            event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
+            event.X.deltaPhi = deltaPhi(event.Z.phi(), event.highptFatJets[0].phi())
         elif len(event.highptLeptons) == 1:
-            event.A = event.highptLeptons[0].p4() + event.met.p4() + event.highptFatJets[0].p4()
+            event.X = event.highptLeptons[0].p4() + event.met.p4() + event.highptFatJets[0].p4()
             pz = 0.
             a = 80.4**2 - event.highptLeptons[0].mass()**2 + 2.*event.highptLeptons[0].px()*event.met.px() + 2.*event.highptLeptons[0].py()*event.met.py()
             A = 4*( event.highptLeptons[0].energy()**2 - event.highptLeptons[0].pz()**2 )
@@ -402,18 +402,18 @@ class AZhAnalyzer( Analyzer ):
                 pz = -B/(2*A)
             kmet = event.met.p4()
             kmet.SetPz(pz)
-            event.A.mT = (event.highptLeptons[0].p4() + kmet + event.highptFatJets[0].p4()).mass()
+            event.X.mT = (event.highptLeptons[0].p4() + kmet + event.highptFatJets[0].p4()).mass()
             cmet = event.met.p4()
             cmet.SetPz(event.highptLeptons[0].pz())
-            event.A.mC = (event.highptLeptons[0].p4() + cmet + event.highptFatJets[0].p4()).mass()
-            event.A.mK = (event.highptLeptons[0].p4() + kmet + kH).mass()
+            event.X.mC = (event.highptLeptons[0].p4() + cmet + event.highptFatJets[0].p4()).mass()
+            event.X.mK = (event.highptLeptons[0].p4() + kmet + kH).mass()
         else:
-            event.A = event.met.p4() + event.highptFatJets[0].p4()
-            event.A.mT = math.sqrt( 2.*event.highptFatJets[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.highptFatJets[0].phi(), event.met.phi()) )) )
+            event.X = event.met.p4() + event.highptFatJets[0].p4()
+            event.X.mT = math.sqrt( 2.*event.highptFatJets[0].energy()*event.met.pt()*(1.-math.cos( deltaPhi(event.highptFatJets[0].phi(), event.met.phi()) )) )
             cmet = event.met.p4()
             cmet.SetPz( -event.highptFatJets[0].pz() )
-            event.A.mC = (cmet + event.highptFatJets[0].p4()).mass()
-            event.A.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
+            event.X.mC = (cmet + event.highptFatJets[0].p4()).mass()
+            event.X.mK = math.sqrt( 2.*kH.energy()*event.met.pt()*(1.-math.cos( deltaPhi(kH.phi(), event.met.phi()) )) )
         
         if event.isZ2LL:
             self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
@@ -425,7 +425,7 @@ class AZhAnalyzer( Analyzer ):
         
         
         # Fill tree
-        event.isAZh = True
+        event.isXZh = True
         
         # ---------- Estimate cuts ----------
         
