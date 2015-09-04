@@ -15,8 +15,8 @@ class PreselectionAnalyzer( Analyzer ):
         if "outputfile" in setup.services:
             setup.services["outputfile"].file.mkdir("Counters")
             setup.services["outputfile"].file.cd("Counters")
-            Labels = ["Trigger"]
-            self.Counter = ROOT.TH1F("Counter", "Counter", 8, 0, 8)
+            Labels = ["All", "SR", "ZCR", "WCR", "TCR", "GCR"]
+            self.Counter = ROOT.TH1F("Counter", "Counter", len(Labels), 0, len(Labels))
             for i, l in enumerate(Labels):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
             setup.services["outputfile"].file.cd("..")
@@ -88,7 +88,9 @@ class PreselectionAnalyzer( Analyzer ):
         event.theW = theW
         return True
     
-    
+    def createX(self, event):
+        event.theX = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        return True
     
     def process(self, event):
         event.isSR = False
@@ -127,8 +129,14 @@ class PreselectionAnalyzer( Analyzer ):
         #self.addJESUncertainty(event)
         
         self.Counter.Fill(-1, event.eventWeight)
-        # Trigger
-        self.Counter.Fill(0, event.eventWeight)
+        
+        
+        ########################################
+        ###    Very preliminary selections   ###
+        ########################################
+        
+        if not event.passedVertexAnalyzer:
+            return False
         
         # Check if there is at least one jet
         #if len(event.cleanJets) < 1:# and len(event.cleanJetsAK8) < 1:
@@ -140,6 +148,7 @@ class PreselectionAnalyzer( Analyzer ):
         ### Count Leptons and select Regions ###
         ########################################
         
+        self.Counter.AddBinContent(1, event.eventWeight)
         
         ### Two leptons
         if len(event.selectedLeptons) >= 2:
@@ -147,6 +156,7 @@ class PreselectionAnalyzer( Analyzer ):
             if len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
                 event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
+                self.Counter.AddBinContent(5, event.eventWeight)
                 event.isTCR = True
             
             ###   Z(ee) Control Region   ###
@@ -154,6 +164,7 @@ class PreselectionAnalyzer( Analyzer ):
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.createZ(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 event.xcleanLeptons = event.selectedElectrons
+                self.Counter.AddBinContent(3, event.eventWeight)
                 event.isZtoEE = True
                 event.isZCR = True
             
@@ -162,6 +173,7 @@ class PreselectionAnalyzer( Analyzer ):
                 self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 event.xcleanLeptons = event.selectedMuons
+                self.Counter.AddBinContent(3, event.eventWeight)
                 event.isZtoMM = True
                 event.isZCR = True
         
@@ -172,6 +184,7 @@ class PreselectionAnalyzer( Analyzer ):
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
                 event.xcleanLeptons = event.selectedElectrons
+                self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoEN = True
                 event.isWCR = True
             
@@ -180,19 +193,23 @@ class PreselectionAnalyzer( Analyzer ):
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
                 event.xcleanLeptons = event.selectedMuons
+                self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoMN = True
                 event.isWCR = True
         
         ### One photon
         elif len(event.selectedPhotons) >= 1:
             self.addFakeMet(event, [event.selectedPhotons[0]])
+            self.Counter.AddBinContent(6, event.eventWeight)
             event.isGCR = True
         
         ### No leptons nor photons
         else:
             self.addFakeMet(event, [])
+            self.createX(event)
+            self.Counter.AddBinContent(2, event.eventWeight)
             event.isSR = True
-        
+            
         
         return True
     
