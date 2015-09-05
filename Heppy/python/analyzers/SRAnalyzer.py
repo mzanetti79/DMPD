@@ -43,7 +43,7 @@ class SRAnalyzer( Analyzer ):
             
         # h candidate with pseudo-kin fit
         kH = event.xcleanJetsAK8[0].p4()
-        k = 125.0/event.xcleanJetsAK8[0].mass() if event.xcleanJetsAK8[0].mass() > 0 else 0. #.userFloat("ak8PFJetsCHSSoftDropMass")
+        k = 125.0/event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) if event.xcleanJetsAK8[0].mass() > 0 else 0.
         kH = ROOT.reco.Particle.LorentzVector(event.xcleanJetsAK8[0].px()*k, event.xcleanJetsAK8[0].py()*k, event.xcleanJetsAK8[0].pz()*k, event.xcleanJetsAK8[0].energy()*k)
         
         event.theX = event.met.p4() + event.xcleanJetsAK8[0].p4()
