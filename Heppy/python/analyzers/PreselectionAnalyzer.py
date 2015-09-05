@@ -152,12 +152,35 @@ class PreselectionAnalyzer( Analyzer ):
         
         ### Two leptons
         if len(event.selectedLeptons) >= 2:
-            ###   TTbar Control Region   ###
-            if len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
-                self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
-                event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
-                self.Counter.AddBinContent(5, event.eventWeight)
-                event.isTCR = True
+            ###   W(mnu) Control Region   ###
+            if len(event.selectedMuons) >= 1:
+                self.addFakeMet(event, [event.selectedMuons[0]])
+                self.createW(event, event.selectedMuons[0])
+                event.xcleanLeptons = event.selectedMuons + [x for x in event.otherLeptons if x.isMuon()]
+                self.Counter.AddBinContent(4, event.eventWeight)
+                event.isWtoMN = True
+                event.isWCR = True
+            
+            ###   W(enu) Control Region   ###
+            elif len(event.selectedElectrons) >= 1:
+                self.addFakeMet(event, [event.selectedElectrons[0]])
+                self.createW(event, event.selectedElectrons[0])
+                event.xcleanLeptons = event.selectedElectrons + [x for x in event.otherLeptons if x.isElectron()]
+                self.Counter.AddBinContent(4, event.eventWeight)
+                event.isWtoEN = True
+                event.isWCR = True
+            else: print "PORNOBLEMA"
+                 
+            ### ============================== ###
+            
+            ###   Z(mm) Control Region   ###
+            if len(event.selectedMuons) >= 2 and event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
+                self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
+                self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
+                event.xcleanLeptons = event.selectedMuons
+                self.Counter.AddBinContent(3, event.eventWeight)
+                event.isZtoMM = True
+                event.isZCR = True
             
             ###   Z(ee) Control Region   ###
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
@@ -168,33 +191,32 @@ class PreselectionAnalyzer( Analyzer ):
                 event.isZtoEE = True
                 event.isZCR = True
             
-            ###   Z(mm) Control Region   ###
-            elif len(event.selectedMuons) >= 2 and event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
-                self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
-                self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
-                event.xcleanLeptons = event.selectedMuons
-                self.Counter.AddBinContent(3, event.eventWeight)
-                event.isZtoMM = True
-                event.isZCR = True
+            ###   TTbar Control Region   ###
+            elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
+                self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
+                event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
+                self.Counter.AddBinContent(5, event.eventWeight)
+                event.isTCR = True
+            
         
         ### One lepton
         elif len(event.selectedLeptons) == 1:
-            ###   W(enu) Control Region   ###
-            if len(event.selectedElectrons) == 1:
-                self.addFakeMet(event, [event.selectedElectrons[0]])
-                self.createW(event, event.selectedElectrons[0])
-                event.xcleanLeptons = event.selectedElectrons
-                self.Counter.AddBinContent(4, event.eventWeight)
-                event.isWtoEN = True
-                event.isWCR = True
-            
             ###   W(mnu) Control Region   ###
-            elif len(event.selectedMuons) == 1:
+            if len(event.selectedMuons) == 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
-                event.xcleanLeptons = event.selectedMuons
+                event.xcleanLeptons = event.selectedMuons + [x for x in event.otherLeptons if x.isMuon()]
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoMN = True
+                event.isWCR = True
+            
+            ###   W(enu) Control Region   ###
+            elif len(event.selectedElectrons) == 1:
+                self.addFakeMet(event, [event.selectedElectrons[0]])
+                self.createW(event, event.selectedElectrons[0])
+                event.xcleanLeptons = event.selectedElectrons + [x for x in event.otherLeptons if x.isElectron()]
+                self.Counter.AddBinContent(4, event.eventWeight)
+                event.isWtoEN = True
                 event.isWCR = True
         
         ### One photon
