@@ -15,6 +15,7 @@ sample = {
     'DYJetsToLL' : {
         'order' : 1,
         'files' : ['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
+        #'files' : ['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 418,
         'fillstyle' : 1001,
         'linecolor' : 418,
