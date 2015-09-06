@@ -72,8 +72,8 @@ class PreselectionAnalyzer( Analyzer ):
         theZ.charge = leptons[0].charge() + leptons[1].charge()
         theZ.deltaR = deltaR(leptons[0].eta(), leptons[0].phi(), leptons[1].eta(), leptons[1].phi())
         theZ.deltaEta = abs(leptons[0].eta() - leptons[1].eta())
-        theZ.deltaPhi = deltaPhi(leptons[0].phi(), leptons[1].phi())
-        #theZ.deltaPhi_met = deltaPhi(theZ.phi(), event.met.phi())
+        theZ.deltaPhi = abs(deltaPhi(leptons[0].phi(), leptons[1].phi()))
+        #theZ.deltaPhi_met = abs(deltaPhi(theZ.phi(), event.met.phi()))
         event.theZ = theZ
         return True
     
@@ -82,9 +82,9 @@ class PreselectionAnalyzer( Analyzer ):
         theW.charge = lepton.charge()
         theW.deltaR = deltaR(lepton.eta(), lepton.phi(), 0, event.met.phi())
         theW.deltaEta = abs(lepton.eta())
-        theW.deltaPhi = deltaPhi(lepton.phi(), event.met.phi())
-        theW.deltaPhi_met = deltaPhi(lepton.phi(), event.met.phi())
-        theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(theW.deltaPhi_met)) )
+        theW.deltaPhi = abs(deltaPhi(lepton.phi(), event.met.phi()))
+        theW.deltaPhi_met = abs(deltaPhi(lepton.phi(), event.met.phi()))
+        theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) )
         event.theW = theW
         return True
     

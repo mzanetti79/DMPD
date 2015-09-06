@@ -449,7 +449,7 @@ class XZhAnalyzer( Analyzer ):
         event.X.mK = (event.Z + kH).mass()
         event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
         event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
-        event.X.deltaPhi = deltaPhi(event.Z.phi(), event.highptFatJets[0].phi())
+        event.X.deltaPhi = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
         
 #        elif len(event.highptLeptons) == 1:
 #            event.X = event.highptLeptons[0].p4() + event.met.p4() + event.highptFatJets[0].p4()
