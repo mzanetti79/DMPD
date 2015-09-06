@@ -119,10 +119,13 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
 ])
 
 fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -1., float, help="Jet pruned mass"),
     #NTupleVariable("trimmedMass",   lambda x : x.userFloat("ak8PFJetsCHSTrimmedMass") if x.hasUserFloat("ak8PFJetsCHSTrimmedMass") else -1., float, help="Jet trimmed mass"),
     #NTupleVariable("filteredMass",   lambda x : x.userFloat("ak8PFJetsCHSFilteredMass") if x.hasUserFloat("ak8PFJetsCHSFilteredMass") else -1., float, help="Jet filtered mass"),
+    NTupleVariable("prunedMass",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMass") if x.hasUserFloat("ak8PFJetsCHSPrunedMass") else -1., float, help="Jet pruned mass"),
     NTupleVariable("softdropMass",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMass") if x.hasUserFloat("ak8PFJetsCHSSoftDropMass") else -1., float, help="Jet SoftDrop mass"),
+    NTupleVariable("prunedMassCorr",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMassCorr") if x.hasUserFloat("ak8PFJetsCHSPrunedMassCorr") else -1., float, help="Jet pruned mass corrected"),
+    NTupleVariable("softdropMassCorr",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMassCorr") if x.hasUserFloat("ak8PFJetsCHSSoftDropMassCorr") else -1., float, help="Jet SoftDrop mass corrected"),
+    
     NTupleVariable("dR",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
