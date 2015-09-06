@@ -446,7 +446,7 @@ from DMPD.Heppy.analyzers.SRAnalyzer import SRAnalyzer
 SRAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = SRAnalyzer,
-    jetAlgo = "ak8PFJetsCHSPrunedMass",
+    jetAlgo = "ak8PFJetsCHSPrunedMassCorr",
     )
 
 from DMPD.Heppy.analyzers.XZhAnalyzer import XZhAnalyzer
@@ -463,8 +463,8 @@ XZhAnalyzer = cfg.Analyzer(
     Z_mass_high = 110.,
     Z_pt = 0.,#200.,
     met_pt = 0.,#200.,
-    jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
-    recalibrateMass             = False,
+    jetAlgo = "ak8PFJetsCHSPrunedMassCorr",#"ak8PFJetsCHSSoftDropMass"
+    recalibrateMass             = True,
     recalibrationType           = 'AK8PFchs',
     jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
     mcGT                        = 'Summer15_25nsV2_MC',
@@ -558,7 +558,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isSR and x.met.pt() >= fake_met_cut,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalDMVariables + [],
+    globalVariables = globalDMVariables + [
+        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nu nu flag'),
+    ],
     globalObjects = {
         'theX'      : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET 3.0, without type 1 corrections'),
@@ -746,7 +748,7 @@ XZhTreeProducer= cfg.Analyzer(
         },
     collections = {
         'highptLeptons' : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
-        'highptFatJets' : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
+        'highptFatJets' : NTupleCollection('fatjet', fatjetType, 2, help='fatJets after the preselection'),
         }
     )
 
@@ -970,11 +972,11 @@ selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
-    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
+##    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
 ]
 
 ### TEST (LOCAL)
@@ -1012,7 +1014,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=10000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
