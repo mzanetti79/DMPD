@@ -43,7 +43,7 @@ class SRAnalyzer( Analyzer ):
             
         # h candidate with pseudo-kin fit
         kH = event.xcleanJetsAK8[0].p4()
-        k = 125.0/event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) if event.xcleanJetsAK8[0].mass() > 0 else 0.
+        k = 125.0/event.xcleanJetsAK8[0].mass() if event.xcleanJetsAK8[0].mass() > 0 else 0. #.userFloat(self.cfg_ana.jetAlgo)
         kH = ROOT.reco.Particle.LorentzVector(event.xcleanJetsAK8[0].px()*k, event.xcleanJetsAK8[0].py()*k, event.xcleanJetsAK8[0].pz()*k, event.xcleanJetsAK8[0].energy()*k)
         
         event.theX = event.met.p4() + event.xcleanJetsAK8[0].p4()
@@ -64,10 +64,10 @@ class SRAnalyzer( Analyzer ):
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(6, event.eventWeight)
         
         # b-tagging
-        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) > 0 and event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605: event.isZ2NN = False
+        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) >= 2 and (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605): event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(7, event.eventWeight)
 
-        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) > 1 and event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:  event.isZ2NN = False
+        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) >= 2 and (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):  event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(8, event.eventWeight)
         
 
