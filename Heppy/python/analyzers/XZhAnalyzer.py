@@ -1,8 +1,7 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
-import copy
-import math
+import os, copy, math
 import ROOT
 from array import array
 
@@ -15,7 +14,7 @@ class XZhAnalyzer( Analyzer ):
         
         Z2LLlabels = ["Trigger", "Lep Acc", "Lep Id", "Lep Iso", "Z cand", "Z mass", "Z p_{T}", "Jet p_{T}", "h mass", "b-tag 1", "b-tag 2"]
         Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
-        HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|"]
+        HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|", "All"]
         pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
         dRbins = [0., 0.025, 0.05, 0.075, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.75, 1.0]
         if "outputfile" in setup.services:
@@ -66,10 +65,10 @@ class XZhAnalyzer( Analyzer ):
                 h.Sumw2()
         
         # Jet Mass Recalibration
-        if cfg_ana.recalibrateMass:
-            path = os.path.expandvars(cfg_ana.jecPath)
-            globalTag = cfg_ana.mcGT if self.cfg_comp.isMC else cfg_ana.dataGT
-            jetFlavour = cfg_ana.recalibrationType
+        if self.cfg_ana.recalibrateMass:
+            path = os.path.expandvars(self.cfg_ana.jecPath)
+            globalTag = self.cfg_ana.mcGT if self.cfg_comp.isMC else self.cfg_ana.dataGT
+            jetFlavour = self.cfg_ana.recalibrationType
             self.vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
             #self.L1JetPar  = ROOT.JetCorrectorParameters("%s/%s_L1FastJet_%s.txt" % (path,globalTag,jetFlavour),"");
             self.L2JetPar  = ROOT.JetCorrectorParameters("%s/%s_L2Relative_%s.txt" % (path,globalTag,jetFlavour),"");
@@ -269,25 +268,31 @@ class XZhAnalyzer( Analyzer ):
         else:
             return False
         
+        if doPlot:
+            if abs(e.superCluster().eta()) < 1.4442:
+                self.Hist["EffElecBarrelHEEP"].AddBinContent(8)
+            elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+                self.Hist["EffElecEndcapHEEP"].AddBinContent(8)
+        
         e.isHEEP = True
         return True
     
     
-    def addCorrectedJetMass(event, jet):
-        if cfg_ana.recalibrateMass:
+    def addCorrectedJetMass(self, event, jet):
+        if self.cfg_ana.recalibrateMass:
             self.JetCorrector.setJetPt(jet.pt() * jet.rawFactor())
             self.JetCorrector.setJetEta(jet.eta())
+            self.JetCorrector.setJetE(jet.energy() * jet.rawFactor());
             self.JetCorrector.setJetA(jet.jetArea())
-            self.JetCorrector.setRho(rho)
+            self.JetCorrector.setRho(event.rho)
+            self.JetCorrector.setNPV( len(event.vertices) )
             corr = self.JetCorrector.getCorrection()
         else:
             corr = 1.
 
-        jet.addUserFloat("ak8PFJetsCHSRawPrunedMass", jet.userFloat("ak8PFJetsCHSPrunedMass"))
-        jet.addUserFloat("ak8PFJetsCHSPrunedMass", corr*jet.userFloat("ak8PFJetsCHSRawPrunedMass"))
+        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
+        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
         
-        jet.addUserFloat("ak8PFJetsCHSRawSoftDropMass", jet.userFloat("ak8PFJetsCHSSoftDropMass"))
-        jet.addUserFloat("ak8PFJetsCHSSoftDropMass", corr*jet.userFloat("ak8PFJetsCHSRawSoftDropMass"))
     
     
     def process(self, event):
@@ -300,8 +305,8 @@ class XZhAnalyzer( Analyzer ):
         event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         
          # All
-        self.Hist["Z2EECounter"].AddBinContent(0)
-        self.Hist["Z2MMCounter"].AddBinContent(0)
+        self.Hist["Z2EECounter"].AddBinContent(0, event.eventWeight)
+        self.Hist["Z2MMCounter"].AddBinContent(0, event.eventWeight)
         
         ### Preliminary operations ###
         # Attach electron HEEP Id
@@ -309,10 +314,13 @@ class XZhAnalyzer( Analyzer ):
         self.fillGenPlots(event)
         
         # Trigger
-        if not event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v and not event.HLT_BIT_HLT_Mu45_eta2p1_v:
+        elecTrigger = event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v
+        muonTrigger = event.HLT_BIT_HLT_Mu45_eta2p1_v
+        
+        if not elecTrigger and not muonTrigger:
             return True
-        if event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v: self.Hist["Z2EECounter"].AddBinContent(1)
-        if event.HLT_BIT_HLT_Mu45_eta2p1_v: self.Hist["Z2MMCounter"].AddBinContent(1)
+        if elecTrigger: self.Hist["Z2EECounter"].AddBinContent(1, event.eventWeight)
+        if muonTrigger: self.Hist["Z2MMCounter"].AddBinContent(1, event.eventWeight)
         
         #########################
         #    Part 1: Leptons    #
@@ -327,8 +335,8 @@ class XZhAnalyzer( Analyzer ):
         
         if not elecAcc and not muonAcc:
             return True
-        if elecAcc: self.Hist["Z2EECounter"].AddBinContent(2)
-        if muonAcc: self.Hist["Z2MMCounter"].AddBinContent(2)
+        if elecTrigger and elecAcc: self.Hist["Z2EECounter"].AddBinContent(2, event.eventWeight)
+        if muonTrigger and muonAcc: self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
         
         # Id
         event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.addHEEP(x)] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
@@ -342,8 +350,8 @@ class XZhAnalyzer( Analyzer ):
         
         if not elecId and not muonId:
             return True
-        if elecId: self.Hist["Z2EECounter"].AddBinContent(3)
-        if muonId: self.Hist["Z2MMCounter"].AddBinContent(3)
+        if elecTrigger and elecId: self.Hist["Z2EECounter"].AddBinContent(3, event.eventWeight)
+        if muonTrigger and muonId: self.Hist["Z2MMCounter"].AddBinContent(3, event.eventWeight)
         
         # Iso
         event.highptIdIsoElectrons = [x for x in event.highptIdElectrons if x.miniRelIso<0.1]
@@ -357,16 +365,23 @@ class XZhAnalyzer( Analyzer ):
         
         if not elecIdIso and not muonIdIso:
             return True
-        if elecIdIso: self.Hist["Z2EECounter"].AddBinContent(4)
-        if muonIdIso: self.Hist["Z2MMCounter"].AddBinContent(4)
+        if elecTrigger and elecIdIso: self.Hist["Z2EECounter"].AddBinContent(4, event.eventWeight)
+        if muonTrigger and muonIdIso: self.Hist["Z2MMCounter"].AddBinContent(4, event.eventWeight)
         
         # Categorization
         if elecIdIso and muonIdIso:
-            event.isZ2EE = event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt()
-        elif elecIdIso and not muonIdIso:
+            if elecTrig and event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt():
+                event.isZ2EE = True
+            elif muonTrigger and event.highptIdIsoElectrons[0].pt() < event.highptIdIsoMuons[0].pt():
+                event.isZ2EE = False
+            else:
+                event.isZ2EE = event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt()
+        elif elecIdIso and not muonIdIso and elecTrigger:
             event.isZ2EE = True
-        else:
+        elif muonIdIso and not elecIdIso and muonTrigger:
             event.isZ2EE = False
+        else:
+            return True
         event.isZ2MM = not event.isZ2EE
         
         #for i, m in enumerate(event.highptMuons):
@@ -385,7 +400,7 @@ class XZhAnalyzer( Analyzer ):
         # Z candidate
         if event.Z.mass() < 50. or event.highptLeptons[0].charge() == event.highptLeptons[1].charge():
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5, event.eventWeight)
         
         # Fill tree
         event.isXZh = True
@@ -394,10 +409,10 @@ class XZhAnalyzer( Analyzer ):
         if event.Z.mass() < self.cfg_ana.Z_mass_low or event.Z.mass() > self.cfg_ana.Z_mass_high:
             return True
         # Z pt
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(6)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(6, event.eventWeight)
         if event.Z.pt() < self.cfg_ana.Z_pt:
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(7)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(7, event.eventWeight)
         
         
         
@@ -408,7 +423,7 @@ class XZhAnalyzer( Analyzer ):
         for i, j in enumerate(event.cleanJetsAK8):
             if j.pt() >= self.cfg_ana.fatjet_pt:
                 if deltaR(event.highptLeptons[0].eta(), event.highptLeptons[0].phi(), j.eta(), j.phi()) > self.cfg_ana.jetlep_dR and deltaR(event.highptLeptons[1].eta(), event.highptLeptons[1].phi(), j.eta(), j.phi()) > self.cfg_ana.jetlep_dR:
-                    self.addCorrectedJetMass(j)
+                    self.addCorrectedJetMass(event, j)
                     event.highptFatJets.append(j)
         event.highptFatJets.sort(key = lambda j : j.pt(), reverse = True) #j.userFloat(self.cfg_ana.jetAlgo)
             
@@ -416,7 +431,7 @@ class XZhAnalyzer( Analyzer ):
         if len(event.highptFatJets) < 1:
             return True
         
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(8)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(8, event.eventWeight)
         
         #########################
         #   Part 3: Candidates  #
@@ -424,7 +439,7 @@ class XZhAnalyzer( Analyzer ):
         
         # h candidate with pseudo-kin fit
         kH = event.highptFatJets[0].p4()
-        k = 125.0/event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) if event.highptFatJets[0].mass() > 0 else 0.
+        k = 125.0/event.highptFatJets[0].mass() if event.highptFatJets[0].mass() > 0 else 0. #.userFloat(self.cfg_ana.jetAlgo)
         kH = ROOT.reco.Particle.LorentzVector(event.highptFatJets[0].px()*k, event.highptFatJets[0].py()*k, event.highptFatJets[0].pz()*k, event.highptFatJets[0].energy()*k)
         
         # A/Z' candidate
@@ -465,13 +480,13 @@ class XZhAnalyzer( Analyzer ):
         # ---------- Estimate cuts ----------
         if event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) > 130:
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(9) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9)
-        if event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(9, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9, event.eventWeight)
+        if event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(10) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(10)
-        if event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(10, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(10, event.eventWeight)
+        if event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605:
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(11)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(11, event.eventWeight)
         
         return True
 
