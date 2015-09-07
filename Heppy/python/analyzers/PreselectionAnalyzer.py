@@ -17,6 +17,7 @@ class PreselectionAnalyzer( Analyzer ):
             setup.services["outputfile"].file.cd("Counters")
             Labels = ["All", "SR", "ZCR", "WCR", "TCR", "GCR"]
             self.Counter = ROOT.TH1F("Counter", "Counter", len(Labels), 0, len(Labels))
+            self.Counter.Sumw2()
             for i, l in enumerate(Labels):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
             setup.services["outputfile"].file.cd("..")

@@ -18,7 +18,10 @@ class SRAnalyzer( Analyzer ):
         for i, l in enumerate(Z2NNlabels):
             self.Hist["Z2NNCounter"].GetXaxis().SetBinLabel(i+1, l)
         setup.services["outputfile"].file.cd("..")
-
+        # Set Sumw2
+        for n, h in self.Hist.iteritems():
+            h.Sumw2()
+        
     def process(self, event):
     
         event.isZ2NN = True
