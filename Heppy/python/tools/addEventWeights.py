@@ -79,7 +79,7 @@ def processFile(dir_name, verbose=False):
     # Get event number
     ref_file = TFile(ref_file_name, "READ")
     ref_hist = ref_file.Get('Counters/Counter')
-    totalEntries = ref_hist.GetBinContent(0)
+    totalEntries = ref_hist.GetBinContent(1)
     if isMC:
         weightXS = samples[dir_name]['xsec']/totalEntries
     else:
@@ -108,7 +108,6 @@ def processFile(dir_name, verbose=False):
             if "SR" in obj.GetName() or "CR" in obj.GetName():
                 obj.Add(ref_hist)
             if "Counter" in obj.GetName():
-                obj.Sumw2() #FIXME
                 obj.Scale(weightXS)
             obj.SetBinContent(0, totalEntries)
             new_file.cd()
