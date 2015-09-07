@@ -20,8 +20,7 @@ class SRAnalyzer( Analyzer ):
         setup.services["outputfile"].file.cd("..")
 
     def process(self, event):
-        if not event.isSR:
-            return True
+    
         event.isZ2NN = True
         
         # Trigger
@@ -29,13 +28,17 @@ class SRAnalyzer( Analyzer ):
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(1, event.eventWeight)
         
         # MET
-        if event.met.pt() > 200.: event.isZ2NN = False
+        if event.met.pt() > self.cfg_ana.met_pt: event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(2, event.eventWeight)
         
         
         # Leptons, Taus and Gamma vetoes
+        if not event.isSR:
+            return True
+        
         if not len(event.xcleanLeptons) + len(event.xcleanTaus) + len(event.xcleanPhotons): event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(4, event.eventWeight)
+        
         
         # Jet and candidate
         if len(event.xcleanJetsAK8) == 0:
@@ -60,14 +63,14 @@ class SRAnalyzer( Analyzer ):
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(5, event.eventWeight)
         
         # Jet mass
-        if event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) > 95 and event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) < 130: event.isZ2NN = False
+        if event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.xcleanJetsAK8[0].userFloat(self.cfg_ana.jetAlgo) > 130: event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(6, event.eventWeight)
         
         # b-tagging
-        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) >= 2 and (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605): event.isZ2NN = False
+        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) < 2 or not (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605): event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(7, event.eventWeight)
 
-        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) >= 2 and (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):  event.isZ2NN = False
+        if len(event.xcleanJetsAK8[0].subjets('SoftDrop')) < 2 or not (event.xcleanJetsAK8[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.xcleanJetsAK8[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):  event.isZ2NN = False
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(8, event.eventWeight)
         
 
