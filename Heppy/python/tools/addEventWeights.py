@@ -17,22 +17,37 @@ usage = "usage: %prog [options]"
 parser = optparse.OptionParser(usage)
 parser.add_option("-i", "--input", action="store", type="string", dest="origin", default="")
 parser.add_option("-o", "--output", action="store", type="string", dest="target", default="")
+parser.add_option("-j", "--json", action="store", type="string", dest="json", default="")
 
 (options, args) = parser.parse_args()
 
 origin = options.origin
 target = options.target
+json_path = options.json
 
-json = {
- "251244": [[85, 86], [88, 93], [96, 121], [123, 156], [158, 428], [430, 442]],
- "251251": [[1, 31], [33, 97], [99, 167]],
- "251252": [[1, 283], [285, 505], [507, 554]],
- "251561": [[1, 94]],
- "251562": [[1, 439], [443, 691]],
- "251643": [[1, 216], [222, 606]],
- "251721": [[21, 36]],
- "251883": [[56, 56], [58, 60], [62, 144], [156, 437]]
-}
+
+import json
+
+if len(json_path) <= 0 or not os.path.exists(json_path):
+    print "Warning, no JSON file has been specified. Continue?"
+    raw_input()
+with open(json_path) as json_file:    
+    json_data = json.load(json_file)
+
+
+#json = {
+# "251244": [[85, 86], [88, 93], [96, 121], [123, 156], [158, 428], [430, 442]],
+# "251251": [[1, 31], [33, 97], [99, 167]],
+# "251252": [[1, 283], [285, 505], [507, 554]],
+# "251561": [[1, 94]],
+# "251562": [[1, 439], [443, 691]],
+# "251643": [[1, 216], [222, 606]],
+# "251721": [[21, 36]],
+# "251883": [[56, 56], [58, 60], [62, 144], [156, 437]]
+#}
+
+
+raw_input()
 
 if not os.path.exists(origin):
     print "Origin dir", origin, "does not exist, aborting..."
@@ -45,10 +60,10 @@ if not os.path.exists(target):
 
 def isJSON(run, lumi):
     runstr = "%d" % run
-    if not runstr in json:
+    if not runstr in json_data:
         return False
     else:
-        if any(l <= lumi <= u for [l, u] in json[runstr]):
+        if any(l <= lumi <= u for [l, u] in json_data[runstr]):
             return True
     return False
 
@@ -79,7 +94,7 @@ def processFile(dir_name, verbose=False):
     # Get event number
     ref_file = TFile(ref_file_name, "READ")
     ref_hist = ref_file.Get('Counters/Counter')
-    totalEntries = ref_hist.GetBinContent(1)
+    totalEntries = ref_hist.GetBinContent(0)
     if isMC:
         weightXS = samples[dir_name]['xsec']/totalEntries
     else:
@@ -105,8 +120,8 @@ def processFile(dir_name, verbose=False):
         if obj.IsA().InheritsFrom("TH1"):
             if verbose: print " + TH1:", obj.GetName()
             new_file.cd()
-            if "SR" in obj.GetName() or "CR" in obj.GetName():
-                obj.Add(ref_hist)
+            #if "SR" in obj.GetName() or "CR" in obj.GetName():
+            #    obj.Add(ref_hist)
             if "Counter" in obj.GetName():
                 obj.Scale(weightXS)
             obj.SetBinContent(0, totalEntries)
