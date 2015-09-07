@@ -10786,7 +10786,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/0C8B012D-6340-E511-9ED6-0026182FD77A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/DE3DF6BD-6240-E511-BDA7-001517FB20EC.root' ],
         'xsec'    : 1.34E-09,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v1': {
@@ -10798,7 +10798,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/D65CB008-A938-E511-9AAC-0025905A6132.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/DAF7370A-A938-E511-872C-0025905A48C0.root' ],
         'xsec'    : 0.00005241,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1': {
@@ -10811,7 +10811,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/B2D708E3-A935-E511-9800-000F532734A0.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/EAD24227-0434-E511-922C-02163E011836.root' ],
         'xsec'    : 1.263,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1': {
@@ -10822,7 +10822,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/A8D510AD-1734-E511-9555-00266CF9B630.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/BC3EDFAC-1734-E511-902D-00266CF9B630.root' ],
         'xsec'    : 1.29E+02,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1': {
@@ -10833,7 +10833,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/A24FFEAA-0C3A-E511-977F-008CFA110AB4.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/D02FFAC8-0C3A-E511-8432-00266CF9BBE4.root' ],
         'xsec'    : 0.1327,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1': {
@@ -10844,7 +10844,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/AAB357F3-3436-E511-9B84-002590A83192.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/C40F97F2-3436-E511-A5CB-0025905A6138.root' ],
         'xsec'    : 50.24,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1': {
@@ -10858,7 +10858,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/E8334850-9D35-E511-A76F-E41D2D08DD10.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/FA72EF38-8A35-E511-908D-003048F0E1B2.root' ],
         'xsec'    : 0.02934,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1': {
@@ -10870,7 +10870,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/703666B9-B033-E511-9D46-002354EF3BDF.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/C281F2FD-B033-E511-8405-20CF3027A5F6.root' ],
         'xsec'    : 0.001682,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1': {
@@ -10882,7 +10882,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/ACF65785-9A35-E511-9285-0025905A612E.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/C6C6F74C-1735-E511-8A0D-02163E00BFFF.root' ],
         'xsec'    : 8.094,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000_madgraphMLM_pythia8_v1': {
@@ -10892,7 +10892,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/6A535373-0B34-E511-A0BF-00266CFC3B0C.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/8E38B0AB-7B34-E511-930A-20CF3027A5F4.root' ],
         'xsec'    : 1.30E-09,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1': {
@@ -10902,7 +10902,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/C2524145-6833-E511-B48B-001517E73360.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/E09EEEFB-6733-E511-98AB-0026181D28F0.root' ],
         'xsec'    : 1.255,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1': {
@@ -10913,7 +10913,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/AE4426BD-B136-E511-A40A-00259073E4E4.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/DE18A7B5-B136-E511-BD04-008CFA1979BC.root' ],
         'xsec'    : 0.5379,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15_madgraphMLM_pythia8_v1': {
@@ -10927,7 +10927,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/9C744EA8-123B-E511-9B90-008CFA1111EC.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/B80ABE62-B93A-E511-B1F9-02163E01441B.root' ],
         'xsec'    : 0.8376,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1': {
@@ -10937,7 +10937,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/C67A83BC-CF31-E511-B0D8-90B11C08AD7D.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/F42C58B7-CF31-E511-A413-90B11C050AD4.root' ],
         'xsec'    : 8.037,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10_madgraphMLM_pythia8_v1': {
@@ -10948,7 +10948,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/94597AD3-8F34-E511-864C-008CFA1974BC.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/DC055DBC-8E34-E511-B35C-0025904C66EC.root' ],
         'xsec'    : 0.005776,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1': {
@@ -10959,7 +10959,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/64A1B872-4A34-E511-AD94-0CC47A13CB36.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/A4CFF66B-4A34-E511-B3A7-0CC47A13CBEA.root' ],
         'xsec'    : 0.1319,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1': {
@@ -10971,7 +10971,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/20000/DAF696A0-EB33-E511-B924-002590200898.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/20000/FCC20A9C-DE33-E511-BA14-008CFA05E8EC.root' ],
         'xsec'    : 0.00778,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95_madgraphMLM_pythia8_v1': {
@@ -10983,7 +10983,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/8C5698F7-4033-E511-9478-B499BAABF37A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/F67A7CF8-4033-E511-B880-B499BAAC3786.root' ],
         'xsec'    : 0.04632,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000_madgraphMLM_pythia8_v1': {
@@ -10996,7 +10996,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/F4812BBF-CD3A-E511-9441-02163E014197.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/F6FE71C2-CD3A-E511-8AD5-02163E0139DA.root' ],
         'xsec'    : 4.87E-10,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1': {
@@ -11008,7 +11008,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/92455FAB-513A-E511-A3AF-00266CF9B8B0.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/EA0720DF-513A-E511-AE2F-00259055C872.root' ],
         'xsec'    : 0.00004053,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1': {
@@ -11018,7 +11018,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/9C63C6C6-E933-E511-9B3B-00266CF2506C.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/E0574493-E933-E511-9818-00266CFAE69C.root' ],
         'xsec'    : 0.0001747,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295_madgraphMLM_pythia8_v1': {
@@ -11029,7 +11029,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/CA8262D3-1E36-E511-A54D-0025905964B4.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/F403D358-1E36-E511-A82E-F45214C74880.root' ],
         'xsec'    : 0.002055,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1': {
@@ -11041,7 +11041,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/DACEB61C-DD32-E511-B677-000F532734B0.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/EC56800F-9533-E511-9B4F-00259073E516.root' ],
         'xsec'    : 0.001306,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000_madgraphMLM_pythia8_v1': {
@@ -11051,7 +11051,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/625B3B11-EA33-E511-9EFD-6CC2173BBF00.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/CA3103E9-ED33-E511-A9E4-0CC47A010010.root' ],
         'xsec'    : 5.38E-11,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10_madgraphMLM_pythia8_v1': {
@@ -11060,7 +11060,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/E2EBFFCD-E933-E511-B34A-0CC47A13D16A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/E83419CA-E933-E511-AACF-0025905A612A.root' ],
         'xsec'    : 1.64E-07,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1': {
@@ -11072,7 +11072,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/DE555394-C433-E511-A03F-B8CA3A709648.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/FAC4B43A-C333-E511-BC3C-B8CA3A70A410.root' ],
         'xsec'    : 2.47E-07,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995_madgraphMLM_pythia8_v1': {
@@ -11084,7 +11084,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/6C00936A-DF33-E511-9DD5-00266CFFBCDC.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/ECB80272-DF33-E511-9AA5-003048FFD770.root' ],
         'xsec'    : 0.00000547,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_madgraphMLM_pythia8_v1': {
@@ -11095,7 +11095,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/8C4CD634-003A-E511-B069-002590DB05F4.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/CAC30622-003A-E511-9313-0CC47A4D998C.root' ],
         'xsec'    : 4.58E-12,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000_madgraphMLM_pythia8_v1': {
@@ -11103,7 +11103,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/3C44C681-2A3A-E511-A29F-001E67A3EAB1.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/7A360289-2A3A-E511-843D-001E67A3E8F9.root' ],
         'xsec'    : 1.70E-09,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
     'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1': {
@@ -11112,7 +11112,7 @@ mcsamples = {
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/C6243C9A-5F34-E511-A2A3-90B11C2AA388.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/E613F27F-5F34-E511-A29A-002590A88804.root' ],
         'xsec'    : 1.12E-09,
-        'nevents' : 0.,
+        'nevents' : 50000,
         },
 
 
