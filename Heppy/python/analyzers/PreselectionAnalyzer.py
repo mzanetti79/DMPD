@@ -170,7 +170,6 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoEN = True
                 event.isWCR = True
-            else: print "PORNOBLEMA"
                  
             ### ============================== ###
             
@@ -195,6 +194,7 @@ class PreselectionAnalyzer( Analyzer ):
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
+                #event.xcleanLeptons = event.selectedElectrons[0] + event.selectedMuons[0]
                 event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 self.Counter.AddBinContent(5, event.eventWeight)
                 event.isTCR = True
