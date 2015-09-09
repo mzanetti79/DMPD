@@ -115,7 +115,7 @@ class XZhAnalyzer( Analyzer ):
                     if event.inclusiveLeptons[l2].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i2].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i2].eta())
-                if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt+15:
+                if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt:
                     pfIso = event.inclusiveLeptons[l1].relIso03<0.15 and event.inclusiveLeptons[l2].relIso03<0.15
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
                     self.Hist["ElecZdR"].Fill(genZdR)
@@ -150,14 +150,14 @@ class XZhAnalyzer( Analyzer ):
                 if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.muon2pt:
                     
                     if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
-                        self.Hist["MuonPt"].Fill(event.genleps[i1].pt())
-                        self.Hist["MuonEta"].Fill(event.genleps[i1].eta())
+                        self.Hist["MuonPt"].Fill(event.inclusiveLeptons[l1].pt())
+                        self.Hist["MuonEta"].Fill(event.inclusiveLeptons[l1].eta())
                         if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt"):
-                            self.Hist["EffMuonPt_Highpt"].Fill(event.genleps[i1].pt())
-                            self.Hist["EffMuonEta_Highpt"].Fill(event.genleps[i1].eta())
-                        elif event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
-                            self.Hist["EffMuonPt_Highpt"].Fill(event.genleps[i2].pt())
-                            self.Hist["EffMuonEta_Highpt"].Fill(event.genleps[i2].eta())
+                            self.Hist["EffMuonPt_Highpt"].Fill(event.inclusiveLeptons[l1].pt())
+                            self.Hist["EffMuonEta_Highpt"].Fill(event.inclusiveLeptons[l1].eta())
+                        else: # event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
+                            self.Hist["EffMuonPt_Highpt"].Fill(event.inclusiveLeptons[l2].pt())
+                            self.Hist["EffMuonEta_Highpt"].Fill(event.inclusiveLeptons[l2].eta())
                     pfIso = event.inclusiveLeptons[l1].relIso04<0.20 and event.inclusiveLeptons[l2].relIso04<0.20
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
                     self.Hist["MuonZdR"].Fill(genZdR)
@@ -225,7 +225,7 @@ class XZhAnalyzer( Analyzer ):
     
     def addHEEP(self, e, doPlot=False):
         e.isHEEP = False
-        if not e.isElectron() or not e.et() > 35.: return False
+        if not e.isElectron() or not e.pt() > 35.: return False
         
         # Plot
         if doPlot:
