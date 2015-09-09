@@ -119,7 +119,7 @@ class XZhAnalyzer( Analyzer ):
                     Zmass = (event.inclusiveLeptons[l1].p4() + event.inclusiveLeptons[l2].p4()).mass()
                     pfIso = event.inclusiveLeptons[l1].relIso03<0.15 and event.inclusiveLeptons[l2].relIso03<0.15
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
-                    if Zmass > self.cfg_ana.Z_mass_low and Zmass() < self.cfg_ana.Z_mass_high:
+                    if Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
                         self.Hist["ElecZdR"].Fill(genZdR)
                         self.Hist["ElecZpt"].Fill(genZpt)
                         if event.inclusiveLeptons[l1].isHEEP and event.inclusiveLeptons[l2].isHEEP:
@@ -163,7 +163,7 @@ class XZhAnalyzer( Analyzer ):
                     Zmass = (event.inclusiveLeptons[l1].p4() + event.inclusiveLeptons[l2].p4()).mass()
                     pfIso = event.inclusiveLeptons[l1].relIso04<0.20 and event.inclusiveLeptons[l2].relIso04<0.20
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
-                    if Zmass > self.cfg_ana.Z_mass_low and Zmass() < self.cfg_ana.Z_mass_high:
+                    if Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
                         self.Hist["MuonZdR"].Fill(genZdR)
                         self.Hist["MuonZpt"].Fill(genZpt)
                         if event.inclusiveLeptons[l1].isTrackerMuon() and event.inclusiveLeptons[l2].isTrackerMuon():
