@@ -157,7 +157,7 @@ class PreselectionAnalyzer( Analyzer ):
             if len(event.selectedMuons) >= 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
-                event.xcleanLeptons = event.selectedMuons + [x for x in event.otherLeptons if x.isMuon()]
+                event.xcleanLeptons = event.selectedMuons + event.selectedElectrons + event.otherLeptons
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoMN = True
                 event.isWCR = True
@@ -166,7 +166,7 @@ class PreselectionAnalyzer( Analyzer ):
             elif len(event.selectedElectrons) >= 1:
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
-                event.xcleanLeptons = event.selectedElectrons + [x for x in event.otherLeptons if x.isElectron()]
+                event.xcleanLeptons = event.selectedElectrons + event.selectedMuons + event.otherLeptons
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoEN = True
                 event.isWCR = True
@@ -194,7 +194,7 @@ class PreselectionAnalyzer( Analyzer ):
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
-                #event.xcleanLeptons = event.selectedElectrons[0] + event.selectedMuons[0]
+                event.xcleanLeptons = [event.selectedElectrons[0]] + [event.selectedMuons[0]]
                 event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 self.Counter.AddBinContent(5, event.eventWeight)
                 event.isTCR = True
