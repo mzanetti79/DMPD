@@ -447,6 +447,7 @@ SRAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = SRAnalyzer,
     jetAlgo = "ak8PFJetsCHSPrunedMass",
+    met_pt = 0.,#200.,
     )
 
 from DMPD.Heppy.analyzers.XZhAnalyzer import XZhAnalyzer
@@ -462,12 +463,11 @@ XZhAnalyzer = cfg.Analyzer(
     Z_mass_low = 70.,
     Z_mass_high = 110.,
     Z_pt = 0.,#200.,
-    met_pt = 0.,#200.,
     jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
     recalibrateMass             = False,
     recalibrationType           = 'AK8PFchs',
-    jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
-    #jecPath                     = 'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms/store/user/zucchett/JEC/', 
+    #jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
+    jecPath                     = 'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms/store/user/zucchett/JEC/', 
     mcGT                        = 'Summer15_25nsV2_MC',
     dataGT                      = 'Summer15_25nsV2_DATA',
     )
@@ -573,7 +573,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     collections = {
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -607,10 +607,10 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
     },
     collections = {
-        'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 4, help='Muon or Electron collection'),
+        'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -645,8 +645,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 4, help='Muon or Electron collection'),
-        'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
-        'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
+        #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
+        #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
@@ -676,10 +676,10 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
-        'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 4, help='Muon and Electron collection'),
+        'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon and Electron collection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -711,7 +711,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
         #'selectedElectrons'   : NTupleCollection('electron', electronType, 4, help='Electrons after the preselection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -722,7 +722,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
 
 
 ##############################
-### X -> Zh -> (ll/nunu)bb ###
+###    X -> Zh -> llbb     ###
 ##############################
 
 XZhTreeProducer= cfg.Analyzer(
@@ -736,7 +736,7 @@ XZhTreeProducer= cfg.Analyzer(
         NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
         NTupleVariable('nMuons',           lambda x: len(x.highptIdIsoMuons), int, help='Number of selected muons'),
-        NTupleVariable('nElectrons',       lambda x: len(x.highptIdIsoMuons), int, help='Number of selected electrons'),
+        NTupleVariable('nElectrons',       lambda x: len(x.highptIdIsoElectrons), int, help='Number of selected electrons'),
         NTupleVariable('nTaus',            lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
         NTupleVariable('nPhotons',         lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
         NTupleVariable('nJets',            lambda x: len(x.cleanJets), int, help='Number of xcleaned jets'),
@@ -855,7 +855,7 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ### MC ###
-#selectedComponents = [
+selectedComponents = [
 #    sample['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
 #    sample['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2'],
@@ -926,20 +926,20 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##    sample['ZH_HToBB_ZToLL_M125_amcatnloFXFX_madspin_pythia8_v1'],
 #    sample['ZH_HToBB_ZToLL_M125_powheg_pythia8_v1'],
 ##    sample['ZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
-#]
+    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
+    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+]
 
 
 
@@ -959,9 +959,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #filterAnalyzer.processName = 'RECO'
 
 
-
-#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
-selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],]
+selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+#selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],]
 
 #selectedComponents = [
 ####    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
@@ -1109,7 +1108,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=1000000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
