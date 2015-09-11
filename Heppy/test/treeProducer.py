@@ -143,8 +143,8 @@ leptonAnalyzer = cfg.Analyzer(
     ### Electron selection - First step
     inclusive_electron_id       = '',
     #inclusive_electron_id       = 'POG_Cuts_ID_PHYS14_25ns_v1_Veto',
-    inclusive_electron_pt       = 10,
-    inclusive_electron_eta      = 2.5,
+    inclusive_electron_pt       = 0.,
+    inclusive_electron_eta      = 99.,
     inclusive_electron_dxy      = 1.e99,
     inclusive_electron_dz       = 1.e99,
     inclusive_electron_lostHits = 99.,
@@ -171,8 +171,8 @@ leptonAnalyzer = cfg.Analyzer(
 
     ### Muon selection - First step
     inclusive_muon_id           = '',
-    inclusive_muon_pt           = 10,
-    inclusive_muon_eta          = 2.4,
+    inclusive_muon_pt           = 0,
+    inclusive_muon_eta          = 99,
     inclusive_muon_dxy          = 1.e99,
     inclusive_muon_dz           = 1.e99,
     #inclusive_muon_isoCut       = lambda muon : muon.relIso04 < 0.2,
@@ -261,7 +261,7 @@ fatJetAnalyzer = cfg.Analyzer(
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     addJECShifts                = False,
-    smearJets                   = False,
+    smearJets                   = True,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -411,6 +411,12 @@ from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = PreselectionAnalyzer,
+    recalibrateMass             = True,
+    recalibrationType           = 'AK8PFchs',
+    jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
+    #jecPath                     = 'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms/store/user/zucchett/JEC/', 
+    mcGT                        = 'Summer15_25nsV2_MC',
+    dataGT                      = 'Summer15_25nsV2_DATA',
     )
 
 from DMPD.Heppy.analyzers.XCleaningAnalyzer import XCleaningAnalyzer
@@ -464,12 +470,6 @@ XZhAnalyzer = cfg.Analyzer(
     Z_mass_high = 110.,
     Z_pt = 0.,#200.,
     jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
-    recalibrateMass             = False,
-    recalibrationType           = 'AK8PFchs',
-    #jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
-    jecPath                     = 'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms/store/user/zucchett/JEC/', 
-    mcGT                        = 'Summer15_25nsV2_MC',
-    dataGT                      = 'Summer15_25nsV2_DATA',
     )
 
 
@@ -735,6 +735,8 @@ XZhTreeProducer= cfg.Analyzer(
     globalVariables = globalEventVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZ2EE, int, help='Z -> ee flag'),
         NTupleVariable('isZtoMM',  lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
+        NTupleVariable('isGenZtoEE',  lambda x: x.isGenZ2EE, int, help='Z -> ee at gen level flag'),
+        NTupleVariable('isGenZtoMM',  lambda x: x.isGenZ2MM, int, help='Z -> mumu at gen level flag'),
         NTupleVariable('nMuons',           lambda x: len(x.highptIdIsoMuons), int, help='Number of selected muons'),
         NTupleVariable('nElectrons',       lambda x: len(x.highptIdIsoElectrons), int, help='Number of selected electrons'),
         NTupleVariable('nTaus',            lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
@@ -833,6 +835,7 @@ for i in datasamples:
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON_v2.txt' % os.environ['CMSSW_BASE'],
         splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
@@ -927,18 +930,31 @@ selectedComponents = [
 #    sample['ZH_HToBB_ZToLL_M125_powheg_pythia8_v1'],
 ##    sample['ZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1'],
     sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M1000_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M1200_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M1400_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M1600_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M1800_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M2000_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M2500_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M3000_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M3500_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M4000_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M4500_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M600_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2'],
 ]
 
 
@@ -959,7 +975,7 @@ selectedComponents = [
 #filterAnalyzer.processName = 'RECO'
 
 
-selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
 #selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],]
 
 #selectedComponents = [
