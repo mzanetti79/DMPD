@@ -11580,7 +11580,7 @@ mcsamples = {
 
 
 
-    'ZprimeToZhToZinvhbb_narrow_M_600_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M600_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/00A51536-433A-E511-9838-00259073E3B2.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/68FF1537-433A-E511-B59E-008CFA197AC4.root',
@@ -11590,7 +11590,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_800_13TeV_madgraph_v2': {
+    'ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/30000/3C25C422-B746-E511-A308-00259073E3C8.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v2/30000/80F5E424-B746-E511-A3C9-002590747DC8.root' ],
@@ -11598,7 +11598,7 @@ mcsamples = {
         'nevents' : 99800,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_1000_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M1000_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/2CB4EFE5-0D41-E511-A38B-002590A831AA.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/B00175C8-1442-E511-A8C8-001E673986B0.root',
@@ -11609,7 +11609,7 @@ mcsamples = {
         'nevents' : 99200,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_1200_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M1200_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/30958EF8-8834-E511-9BCC-00259073E502.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/34D66B17-8934-E511-94F5-047D7BD6DF34.root',
@@ -11618,7 +11618,7 @@ mcsamples = {
         'nevents' : 99200,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_1400_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M1400_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/0A110A66-FE39-E511-A1DA-0002C92DB418.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/38F4CC64-FE39-E511-889C-000F53273500.root',
@@ -11627,7 +11627,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_1600_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M1600_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/1C2590FE-F633-E511-89E5-00259029E81A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/364780FF-F633-E511-B0B0-002590D9D8B2.root',
@@ -11637,7 +11637,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_1800_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M1800_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/0C441D8A-A233-E511-B8C4-008CFA197A5C.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/40000/BE9AE661-E933-E511-8D59-003048FFD756.root',
@@ -11646,7 +11646,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_2000_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M2000_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/2A4E8091-D234-E511-BE01-000F530E4780.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/50000/5409D92E-CA34-E511-9B3A-0026B95A0D29.root',
@@ -11660,7 +11660,7 @@ mcsamples = {
         'nevents' : 98400,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_2500_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M2500_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/08C59EA5-DF36-E511-85A3-02163E0138EC.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/30000/0ED26CAB-DF36-E511-A4C9-02163E01250C.root',
@@ -11672,7 +11672,7 @@ mcsamples = {
         'nevents' : 98400,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_3000_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M3000_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/1C823888-AB31-E511-9BC7-001517FB1990.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/30BD438D-AB31-E511-BFDC-001517E74088.root',
@@ -11681,7 +11681,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_3500_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M3500_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/000A0E9C-113A-E511-B276-0002C94CDDEC.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/60000/5A09A790-113A-E511-8336-0026189438C0.root',
@@ -11692,7 +11692,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_4000_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M4000_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/1A22A9EA-C933-E511-BA93-0CC47A13D16A.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/80000/36CCB7EF-4033-E511-9704-842B2B2B0EC5.root',
@@ -11703,7 +11703,7 @@ mcsamples = {
         'nevents' : 100000,
         },
 
-    'ZprimeToZhToZinvhbb_narrow_M_4500_13TeV_madgraph_v1': {
+    'ZprimeToZhToZinvhbb_narrow_M4500_madgraph_v1': {
         'files'   : [
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/3EA3E474-F934-E511-B4C1-001E6758651B.root',
        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15DR74/ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/88585338-FA34-E511-827C-001E67A40523.root',
