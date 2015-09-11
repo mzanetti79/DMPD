@@ -33,6 +33,9 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenZpt"] = ROOT.TH1F("GenZpt", ";Z p_{T} [GeV]", 2500, 0., 2500.)
             self.Hist["GenZeta"] = ROOT.TH1F("GenZeta", ";Z #eta", 50, -5, 5.)
             self.Hist["GenZdR"] = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 60, 0, 3.)
+            self.Hist["GenWmass"] = ROOT.TH1F("GenWmass", ";m_{W} [GeV]", 150, 0., 150.)
+            self.Hist["GenWpt"] = ROOT.TH1F("GenWpt", ";W p_{T} [GeV]", 2500, 0., 2500.)
+            self.Hist["GenWeta"] = ROOT.TH1F("GenWeta", ";W #eta", 50, -5, 5.)
             self.Hist["GenHdecay"] = ROOT.TH1F("GenHdecay", ";H daughter pdgId", 25, 0.5, 25.5)
             self.Hist["GenHmass"] = ROOT.TH1F("GenHmass", ";m_{H} [GeV]", 100, 120., 130.)
             self.Hist["GenHpt"] = ROOT.TH1F("GenHpt", ";H p_{T} [GeV]", 250, 0., 2500.)
@@ -93,9 +96,14 @@ class GenAnalyzer( Analyzer ):
         # Z
         if hasattr(event, "genVBosons"):
             if len(event.genVBosons) > 0:
-                self.Hist["GenZmass"].Fill(event.genVBosons[0].mass())
-                self.Hist["GenZpt"].Fill(event.genVBosons[0].pt())
-                self.Hist["GenZeta"].Fill(event.genVBosons[0].eta())
+                if event.genVBosons[0].pdgId() == 23:
+                    self.Hist["GenZmass"].Fill(event.genVBosons[0].mass())
+                    self.Hist["GenZpt"].Fill(event.genVBosons[0].pt())
+                    self.Hist["GenZeta"].Fill(event.genVBosons[0].eta())
+                elif event.genVBosons[0].pdgId() == 24:
+                    self.Hist["GenWmass"].Fill(event.genVBosons[0].mass())
+                    self.Hist["GenWpt"].Fill(event.genVBosons[0].pt())
+                    self.Hist["GenWeta"].Fill(event.genVBosons[0].eta())
         # Higgs
         if hasattr(event, "genHiggsBosons"):
             if len(event.genHiggsBosons) > 0:
