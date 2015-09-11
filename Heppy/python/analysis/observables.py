@@ -1,6 +1,6 @@
 from array import array
 
-momentum_bins=range(0,331,25)+[350, 380, 430, 500, 1000]
+momentum_bins=range(0,150,10)+range(150,326,25)+[350, 380, 430, 500, 1000]
 
 class Observable():
     def __init__(self,**k):
@@ -34,11 +34,27 @@ observables = {
                         formula='jet1_pt',
                         labelX='leading jet p_{T} [GeV]',
                         ),
+    'fatjetPt':Observable(variable='fatjetPt',
+                        formula='fatjet1_pt',
+                        labelX='fat jet p_{T} [GeV]',
+                        ),
+    'fatjetMass':Observable(variable='fatjetMass',
+                        formula='fatjet1_mass',
+                        labelX='fat jet mass [GeV]',
+                        ),
     'jet2Phi':Observable(variable='jet2Phi',
                         formula='jet2_phi',
                         labelX='leading jet #phi',
                         scale_bin_content=False,
                         bins = array('d',[v/10. for v in range(-33,33)])
+                        ),
+    'lep1Pt':Observable(variable='lep1Pt',
+                        formula='lepton1_pt',
+                        labelX='leading lepton p_{T} [GeV]',
+                        ),
+    'lep2Pt':Observable(variable='lep2Pt',
+                        formula='lepton2_pt',
+                        labelX='trailing lepton p_{T} [GeV]',
                         ),
     'metPhi':Observable(variable='metPhi',
                         formula='fakemet_phi',
@@ -54,7 +70,7 @@ observables = {
                         formula='nJets',
                         labelX='muon multiplicity',
                         scale_bin_content=False,
-                        bins = array('d',range(0,5))
+                        bins = array('d',range(0,10))
                         ),
     'nMuons':Observable(variable='nMuons',
                         formula='nMuons',
@@ -84,6 +100,12 @@ observables = {
                         formula='Z_mass',
                         labelX='mass [GeV]',
                         bins = array('d',[60,70,80,85]+range(86,95)+[95,100,110,120]),  
+                        ),
+    'Wmass': Observable(variable='Wmass',
+                        #formula='W_mass',
+                        formula='transverseMass(lepton1_pt,lepton1_phi,met_pt,met_phi)',
+                        labelX='mass [GeV]',
+                        bins = array('d',range(0,201,5)),  
                         ),
                 
 

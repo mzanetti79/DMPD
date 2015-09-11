@@ -7,11 +7,12 @@ gROOT.Macro('functions.C')
 timeout = 10
 
 ### tell me what I need to plot
-common_plots = [] #['nJets','jet1Pt']
+common_plots = ['lep1Pt'] #['nJets','jet1Pt']
 to_be_processed = {
     #'SR':common_plots+['met', 'dPhiJet1Jet2', 'jet2Phi'],
-    'ZCR':common_plots+['jet1Pt', 'Zmass'],
-    #'WCR':common_plots,
+    #'ZCR':common_plots+['jet1Pt', 'Zmass', 'met', 'nJets', 'bDisc' ],
+    #'WCR':common_plots+['jet1Pt', 'Wmass', 'met', 'nJets', 'bDisc', 'fakemet' ],
+    'WCR':common_plots+['fatjetPt','fatjetMass' ],
     #'GCR':common_plots,
     }
 
@@ -52,16 +53,13 @@ while len(results) < len(processes):
     results[result[0]] = result[1]
 
 ### plot and save the results
-output = TFile(cfg.parametersSet['output_name'],'recreate')
+#output = TFile(cfg.parametersSet['output_name'],'recreate')
 from plotter import Plotter
 plotters = {}
 for plot in results:
     plotters[plot] = Plotter(results[plot])
     plotters[plot].plot()
     plotters[plot].multi_canvas.canvas.SaveAs('/Users/mzanetti/Sites/cms/DMPD/'+plotters[plot].multi_canvas.canvas.GetName()+'.png')
-    plotters[plot].multi_canvas.canvas.Write()
-    #results[plot].draw()
-    #results[plot].canvas.SaveAs('plots/'+results[plot].canvas.GetName()+'.png')
-    #results[plot].canvas.Write()
+    #plotters[plot].multi_canvas.canvas.Write()
     
 

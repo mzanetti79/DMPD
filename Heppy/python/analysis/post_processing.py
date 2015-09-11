@@ -1,37 +1,64 @@
 #! /usr/bin/env python
 import math
-from ROOT import TStyle, TCanvas, TPad, TH1D, TLine, SetOwnership, TGraphErrors, TGraph, TMultiGraph
-
-class MultiCanvas:
-    def __init__(self, name='', border_y = 0.2, margin=0.01):
-        self.name = name
-        self.canvas = TCanvas(name,name) 
-        SetOwnership(self.canvas,False)
-        self.mainPad = TPad(name+'mainPad', '' ,0+margin,border_y,1-margin,1-margin)
-        self.mainPad.SetBottomMargin(0.0) ##?
-        self.comparisonPad = TPad(name+'comparisonPad', '' ,0+margin,0+margin,1-margin,border_y)
-        self.comparisonPad.SetTopMargin(0)
-        self.comparisonPad.SetBottomMargin(0.33);
-        self.comparisonPad.SetGridy()
-        self.draw()
-    def draw(self):
-        self.mainPad.Draw()
-        self.comparisonPad.Draw()
-        self.canvas.Modified()
-        self.canvas.Update()
+from datasets import processes
+from ROOT import THStack, TLegend, TCanvas, TStyle, TLine
 
 
+def rescale_bins(hist):
+    for bin in range(1,hist.GetNbinsX()+1):
+        hist.SetBinContent(bin,hist.GetBinContent(bin)/hist.GetBinWidth(bin))
+        hist.SetBinError(bin,hist.GetBinError(bin)/hist.GetBinWidth(bin))
 
+
+def format_histograms(name, histograms, setup, scale_bin_content=True):
+    formatted_histograms = {}
+    stack = THStack('stack'+name,'')
+    legend = TLegend(0.65,0.6,0.88,0.88)
+    legend.SetFillColor(0)
+    legend.SetLineColor(0)
+    legend.SetBorderSize(0)
+    for process_name in setup.order_processes():
+        try: histograms[process_name]
+        except KeyError: continue
+        hist = histograms[process_name]
+        # --> events / GeV
+        if scale_bin_content: rescale_bins(hist)
+        # data
+        if process_name.find('data')>-1:
+            legendMarker = 'p'
+            hist.SetMarkerStyle(20)
+            hist.SetMarkerSize(1.3)
+            formatted_histograms['data'] = hist
+        # signal
+        elif process_name.find('signal')>-1: 
+            hist.Scale(float(setup.configuration['lumi']))
+            legendMarker = 'l'
+            hist.SetLineWidth(2)            
+            hist.SetFillColor(0)
+            hist.SetLineColor(2)
+            formatted_histograms['signal'] = hist
+        # MC
+        else:  
+            hist.Scale(float(setup.configuration['lumi']))
+            legendMarker = 'f'
+            hist.SetLineColor(processes[process_name]['color'])
+            hist.SetFillColor(processes[process_name]['color'])
+            stack.Add(hist)
+            formatted_histograms['background'] = stack
+        # adding to the legend
+        legend.AddEntry(hist,processes[process_name]['label'],legendMarker)
+    return formatted_histograms, legend
+
+from plotter import MultiCanvas
 class Plotter():
-    def __init__(self, analyzer,method='data/MC'):
-        self.analyzer = analyzer
-        self.name = analyzer.cfg.name
-        self.histos = analyzer.formatted_histograms
+    def __init__(self, name, formatted_histograms, legend, method='data/MC'):
+        self.name = name
+        self.histos = formatted_histograms
+        self.legend = legend
         self.method=method
-        self.parameters = [0,2,1] if self.method=='data/MC' else [-0.5,0.5,0]
+        self.parameters = [0.5,1.5,1] if self.method=='data/MC' else [-0.5,0.5,0]
         self.setStyle()
         self.multi_canvas = MultiCanvas(self.name)
-    
 
     def plot(self):
         if self.histos.has_key('data'): self.plotDataMC()
@@ -39,13 +66,12 @@ class Plotter():
 
     def plotMC(self):
         self.histos['background'].Draw('fhist')
-        self.histos['background'].GetXaxis().SetTitle(self.analyzer.setup.observable.labelX)
-        self.histos['background'].GetYaxis().SetTitle(self.analyzer.setup.observable.labelY)
+        #self.histos['background'].GetXaxis().SetTitle(observable.labelX) #FIXME
+        #self.histos['background'].GetYaxis().SetTitle(observable.labelY)
         self.histos['background'].GetXaxis().SetNdivisions(505)
         self.histos['background'].GetYaxis().SetNdivisions(505)
         try: self.histos['signal'].Draw('hist,same') 
-        except:
-            if self.analyzer.cfg.parametersSet['verbosity'] > 2: print 'signal not plotted'
+        except: print 'signal not plotted'
         self.legend.Draw()
 
     def plotDataMC(self):
@@ -54,8 +80,8 @@ class Plotter():
         self.histos['data'].Draw('ep')
         ## setup
         self.histos['data'].GetXaxis().SetLabelSize(0) ##?
-        self.histos['data'].GetXaxis().SetTitle(self.analyzer.setup.observable.labelX)
-        self.histos['data'].GetYaxis().SetTitle(self.analyzer.setup.observable.labelY)
+        #self.histos['data'].GetXaxis().SetTitle(observable.labelX) #FIXME
+        #self.histos['data'].GetYaxis().SetTitle(observable.labelY)
         self.histos['data'].GetXaxis().SetNdivisions(505)
         self.histos['data'].GetYaxis().SetNdivisions(505)
         maxY = self.histos['data'].GetMaximum() if self.histos['data'].GetMaximum()> self.histos['background'].GetMaximum() else self.histos['background'].GetMaximum()
@@ -65,11 +91,10 @@ class Plotter():
         self.histos['background'].Draw('fhist,same')
         ## signal MC
         try: self.histos['signal'].Draw('hist,same') 
-        except:
-            if self.analyzer.cfg.parametersSet['verbosity'] > 2: print 'signal not plotted'
+        except: print 'signal not plotted'
         self.histos['data'].Draw('ep,same')
         ## legend
-        self.analyzer.legend.Draw()
+        self.legend.Draw()
         ## canvas
         self.multi_canvas.mainPad.SetLogy()
         self.multi_canvas.mainPad.Update()
@@ -94,7 +119,6 @@ class Plotter():
         line.SetLineColor(2)
         line.Draw('same')
         self.multi_canvas.comparisonPad.Update()
-
 
         
     def compareHistograms(self, reference, model):
@@ -186,3 +210,4 @@ class Plotter():
         self.style.SetOptLogy(0)
         self.style.SetOptLogz(0)
         self.style.cd()
+

@@ -11,7 +11,7 @@ cfg=Configuration()
 ## mandatory configurations parameters
 cfg.parametersSet['region'] = 'ZCR'
 cfg.parametersSet['samples_set'].append('data_singlemu')
-cfg.parametersSet['observable'] = 'fakemet'
+cfg.parametersSet['observable'] = 'lep1Pt'
 cfg.parametersSet['verbosity'] = 3
 cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
 cfg.parametersSet['lumi'] = '41.9' # pb^-1

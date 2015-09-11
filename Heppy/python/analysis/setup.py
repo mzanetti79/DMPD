@@ -10,6 +10,7 @@ class Configuration():
             'verbosity':1, #1-> error, 2-> warning, 3-> info, 0->none
             'output_name':'tmp.root',
             'samples_set':['Zll_amcnlo','Zvv','Wlv_amcnlo','top','VV','QCD','signal_monoH'],
+            #'samples_set':['Zvv','top','VV','QCD','signal_monoH'],
         }
         self.name = 'default'
         
