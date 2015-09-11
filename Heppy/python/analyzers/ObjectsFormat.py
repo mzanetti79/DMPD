@@ -49,7 +49,7 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
     NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
     NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
-    NTupleVariable("highPtId",   lambda x : x.muonID("POG_ID_HighPt") if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),
+    NTupleVariable("highptId",   lambda x : x.muonID("POG_ID_HighPt") if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),
 ])
 
 muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variables = [
