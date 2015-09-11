@@ -350,7 +350,7 @@ class XZhAnalyzer( Analyzer ):
         event.highptIdMuons.sort(key = lambda l : l.pt(), reverse = True)
         
         elecId = len(event.highptIdElectrons) >= 2 and event.highptIdElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdElectrons[1].pt() > self.cfg_ana.elec2pt
-        muonId = len(event.highptIdMuons) >= 2 and event.highptIdMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdMuons[1].pt() > self.cfg_ana.muon2pt
+        muonId = len(event.highptIdMuons) >= 2 and event.highptIdMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdMuons[0].muonID("POG_ID_HighPt") or event.highptIdMuons[1].muonID("POG_ID_HighPt"))
         
         if not elecId and not muonId:
             return True
@@ -365,7 +365,7 @@ class XZhAnalyzer( Analyzer ):
         event.highptIdIsoMuons.sort(key = lambda l : l.pt(), reverse = True)
         
         elecIdIso = len(event.highptIdIsoElectrons) >= 2 and event.highptIdIsoElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdIsoElectrons[1].pt() > self.cfg_ana.elec2pt
-        muonIdIso = len(event.highptIdIsoMuons) >= 2 and event.highptIdIsoMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdIsoMuons[1].pt() > self.cfg_ana.muon2pt
+        muonIdIso = len(event.highptIdIsoMuons) >= 2 and event.highptIdIsoMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdIsoMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdIsoMuons[0].muonID("POG_ID_HighPt") or event.highptIdIsoMuons[1].muonID("POG_ID_HighPt"))
         
         if not elecIdIso and not muonIdIso:
             return True
