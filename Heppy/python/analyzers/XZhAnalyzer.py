@@ -64,24 +64,24 @@ class XZhAnalyzer( Analyzer ):
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
         
-        # Jet Mass Recalibration
-        if self.cfg_ana.recalibrateMass:
-            path = os.path.expandvars(self.cfg_ana.jecPath)
-            globalTag = self.cfg_ana.mcGT if self.cfg_comp.isMC else self.cfg_ana.dataGT
-            jetFlavour = self.cfg_ana.recalibrationType
-            self.vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
-            #self.L1JetPar  = ROOT.JetCorrectorParameters("%s/%s_L1FastJet_%s.txt" % (path,globalTag,jetFlavour),"");
-            self.L2JetPar  = ROOT.JetCorrectorParameters("%s/%s_L2Relative_%s.txt" % (path,globalTag,jetFlavour),"");
-            self.L3JetPar  = ROOT.JetCorrectorParameters("%s/%s_L3Absolute_%s.txt" % (path,globalTag,jetFlavour),"");
-            #self.vPar.push_back(self.L1JetPar);
-            self.vPar.push_back(self.L2JetPar);
-            self.vPar.push_back(self.L3JetPar);
-            # Add residuals if needed
-            if self.cfg_comp.isMC: 
-                self.ResJetPar = ROOT.JetCorrectorParameters("%s/%s_L2L3Residual_%s.txt" % (path,globalTag,jetFlavour))
-                self.vPar.push_back(self.ResJetPar);
-            #Step3 (Construct a FactorizedJetCorrector object) 
-            self.JetCorrector = ROOT.FactorizedJetCorrector(self.vPar)
+#        # Jet Mass Recalibration
+#        if self.cfg_ana.recalibrateMass:
+#            path = os.path.expandvars(self.cfg_ana.jecPath)
+#            globalTag = self.cfg_ana.mcGT if self.cfg_comp.isMC else self.cfg_ana.dataGT
+#            jetFlavour = self.cfg_ana.recalibrationType
+#            self.vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
+#            #self.L1JetPar  = ROOT.JetCorrectorParameters("%s/%s_L1FastJet_%s.txt" % (path,globalTag,jetFlavour),"");
+#            self.L2JetPar  = ROOT.JetCorrectorParameters("%s/%s_L2Relative_%s.txt" % (path,globalTag,jetFlavour),"");
+#            self.L3JetPar  = ROOT.JetCorrectorParameters("%s/%s_L3Absolute_%s.txt" % (path,globalTag,jetFlavour),"");
+#            #self.vPar.push_back(self.L1JetPar);
+#            self.vPar.push_back(self.L2JetPar);
+#            self.vPar.push_back(self.L3JetPar);
+#            # Add residuals if needed
+#            if self.cfg_comp.isMC: 
+#                self.ResJetPar = ROOT.JetCorrectorParameters("%s/%s_L2L3Residual_%s.txt" % (path,globalTag,jetFlavour))
+#                self.vPar.push_back(self.ResJetPar);
+#            #Step3 (Construct a FactorizedJetCorrector object) 
+#            self.JetCorrector = ROOT.FactorizedJetCorrector(self.vPar)
             
 
             
@@ -285,20 +285,20 @@ class XZhAnalyzer( Analyzer ):
         return True
     
     
-    def addCorrectedJetMass(self, event, jet):
-        if self.cfg_ana.recalibrateMass:
-            self.JetCorrector.setJetPt(jet.pt() * jet.rawFactor())
-            self.JetCorrector.setJetEta(jet.eta())
-            self.JetCorrector.setJetE(jet.energy() * jet.rawFactor());
-            self.JetCorrector.setJetA(jet.jetArea())
-            self.JetCorrector.setRho(event.rho)
-            self.JetCorrector.setNPV( len(event.vertices) )
-            corr = self.JetCorrector.getCorrection()
-        else:
-            corr = 1.
+#    def addCorrectedJetMass(self, event, jet):
+#        if self.cfg_ana.recalibrateMass:
+#            self.JetCorrector.setJetPt(jet.pt() * jet.rawFactor())
+#            self.JetCorrector.setJetEta(jet.eta())
+#            self.JetCorrector.setJetE(jet.energy() * jet.rawFactor());
+#            self.JetCorrector.setJetA(jet.jetArea())
+#            self.JetCorrector.setRho(event.rho)
+#            self.JetCorrector.setNPV( len(event.vertices) )
+#            corr = self.JetCorrector.getCorrection()
+#        else:
+#            corr = 1.
 
-        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
-        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
+#        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
+#        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
         
     
     
@@ -439,7 +439,7 @@ class XZhAnalyzer( Analyzer ):
         for i, j in enumerate(event.cleanJetsAK8):
             if j.pt() >= self.cfg_ana.fatjet_pt:
                 if deltaR(event.highptLeptons[0].eta(), event.highptLeptons[0].phi(), j.eta(), j.phi()) > self.cfg_ana.jetlep_dR and deltaR(event.highptLeptons[1].eta(), event.highptLeptons[1].phi(), j.eta(), j.phi()) > self.cfg_ana.jetlep_dR:
-                    self.addCorrectedJetMass(event, j)
+                    #self.addCorrectedJetMass(event, j)
                     event.highptFatJets.append(j)
         event.highptFatJets.sort(key = lambda j : j.pt(), reverse = True) #j.userFloat(self.cfg_ana.jetAlgo)
             

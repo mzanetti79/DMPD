@@ -22,6 +22,43 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
             setup.services["outputfile"].file.cd("..")
     
+    
+        # Jet Mass Recalibration
+        if self.cfg_ana.recalibrateMass:
+            path = os.path.expandvars(self.cfg_ana.jecPath)
+            globalTag = self.cfg_ana.mcGT if self.cfg_comp.isMC else self.cfg_ana.dataGT
+            jetFlavour = self.cfg_ana.recalibrationType
+            self.vPar = ROOT.vector(ROOT.JetCorrectorParameters)()
+            #self.L1JetPar  = ROOT.JetCorrectorParameters("%s/%s_L1FastJet_%s.txt" % (path,globalTag,jetFlavour),"");
+            self.L2JetPar  = ROOT.JetCorrectorParameters("%s/%s_L2Relative_%s.txt" % (path,globalTag,jetFlavour),"");
+            self.L3JetPar  = ROOT.JetCorrectorParameters("%s/%s_L3Absolute_%s.txt" % (path,globalTag,jetFlavour),"");
+            #self.vPar.push_back(self.L1JetPar);
+            self.vPar.push_back(self.L2JetPar);
+            self.vPar.push_back(self.L3JetPar);
+            # Add residuals if needed
+            if self.cfg_comp.isMC: 
+                self.ResJetPar = ROOT.JetCorrectorParameters("%s/%s_L2L3Residual_%s.txt" % (path,globalTag,jetFlavour))
+                self.vPar.push_back(self.ResJetPar);
+            #Step3 (Construct a FactorizedJetCorrector object) 
+            self.JetCorrector = ROOT.FactorizedJetCorrector(self.vPar)
+        
+    
+    def addCorrectedJetMass(self, event, jet):
+        if self.cfg_ana.recalibrateMass:
+            self.JetCorrector.setJetPt(jet.pt() * jet.rawFactor())
+            self.JetCorrector.setJetEta(jet.eta())
+            self.JetCorrector.setJetE(jet.energy() * jet.rawFactor());
+            self.JetCorrector.setJetA(jet.jetArea())
+            self.JetCorrector.setRho(event.rho)
+            self.JetCorrector.setNPV( len(event.vertices) )
+            corr = self.JetCorrector.getCorrection()
+        else:
+            corr = 1.
+
+        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
+        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
+    
+    
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
@@ -32,7 +69,7 @@ class PreselectionAnalyzer( Analyzer ):
             j.dR_subjets = -1.
             if len(j.subjets('SoftDrop')) >= 2:
                 j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
-        
+            self.addCorrectedJetMass(event, j)
         
         
 #    def addJESUncertainty(self, event):
