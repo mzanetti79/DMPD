@@ -3,16 +3,18 @@ import os, sys, time, multiprocessing
 from ROOT import TFile, gROOT
 gROOT.Macro('functions.C')
 
+
 ### The Configuration
 from setup import Configuration
 cfg=Configuration()
 
 ## mandatory configurations parameters
-cfg.parametersSet['region'] = 'SR'
-cfg.parametersSet['observable'] = 'met'
+cfg.parametersSet['region'] = 'ZCR'
+cfg.parametersSet['samples_set'].append('data_singlemu')
+cfg.parametersSet['observable'] = 'fakemet'
 cfg.parametersSet['verbosity'] = 3
 cfg.name=cfg.parametersSet['region']+'_'+cfg.parametersSet['observable']
-cfg.parametersSet['lumi'] = '5000' # pb^-1
+cfg.parametersSet['lumi'] = '41.9' # pb^-1
 
 ### you can build observables and selections on the fly
 #from observables import Observable
@@ -25,8 +27,11 @@ label = str(hash(frozenset(cfg.parametersSet.items()))) if False else '' # log o
 analyzer = Analyzer(cfg, label)
 analyzer.analyze()
 analyzer.print_yields()
-analyzer.format_histograms()
-analyzer.draw()
+
+# plot
+from plotter import Plotter
+plotter=Plotter(analyzer)
+plotter.plot()
 
     
 

@@ -1,6 +1,6 @@
 from array import array
 
-momentum_bins=range(100,331,25)+[350, 380, 430, 500, 1000]
+momentum_bins=range(0,331,25)+[350, 380, 430, 500, 1000]
 
 class Observable():
     def __init__(self,**k):
@@ -31,8 +31,14 @@ observables = {
                         labelX='E_{T}^{miss} [GeV]',
                      ),
     'jet1Pt':Observable(variable='jet1Pt',
-                        formula='jet_pt[0]',
+                        formula='jet1_pt',
                         labelX='leading jet p_{T} [GeV]',
+                        ),
+    'jet2Phi':Observable(variable='jet2Phi',
+                        formula='jet2_phi',
+                        labelX='leading jet #phi',
+                        scale_bin_content=False,
+                        bins = array('d',[v/10. for v in range(-33,33)])
                         ),
     'metPhi':Observable(variable='metPhi',
                         formula='fakemet_phi',
@@ -63,13 +69,13 @@ observables = {
                             bins = array('d',range(0,5))
                             ),
     'dPhiJet1Jet2': Observable(variable='dPhiJet1Jet2',
-                               formula='deltaPhi(jet_phi[0],jet_phi[1])',
+                               formula='deltaPhi(jet1_phi,jet2_phi)',
                                labelX='#Delta#phi(jet_{1},jet_{2})',
                                scale_bin_content=False,
-                               bins = array('d',[v/10. for v in range(0,33)])
+                               bins = array('d',[v/10. for v in range(-33,33)])
                                ),  
     'bDisc': Observable(variable='bDisc',
-                        formula='jet_CSV[0]',
+                        formula='jet1_CSV',
                         labelX='leading jet CSV',
                         scale_bin_content=False,
                         bins = array('d',[v/25. for v in range(0,26)]),  

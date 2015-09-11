@@ -7,10 +7,10 @@ gROOT.Macro('functions.C')
 timeout = 10
 
 ### tell me what I need to plot
-common_plots = ['nJets','jet1Pt']
+common_plots = [] #['nJets','jet1Pt']
 to_be_processed = {
-    'SR':common_plots+['met'],
-    'ZCR':common_plots+['fakemet','Zmass'],
+    #'SR':common_plots+['met', 'dPhiJet1Jet2', 'jet2Phi'],
+    'ZCR':common_plots+['jet1Pt', 'Zmass'],
     #'WCR':common_plots,
     #'GCR':common_plots,
     }
@@ -18,14 +18,14 @@ to_be_processed = {
 ### the configuration. First the common features
 from setup import Configuration
 cfg=Configuration()
-cfg.parametersSet['lumi'] = '5000' # pb^-1
+cfg.parametersSet['lumi'] = '41.9' # pb^-1
+cfg.parametersSet['samples_set'].append('data_singlemu') ### FIXME
 
 ### the analyzer
 from analyzer import Analyzer
 def worker(cfg, label, result_queue):
     analyzer = Analyzer(cfg, label)
     analyzer.analyze()
-    analyzer.format_histograms()
     result_queue.put([cfg.name,analyzer])
 
 ### launch the processes
@@ -53,9 +53,15 @@ while len(results) < len(processes):
 
 ### plot and save the results
 output = TFile(cfg.parametersSet['output_name'],'recreate')
+from plotter import Plotter
+plotters = {}
 for plot in results:
-    results[plot].draw()
-    results[plot].canvas.SaveAs('plots/'+results[plot].canvas.GetName()+'.png')
-    results[plot].canvas.Write()
+    plotters[plot] = Plotter(results[plot])
+    plotters[plot].plot()
+    plotters[plot].multi_canvas.canvas.SaveAs('/Users/mzanetti/Sites/cms/DMPD/'+plotters[plot].multi_canvas.canvas.GetName()+'.png')
+    plotters[plot].multi_canvas.canvas.Write()
+    #results[plot].draw()
+    #results[plot].canvas.SaveAs('plots/'+results[plot].canvas.GetName()+'.png')
+    #results[plot].canvas.Write()
     
 

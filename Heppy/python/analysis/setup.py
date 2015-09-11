@@ -9,6 +9,7 @@ class Configuration():
         self.parametersSet = {
             'verbosity':1, #1-> error, 2-> warning, 3-> info, 0->none
             'output_name':'tmp.root',
+            'samples_set':['Zll_amcnlo','Zvv','Wlv_amcnlo','top','VV','QCD','signal_monoH'],
         }
         self.name = 'default'
         
@@ -56,7 +57,10 @@ class Setup():
                     sample_to_be_added = False
                     if self.configuration['verbosity'] > 1: print 'WARNING:', p, 'is not there'
                 if self.configuration['region']!='GJets' and p=='GJets': sample_to_be_added = False
+                if p not in self.configuration['samples_set']: sample_to_be_added = False    
             if sample_to_be_added: self.processes[p] = processes[p]
+            else:
+                if self.configuration['verbosity'] > 2: print 'INFO:', p, 'not considered'
 
 
     def order_processes(self):

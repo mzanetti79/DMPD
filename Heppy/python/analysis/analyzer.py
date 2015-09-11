@@ -2,7 +2,6 @@
 from setup import Setup
 from datasets import processes
 from selections import Selection
-from plottingTools import *
 from ROOT import THStack, TLegend, TCanvas
 
 class Analyzer():
@@ -32,13 +31,20 @@ class Analyzer():
                 print 'processing', process_name, self.trees[process_name].GetName()
             self.histograms[process_name] = self.setup.make_histogram(process_name+'_'+self.cfg.name)
             selection = self.selection
+            # MARGHERITA
+            weight = '(isData && eventWeight>0.001? 1.:eventWeight)'
+            if process_name.find('data')==-1: weight = str(self.cfg.parametersSet['lumi'])+'*'+weight 
+            selection = '('+selection+')*'+weight
+            # DEFAULT
+            """
             if process_name.find('data')==-1: 
-                weight = str(self.cfg.parametersSet['lumi'])+'*weight' 
-                selection = '('+selection+')*'+weight 
+                weight = str(self.cfg.parametersSet['lumi'])+'*eventWeight' 
+                selection = '('+selection+')*'+weight
+            """
             self.trees[process_name].Project(self.histograms[process_name].GetName(), 
                                              self.setup.observable.plot, 
                                              selection)
-
+        self.format_histograms()
 
     def generate(self, variables, weight=':weight'):
         from formatting import getRooDataSet
@@ -100,29 +106,4 @@ class Analyzer():
                 self.formatted_histograms['background'] = stack
             # adding to the legend
             self.legend.AddEntry(hist,processes[process_name]['label'],legendMarker)
-
-    
-    def draw(self,name=''):
-        if name=='': name=self.cfg.name
-        self.make_canvas(name) 
-        self.formatted_histograms['background'].Draw('fhist')
-        self.formatted_histograms['background'].GetXaxis().SetTitle(self.setup.observable.labelX)
-        self.formatted_histograms['background'].GetYaxis().SetTitle(self.setup.observable.labelY)
-        self.formatted_histograms['background'].GetXaxis().SetNdivisions(505)
-        self.formatted_histograms['background'].GetYaxis().SetNdivisions(505)
-        try: 
-            self.formatted_histograms['data'].Draw('ep,same') 
-            self.draw_compare()
-        except:
-            if self.cfg.parametersSet['verbosity'] > 2: print 'data not plotted'
-        try: self.formatted_histograms['signal'].Draw('hist,same') 
-        except:
-            if self.cfg.parametersSet['verbosity'] > 2: print 'signal not plotted'
-        self.legend.Draw()
-            
-
-    def make_canvas(self,name):
-        self.canvas = MultiCanvas(name) if self.formatted_histograms.has_key('data') else TCanvas(name,name,1000,800)
-        self.canvas.SetLogy()
-        SetOwnership(self.canvas,False)
 
