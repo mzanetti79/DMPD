@@ -93,14 +93,14 @@ class XZhAnalyzer( Analyzer ):
         
     def fillGenPlots(self, event):
         if not hasattr(event, "genleps"): return True
-        if hasattr(event, "genVBosons") and len(event.genVBosons) >= 1:
-            genZpt = event.genVBosons[0].pt()
-        
         if not len(event.genleps) >= 2: return True
         i1, i2 = [0, 1] if event.genleps[0].pt() > event.genleps[1].pt() else [1, 0]
         l1, l2 = -1, -1
         genZdR = deltaR(event.genleps[i1].eta(), event.genleps[i1].phi(), event.genleps[i2].eta(), event.genleps[i2].phi())
-        if genZpt == None: genZpt = (event.genleps[i1].p4() + event.genleps[i2].p4()).pt()
+        if hasattr(event, "genVBosons") and len(event.genVBosons) >= 1:
+            genZpt = event.genVBosons[0].pt()
+        else:
+            genZpt = (event.genleps[i1].p4() + event.genleps[i2].p4()).pt()
         
         # Electrons
         if abs(event.genleps[0].pdgId()) == 11:
