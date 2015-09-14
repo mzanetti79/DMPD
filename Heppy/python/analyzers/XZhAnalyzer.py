@@ -418,9 +418,6 @@ class XZhAnalyzer( Analyzer ):
             return True
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5, event.eventWeight)
         
-        # Fill tree
-        event.isXZh = True
-        
         # Z mass
         if event.Z.mass() < self.cfg_ana.Z_mass_low or event.Z.mass() > self.cfg_ana.Z_mass_high:
             return True
@@ -430,7 +427,8 @@ class XZhAnalyzer( Analyzer ):
             return True
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(7, event.eventWeight)
         
-        
+        # Fill tree
+        event.isXZh = True
         
         #########################
         #    Part 2: Jets       #
