@@ -25,35 +25,22 @@ origin = options.origin
 target = options.target
 json_path = options.json
 
-
 import json
 
 if len(json_path) <= 0 or not os.path.exists(json_path):
-    print "Warning, no JSON file has been specified. Continue?"
-    raw_input()
-with open(json_path) as json_file:    
-    json_data = json.load(json_file)
-
-
-#json = {
-# "251244": [[85, 86], [88, 93], [96, 121], [123, 156], [158, 428], [430, 442]],
-# "251251": [[1, 31], [33, 97], [99, 167]],
-# "251252": [[1, 283], [285, 505], [507, 554]],
-# "251561": [[1, 94]],
-# "251562": [[1, 439], [443, 691]],
-# "251643": [[1, 216], [222, 606]],
-# "251721": [[21, 36]],
-# "251883": [[56, 56], [58, 60], [62, 144], [156, 437]]
-#}
-
-
-raw_input()
+    print "Warning, no JSON file (-j option) has been specified"#. Press Enter to continue"
+    #raw_input()
+    isJson_file = False
+else:
+    with open(json_path) as json_file:    
+        json_data = json.load(json_file)
+    isJson_file = True
 
 if not os.path.exists(origin):
-    print "Origin dir", origin, "does not exist, aborting..."
+    print "Origin directory", origin, "does not exist, aborting..."
     exit()
 if not os.path.exists(target):
-    print "Target dir", target,"does not exist, aborting..."
+    print "Target directory", target,"does not exist, aborting..."
     exit()
 
 
@@ -71,7 +58,7 @@ def isJSON(run, lumi):
 def processFile(dir_name, verbose=False):
     
     #print "##################################################"
-    print "\n", dir_name, ":"
+    print dir_name#, ":"
     #print "##################################################"
     
     isMC = not '2015' in dir_name
@@ -157,11 +144,12 @@ def processFile(dir_name, verbose=False):
                 # Data
                 else:
                     # Check JSON
-                    if not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
+                    if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
                     # Filters
                     #elif not (obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0. #obj.Flag_BIT_Flag_HBHENoiseFilter and 
                     # Filter by PD
-                    else: xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
+                    else: xsWeight[0] = 1.
+                        #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 # Total
                 eventWeight[0] = xsWeight[0] * pileupWeight[0]
