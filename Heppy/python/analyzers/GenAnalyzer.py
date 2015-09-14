@@ -73,6 +73,8 @@ class GenAnalyzer( Analyzer ):
         if not hasattr(event, "genParticles"):
             return True
         
+        weight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
+        
         event.genChi = []
         
         for g in event.genParticles:
@@ -81,72 +83,72 @@ class GenAnalyzer( Analyzer ):
             if g.pdgId() in self.cfg_ana.chi:
                 event.genChi.append(g)
         if hasattr(event, "genPhi"):
-            self.Hist["GenPhi1mass"].Fill(event.genPhi.mass())
-            self.Hist["GenPhi1pt"].Fill(event.genPhi.pt())
-            self.Hist["GenPhi1eta"].Fill(event.genPhi.eta())
+            self.Hist["GenPhi1mass"].Fill(event.genPhi.mass(), weight)
+            self.Hist["GenPhi1pt"].Fill(event.genPhi.pt(), weight)
+            self.Hist["GenPhi1eta"].Fill(event.genPhi.eta(), weight)
         if len(event.genChi) >= 2:
             i1, i2 = [0, 1] if event.genChi[0].pt() > event.genChi[1].pt() else [1, 0]
-            self.Hist["GenChi1mass"].Fill(event.genChi[i1].mass())
-            self.Hist["GenChi1pt"].Fill(event.genChi[i1].pt())
-            self.Hist["GenChi1eta"].Fill(event.genChi[i1].eta())
-            self.Hist["GenChi2mass"].Fill(event.genChi[i1].mass())
-            self.Hist["GenChi2pt"].Fill(event.genChi[i1].pt())
-            self.Hist["GenChi2eta"].Fill(event.genChi[i1].eta())
-            self.Hist["GenChi12dR"].Fill(deltaR(event.genChi[0].eta(), event.genChi[0].phi(), event.genChi[1].eta(), event.genChi[1].phi()))
+            self.Hist["GenChi1mass"].Fill(event.genChi[i1].mass(), weight)
+            self.Hist["GenChi1pt"].Fill(event.genChi[i1].pt(), weight)
+            self.Hist["GenChi1eta"].Fill(event.genChi[i1].eta(), weight)
+            self.Hist["GenChi2mass"].Fill(event.genChi[i1].mass(), weight)
+            self.Hist["GenChi2pt"].Fill(event.genChi[i1].pt(), weight)
+            self.Hist["GenChi2eta"].Fill(event.genChi[i1].eta(), weight)
+            self.Hist["GenChi12dR"].Fill(deltaR(event.genChi[0].eta(), event.genChi[0].phi(), event.genChi[1].eta(), event.genChi[1].phi()), weight)
         # Z
         if hasattr(event, "genVBosons"):
             if len(event.genVBosons) > 0:
                 if event.genVBosons[0].pdgId() == 23:
-                    self.Hist["GenZmass"].Fill(event.genVBosons[0].mass())
-                    self.Hist["GenZpt"].Fill(event.genVBosons[0].pt())
-                    self.Hist["GenZeta"].Fill(event.genVBosons[0].eta())
+                    self.Hist["GenZmass"].Fill(event.genVBosons[0].mass(), weight)
+                    self.Hist["GenZpt"].Fill(event.genVBosons[0].pt(), weight)
+                    self.Hist["GenZeta"].Fill(event.genVBosons[0].eta(), weight)
                 elif event.genVBosons[0].pdgId() == 24:
-                    self.Hist["GenWmass"].Fill(event.genVBosons[0].mass())
-                    self.Hist["GenWpt"].Fill(event.genVBosons[0].pt())
-                    self.Hist["GenWeta"].Fill(event.genVBosons[0].eta())
+                    self.Hist["GenWmass"].Fill(event.genVBosons[0].mass(), weight)
+                    self.Hist["GenWpt"].Fill(event.genVBosons[0].pt(), weight)
+                    self.Hist["GenWeta"].Fill(event.genVBosons[0].eta(), weight)
         # Higgs
         if hasattr(event, "genHiggsBosons"):
             if len(event.genHiggsBosons) > 0:
-                self.Hist["GenHmass"].Fill(event.genHiggsBosons[0].mass())
-                self.Hist["GenHpt"].Fill(event.genHiggsBosons[0].pt())
-                self.Hist["GenHeta"].Fill(event.genHiggsBosons[0].eta())
+                self.Hist["GenHmass"].Fill(event.genHiggsBosons[0].mass(), weight)
+                self.Hist["GenHpt"].Fill(event.genHiggsBosons[0].pt(), weight)
+                self.Hist["GenHeta"].Fill(event.genHiggsBosons[0].eta(), weight)
         # Leptons from Z
         if hasattr(event, "genleps"):
             if len(event.genleps) >= 2:
-                self.Hist["GenZdecay"].Fill(abs(event.genleps[0].pdgId()))
-                self.Hist["GenZdR"].Fill(deltaR(event.genleps[0].eta(), event.genleps[0].phi(), event.genleps[1].eta(), event.genleps[1].phi()))
+                self.Hist["GenZdecay"].Fill(abs(event.genleps[0].pdgId()), weight)
+                self.Hist["GenZdR"].Fill(deltaR(event.genleps[0].eta(), event.genleps[0].phi(), event.genleps[1].eta(), event.genleps[1].phi()), weight)
                 i1, i2 = [0, 1] if event.genleps[0].pt() > event.genleps[1].pt() else [1, 0]
-                self.Hist["GenLepton1pt"].Fill(event.genleps[i1].pt())
-                self.Hist["GenLepton1eta"].Fill(event.genleps[i1].eta())
-                self.Hist["GenLepton2pt"].Fill(event.genleps[i2].pt())
-                self.Hist["GenLepton2eta"].Fill(event.genleps[i2].eta())
+                self.Hist["GenLepton1pt"].Fill(event.genleps[i1].pt(), weight)
+                self.Hist["GenLepton1eta"].Fill(event.genleps[i1].eta(), weight)
+                self.Hist["GenLepton2pt"].Fill(event.genleps[i2].pt(), weight)
+                self.Hist["GenLepton2eta"].Fill(event.genleps[i2].eta(), weight)
         # b-quarks from Higgs
         if hasattr(event, "genbquarks"):
             if len(event.genbquarks) == 1:
-                self.Hist["GenBquark1pt"].Fill(event.genbquarks[0].pt())
-                self.Hist["GenBquark1eta"].Fill(event.genbquarks[0].eta())
+                self.Hist["GenBquark1pt"].Fill(event.genbquarks[0].pt(), weight)
+                self.Hist["GenBquark1eta"].Fill(event.genbquarks[0].eta(), weight)
             elif len(event.genbquarks) >= 2:
-                self.Hist["GenHdecay"].Fill(abs(event.genbquarks[0].pdgId()))
-                self.Hist["GenHdR"].Fill(deltaR(event.genbquarks[0].eta(), event.genbquarks[0].phi(), event.genbquarks[1].eta(), event.genbquarks[1].phi()))
-                self.Hist["GenHdPhi"].Fill(deltaPhi(event.genbquarks[0].phi(), event.genbquarks[1].phi()))
+                self.Hist["GenHdecay"].Fill(abs(event.genbquarks[0].pdgId()), weight)
+                self.Hist["GenHdR"].Fill(deltaR(event.genbquarks[0].eta(), event.genbquarks[0].phi(), event.genbquarks[1].eta(), event.genbquarks[1].phi()), weight)
+                self.Hist["GenHdPhi"].Fill(deltaPhi(event.genbquarks[0].phi(), event.genbquarks[1].phi()), weight)
                 i1, i2 = [0, 1] if event.genbquarks[0].pt() > event.genbquarks[1].pt() else [1, 0]
-                self.Hist["GenBquark1pt"].Fill(event.genbquarks[i1].pt())
-                self.Hist["GenBquark1eta"].Fill(event.genbquarks[i1].eta())
-                self.Hist["GenBquark2pt"].Fill(event.genbquarks[i2].pt())
-                self.Hist["GenBquark2eta"].Fill(event.genbquarks[i2].eta())
+                self.Hist["GenBquark1pt"].Fill(event.genbquarks[i1].pt(), weight)
+                self.Hist["GenBquark1eta"].Fill(event.genbquarks[i1].eta(), weight)
+                self.Hist["GenBquark2pt"].Fill(event.genbquarks[i2].pt(), weight)
+                self.Hist["GenBquark2eta"].Fill(event.genbquarks[i2].eta(), weight)
         
         
         ### LHE event ###
         if not hasattr(event, "lheV_pt"):
             return True
             
-        self.Hist["LheZpt"].Fill(event.lheV_pt)
-        self.Hist["LheHT"].Fill(event.lheHT)
-        self.Hist["LheNj"].Fill(event.lheNj)
-        self.Hist["LheNb"].Fill(event.lheNb)
-        self.Hist["LheNc"].Fill(event.lheNc)
-        self.Hist["LheNl"].Fill(event.lheNl)
-        self.Hist["LheNg"].Fill(event.lheNg)
+        self.Hist["LheZpt"].Fill(event.lheV_pt, weight)
+        self.Hist["LheHT"].Fill(event.lheHT, weight)
+        self.Hist["LheNj"].Fill(event.lheNj, weight)
+        self.Hist["LheNb"].Fill(event.lheNb, weight)
+        self.Hist["LheNc"].Fill(event.lheNc, weight)
+        self.Hist["LheNl"].Fill(event.lheNl, weight)
+        self.Hist["LheNg"].Fill(event.lheNg, weight)
         
         
         return True
