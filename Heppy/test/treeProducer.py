@@ -760,7 +760,7 @@ XZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
-    #jsonAnalyzer,
+    jsonAnalyzer,
     lheAnalyzer,
     generatorAnalyzer,
     #pdfAnalyzer,
@@ -858,28 +858,29 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ### MC ###
-selectedComponents = [
+#selectedComponents = [
 #    sample['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
+#    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
 #    sample['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2'],
-##    sample['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1'],
-##    sample['ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1'],
-##    sample['ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1'],
-##    sample['ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1'],
+#    sample['ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
 ##    sample['GJets_HT_100To200_madgraphMLM_pythia8_v2'],
 ##    sample['GJets_HT_200To400_madgraphMLM_pythia8_v2'],
 ##    sample['GJets_HT_400To600_madgraphMLM_pythia8_v1'],
 ##    sample['GJets_HT_600ToInf_madgraphMLM_pythia8_v1'],
-##    sample['QCD_HT_1000to1500_madgraphMLM_pythia8_v2'],
-##    sample['QCD_HT_100to200_madgraphMLM_pythia8_v2'],
-##    sample['QCD_HT_1500to2000_madgraphMLM_pythia8_v1'],
-##    sample['QCD_HT_2000toInf_madgraphMLM_pythia8_v1'],
-##    sample['QCD_HT_200to300_madgraphMLM_pythia8_v2'],
-##    sample['QCD_HT_300to500_madgraphMLM_pythia8_v2'],
-##    sample['QCD_HT_500to700_madgraphMLM_pythia8_v1'],
-##    sample['QCD_HT_700to1000_madgraphMLM_pythia8_v1'],
+#    sample['QCD_HT_1000to1500_madgraphMLM_pythia8_v2'],
+#    sample['QCD_HT_100to200_madgraphMLM_pythia8_v2'],
+#    sample['QCD_HT_1500to2000_madgraphMLM_pythia8_v1'],
+#    sample['QCD_HT_2000toInf_madgraphMLM_pythia8_v1'],
+#    sample['QCD_HT_200to300_madgraphMLM_pythia8_v2'],
+#    sample['QCD_HT_300to500_madgraphMLM_pythia8_v2'],
+#    sample['QCD_HT_500to700_madgraphMLM_pythia8_v1'],
+#    sample['QCD_HT_700to1000_madgraphMLM_pythia8_v1'],
 ##    sample['QCD_Pt_1000to1400_pythia8_v1'],
 ##    sample['QCD_Pt_10to15_pythia8_v2'],
 ##    sample['QCD_Pt_120to170_pythia8_v1'],
@@ -897,27 +898,13 @@ selectedComponents = [
 ##    sample['QCD_Pt_600to800_pythia8_v3'],
 ##    sample['QCD_Pt_800to1000_pythia8_v2'],
 ##    sample['QCD_Pt_80to120_pythia8_v1'],
-##    sample['ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
-##    sample['ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1'],
-##    sample['ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1'],
-##    sample['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1'],
-##    sample['ST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_10_Mphi_50_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_150_Mphi_200_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_1_Mphi_10_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_1_Mphi_300_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_500_Mphi_500_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_50_Mphi_300_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_pseudoscalar_Mchi_50_Mphi_50_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_scalar_Mchi_10_Mphi_100_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_scalar_Mchi_10_Mphi_10_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_scalar_Mchi_150_Mphi_500_madgraphMLM_pythia8_v3'],
-##    sample['TTbarDMJets_scalar_Mchi_1_Mphi_100_madgraphMLM_pythia8_v1'],
-##    sample['TTbarDMJets_scalar_Mchi_1_Mphi_50_madgraphMLM_pythia8_v1'],
-#    sample['TTJets_madgraphMLM_pythia8_v2'],
-##    sample['TT_powheg_pythia8_v2'],
+#    sample['ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1'],
+#    sample['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1'],
+#    sample['ST_tW_top_5f_inclusiveDecays_powheg_pythia8_v1'],
+##    sample['TTJets_madgraphMLM_pythia8_v2'],
+#    sample['TT_powheg_pythia8_v2'],
 #    sample['WJetsToLNu_amcatnloFXFX_pythia8_v1'],
 ##    sample['WJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1'],
 ##    sample['WJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1'],
@@ -929,7 +916,9 @@ selectedComponents = [
 ##    sample['ZH_HToBB_ZToLL_M125_amcatnloFXFX_madspin_pythia8_v1'],
 #    sample['ZH_HToBB_ZToLL_M125_powheg_pythia8_v1'],
 ##    sample['ZH_HToBB_ZToNuNu_M125_amcatnloFXFX_madspin_pythia8_v1'],
-    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+#    sample['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1'],
@@ -940,8 +929,8 @@ selectedComponents = [
 #    sample['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1'],
 #    sample['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],
-#    sample['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M600_madgraph_v1'],
+#    sample['ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M1000_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M1200_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M1400_madgraph_v1'],
@@ -953,9 +942,7 @@ selectedComponents = [
 #    sample['ZprimeToZhToZinvhbb_narrow_M3500_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M4000_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M4500_madgraph_v1'],
-#    sample['ZprimeToZhToZinvhbb_narrow_M600_madgraph_v1'],
-#    sample['ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2'],
-]
+#]
 
 
 
@@ -975,7 +962,7 @@ selectedComponents = [
 #filterAnalyzer.processName = 'RECO'
 
 
-#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
 #selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],]
 
 #selectedComponents = [
