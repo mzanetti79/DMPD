@@ -32,7 +32,7 @@ loose_tauIDnHits = 0,
 ### PhotonAnalyzer.py
 [PhysicsTools/Heppy/python/analyzers/objects/PhotonAnalyzer.py]
 
-#### L76-82 SOBSTITUTE WITH
+#### L76-82 REPLACE WITH
 ```python
 if   abs(gamma.eta()) < 1.0:   gamma.EffectiveArea03 = [ 0.0234, 0.0053, 0.0896 ]
 elif abs(gamma.eta()) < 1.479: gamma.EffectiveArea03 = [ 0.0189, 0.0103, 0.0762 ]
