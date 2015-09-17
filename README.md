@@ -66,14 +66,16 @@ self.jetFlavour(event)
 ```
 
 #### L260-264 MODIFY
-```if self.cfg_ana.do_mc_match:
+```python
+if self.cfg_ana.do_mc_match:
   setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
   setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
   setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
   setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
 ```
 WITH
-```setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
+```python
+setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
 setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
 setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
 setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
@@ -83,8 +85,10 @@ setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.hea
 [PhysicsTools/Heppy/python/physicsobjects/Photon.py]
 
 #### FIND AND REPLACE
-```conversionVeto": [True,True]
+```python
+conversionVeto": [True,True]
 ```
 WITH
-```conversionVeto": [False,False]
+```python
+conversionVeto": [False,False]
 ```
