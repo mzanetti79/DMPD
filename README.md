@@ -7,28 +7,33 @@ DM analysis framework of the CMS PD group
 [PhysicsTools/Heppy/python/analyzers/objects/TauAnalyzer.py]
 
 L89 REPLACE 
-```tau.tauID(self.cfg_ana.inclusive_tauID)
+```python
+tau.tauID(self.cfg_ana.inclusive_tauID)
 ```
 WITH 
-```tau.tauID(self.cfg_ana.inclusive_tauID) < self.cfg_ana.inclusive_tauIDnHits
+```python
+tau.tauID(self.cfg_ana.inclusive_tauID) < self.cfg_ana.inclusive_tauIDnHits
 ```
 
 L108 REPLACE 
-```tau.tauID(self.cfg_ana.loose_tauID)
+```python
+tau.tauID(self.cfg_ana.loose_tauID)
 ```
 WITH 
-```tau.tauID(self.cfg_ana.loose_tauID) < self.cfg_ana.loose_tauIDnHits
+```python
+tau.tauID(self.cfg_ana.loose_tauID) < self.cfg_ana.loose_tauIDnHits
 ```
 
 L145-170 ADD
-```inclusive_tauIDnHits = 0,
+```python
+inclusive_tauIDnHits = 0,
 loose_tauIDnHits = 0,
 ```
 ### PhotonAnalyzer.py
 [PhysicsTools/Heppy/python/analyzers/objects/PhotonAnalyzer.py]
 
 L76-82 SOBSTITUTE WITH
-```
+```python
 if   abs(gamma.eta()) < 1.0:   gamma.EffectiveArea03 = [ 0.0234, 0.0053, 0.0896 ]
 elif abs(gamma.eta()) < 1.479: gamma.EffectiveArea03 = [ 0.0189, 0.0103, 0.0762 ]
 elif abs(gamma.eta()) < 2.0:   gamma.EffectiveArea03 = [ 0.0171, 0.0057, 0.0383 ]
@@ -42,19 +47,22 @@ else:                          gamma.EffectiveArea03 = [ 0.0035, 0.1709, 0.1598 
 [PhysicsTools/Heppy/python/analyzers/objects/JetAnalyzer.py]
 
 L123-124 MODIFY
-```if self.cfg_ana.do_mc_match:
+```python
+if self.cfg_ana.do_mc_match:
   self.matchJets(event, allJets)
 ```
 WITH
-```
+```python
 self.matchJets(event, allJets)
 ```
 L236-237 MODIFY
-```if self.cfg_ana.do_mc_match:
+```python
+if self.cfg_ana.do_mc_match:
   self.jetFlavour(event)
 ```
 WITH
-```self.jetFlavour(event)
+```python
+self.jetFlavour(event)
 ```
 
 L260-264 MODIFY
