@@ -237,8 +237,7 @@ class XZhAnalyzer( Analyzer ):
                         if miniIso:
                             self.Hist["EffMuonZdR_LooseLoose_miniIso"].Fill(genZdR)
                             self.Hist["EffMuonZpt_LooseLoose_miniIso"].Fill(genZpt)
-                    # HighPt / Tracker ### FIXME -> CHECK WITH ALBERTO
-                    #if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")) and event.inclusiveLeptons[l1].isTrackerMuon() and event.inclusiveLeptons[l2].isTrackerMuon():
+                    # HighPt / Tracker
                     if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].isTrackerMuon) or (event.inclusiveLeptons[l1].isTrackerMuon and event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")):
                         self.Hist["EffMuonZdR_HighptTracker"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptTracker"].Fill(genZpt)
@@ -250,7 +249,7 @@ class XZhAnalyzer( Analyzer ):
                         if miniIso:
                             self.Hist["EffMuonZdR_HighptTracker_miniIso"].Fill(genZdR)
                             self.Hist["EffMuonZpt_HighptTracker_miniIso"].Fill(genZpt)
-                    # HighPt / CustomTracker ### FIXME -> CHECK WITH ALBERTO (SEE ABOVE/BELOW)
+                    # HighPt / CustomTracker 
                     if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].isCustomTracker) or (event.inclusiveLeptons[l1].isCustomTracker and event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")):
                         self.Hist["EffMuonZdR_HighptCustomTracker"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptCustomTracker"].Fill(genZpt)
@@ -262,8 +261,7 @@ class XZhAnalyzer( Analyzer ):
                         if miniIso:
                             self.Hist["EffMuonZdR_HighptCustomTracker_miniIso"].Fill(genZdR)
                             self.Hist["EffMuonZpt_HighptCustomTracker_miniIso"].Fill(genZpt)
-                    # HighPt / Loose ### FIXME -> CHECK WITH ALBERTO (SEE ABOVE/BELOW)
-                    #if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")) and event.inclusiveLeptons[l1].muonID("POG_ID_Loose") and event.inclusiveLeptons[l2].muonID("POG_ID_Loose"):
+                    # HighPt / Loose 
                     if (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].muonID("POG_ID_Loose")) or (event.inclusiveLeptons[l1].muonID("POG_ID_Loose") and event.inclusiveLeptons[l2].muonID("POG_ID_HighPt")):
                         self.Hist["EffMuonZdR_HighptLoose"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptLoose"].Fill(genZpt)
@@ -301,54 +299,72 @@ class XZhAnalyzer( Analyzer ):
     
     
     
-    def addHEEP(self, e, doPlot=False):
-        e.isHEEP = False
-        if not e.isElectron() or not e.pt() > 35.: return False
-        
+    def addHEEP(self, event, e, doPlot=False):
+        e.isHEEP = False        
+        if not e.isElectron(): return False
+
+        # define electron variables
+        scTheta             = 2*math.atan( math.exp( -e.superCluster().eta() ) )
+        scE                 = e.superCluster().energy()
+        scEt                = e.superCluster().energy()*scTheta        
+        scEta               = e.superCluster().eta()
+        isEcalDriven        = e.ecalDrivenSeed()
+        deltaEtaSeedIn      = e.deltaEtaSeedClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta() 
+        #deltaEtaSeedIn      =  e.deltaEtaSuperClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta() if ( e.superCluster().isNonnull() and e.superCluster().seed().isNonnull() ) else 1e99
+        deltaPhiIn          = e.deltaPhiSuperClusterTrackAtVtx()
+        HoE                 = e.hadronicOverEm()
+        full5x5sigmaIetaIeta= e.full5x5_sigmaIetaIeta()
+        full5x5e2x5e5x5     = e.full5x5_e2x5Max()/e.full5x5_e5x5()
+        full5x5e1x5e5x5     = e.full5x5_e1x5()/e.full5x5_e5x5()
+        inLayLostHits       = e.gsfTrack().hitPattern().numberOfHits(1)
+        dxy                 = e.gsfTrack().dxy(event.goodVertices[0].position())
+                
+        if not scEt > 35.: return False
+                
         # Plot
         if doPlot:
-            if abs(e.superCluster().eta()) < 1.4442:
-                for i in range(self.Hist["ElecBarrelHEEP"].GetNbinsX()): self.Hist["ElecBarrelHEEP"].AddBinContent(i+1)
-                if e.ecalDrivenSeed(): self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
-                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
-                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
-                if e.hadronicOverEm() < 1./e.superCluster().energy() + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
-                if (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
-                if e.lostInner() <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
-                if abs(e.dxy()) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
-            elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-                for i in range(self.Hist["ElecEndcapHEEP"].GetNbinsX()): self.Hist["ElecEndcapHEEP"].AddBinContent(i+1)
-                if e.ecalDrivenSeed(): self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
-                if abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
-                if abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
-                if e.hadronicOverEm() < 5./e.superCluster().energy() + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
-                if e.sigmaIetaIeta() < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
-                if e.lostInner() <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
-                if abs(e.dxy()) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
-        
-        if abs(e.superCluster().eta()) < 1.4442:
-            if not e.ecalDrivenSeed(): return False
-            if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.004: return False
-            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            if not e.hadronicOverEm() < 1./e.superCluster().energy() + 0.05: return False
-            if not (e.e2x5Max()/e.e5x5() > 0.94 or e.e1x5()/e.e5x5() > 0.83): return False
-            if not e.lostInner() <= 1: return False
-            if not abs(e.dxy()) < 0.02: return False
-        elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
-            if not e.ecalDrivenSeed(): return False
-            if not abs(e.deltaEtaSeedClusterTrackAtVtx()) < 0.006: return False
-            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
-            if not e.hadronicOverEm() < 5./e.superCluster().energy() + 0.05: return False
-            if not e.sigmaIetaIeta() < 0.03: return False
-            if not e.lostInner() <= 1: return False
-            if not abs(e.dxy()) < 0.05: return False
+          if abs(scEta) < 1.4442:
+              for i in range(self.Hist["ElecBarrelHEEP"].GetNbinsX()): self.Hist["ElecBarrelHEEP"].AddBinContent(i+1)            
+              if isEcalDriven: self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
+              if abs(deltaEtaSeedIn) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
+              if abs(deltaPhiIn) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
+              if HoE < 1./scE + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
+              if (full5x5e2x5e5x5 > 0.94 or full5x5e1x5e5x5 > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
+              if inLayLostHits <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
+              if abs(dxy) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
+          elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
+              for i in range(self.Hist["ElecEndcapHEEP"].GetNbinsX()): self.Hist["ElecEndcapHEEP"].AddBinContent(i+1)            
+              if isEcalDriven: self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
+              if abs(deltaEtaSeedIn) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
+              if abs(deltaPhiIn) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
+              if HoE < 5./scE + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
+              if full5x5sigmaIetaIeta < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
+              if inLayLostHits <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
+              if abs(dxy) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
+                        
+        if abs(scEta) < 1.4442:
+            if not isEcalDriven: return False
+            if not abs(deltaEtaSeedIn) < 0.004: return False
+            if not abs(deltaPhiIn) < 0.06: return False
+            if not HoE < 1./scE + 0.05: return False
+            if not (full5x5e2x5e5x5 > 0.94 or full5x5e1x5e5x5 > 0.83): return False
+            if not inLayLostHits <= 1: return False
+            if not abs(dxy) < 0.02: return False
+        elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
+            if not isEcalDriven: return False
+            if not abs(deltaEtaSeedIn) < 0.006: return False
+            if not abs(deltaPhiIn) < 0.06: return False
+            if not HoE < 5./scE + 0.05: return False
+            if not full5x5sigmaIetaIeta < 0.03: return False
+            if not inLayLostHits <= 1: return False
+            if not abs(dxy) < 0.05: return False
         else:
-            return False
+            return False        
         
         if doPlot:
-            if abs(e.superCluster().eta()) < 1.4442:
+            if abs(scEta) < 1.4442:
                 self.Hist["EffElecBarrelHEEP"].AddBinContent(8)
-            elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+            elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
                 self.Hist["EffElecEndcapHEEP"].AddBinContent(8)
         
         e.isHEEP = True
@@ -358,28 +374,38 @@ class XZhAnalyzer( Analyzer ):
         m.isCustomTracker = False
         if not m.isMuon(): return False
         
+        # define muon variables
+        isTrk       = m.isTrackerMuon()
+        nMatchSt    = m.numberOfMatchedStations()
+        sigmaPt     = m.bestTrack().ptError()/m.bestTrack().pt()       
+        dxy         = m.bestTrack().dxy(event.goodVertices[0].position())
+        dz          = m.bestTrack().dz(event.goodVertices[0].position())
+        validTrk    = m.innerTrack().isNonnull()
+        nPixHits    = m.innerTrack().hitPattern().numberOfValidPixelHits() 
+        nTrkLayMeas = m.innerTrack().hitPattern().trackerLayersWithMeasurement()
+
         # Plot
         if doPlot:
           for i in range(self.Hist["MuonCustomTracker"].GetNbinsX()): self.Hist["MuonCustomTracker"].AddBinContent(i+1)
-          if m.isTrackerMuon(): self.Hist["MuonCustomTracker"].AddBinContent(1)
-          if m.numberOfMatchedStations() > 1: self.Hist["MuonCustomTracker"].AddBinContent(2)
-          if m.bestTrack().ptError()/m.bestTrack().pt() < 0.3: self.Hist["MuonCustomTracker"].AddBinContent(3)
-          if abs(m.bestTrack().dxy(event.goodVertices[0].position())) < 0.2: self.Hist["MuonCustomTracker"].AddBinContent(4)
-          if abs(m.bestTrack().dz(event.goodVertices[0].position())) < 0.5: self.Hist["MuonCustomTracker"].AddBinContent(5)
-          if m.innerTrack().isNonnull() and m.innerTrack().hitPattern().numberOfValidPixelHits() > 0: self.Hist["MuonCustomTracker"].AddBinContent(6)
-          if m.innerTrack().hitPattern().trackerLayersWithMeasurement() > 5: self.Hist["MuonCustomTracker"].AddBinContent(7)
+          if isTrk: self.Hist["EffMuonCustomTracker"].AddBinContent(1)
+          if nMatchSt > 1: self.Hist["EffMuonCustomTracker"].AddBinContent(2)
+          if sigmaPt < 0.3: self.Hist["EffMuonCustomTracker"].AddBinContent(3)
+          if abs(dxy) < 0.2: self.Hist["EffMuonCustomTracker"].AddBinContent(4)
+          if abs(dz) < 0.5: self.Hist["EffMuonCustomTracker"].AddBinContent(5)
+          if validTrk and nPixHits > 0: self.Hist["EffMuonCustomTracker"].AddBinContent(6)
+          if nTrkLayMeas > 5: self.Hist["EffMuonCustomTracker"].AddBinContent(7)
         
-        if not m.isTrackerMuon(): return False
-        if not m.numberOfMatchedStations() > 1: return False
-        if not m.bestTrack().ptError()/m.bestTrack().pt() < 0.3: return False
-        if not abs(m.bestTrack().dxy(event.goodVertices[0].position())) < 0.2: return False
-        if not abs(m.bestTrack().dz(event.goodVertices[0].position())) < 0.5: return False
-        if not m.innerTrack().isNonnull(): return False
-        if not m.innerTrack().hitPattern().numberOfValidPixelHits() > 0: return False
-        if not m.innerTrack().hitPattern().trackerLayersWithMeasurement() > 5: return False
+        if not isTrk: return False
+        if not nMatchSt > 1: return False
+        if not sigmaPt < 0.3: return False
+        if not abs(dxy) < 0.2: return False
+        if not abs(dz) < 0.5: return False
+        if not validTrk: return False
+        if not nPixHits > 0: return False
+        if not nTrkLayMeas > 5: return False
         
         if doPlot:
-            self.Hist["MuonCustomTracker"].AddBinContent(8)
+            self.Hist["EffMuonCustomTracker"].AddBinContent(8)
         
         m.isCustomTracker = True
         return True
@@ -416,7 +442,7 @@ class XZhAnalyzer( Analyzer ):
         self.Hist["Z2MMCounter"].AddBinContent(0, event.eventWeight)
         
         # Attach electron HEEP Id
-        for i, l in enumerate(event.inclusiveLeptons): self.addHEEP(l, i==0)
+        for i, l in enumerate(event.inclusiveLeptons): self.addHEEP(event, l, i==0)
         
         # Attach muon Custom Tracker Id
         for i, l in enumerate(event.inclusiveLeptons): self.addCustomTracker(event, l, i==0)
@@ -457,7 +483,7 @@ class XZhAnalyzer( Analyzer ):
         if muonTrigger and muonAcc: self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
         
         # Id
-        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.addHEEP(x)] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
+        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.addHEEP(event, x)] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
         #event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
         event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and self.addCustomTracker(event, x)] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
         
