@@ -152,7 +152,7 @@ onPADOVA = ( hostName.startswith('t2-ui') and re.match('.*pd.infn.*',hostName) )
 batchCmd = batch.split()[0]
 
 if batchCmd == 'bsub':
-    if not (onLxplus or onPISA or onPADOVA) :
+    if not (onLxplus or onPADOVA) :
         err = 'Cannot run %s on %s' % (batchCmd, hostName)
         raise ValueError( err )
     elif onPADOVA:
