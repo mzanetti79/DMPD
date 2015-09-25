@@ -1,7 +1,15 @@
 # DMPD
 DM analysis framework of the CMS PD group
+
+## 1. CMSSW Release
+
+CMSSW_7_4_7
+
+## 2. Setup of the CMG-Heppy framework
+
+Carefully follow **all** the instructions of the [CMG Twiki Page](https://twiki.cern.ch/twiki/bin/viewauth/CMS/CMGToolsReleasesExperimental#Git_MiniAOD_release_for_Summ_AN1)
  
-## Manual changes to Heppy for Syncronization
+## 3. Manual changes to Heppy (for Syncronization)
 
 ### TauAnalyzer.py
 [PhysicsTools/Heppy/python/analyzers/objects/TauAnalyzer.py]
@@ -91,4 +99,66 @@ conversionVeto": [True,True]
 WITH
 ```python
 conversionVeto": [False,False]
+```
+
+## 4. Manual changes to Heppy (for run on LSF@LNL)
+
+### heppy_batch.py
+[PhysicsTools/HeppyCore/scripts/heppy_batch.py]
+
+#### L17 MODIFY
+```python
+#BSUB -q local
+```
+WITH
+```python
+#BSUB -q local-cms-short
+```
+
+### batchmanager.py
+[PhysicsTools/HeppyCore/python/utils/batchmanager.py]
+
+#### L12 COMMENT
+```python
+import eostools as castortools
+```
+
+#### L250-264 REPLACE
+```python
+hostName = os.environ['HOSTNAME']
+
+onLxplus = hostName.startswith('lxplus')
+onPSI    = hostName.startswith('t3ui')
+onNAF =  hostName.startswith('naf')
+
+batchCmd = batch.split()[0]
+
+if batchCmd == 'bsub':
+    if not onLxplus:
+        err = 'Cannot run %s on %s' % (batchCmd, hostName)
+        raise ValueError( err )
+    else:
+        print 'running on LSF : %s from %s' % (batchCmd, hostName)
+        return 'LXPLUS'
+```
+WITH
+```python
+hostName = os.environ['HOSTNAME']
+
+onLxplus = hostName.startswith('lxplus')
+onPSI    = hostName.startswith('t3ui'  )
+onPADOVA = ( hostName.startswith('t2-ui') and re.match('.*pd.infn.*',hostName) ) or ( hostName.startswith('t2-cld') and re.match('.*lnl.infn.*',hostName) )
+
+batchCmd = batch.split()[0]
+
+if batchCmd == 'bsub':
+    if not (onLxplus or onPISA or onPADOVA) :
+        err = 'Cannot run %s on %s' % (batchCmd, hostName)
+        raise ValueError( err )
+    elif onPADOVA:
+        print 'running on LSF padova: %s from %s' % (batchCmd, hostName)
+        return 'PADOVA'
+    else:
+        print 'running on LSF lxplus: %s from %s' % (batchCmd, hostName)
+        return 'LXPLUS'
 ```
