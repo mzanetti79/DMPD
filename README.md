@@ -101,7 +101,7 @@ WITH
 conversionVeto": [False,False]
 ```
 
-## 4. Manual changes to Heppy (for run on LSF@LNL)
+## 4. Manual changes to Heppy (to run on LSF@LNL)
 
 ### heppy_batch.py
 [PhysicsTools/HeppyCore/scripts/heppy_batch.py]
