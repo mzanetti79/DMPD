@@ -760,12 +760,12 @@ XZhTreeProducer= cfg.Analyzer(
 ##############################
 
 sequence = [
-    jsonAnalyzer,
+    jsonAnalyzer, #FIXME
     lheAnalyzer,
     generatorAnalyzer,
     #pdfAnalyzer,
     triggerAnalyzer,
-    filterAnalyzer,
+    filterAnalyzer, #FIXME
     pileupAnalyzer,
     vertexAnalyzer,
     MEtAnalyzer,
@@ -844,9 +844,9 @@ for i in mcsamples:
     sample[i] = cfg.MCComponent(
         files   = mcsamples[i]['files'],
         name    = i,
-	      isMC    = True,
-	      isEmbed = False,
-	      splitFactor = int(mcsamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
+	    isMC    = True,
+	    isEmbed = False,
+	    splitFactor = int(mcsamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
 ##############################
@@ -949,12 +949,12 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ### DATA ###
 selectedComponents = [
-### Run2015D
+#### Run2015D
    sample['SingleMuon_Run2015D_PromptReco_v3'],
-   sample['SingleElectron_Run2015D_PromptReco_v3'],
-   sample['DoubleMuon_Run2015D_PromptReco_v3'],
-   sample['DoubleEG_Run2015D_PromptReco_v3'],
-   sample['MET_Run2015D_PromptReco_v3'],
+   #sample['SingleElectron_Run2015D_PromptReco_v3'],
+   #sample['DoubleMuon_Run2015D_PromptReco_v3'],
+   #sample['DoubleEG_Run2015D_PromptReco_v3'],
+   #sample['MET_Run2015D_PromptReco_v3'],
 #### Run2015C
    #sample['SingleMuon_Run2015C_PromptReco_v1'],
    #sample['SingleElectron_Run2015C_PromptReco_v1'],
@@ -1125,7 +1125,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=1e99,
         )
     looper.loop()
     looper.write()
