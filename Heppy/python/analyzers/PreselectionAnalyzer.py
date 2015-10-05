@@ -141,6 +141,8 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWtoEN = False
         event.isWtoMN = False
         
+        event.genV = event.genVBosons[0] if hasattr(event, "genVBosons") and len(event.genVBosons) > 0 else ROOT.reco.GenParticle()
+        
         if self.cfg_comp.isMC: 
             event.eventWeight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
         else:
@@ -158,10 +160,19 @@ class PreselectionAnalyzer( Analyzer ):
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
 #        event.xcleanJetsAK8JERDown = event.cleanJetsAK8JERDown
         
-        # Swap MET and MET3.0 collections
+        # Swap MET and METraw (uncorrected) collections
         event.pfmet = copy.deepcopy(event.met)
-        #if hasattr(event, "metNoHF"): 
-        event.met.setP4(event.metNoHF)
+        
+        # MINIAOD v1 (Spring 15 and Run 2015C)
+        pt_ = event.met.uncorrectedPt()
+        phi_ = event.met.uncorrectedPhi()
+        px_ = pt_*math.cos(phi_)
+        py_ = pt_*math.sin(phi_)
+        # MINIAOD v2 (Run 2015D)
+        #px_ = event.met.uncorPx()
+        #py_ = event.met.uncorPy()
+        #pt_ = math.hypot(px_, py_)
+        event.met.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
         
         self.addJetVariables(event)
         #self.addJESUncertainty(event)
