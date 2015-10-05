@@ -10,7 +10,7 @@ from DMPD.Heppy.samples.Data.fileLists import datasamples
 samples = datasamples.copy()
 samples.update(mcsamples)
 
-ref_pu_file = "/lustre/cmswork/zucchett/CMSSW_7_4_7/src/DMPD/Heppy/python/tools/PU.root"
+ref_pu_file = "%s/src/DMPD/Heppy/python/tools/PU.root" % os.environ['CMSSW_BASE']
 
 import optparse
 usage = "usage: %prog [options]"
@@ -91,6 +91,7 @@ def processFile(dir_name, verbose=False):
     puFile = TFile(ref_pu_file, "READ")
     puData = puFile.Get("data")
     puMC = puFile.Get("mc")
+    puRatio = puFile.Get("ratio")
     if verbose: print "PU histogram entries: data", puData.GetEntries(), ", MC", puMC.GetEntries()
     
     # Variables declaration
@@ -139,8 +140,9 @@ def processFile(dir_name, verbose=False):
                     # Cross section
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
                     # PU reweighting
-                    nbin = puData.FindBin(obj.nPV)
-                    pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
+                    #nbin = puData.FindBin(obj.nPV)
+                    #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
+                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV))
                 # Data
                 else:
                     # Check JSON
