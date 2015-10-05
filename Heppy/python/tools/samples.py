@@ -3,7 +3,8 @@ from collections import OrderedDict
 sample = {
     'Data' : {
         'order' : 0,
-        'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'MET_Run2015B_PromptReco_v1', 'MET_Run2015B_17Jul2015_v1'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
+        #'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'MET_Run2015B_PromptReco_v1', 'MET_Run2015B_17Jul2015_v1'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
+        'files' : ['SingleMuon_Run2015D_PromptReco_v3',],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
