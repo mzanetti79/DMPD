@@ -539,6 +539,7 @@ globalEventVariables = [
     NTupleVariable('lheNb',            lambda x: getattr(x, "lheNb", -1.), int, help='Number of b-quarks at LHE level'),
     NTupleVariable('lheHT',            lambda x: getattr(x, "lheHT", -1.), int, help='HT at LHE level'),
     NTupleVariable('lheVpt',           lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
+    NTupleVariable('genVpt',           lambda x: x.genV.pt() if hasattr(x, "genV") else -1., float, help='Vector boson pt at Gen level'),
     NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
