@@ -97,7 +97,7 @@ def processFile(dir_name, verbose=False):
     
     # V reweighting
     vFile = TFile(ref_v_file, "READ")
-    vRatio = puFile.Get("ratio")
+    vRatio = vFile.Get("ratio")
     if verbose: print "V histogram entries: ", vRatio.GetEntries()
     
     enableVreweighting = ('ZJetsToNuNu' in dir_name or 'DYJetsToLL' in dir_name) and 'madgraph' in dir_name
@@ -154,7 +154,8 @@ def processFile(dir_name, verbose=False):
                     pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV))
                     # V boson pT reweight
                     if enableVreweighting:
-                        ptWeight[0] = vRatio.GetBinContent(vRatio.FindBin(obj.genVpt))
+                        vbin = vRatio.FindBin(obj.genVpt)
+                        ptWeight[0] = vRatio.GetBinContent(vbin)
                         
                 # Data
                 else:
