@@ -2,7 +2,8 @@
 
 import os
 from array import array
-from ROOT import TFile, TH1F, TCanvas
+from ROOT import gStyle, TFile, TH1F, TCanvas
+gStyle.SetOptStat(0)
 
 import optparse
 usage = "usage: %prog [options]"
@@ -10,7 +11,7 @@ parser = optparse.OptionParser(usage)
 parser.add_option("-d", "--dataFile", action="store", type="string", default=False, dest="dataFileName")
 parser.add_option("-m", "--mcFile", action="store", type="string", default=False, dest="mcFileName")
 parser.add_option("-r", "--mcReweightedFile", action="store", type="string", default=False, dest="mcReweightedFileName")
-parser.add_option("-p", "--plot", action="store", default=False, dest="doPlot")
+parser.add_option("-p", "--plot", action="store_true", default=False, dest="doPlot")
 parser.add_option("-s", "--save", action="store_true", default=True, dest="doSave")
 
 (options, args) = parser.parse_args()
