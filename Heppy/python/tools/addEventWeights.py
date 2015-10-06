@@ -107,6 +107,8 @@ def processFile(dir_name, verbose=False):
     xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     ptWeight = array('f', [1.0])  # weight from V pt reweighting
+    ptWeightUp = array('f', [1.0])
+    ptWeightDown = array('f', [1.0])
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -134,6 +136,8 @@ def processFile(dir_name, verbose=False):
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
             ptWeightBranch = new_tree.Branch('ptWeight', ptWeight, 'ptWeight/F')
+            ptWeightUpBranch = new_tree.Branch('ptWeightUp', ptWeightUp, 'ptWeightUp/F')
+            ptWeightDownBranch = new_tree.Branch('ptWeightDown', ptWeightDown, 'ptWeightDown/F')
             
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -142,7 +146,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = pileupWeight[0] = ptWeight[0] = 1.
+                eventWeight[0] = xsWeight[0] = pileupWeight[0] = ptWeight[0] = ptWeightUp[0] = ptWeightDown[0] = 1.
                 
                 # Weights
                 if isMC:
@@ -156,6 +160,8 @@ def processFile(dir_name, verbose=False):
                     if enableVreweighting:
                         vbin = vRatio.FindBin(obj.genVpt)
                         ptWeight[0] = vRatio.GetBinContent(vbin)
+                        ptWeightUp[0] = vRatio.GetBinContent(vbin)+vRatio.GetBinError(vbin)
+                        ptWeightDown[0] = vRatio.GetBinContent(vbin)-vRatio.GetBinError(vbin)
                         
                 # Data
                 else:
@@ -175,6 +181,8 @@ def processFile(dir_name, verbose=False):
                 xsWeightBranch.Fill()
                 pileupWeightBranch.Fill()
                 ptWeightBranch.Fill()
+                ptWeightUpBranch.Fill()
+                ptWeightDownBranch.Fill()
                 
             new_file.cd()
             new_tree.Write()
