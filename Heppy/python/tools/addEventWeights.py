@@ -11,6 +11,7 @@ samples = datasamples.copy()
 samples.update(mcsamples)
 
 ref_pu_file = "%s/src/DMPD/Heppy/python/tools/PU.root" % os.environ['CMSSW_BASE']
+ref_v_file = "%s/src/DMPD/Heppy/python/tools/Vpt.root" % os.environ['CMSSW_BASE']
 
 import optparse
 usage = "usage: %prog [options]"
@@ -28,7 +29,7 @@ json_path = options.json
 import json
 
 if len(json_path) <= 0 or not os.path.exists(json_path):
-    print "Warning, no JSON file (-j option) has been specified"#. Press Enter to continue"
+    print "  WARNING, no JSON file (-j option) has been specified"#. Press Enter to continue"
     #raw_input()
     isJson_file = False
 else:
@@ -92,13 +93,20 @@ def processFile(dir_name, verbose=False):
     puData = puFile.Get("data")
     puMC = puFile.Get("mc")
     puRatio = puFile.Get("ratio")
-    if verbose: print "PU histogram entries: data", puData.GetEntries(), ", MC", puMC.GetEntries()
+    if verbose: print "PU histogram entries: ", puRatio.GetEntries()
+    
+    # V reweighting
+    vFile = TFile(ref_v_file, "READ")
+    vRatio = puFile.Get("ratio")
+    if verbose: print "V histogram entries: ", vRatio.GetEntries()
+    
+    enableVreweighting = ('ZJetsToNuNu' in dir_name or 'DYJetsToLL' in dir_name) and 'madgraph' in dir_name
     
     # Variables declaration
-    eventWeight = array('f',[1.0])  # global event weight
-    xsWeight  = array('f',[1.0])  # weight due to the MC sample cross section
-    pileupWeight = array('f',[1.0])  # weight from PU reweighting
-    
+    eventWeight = array('f', [1.0])  # global event weight
+    xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
+    pileupWeight = array('f', [1.0])  # weight from PU reweighting
+    ptWeight = array('f', [1.0])  # weight from V pt reweighting
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -125,6 +133,7 @@ def processFile(dir_name, verbose=False):
             eventWeightBranch = new_tree.Branch('eventWeight', eventWeight, 'eventWeight/F')
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
+            ptWeightBranch = new_tree.Branch('ptWeight', ptWeight, 'ptWeight/F')
             
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -133,7 +142,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = pileupWeight[0] = 1.
+                eventWeight[0] = xsWeight[0] = pileupWeight[0] = ptWeight[0] = 1.
                 
                 # Weights
                 if isMC:
@@ -143,6 +152,10 @@ def processFile(dir_name, verbose=False):
                     #nbin = puData.FindBin(obj.nPV)
                     #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
                     pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV))
+                    # V boson pT reweight
+                    if enableVreweighting:
+                        ptWeight[0] = vRatio.GetBinContent(vRatio.FindBin(obj.genVpt))
+                        
                 # Data
                 else:
                     # Check JSON
@@ -160,6 +173,7 @@ def processFile(dir_name, verbose=False):
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
                 pileupWeightBranch.Fill()
+                ptWeightBranch.Fill()
                 
             new_file.cd()
             new_tree.Write()
