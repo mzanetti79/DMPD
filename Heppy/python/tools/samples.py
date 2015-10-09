@@ -4,7 +4,7 @@ sample = {
     'Data' : {
         'order' : 0,
         #'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'MET_Run2015B_PromptReco_v1', 'MET_Run2015B_17Jul2015_v1'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
-        'files' : ['SingleMuon_Run2015D_PromptReco_v3',],
+        'files' : ['SingleMuon_Run2015C_PromptReco_v1', 'SingleElectron_Run2015C_PromptReco_v1', 'MET_Run2015C_PromptReco_v1'] + ['SingleMuon_Run2015D_PromptReco_v3', 'SingleElectron_Run2015D_PromptReco_v3', 'MET_Run2015D_PromptReco_v3'],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
@@ -58,6 +58,17 @@ sample = {
         'weight': 1.,
         'plot': True,
     },
+    'WJetsToLNu_HT' : {
+        'order' : 2,
+        'files' : ['WJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1', 'WJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1', 'WJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3', 'WJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1'],
+        'fillcolor' : 881,
+        'fillstyle' : 1001,
+        'linecolor' : 881,
+        'linestyle' : 1,
+        'label' : "W(l#nu) + jets",
+        'weight': 1.,
+        'plot': True,
+    },
     'TTbar' : {
         'order' : 3,
         'files' : ['TT_powheg_pythia8_v2'],
@@ -94,7 +105,7 @@ sample = {
     },
     'QCD' : {
         'order' : 6,
-        'files' : ['QCD_HT_500to700_madgraphMLM_pythia8_v1', 'QCD_HT_700to1000_madgraphMLM_pythia8_v1', 'QCD_HT_1000to1500_madgraphMLM_pythia8_v2','QCD_HT_1500to2000_madgraphMLM_pythia8_v1','QCD_HT_2000toInf_madgraphMLM_pythia8_v1'],
+        'files' : ['QCD_HT_100to200_madgraphMLM_pythia8_v2', 'QCD_HT_200to300_madgraphMLM_pythia8_v2', 'QCD_HT_300to500_madgraphMLM_pythia8_v2', 'QCD_HT_500to700_madgraphMLM_pythia8_v1', 'QCD_HT_500to700_madgraphMLM_pythia8_v1', 'QCD_HT_700to1000_madgraphMLM_pythia8_v1', 'QCD_HT_1000to1500_madgraphMLM_pythia8_v2','QCD_HT_1500to2000_madgraphMLM_pythia8_v1','QCD_HT_2000toInf_madgraphMLM_pythia8_v1'],
         'fillcolor' : 920,
         'fillstyle' : 1001,
         'linecolor' : 920,
@@ -1245,389 +1256,389 @@ sample = {
     
 #################### ALL HF(bb+tt)DM SCALAR
 
-    'HFDMJets_scalar_Mchi-1_Mphi-10' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-10' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-20' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-20' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-50' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-100' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-100' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
-        'fillcolor' : 623,
+        'fillcolor' : 625,
         'fillstyle' : 3005,
-        'linecolor' : 623,
+        'linecolor' : 625,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=100 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
-        'plot': False,
+        'label' : "m_{#Phi}=100 GeV",
+        'weight': 100.,
+        'plot': True,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-200' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-200' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
-        'fillcolor' : 623,
+        'fillcolor' : 628,
         'fillstyle' : 3005,
-        'linecolor' : 623,
+        'linecolor' : 628,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=200 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
-        'plot': False,
+        'label' : "m_{#Phi}=200 GeV",
+        'weight': 100.,
+        'plot': True,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-300' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-300' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-500' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
-        'fillcolor' : 623,
+        'fillcolor' : 633,
         'fillstyle' : 3005,
-        'linecolor' : 623,
+        'linecolor' : 633,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
-        'plot': False,
+        'label' : "m_{#Phi}=500 GeV",
+        'weight': 100.,
+        'plot': True,
     },
 
-    'HFDMJets_scalar_Mchi-1_Mphi-1000' : {
+    'hfDMJets_scalar_Mchi-1_Mphi-1000' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v2'],
-        'fillcolor' : 623,
+        'fillcolor' : 635,
         'fillstyle' : 3005,
-        'linecolor' : 623,
+        'linecolor' : 635,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=1000 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
-        'plot': False,
+        'label' : "m_{#Phi}=1000 GeV",
+        'weight': 100.,
+        'plot': True,
     },
 
-    'HFDMJets_scalar_Mchi-10_Mphi-10' : {
+    'hfDMJets_scalar_Mchi-10_Mphi-10' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-10_Mphi-100' : {
+    'hfDMJets_scalar_Mchi-10_Mphi-100' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-10_Mphi-50' : {
+    'hfDMJets_scalar_Mchi-10_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-150_Mphi-1000' : {
+    'hfDMJets_scalar_Mchi-150_Mphi-1000' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v3'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-150_Mphi-200' : {
+    'hfDMJets_scalar_Mchi-150_Mphi-200' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-150_Mphi-500' : {
+    'hfDMJets_scalar_Mchi-150_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v3'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-50_Mphi-50' : {
+    'hfDMJets_scalar_Mchi-50_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_scalar_Mchi-500_Mphi-500' : {
+    'hfDMJets_scalar_Mchi-500_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
+        'weight': 100.,
         'plot': False,
     },
     
 #################### ALL HF(bb+tt)DM PSEUDOSCALAR
     
-        'HFDMJets_pseudoscalar_Mchi-1_Mphi-10' : {
+        'hfDMJets_pseudoscalar_Mchi-1_Mphi-10' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-100' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-100' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=100 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-20' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-20' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-200' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-200' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=200 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-300' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-300' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-50' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-1_Mphi-500' : {
+    'hfDMJets_pseudoscalar_Mchi-1_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=1 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=1 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-10_Mphi-10' : {
+    'hfDMJets_pseudoscalar_Mchi-10_Mphi-10' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-10_Mphi-100' : {
+    'hfDMJets_pseudoscalar_Mchi-10_Mphi-100' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-10_Mphi-50' : {
+    'hfDMJets_pseudoscalar_Mchi-10_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-150_Mphi-1000' : {
+    'hfDMJets_pseudoscalar_Mchi-150_Mphi-1000' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-150_Mphi-200' : {
+    'hfDMJets_pseudoscalar_Mchi-150_Mphi-200' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-150_Mphi-500' : {
+    'hfDMJets_pseudoscalar_Mchi-150_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-50_Mphi-200' : {
+    'hfDMJets_pseudoscalar_Mchi-50_Mphi-200' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=200 GeV m_{#Chi}=50 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=50 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-50_Mphi-50' : {
+    'hfDMJets_pseudoscalar_Mchi-50_Mphi-50' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
+        'weight': 100.,
         'plot': False,
     },
 
-    'HFDMJets_pseudoscalar_Mchi-500_Mphi-500' : {
+    'hfDMJets_pseudoscalar_Mchi-500_Mphi-500' : {
         'order' : 1001,
         'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
         'linestyle' : 1,
-        'label' : "ttDM+bbDM m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
-        'weight': 1.,
+        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
+        'weight': 100.,
         'plot': False,
     },
     
@@ -1788,7 +1799,7 @@ sample = {
     },
     'ZZhnnbb_M800' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZinvhbb_narrow_M800_madgraph_v1'],
+        'files' : ['ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1917,19 +1928,6 @@ sample = {
         'label' : "m_{X} = 4500 GeV",
         'weight': 1.,
         'plot': False,
-    },
-    
-    # Dummy entry for background sum
-    'BkgSum' : {
-        'order' : 0,
-        'files' : [],
-        'fillcolor' : 1,
-        'fillstyle' : 3003,
-        'linecolor' : 1,
-        'linestyle' : 1,
-        'label' : "MC Stat",
-        'weight': 1.,
-        'plot': True,
     },
     
     # Dummy entry for background sum
