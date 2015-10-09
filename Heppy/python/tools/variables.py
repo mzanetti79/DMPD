@@ -76,44 +76,51 @@ var_template = {
     
     # MET
     "met_pt": {
-      "title" : "raw #slash{E}_{T} NoHF (GeV)",
+      "title" : "raw #slash{E}_{T} (GeV)",
       "nbins" : -1,
       "bins" : [200, 300, 400, 500, 700, 1000],
       "min" : 200,
-      "max" : 1200,
+      "max" : 1000,
       "log" : True,
     },
-  #  "met_pt": {
-  #    "title" : "raw #slash{E}_{T} NoHF (GeV)",
-  #    "nbins" : 20,
-  #    "min" : 200,
-  #    "max" : 1200,
-  #    "log" : True,
-  #  },
-  #  "met_pt": {
-  #    "title" : "raw #slash{E}_{T} NoHF (GeV)",
-  #    "nbins" : 50,
-  #    "min" : 0,
-  #    "max" : 250,
-  #    "log" : True,
-  #  },
+#    "met_pt": {
+#      "title" : "raw #slash{E}_{T} (GeV)",
+#      "nbins" : 20,
+#      "min" : 0,
+#      "max" : 1000,
+#      "log" : True,
+#    },
+#    "met_pt": {
+#      "title" : "raw #slash{E}_{T} (GeV)",
+#      "nbins" : 20,
+#      "min" : 0,
+#      "max" : 400,
+#      "log" : True,
+#    },
     "met_phi": {
-      "title" : "raw #slash{E}_{T} NoHF #varphi",
+      "title" : "raw #slash{E}_{T} #varphi",
       "nbins" : 50,
       "min" : -3.15,
       "max" : 3.15,
       "log" : False,
     },
+#    "pfmet_pt": {
+#      "title" : "#slash{E}_{T} (GeV)",
+#      "nbins" : -1,
+#      "bins" : [200, 300, 400, 500, 700, 1000],
+#      "min" : 200,
+#      "max" : 1200,
+#      "log" : True,
+#    },
     "pfmet_pt": {
-      "title" : "#slash{E}_{T} (GeV)",
-      "nbins" : -1,
-      "bins" : [200, 300, 400, 500, 700, 1000],
-      "min" : 200,
-      "max" : 1200,
+      "title" : "type-1 #slash{E}_{T} (GeV)",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 250,
       "log" : True,
     },
     "pfmet_phi": {
-      "title" : "#slash{E}_{T} #varphi",
+      "title" : "type-1 #slash{E}_{T} #varphi",
       "nbins" : 50,
       "min" : -3.15,
       "max" : 3.15,
@@ -135,9 +142,9 @@ var_template = {
     },
     "fakemet_pt": {
       "title" : "fake #slash{E}_{T} (GeV)",
-      "nbins" : 45,
-      "min" : 100,
-      "max" : 1000,
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 500,
       "log" : True,
     },
     "fakemet_phi": {
@@ -179,16 +186,16 @@ var_template = {
       "log" : False,
     },
     "jet[N]_dPhi_met": {
-      "title" : "#Delta #varphi_{jet[N]-#slash{E}_{T}}",
-      "nbins" : 50,
-      "min" : -3.15,
+      "title" : "#Delta #varphi  jet[N]-#slash{E}_{T}",
+      "nbins" : 30,
+      "min" : 0,
       "max" : 3.15,
       "log" : False,
     },
     "jet[N]_dPhi_jet1": {
-      "title" : "#Delta #varphi_{jet[N]-jet1}",
-      "nbins" : 50,
-      "min" : -3.15,
+      "title" : "#Delta #varphi  jet[N]-jet1",
+      "nbins" : 30,
+      "min" : 0,
       "max" : 3.15,
       "log" : False,
     },
@@ -208,52 +215,52 @@ var_template = {
     },
     "jet[N]_chf": {
       "title" : "jet [N] charged hadron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_nhf": {
       "title" : "jet [N] neutral hadron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_phf": {
       "title" : "jet [N] photon fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_elf": {
       "title" : "jet [N] electron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_muf": {
       "title" : "jet [N] muon fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_chm": {
       "title" : "jet [N] charged multiplicity",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 50,
-      "log" : True,
+      "log" : False,
     },
     "jet[N]_npr": {
       "title" : "jet [N] constituents multiplicity",
       "nbins" : 50,
       "min" : 0,
-      "max" : 100,
-      "log" : True,
+      "max" : 50,
+      "log" : False,
     },
 
     
@@ -639,9 +646,9 @@ var_template = {
     },
     "W_tmass": {
       "title" : "W candidate m_{T} (GeV)",
-      "nbins" : 60,
-      "min" : 60,
-      "max" : 120,
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 200,
       "log" : False,
     },
     "W_charge": {
@@ -762,10 +769,12 @@ var_template = {
 
 for n, v in var_template.iteritems():
     if '[N]' in n:
-        for i in range(1, 4):
+        for i in range(1, 5):
             ni = n.replace('[N]', "%d" % i)
-            variable[ni] = v
+            variable[ni] = v.copy()
             variable[ni]['title'] = variable[ni]['title'].replace('[N]', "%d" % i)
     else:
         variable[n] = v
+
+
 
