@@ -155,10 +155,10 @@ def processFile(dir_name, verbose=False):
                     # PU reweighting
                     #nbin = puData.FindBin(obj.nPV)
                     #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
-                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV))
+                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
                     # V boson pT reweight
                     if enableVreweighting:
-                        vbin = vRatio.FindBin(obj.genVpt)
+                        vbin = vRatio.FindBin(obj.genVpt) if obj.genVpt < vRatio.GetXaxis().GetMax() else vRatio.GetNbinsX()
                         ptWeight[0] = vRatio.GetBinContent(vbin)
                         ptWeightUp[0] = vRatio.GetBinContent(vbin)+vRatio.GetBinError(vbin)
                         ptWeightDown[0] = vRatio.GetBinContent(vbin)-vRatio.GetBinError(vbin)
