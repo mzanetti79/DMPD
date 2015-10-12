@@ -106,6 +106,8 @@ def processFile(dir_name, verbose=False):
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
+    pileupWeightUp = array('f', [1.0])
+    pileupWeightDown = array('f', [1.0])
     ptWeight = array('f', [1.0])  # weight from V pt reweighting
     ptWeightUp = array('f', [1.0])
     ptWeightDown = array('f', [1.0])
@@ -135,6 +137,8 @@ def processFile(dir_name, verbose=False):
             eventWeightBranch = new_tree.Branch('eventWeight', eventWeight, 'eventWeight/F')
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
+            pileupWeightUpBranch = new_tree.Branch('pileupWeightUp', pileupWeightUp, 'pileupWeightUp/F')
+            pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
             ptWeightBranch = new_tree.Branch('ptWeight', ptWeight, 'ptWeight/F')
             ptWeightUpBranch = new_tree.Branch('ptWeightUp', ptWeightUp, 'ptWeightUp/F')
             ptWeightDownBranch = new_tree.Branch('ptWeightDown', ptWeightDown, 'ptWeightDown/F')
@@ -146,7 +150,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = pileupWeight[0] = ptWeight[0] = ptWeightUp[0] = ptWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = ptWeight[0] = ptWeightUp[0] = ptWeightDown[0] = 1.
                 
                 # Weights
                 if isMC:
@@ -156,6 +160,7 @@ def processFile(dir_name, verbose=False):
                     #nbin = puData.FindBin(obj.nPV)
                     #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
                     pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
+                    pileupWeightUp[0] = pileupWeightDown[0] = pileupWeight[0]
                     # V boson pT reweight
                     if enableVreweighting:
                         vbin = vRatio.FindBin(obj.genVpt) if obj.genVpt < vRatio.GetXaxis().GetMax() else vRatio.GetNbinsX()
@@ -180,6 +185,8 @@ def processFile(dir_name, verbose=False):
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
                 pileupWeightBranch.Fill()
+                pileupWeightUpBranch.Fill()
+                pileupWeightDownBranch.Fill()
                 ptWeightBranch.Fill()
                 ptWeightUpBranch.Fill()
                 ptWeightDownBranch.Fill()
