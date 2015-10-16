@@ -552,6 +552,7 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nJets',            lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
+    NTupleVariable('nJetsNoFatJet',    lambda x: getattr(x, "nJetsNoFatJet", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
 ]
 
 
@@ -843,7 +844,7 @@ for i in datasamples:
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON_v3.txt' % os.environ['CMSSW_BASE'],
         splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
@@ -866,13 +867,13 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ### MC ###
-#selectedComponents = [
+selectedComponents = [
 #    sample['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
 #    sample['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
 #    sample['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2'],
 #    sample['DYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2'],
-#    sample['DYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2'],
+    sample['DYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2'],
 #    sample['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1'],
 #    sample['ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1'],
 #    sample['ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1'],
@@ -950,7 +951,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #    sample['ZprimeToZhToZinvhbb_narrow_M3500_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M4000_madgraph_v1'],
 #    sample['ZprimeToZhToZinvhbb_narrow_M4500_madgraph_v1'],
-#]
+]
 
 #selectedComponents = [
 #   sample['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_madgraphMLM_pythia8_v1'],
@@ -1061,13 +1062,13 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #]
 
 ### DATA ###
-selectedComponents = [
+#selectedComponents = [
 ## Run2015D
-   sample['SingleMuon_Run2015D_PromptReco_v3'],
-   sample['SingleElectron_Run2015D_PromptReco_v3'],
-   sample['DoubleMuon_Run2015D_PromptReco_v3'],
-   sample['DoubleEG_Run2015D_PromptReco_v3'],
-   sample['MET_Run2015D_PromptReco_v3'],
+#   sample['SingleMuon_Run2015D_PromptReco_v3'],
+#   sample['SingleElectron_Run2015D_PromptReco_v3'],
+#   sample['DoubleMuon_Run2015D_PromptReco_v3'],
+#   sample['DoubleEG_Run2015D_PromptReco_v3'],
+#   sample['MET_Run2015D_PromptReco_v3'],
 ## Run2015C
 #   sample['SingleMuon_Run2015C_PromptReco_v1'],
 #   sample['SingleElectron_Run2015C_PromptReco_v1'],
@@ -1085,10 +1086,10 @@ selectedComponents = [
 #   sample['DoubleMuon_Run2015B_17Jul2015_v1'],
 #   sample['DoubleEG_Run2015B_17Jul2015_v1'],
 #   sample['MET_Run2015B_17Jul2015_v1'],
-]
-filterAnalyzer.processName = 'RECO'
+#]
+#filterAnalyzer.processName = 'RECO'
 
-#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1'],]
+#selectedComponents = [sample['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1'],]
 #selectedComponents = [sample['ZprimeToZhToZinvhbb_narrow_M2000_madgraph_v1'],]
 #selectedComponents = [sample['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],]
 

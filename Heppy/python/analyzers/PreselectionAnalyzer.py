@@ -141,7 +141,7 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWtoEN = False
         event.isWtoMN = False
         
-        event.genV = event.genVBosons[0] if hasattr(event, "genVBosons") and len(event.genVBosons) > 0 else ROOT.reco.GenParticle()
+        event.nJetsNoFatJet = 0
         
         if self.cfg_comp.isMC: 
             event.eventWeight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
