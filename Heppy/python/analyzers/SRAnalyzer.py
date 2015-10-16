@@ -63,7 +63,7 @@ class SRAnalyzer( Analyzer ):
         kH = ROOT.reco.Particle.LorentzVector(event.xcleanJetsAK8[0].px()*k, event.xcleanJetsAK8[0].py()*k, event.xcleanJetsAK8[0].pz()*k, event.xcleanJetsAK8[0].energy()*k)
         
         event.theX = event.met.p4() + event.xcleanJetsAK8[0].p4()
-        event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].pt()*event.met.pt()*(1.-math.cos( deltaPhi(event.xcleanJetsAK8[0].phi(), event.met.phi()) )) )
+        event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*event.met.pt()*(1.-math.cos( deltaPhi(event.xcleanJetsAK8[0].phi(), event.met.phi()) )) )
         cmet = event.met.p4()
         cmet.SetPz( -event.xcleanJetsAK8[0].pz() )
         event.theX.mC = (cmet + event.xcleanJetsAK8[0].p4()).mass()

@@ -122,7 +122,7 @@ class PreselectionAnalyzer( Analyzer ):
         theW.deltaEta = abs(lepton.eta())
         theW.deltaPhi = abs(deltaPhi(lepton.phi(), event.met.phi()))
         theW.deltaPhi_met = abs(deltaPhi(lepton.phi(), event.met.phi()))
-        theW.mT = math.sqrt( 2.*lepton.pt()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
+        theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
         event.theW = theW
         return True
     
