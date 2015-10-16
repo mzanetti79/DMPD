@@ -56,6 +56,16 @@ def isJSON(run, lumi):
     return False
 
 
+def applyKfactor(name):
+    if 'DYJets' in name or 'ZJets' in name:
+        if 'HT100to200' in name: return 1.5992641737053377
+        elif 'HT200to400' in name: return 1.388778036943685
+        elif 'HT400to600' in name: return 1.5360789955333298
+        elif 'HT600toInf' in name: return 1.1347900247061118
+        else: return 1.
+    else:
+        return 1.
+
 def processFile(dir_name, verbose=False):
     
     #print "##################################################"
@@ -85,6 +95,7 @@ def processFile(dir_name, verbose=False):
     totalEntries = ref_hist.GetBinContent(0)
     if isMC:
         weightXS = samples[dir_name]['xsec']/totalEntries
+        weightXS *= applyKfactor(dir_name)
     else:
         weightXS = 1.
     
@@ -100,7 +111,7 @@ def processFile(dir_name, verbose=False):
     vRatio = vFile.Get("ratio")
     if verbose: print "V histogram entries: ", vRatio.GetEntries()
     
-    enableVreweighting = ('ZJetsToNuNu' in dir_name or 'DYJetsToLL' in dir_name) and 'madgraph' in dir_name
+    enableVreweighting = False #('ZJetsToNuNu' in dir_name or 'DYJetsToLL' in dir_name) and 'madgraph' in dir_name
     
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
@@ -159,11 +170,11 @@ def processFile(dir_name, verbose=False):
                     # PU reweighting
                     #nbin = puData.FindBin(obj.nPV)
                     #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
-                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
+                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) )#if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
                     pileupWeightUp[0] = pileupWeightDown[0] = pileupWeight[0]
                     # V boson pT reweight
                     if enableVreweighting:
-                        vbin = vRatio.FindBin(obj.genVpt) if obj.genVpt < vRatio.GetXaxis().GetMax() else vRatio.GetNbinsX()
+                        vbin = vRatio.FindBin(obj.genVpt) #if obj.genVpt < vRatio.GetXaxis().GetMax() else vRatio.GetNbinsX()
                         ptWeight[0] = vRatio.GetBinContent(vbin)
                         ptWeightUp[0] = vRatio.GetBinContent(vbin)+vRatio.GetBinError(vbin)
                         ptWeightDown[0] = vRatio.GetBinContent(vbin)-vRatio.GetBinError(vbin)
