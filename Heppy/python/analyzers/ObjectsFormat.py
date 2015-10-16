@@ -49,7 +49,7 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="PF Rel Iso, R=0.4, pile-up corrected"),
     NTupleVariable("miniIso", lambda x : getattr(x, "miniRelIso", -1.), float, help="Rel Mini-Iso, pile-up corrected"),
     # Cut Based Identification
-    #NTupleVariable("vetoId",   lambda x : x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto") if x.isElectron() else -99., int, help="Cut Based Veto id" ),
+    #NTupleVariable("vetoId",   lambda x : getattr(x, "isHEEP", 0) if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto"), int, help="Cut Based Veto id" ),
     NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
     NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
     NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
