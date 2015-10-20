@@ -844,7 +844,7 @@ for i in datasamples:
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258714_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
         splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
