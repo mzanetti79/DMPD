@@ -23,7 +23,7 @@ doPlot = options.doPlot
 doSave = options.doSave
 
 
-#python getPUHistogram.py -m ../../test/Batch/DYJetsToLL_M50_amcatnloFXFX_pythia8_v3/Loop/tree.root -d /lustre/cmswork/zucchett/CMSSW_7_4_12_patch4/src/DMPD/Heppy/test/Batch/SingleMuon_Run2015D_PromptReco_v3/Loop/tree.root
+#python getPUHistogram.py -p -s -m ../../test/Batch/DYJetsToLL_M50_amcatnloFXFX_pythia8_v3/Loop/tree.root -d /lustre/cmswork/zucchett/CMSSW_7_4_12_patch4/src/DMPD/Heppy/test/Batch/SingleMuon_Run2015D_PromptReco_v3/Loop/tree.root
 
 #print "\n\n\n"
 #print dataFileName, mcFileName, mcReweightedFileName

@@ -12,6 +12,8 @@ samples.update(mcsamples)
 
 ref_pu_file = "%s/src/DMPD/Heppy/python/tools/PU.root" % os.environ['CMSSW_BASE']
 ref_v_file = "%s/src/DMPD/Heppy/python/tools/Vpt.root" % os.environ['CMSSW_BASE']
+ref_btag_file = "%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv" % os.environ['CMSSW_BASE']
+ref_csv_file = "%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root" % os.environ['CMSSW_BASE']
 
 import optparse
 usage = "usage: %prog [options]"
@@ -25,6 +27,8 @@ parser.add_option("-j", "--json", action="store", type="string", dest="json", de
 origin = options.origin
 target = options.target
 json_path = options.json
+
+numberOfJets = {"ZCR" : 3, "WCR" : 4, "TCR" : 3, "SR": 4}
 
 import json
 
@@ -45,6 +49,90 @@ if not os.path.exists(target):
     exit()
 
 
+### Btagging setup ###
+
+import ROOT
+# from within CMSSW:
+ROOT.gSystem.Load('libCondFormatsBTagObjects')
+# OR using standalone code:
+ROOT.gROOT.ProcessLine('.L BTagCalibrationStandalone.cc+')
+
+fl = ["B", "C", "L"]
+wp = ["L", "M", "T"]
+workingpoint = [0., 0.605, 0.890, 0.980, 1.]
+shape = {}
+
+calib = ROOT.BTagCalibration("csvv2", ref_btag_file)
+reader = {}
+for i, w in enumerate(wp):
+    reader[w] = {}
+    reader[w][0] = ROOT.BTagCalibrationReader(calib, i, "mujets", "central")
+    reader[w][1] = ROOT.BTagCalibrationReader(calib, i, "mujets", "up")
+    reader[w][-1] = ROOT.BTagCalibrationReader(calib, i, "mujets", "down")
+
+
+shFile = TFile(ref_csv_file, "READ")
+shFile.cd()
+if not shFile.IsZombie():
+    for i, f in enumerate(fl):
+        shape[f] = shFile.Get("j_bTagDiscr"+f)
+else: print " - BTagWeight Error: No Shape File"
+
+for i, f in enumerate(fl):
+    #shape[f].Smooth(100)
+    shape[f].Rebin(10)
+    shape[f].Scale(1./shape[f].Integral())
+
+
+def returnNewWorkingPoint(f, p, pt, eta, sigma):
+    if f<0 or f>2: print " - BTagWeight Error: unrecognized flavour", f
+    if p<0 or p>4: print " - BTagWeight Error: working point", p, "not defined"
+    if p==0 or p==4: return workingpoint[p]
+    
+    integral = shape[fl[f]].Integral(shape[fl[f]].FindBin(workingpoint[p]), shape[fl[f]].GetNbinsX()+1)
+    
+    sf = reader[wp[p-1]][sigma].eval(f, eta, pt)
+    if sf == 0: return workingpoint[p]
+    integral /= sf
+    
+    n = shape[fl[f]].GetNbinsX()+1
+    step = 10
+    for i in list(reversed(range(0, n, step))):
+        if shape[fl[f]].Integral(i-step, n) >= integral:
+            for j in list(reversed(range(0, i, step/10))):
+                if shape[fl[f]].Integral(j-step/10, n) >= integral:
+                    return (j-0.5*step/10)/(n-1)
+
+    return workingpoint[p]
+
+
+def returnReshapedDiscr(f, discr, pt, eta, sigma=""):
+    if discr<0.01 or discr>0.99: return discr
+    if f<0 or f>2: return discr
+    i0, i1 = 0, 4
+    x0, x1 = 0., 1.
+    
+    for i in range(1, 5):
+        if discr<=workingpoint[i]:
+            x0 = workingpoint[i-1]
+            x1 = workingpoint[i]
+            i0 = i-1
+            i1 = i
+            break
+    
+    y0 = returnNewWorkingPoint(f, i0, pt, eta, sigma)
+    y1 = returnNewWorkingPoint(f, i1, pt, eta, sigma)
+    return y0 + (discr-x0)*((y1-y0)/(x1-x0))
+
+
+
+
+
+
+####################
+
+
+
 
 def isJSON(run, lumi):
     runstr = "%d" % run
@@ -57,12 +145,14 @@ def isJSON(run, lumi):
 
 
 def applyKfactor(name):
-    if 'DYJets' in name or 'ZJets' in name:
+    if 'madgraph' in name and ('DYJets' in name or 'ZJets' in name):
         if 'HT100to200' in name: return 1.5992641737053377
         elif 'HT200to400' in name: return 1.388778036943685
         elif 'HT400to600' in name: return 1.5360789955333298
         elif 'HT600toInf' in name: return 1.1347900247061118
         else: return 1.
+    elif 'madgraph' in name and 'WJets' in name:
+        return 1.21
     else:
         return 1.
 
@@ -111,17 +201,20 @@ def processFile(dir_name, verbose=False):
     vRatio = vFile.Get("ratio")
     if verbose: print "V histogram entries: ", vRatio.GetEntries()
     
-    enableVreweighting = False #('ZJetsToNuNu' in dir_name or 'DYJetsToLL' in dir_name) and 'madgraph' in dir_name
-    
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     pileupWeightUp = array('f', [1.0])
     pileupWeightDown = array('f', [1.0])
-    ptWeight = array('f', [1.0])  # weight from V pt reweighting
-    ptWeightUp = array('f', [1.0])
-    ptWeightDown = array('f', [1.0])
+    # Lists of arrays do not work #@!
+    CSV = {}
+    CSVUp = {}
+    CSVDown = {}
+    for i in range(10):
+        CSV[i] = array('f', [1.0])
+        CSVUp[i] = array('f', [1.0])
+        CSVDown[i] = array('f', [1.0])
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -142,6 +235,7 @@ def processFile(dir_name, verbose=False):
         # Copy trees
         elif obj.IsA().InheritsFrom("TTree"):
             nev = obj.GetEntriesFast()
+            njets = numberOfJets[obj.GetName()] if obj.GetName() in numberOfJets else 0 #FIXME
             new_file.cd()
             new_tree = obj.CloneTree(-1, 'fast')
             # New branches
@@ -150,9 +244,13 @@ def processFile(dir_name, verbose=False):
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
             pileupWeightUpBranch = new_tree.Branch('pileupWeightUp', pileupWeightUp, 'pileupWeightUp/F')
             pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
-            ptWeightBranch = new_tree.Branch('ptWeight', ptWeight, 'ptWeight/F')
-            ptWeightUpBranch = new_tree.Branch('ptWeightUp', ptWeightUp, 'ptWeightUp/F')
-            ptWeightDownBranch = new_tree.Branch('ptWeightDown', ptWeightDown, 'ptWeightDown/F')
+            CSVBranch = {}
+            CSVUpBranch = {}
+            CSVDownBranch = {}
+            for i in range(njets):
+                CSVBranch[i] = new_tree.Branch('jet%d_rCSV' % (i+1), CSV[i], 'jet%d_rCSV/F' % (i+1))
+                CSVUpBranch[i] = new_tree.Branch('jet%d_rCSVUp' % (i+1), CSVUp[i], 'jet%d_rCSVUp/F' % (i+1))
+                CSVDownBranch[i] = new_tree.Branch('jet%d_rCSVDown' % (i+1), CSVDown[i], 'jet%d_rCSVDown/F' % (i+1))
             
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -161,7 +259,10 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = ptWeight[0] = ptWeightUp[0] = ptWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
+                for i in range(njets):
+                    csv = getattr(obj, "jet%d_CSV" % (i+1), -999)
+                    CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
                 
                 # Weights
                 if isMC:
@@ -172,19 +273,22 @@ def processFile(dir_name, verbose=False):
                     #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
                     pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) )#if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
                     pileupWeightUp[0] = pileupWeightDown[0] = pileupWeight[0]
-                    # V boson pT reweight
-                    if enableVreweighting:
-                        vbin = vRatio.FindBin(obj.genVpt) #if obj.genVpt < vRatio.GetXaxis().GetMax() else vRatio.GetNbinsX()
-                        ptWeight[0] = vRatio.GetBinContent(vbin)
-                        ptWeightUp[0] = vRatio.GetBinContent(vbin)+vRatio.GetBinError(vbin)
-                        ptWeightDown[0] = vRatio.GetBinContent(vbin)-vRatio.GetBinError(vbin)
-                        
+                    
+                    for i in range(njets):
+                        pt = getattr(obj, "jet%d_pt" % (i+1), -1)
+                        eta = getattr(obj, "jet%d_eta" % (i+1), -1)
+                        flav = getattr(obj, "jet%d_flavour" % (i+1), -1)
+                        csv = getattr(obj, "jet%d_CSV" % (i+1), -1)
+                        CSV[i][0] = returnReshapedDiscr(flav, csv, pt, eta, 0)
+                        CSVUp[i][0] = returnReshapedDiscr(flav, csv, pt, eta, +1)
+                        CSVDown[i][0] = returnReshapedDiscr(flav, csv, pt, eta, -1)
+                
                 # Data
                 else:
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
                     # Filters
-                    #elif not (obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0. #obj.Flag_BIT_Flag_HBHENoiseFilter and 
+                    elif not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
                     # Filter by PD
                     else: xsWeight[0] = 1.
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
@@ -198,10 +302,11 @@ def processFile(dir_name, verbose=False):
                 pileupWeightBranch.Fill()
                 pileupWeightUpBranch.Fill()
                 pileupWeightDownBranch.Fill()
-                ptWeightBranch.Fill()
-                ptWeightUpBranch.Fill()
-                ptWeightDownBranch.Fill()
-                
+                for i in range(njets):
+                    CSVBranch[i].Fill()
+                    CSVUpBranch[i].Fill()
+                    CSVDownBranch[i].Fill()
+
             new_file.cd()
             new_tree.Write()
             if verbose: print " "
@@ -226,7 +331,6 @@ def processFile(dir_name, verbose=False):
         else:
             if verbose: print "- Unknown object:", obj.GetName()
     new_file.Close() 
-
 
 
 
