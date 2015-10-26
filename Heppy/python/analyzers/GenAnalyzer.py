@@ -83,7 +83,7 @@ class GenAnalyzer( Analyzer ):
             event.genV = event.genVBosons[0]
         else:
             leptons = [x for x in event.genParticles if abs(x.pdgId())>10 and abs(x.pdgId())<17 and x.status()==23]
-            if len(leptons) >=2 and leptons[0].pdgId()==-leptons[1].pdgId():
+            if len(leptons) >=2:
                 event.genV = ROOT.reco.GenParticle(0, leptons[0].p4()+leptons[1].p4(), leptons[0].vertex(), 23, 1, 0)
             
         
