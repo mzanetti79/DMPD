@@ -86,8 +86,8 @@ var_template = {
 #    "met_pt": {
 #      "title" : "raw #slash{E}_{T} (GeV)",
 #      "nbins" : 20,
-#      "min" : 0,
-#      "max" : 1000,
+#      "min" : 200,
+#      "max" : 1200,
 #      "log" : True,
 #    },
 #    "met_pt": {
@@ -142,9 +142,9 @@ var_template = {
     },
     "fakemet_pt": {
       "title" : "fake #slash{E}_{T} (GeV)",
-      "nbins" : 50,
-      "min" : 0,
-      "max" : 500,
+      "nbins" : 40,
+      "min" : 200,
+      "max" : 1000,
       "log" : True,
     },
     "fakemet_phi": {
@@ -152,6 +152,13 @@ var_template = {
       "nbins" : 50,
       "min" : -3.15,
       "max" : 3.15,
+      "log" : False,
+    },
+    "UperpScale": {
+      "title" : "U_{#perp} (GeV)",
+      "nbins" : 50,
+      "min" : -200,
+      "max" : 200,
       "log" : False,
     },
     
@@ -200,6 +207,13 @@ var_template = {
       "log" : False,
     },
     "jet[N]_CSV": {
+      "title" : "jet [N] CSV",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 1,
+      "log" : False,
+    },
+    "jet[N]_rCSV": {
       "title" : "jet [N] CSV",
       "nbins" : 50,
       "min" : 0,
@@ -267,9 +281,9 @@ var_template = {
     # Fatjets
     "fatjet[N]_pt": {
       "title" : "jet [N] p_{T} (GeV)",
-      "nbins" : 25,
-      "min" : 0,
-      "max" : 500,
+      "nbins" : 20,
+      "min" : 200,
+      "max" : 1000,
       "log" : True,
     },
     "fatjet[N]_eta": {
@@ -345,7 +359,7 @@ var_template = {
     "fatjet[N]_dPhi_met": {
       "title" : "#Delta #varphi_{jet-#slash{E}_{T}}",
       "nbins" : 50,
-      "min" : -3.15,
+      "min" : 0,
       "max" : 3.15,
       "log" : False,
     },
@@ -400,52 +414,52 @@ var_template = {
     },
     "fatjet[N]_chf": {
       "title" : "jet [N] charged hadron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_nhf": {
       "title" : "jet [N] neutral hadron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_phf": {
       "title" : "jet [N] photon fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_elf": {
       "title" : "jet [N] electron fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_muf": {
       "title" : "jet [N] muon fraction",
-      "nbins" : 50,
+      "nbins" : 20,
       "min" : 0,
       "max" : 1,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_chm": {
       "title" : "jet [N] charged multiplicity",
       "nbins" : 50,
       "min" : 0,
       "max" : 50,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_npr": {
       "title" : "jet [N] constituents multiplicity",
       "nbins" : 50,
       "min" : 0,
       "max" : 100,
-      "log" : True,
+      "log" : False,
     },
     
     
@@ -566,9 +580,9 @@ var_template = {
     # Candidates
     "Z_pt": {
       "title" : "Z candidate p_{T} (GeV)",
-      "nbins" : 50,
+      "nbins" : 10,
       "min" : 0,
-      "max" : 500,
+      "max" : 1000,
       "log" : True,
     },
     "Z_eta": {
@@ -588,8 +602,8 @@ var_template = {
     "Z_mass": {
       "title" : "m_{Z} (GeV)",
       "nbins" : 60,
-      "min" : 60,
-      "max" : 120,
+      "min" : 70,
+      "max" : 110,
       "log" : False,
     },
     "Z_charge": {
@@ -679,6 +693,13 @@ var_template = {
       "max" : 3.14,
       "log" : False,
     },
+    "topMass(pt1,eta1,phi1,mass1,csv1,pt2,eta2,phi2,mass2,csv2,pt3,eta3,phi3,mass3,csv3,pt4,eta4,phi4,mass4,csv4)": {
+      "title" : "Top mass",
+      "nbins" : 100,
+      "min" : 0,
+      "max" : 250,
+      "log" : False,
+    },
     
     # X
     "X_pt": {
@@ -707,7 +728,7 @@ var_template = {
       "nbins" : -1,
       #"bins" : [500, 540, 583, 629, 678, 730, 785, 843, 904, 968, 1035, 1105, 1178, 1254, 1333, 1415, 1500, 1588, 1679, 1773, 1870, 1970, 2073, 2179, 2288, 2400, 2515, 2633, 2754, 2878, 3005, 3135, 3268, 3404, 3543, 3685, 3830, 3978, 4129, 4283, 4440, 4600],
       #"bins" : [500, 583, 678, 785, 904, 1035, 1178, 1333, 1500, 1679, 1870, 2073, 2288, 2515, 2754, 3005, 3268, 3543, 3830, 4129, 4600],
-      "bins" : [x*(1+0.1*x)*20+500 for x in range(40)], #[x*(1+0.16*x)*50+500 for x in range(20)],
+      "bins" : [x*(1+0.1*x)*40+500 for x in range(28)],#[x*(1+0.1*x)*20+500 for x in range(40)], #[x*(1+0.16*x)*50+500 for x in range(20)],
       "min" : 500.,
       "max" : 4500.,
       "log" : True,
@@ -762,6 +783,26 @@ var_template = {
       "nbins" : 50,
       "min" : -3.14,
       "max" : 3.14,
+      "log" : False,
+    },
+    
+    "transverseMass(fatjet1_pt,fatjet1_phi,met_pt,met_phi)": {
+      "title" : "m_{T}^{X} (GeV)",
+      "nbins" : -1,
+      #"bins" : [500, 540, 583, 629, 678, 730, 785, 843, 904, 968, 1035, 1105, 1178, 1254, 1333, 1415, 1500, 1588, 1679, 1773, 1870, 1970, 2073, 2179, 2288, 2400, 2515, 2633, 2754, 2878, 3005, 3135, 3268, 3404, 3543, 3685, 3830, 3978, 4129, 4283, 4440, 4600],
+      #"bins" : [200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 1000, 1250, 1500, 2000, 2500, 3000, 3500, 4500],
+      "bins" : [x*(1+0.5*x)*50+500 for x in range(13)],#[x*(1+0.30*x)*50+500 for x in range(15)],
+      "min" : 500.,
+      "max" : 4500.,
+      "log" : True,
+    },
+    
+    # Dummy
+    "0*run": {
+      "title" : "",
+      "nbins" : 1,
+      "min" : -0.5,
+      "max" : 0.5,
       "log" : False,
     },
 }
