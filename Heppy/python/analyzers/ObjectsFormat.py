@@ -49,10 +49,10 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="PF Rel Iso, R=0.4, pile-up corrected"),
     NTupleVariable("miniIso", lambda x : getattr(x, "miniRelIso", -1.), float, help="Rel Mini-Iso, pile-up corrected"),
     # Cut Based Identification
-    #NTupleVariable("vetoId",   lambda x : getattr(x, "isHEEP", 0) if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto"), int, help="Cut Based Veto id" ),
-    NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
-    NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
-    NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
+    #NTupleVariable("vetoId",   lambda x : getattr(x, "isHEEP", 0) if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto"), int, help="Cut Based Veto id" ),
+    NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
+    NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
+    NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
     NTupleVariable("highptId",   lambda x : x.muonID("POG_ID_HighPt") if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),
 ])
 
@@ -76,10 +76,10 @@ muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variable
 electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], variables = [
     NTupleVariable("charge",   lambda x : x.charge(), int, help="Electron charge"),
     # Identification
-    NTupleVariable("vetoId",   lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Veto") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Veto id"),
-    NTupleVariable("looseId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Loose") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Loose id"),
-    NTupleVariable("mediumId", lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Medium") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Medium id"),
-    NTupleVariable("tightId",  lambda x : x.cutBasedId("POG_CSA14_25ns_v1_Tight") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Tight id"),
+    NTupleVariable("vetoId",   lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Veto id"),
+    NTupleVariable("looseId",  lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Loose id"),
+    NTupleVariable("mediumId", lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Medium id"),
+    NTupleVariable("tightId",  lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Tight id"),
     # Isolations with the two radia
     NTupleVariable("relIso03",  lambda x : x.relIso03, help="Electron PF Rel Iso, R=0.3, pile-up corrected"),
     NTupleVariable("relIso04",  lambda x : x.relIso04, help="Electron PF Rel Iso, R=0.4, pile-up corrected"),
@@ -87,16 +87,6 @@ electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], 
     NTupleVariable("ip2d", lambda x : x.dB(1), float, help="Lepton 2D impact parameter"),
     NTupleVariable("ip3d", lambda x : x.dB(2), float, help="Lepton 3D impact parameter"),
     NTupleVariable("dz",  lambda x : x.dz(), float, help="Lepton dz"),
-    ### ELECTRON SPECIFIC VARS
-    #NTupleVariable("MvaIdNonTrig",   lambda x : x.electronID("POG_MVA_ID_NonTrig") if x.isElectron() else -99., int, help="MVA Electron id NonTrig" ),
-    #NTupleVariable("MvaIdTrig",   lambda x : x.electronID("POG_MVA_ID_Trig") if x.isElectron() else -99., int, help="MVA Electron id Trig" ),
-    #NTupleVariable("MvaIdNonTrig5x5",   lambda x : x.electronID("POG_MVA_ID_NonTrig_full5x5") if x.isElectron() else -99., int, help="MVA Electron id NonTrig5x5" ),
-    #NTupleVariable("MvaIdTrig5x5",   lambda x : x.electronID("POG_MVA_ID_Trig_full5x5") if x.isElectron() else -99., int, help="MVA Electron id Trig5x5" ),
-    #NTupleVariable("MvaIdNonTrigVLoose",   lambda x : x.electronID("POG_MVA_ID_Run2_NonTrig_VLoose") if x.isElectron() else -99., int, help="MVA Electron id VLoose" ),
-    #NTupleVariable("MvaIdNonTrigLoose",   lambda x : x.electronID("POG_MVA_ID_Run2_NonTrig_Loose") if x.isElectron() else -99., int, help="MVA Electron id Loose" ),
-    #NTupleVariable("MvaIdNonTrigMedium",   lambda x : x.electronID("POG_MVA_ID_Run2_NonTrig_Medium") if x.isElectron() else -99., int, help="MVA Electron id Medium" ),
-    #NTupleVariable("MvaIdNonTrigTight",   lambda x : x.electronID("POG_MVA_ID_Run2_NonTrig_Tight") if x.isElectron() else -99., int, help="MVA Electron id Tight" ),
-
 ])
 
 jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [

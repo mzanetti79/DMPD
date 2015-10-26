@@ -113,6 +113,11 @@ class PreselectionAnalyzer( Analyzer ):
         theZ.deltaPhi = abs(deltaPhi(leptons[0].phi(), leptons[1].phi()))
         #theZ.deltaPhi_met = abs(deltaPhi(theZ.phi(), event.met.phi()))
         event.theZ = theZ
+        # Recoil correction variables
+        recoilX = - event.met.px() - event.theZ.px()
+        recoilY = - event.met.py() - event.theZ.py()
+        event.Upara = (recoilX*event.theZ.px() + recoilY*event.theZ.py())/event.theZ.pt()
+        event.Uperp = (recoilX*event.theZ.py() - recoilY*event.theZ.px())/event.theZ.pt()        
         return True
     
     def createW(self, event, lepton):
@@ -124,6 +129,11 @@ class PreselectionAnalyzer( Analyzer ):
         theW.deltaPhi_met = abs(deltaPhi(lepton.phi(), event.met.phi()))
         theW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
         event.theW = theW
+        # Recoil correction variables
+        recoilX = - event.met.px() - lepton.px()
+        recoilY = - event.met.py() - lepton.py()
+        event.Upara = (recoilX*lepton.px() + recoilY*lepton.py())/lepton.pt()
+        event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()        
         return True
     
     def createX(self, event):
@@ -160,19 +170,15 @@ class PreselectionAnalyzer( Analyzer ):
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
 #        event.xcleanJetsAK8JERDown = event.cleanJetsAK8JERDown
         
-        # Swap MET and METraw (uncorrected) collections
-        event.pfmet = copy.deepcopy(event.met)
+        # Swap MET (met) and rawMET (uncorrected) collections
+        event.rawmet = copy.deepcopy(event.met)
         
-        # MINIAOD v1 (Spring 15 and Run 2015C)
-        pt_ = event.met.uncorrectedPt()
-        phi_ = event.met.uncorrectedPhi()
-        px_ = pt_*math.cos(phi_)
-        py_ = pt_*math.sin(phi_)
         # MINIAOD v2 (Run 2015D)
-        #px_ = event.met.uncorPx()
-        #py_ = event.met.uncorPy()
-        #pt_ = math.hypot(px_, py_)
-        event.met.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
+        px_ = event.met.uncorPx()
+        py_ = event.met.uncorPy()
+        pt_ = math.hypot(px_, py_)
+        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
+        
         
         self.addJetVariables(event)
         #self.addJESUncertainty(event)
