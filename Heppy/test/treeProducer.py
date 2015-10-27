@@ -549,9 +549,10 @@ globalEventVariables = [
     NTupleVariable('lheVpt',           lambda x: getattr(x, "lheV_pt", -1.), int, help='Vector boson pt at LHE level'),
     NTupleVariable('genVpt',           lambda x: x.genV.pt() if hasattr(x, "genV") else -1., float, help='Vector boson pt at Gen level'),
     NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
-    NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
-    NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
+    NTupleVariable('genNl',            lambda x: len(x.genleps) if hasattr(x, "genleps") else -1, int, help='Number of leptons at generator level'),
     NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.), int, help='Number of true interactions'),
+    NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
+    NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
 ]
 globalDMVariables = globalEventVariables + [
     NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
