@@ -277,8 +277,8 @@ fatJetAnalyzer = cfg.Analyzer(
     cleanJetsFromIsoTracks      = False,
     recalibrationType           = 'AK8PFchs',
     jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
-    mcGT                        = 'Summer15_25nsV2_MC',
-    dataGT                      = 'Summer15_25nsV2_DATA',
+    mcGT                        = 'Summer15_25nsV5_MC',
+    dataGT                      = 'Summer15_25nsV5_DATA',
     genJetCol                   = 'slimmedGenJets',
     rho                         = ('fixedGridRhoFastjetAll','',''),
     copyJetsByValue             = False, #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
@@ -427,8 +427,8 @@ PreselectionAnalyzer = cfg.Analyzer(
     recalibrationType           = 'AK8PFchs',
     jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
     #jecPath                     = 'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms/store/user/zucchett/JEC/', 
-    mcGT                        = 'Summer15_25nsV2_MC',
-    dataGT                      = 'Summer15_25nsV2_DATA',
+    mcGT                        = 'Summer15_25nsV5_MC',
+    dataGT                      = 'Summer15_25nsV5_DATA',
     )
 
 from DMPD.Heppy.analyzers.XCleaningAnalyzer import XCleaningAnalyzer
