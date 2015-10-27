@@ -616,6 +616,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - dilepton)'),            
     ],
     globalObjects = {
+        'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
@@ -655,6 +656,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - lepton)'),
     ],
     globalObjects = {
+        'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
@@ -883,7 +885,7 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### MC ###
-#selectedComponents = [
+selectedComponents = [
 ##sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1043,7 +1045,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ##sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-##sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
@@ -1056,10 +1058,10 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
-#]
+]
 
 ### DATA ###
-selectedComponents = [
+#selectedComponents = [
 ## Run2015D
 #sample['DoubleEG_Run2015D-05Oct2015-v1'],
 #sample['DoubleEG_Run2015D-PromptReco-v4'],
@@ -1069,12 +1071,12 @@ selectedComponents = [
 #sample['MET_Run2015D-PromptReco-v4'],
 #sample['SingleElectron_Run2015D-05Oct2015-v1'],
 #sample['SingleElectron_Run2015D-PromptReco-v4'],
-sample['SingleMuon_Run2015D-05Oct2015-v1'],
-sample['SingleMuon_Run2015D-PromptReco-v4'],
+#sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#sample['SingleMuon_Run2015D-PromptReco-v4'],
 #sample['SinglePhoton_Run2015D-05Oct2015-v1'],
 #sample['SinglePhoton_Run2015D-PromptReco-v4'],
-]
-filterAnalyzer.processName = 'RECO'
+#]
+#filterAnalyzer.processName = 'RECO'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
 #selectedComponents = [sample['SYNCH_TTBar'],]
