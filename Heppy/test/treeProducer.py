@@ -551,6 +551,7 @@ globalEventVariables = [
     NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
+    NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.), int, help='Number of true interactions'),
 ]
 globalDMVariables = globalEventVariables + [
     NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
@@ -693,6 +694,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalDMVariables + [],
     globalObjects = {
+        'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
