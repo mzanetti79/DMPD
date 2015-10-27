@@ -39,8 +39,8 @@ generatorAnalyzer= cfg.Analyzer(
 from PhysicsTools.Heppy.analyzers.gen.PDFWeightsAnalyzer import PDFWeightsAnalyzer
 pdfAnalyzer= cfg.Analyzer(
     class_object=PDFWeightsAnalyzer,
-    doPDFWeights = True,
-    doPDFVars = True,
+    doPDFWeights = False,
+    doPDFVars = False,
     PDFWeights = ["cteq6ll", "MSTW2008nlo68cl"],
     )
 
@@ -550,6 +550,15 @@ globalEventVariables = [
     NTupleVariable('genVpt',           lambda x: x.genV.pt() if hasattr(x, "genV") else -1., float, help='Vector boson pt at Gen level'),
     NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
     NTupleVariable('genNl',            lambda x: len(x.genleps) if hasattr(x, "genleps") else -1, int, help='Number of leptons at generator level'),
+    NTupleVariable('weight_1',         lambda x: abs(x.LHE_weights[0].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 1'),
+    NTupleVariable('weight_2',         lambda x: abs(x.LHE_weights[1].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 2'),
+    NTupleVariable('weight_3',         lambda x: abs(x.LHE_weights[2].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 3'),
+    NTupleVariable('weight_4',         lambda x: abs(x.LHE_weights[3].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 4'),
+    NTupleVariable('weight_5',         lambda x: abs(x.LHE_weights[4].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 5'),
+    NTupleVariable('weight_6',         lambda x: abs(x.LHE_weights[5].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 6'),
+    NTupleVariable('weight_7',         lambda x: abs(x.LHE_weights[6].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 7'),
+    NTupleVariable('weight_8',         lambda x: abs(x.LHE_weights[7].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 8'),
+    NTupleVariable('weight_9',         lambda x: abs(x.LHE_weights[8].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") else 1, int, help='LHE Weight Id 9'),
     NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.), int, help='Number of true interactions'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
@@ -998,7 +1007,7 @@ selectedComponents = [
 ##sample['ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1'],
 ##sample['ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1'],
 ##sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v1'],
-##sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
+sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
 
 ##sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1043,7 +1052,7 @@ selectedComponents = [
 ##sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ##sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+##sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],

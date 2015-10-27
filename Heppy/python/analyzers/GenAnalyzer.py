@@ -64,6 +64,20 @@ class GenAnalyzer( Analyzer ):
             self.Hist["LheNg"] = ROOT.TH1F("LheNg", ";Number of gluons", 6, -0.5, 5.5)
             setup.services["outputfile"].file.cd("..")
             
+            # Weights
+            setup.services["outputfile"].file.mkdir("LheWeights")
+            setup.services["outputfile"].file.cd("LheWeights")
+            self.Hist["LhePDFWeights"] = ROOT.TH1F("LhePDFWeights", ";Weights", 200, 0., 2.)
+            self.Hist["LheScaleWeights"] = ROOT.TH1F("LheScaleWeights", ";Weights", 200, 0., 2.)
+            for i in range(109+1):
+                name = "LheWeight_%d" % i
+                self.Hist[name] = ROOT.TH1F(name, name+";Z p_{T} [GeV]", 2500, 0., 2500.)
+                name = "LheWeightB_%d" % i
+                self.Hist[name] = ROOT.TH1F(name, name+";Z+b(b) p_{T} [GeV]", 2500, 0., 2500.)
+                name = "LheWeightL_%d" % i
+                self.Hist[name] = ROOT.TH1F(name, name+";Z+light p_{T} [GeV]", 2500, 0., 2500.)
+            setup.services["outputfile"].file.cd("..")
+            
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
@@ -163,6 +177,16 @@ class GenAnalyzer( Analyzer ):
         self.Hist["LheNl"].Fill(event.lheNl, weight)
         self.Hist["LheNg"].Fill(event.lheNg, weight)
         
+        # LHE weights
+        self.Hist["LheWeight_0"].Fill(event.lheV_pt, weight)
+        for i in range(min(109, len(event.LHE_weights))):
+            w = abs(event.LHE_weights[i].wgt/event.LHE_originalWeight)
+            if i<9: self.Hist["LheScaleWeights"].Fill(w)
+            else: self.Hist["LhePDFWeights"].Fill(w)
+            self.Hist["LheWeight_%d" % (i+1)].Fill(event.lheV_pt, w)
+            if event.lheNb == 0: self.Hist["LheWeightB_%d" % (i+1)].Fill(event.lheV_pt, w)
+            else: self.Hist["LheWeightL_%d" % (i+1)].Fill(event.lheV_pt, w)
+            #print event.LHE_weights[i].id, event.LHE_weights[i].wgt
         
         return True
     
