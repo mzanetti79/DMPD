@@ -855,6 +855,7 @@ eventspersec = 5 # in ev/s
 
 sample = {}
 for i in datasamples:
+    if int(datasamples[i]['nevents']) < 1: continue
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
@@ -863,6 +864,7 @@ for i in datasamples:
     )
 
 for i in mcsamples:
+    if int(mcsamples[i]['nevents']) < 1: continue
     sample[i] = cfg.MCComponent(
         files   = mcsamples[i]['files'],
         name    = i,
