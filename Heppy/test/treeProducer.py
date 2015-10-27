@@ -581,8 +581,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
+        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
         'theX'      : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
@@ -619,13 +620,11 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
-        'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
+        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
-        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
-        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
-        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon or Electron collection'),
@@ -659,13 +658,11 @@ WControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
-        'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
+        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
-        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
-        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
-        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 1, help='Muon or Electron collection'),
@@ -696,11 +693,10 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalDMVariables + [],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
+        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
-        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
+        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
-        #'V'         : NTupleObject('V', candidateType, help='Higgs boson candidate'),
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 2, help='Muon and Electron collection'),
@@ -729,9 +725,8 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     globalObjects = {
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
-        #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
-        #'V' : NTupleObject('V', candidateType, help='Higgs boson candidate'),
+        'genmet'     : NTupleObject('genmet',  metType, help='MET at generation level'),
     },
     collections = {
         #'selectedMuons'       : NTupleCollection('muon', muonType, 4, help='Muons after the preselection'),
@@ -1048,7 +1043,7 @@ selectedComponents = [
 ##sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ##sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-#sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],

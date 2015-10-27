@@ -71,22 +71,24 @@ class GenAnalyzer( Analyzer ):
     def process(self, event):
         
         event.genV = ROOT.reco.GenParticle()
+        event.genmet = ROOT.reco.Particle.LorentzVector()
+        event.genChi = []
         
         if not hasattr(event, "genParticles"):
             return True
         
         weight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
         
-        
-        
-        event.genChi = []
         if hasattr(event, "genVBosons") and len(event.genVBosons) > 0:
             event.genV = event.genVBosons[0]
         else:
             leptons = [x for x in event.genParticles if abs(x.pdgId())>10 and abs(x.pdgId())<17 and x.status()==23]
             if len(leptons) >=2:
                 event.genV = ROOT.reco.GenParticle(0, leptons[0].p4()+leptons[1].p4(), leptons[0].vertex(), 23, 1, 0)
-            
+        
+        if hasattr(event, "gennus"):
+            for i in range(len(event.gennus)):
+                event.genmet += event.gennus[i].p4()
         
         for g in event.genParticles:
             if g.pdgId() in self.cfg_ana.phi:
