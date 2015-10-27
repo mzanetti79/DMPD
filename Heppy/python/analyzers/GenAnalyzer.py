@@ -70,6 +70,8 @@ class GenAnalyzer( Analyzer ):
     
     def process(self, event):
         
+        event.genV = ROOT.reco.GenParticle()
+        
         if not hasattr(event, "genParticles"):
             return True
         
@@ -78,7 +80,6 @@ class GenAnalyzer( Analyzer ):
         
         
         event.genChi = []
-        event.genV = ROOT.reco.GenParticle()
         if hasattr(event, "genVBosons") and len(event.genVBosons) > 0:
             event.genV = event.genVBosons[0]
         else:
