@@ -1048,7 +1048,7 @@ selectedComponents = [
 ##sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ##sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+#sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ##sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
