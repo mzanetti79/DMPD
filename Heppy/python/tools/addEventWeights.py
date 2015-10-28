@@ -10,10 +10,13 @@ from DMPD.Heppy.samples.Data.fileLists import datasamples
 samples = datasamples.copy()
 samples.update(mcsamples)
 
+#ROOT.gROOT.SetBatch(1)
+
 ref_pu_file = "%s/src/DMPD/Heppy/python/tools/PU.root" % os.environ['CMSSW_BASE']
-ref_v_file = "%s/src/DMPD/Heppy/python/tools/Vpt.root" % os.environ['CMSSW_BASE']
 ref_btag_file = "%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv" % os.environ['CMSSW_BASE']
 ref_csv_file = "%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root" % os.environ['CMSSW_BASE']
+ref_recoilMC_file = "%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root" % os.environ['CMSSW_BASE']
+ref_recoilData_file = "%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root" % os.environ['CMSSW_BASE']
 
 import optparse
 usage = "usage: %prog [options]"
@@ -21,12 +24,14 @@ parser = optparse.OptionParser(usage)
 parser.add_option("-i", "--input", action="store", type="string", dest="origin", default="")
 parser.add_option("-o", "--output", action="store", type="string", dest="target", default="")
 parser.add_option("-j", "--json", action="store", type="string", dest="json", default="")
+parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
 
 (options, args) = parser.parse_args()
 
 origin = options.origin
 target = options.target
 json_path = options.json
+verboseon = options.verbose
 
 numberOfJets = {"ZCR" : 3, "WCR" : 4, "TCR" : 3, "SR": 4}
 
@@ -55,7 +60,7 @@ import ROOT
 # from within CMSSW:
 ROOT.gSystem.Load('libCondFormatsBTagObjects')
 # OR using standalone code:
-ROOT.gROOT.ProcessLine('.L BTagCalibrationStandalone.cc+')
+ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/BTAG/BTagCalibrationStandalone.cc+' % os.environ['CMSSW_BASE'])
 
 fl = ["B", "C", "L"]
 wp = ["L", "M", "T"]
@@ -124,14 +129,16 @@ def returnReshapedDiscr(f, discr, pt, eta, sigma=""):
     y1 = returnNewWorkingPoint(f, i1, pt, eta, sigma)
     return y0 + (discr-x0)*((y1-y0)/(x1-x0))
 
-
-
-
-
-
 ####################
 
+### ADD RECOIL CORRECTIONS ###
 
+ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/RECOIL/RecoilCorrector.hh+' % os.environ['CMSSW_BASE'])
+Recoil = ROOT.RecoilCorrector(ref_recoilMC_file)
+Recoil.addDataFile(ref_recoilData_file)
+Recoil.addMCFile(ref_recoilMC_file)
+
+############################## 
 
 
 def isJSON(run, lumi):
@@ -196,11 +203,6 @@ def processFile(dir_name, verbose=False):
     puRatio = puFile.Get("ratio")
     if verbose: print "PU histogram entries: ", puRatio.GetEntries()
     
-    # V reweighting
-    vFile = TFile(ref_v_file, "READ")
-    vRatio = vFile.Get("ratio")
-    if verbose: print "V histogram entries: ", vRatio.GetEntries()
-    
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
@@ -215,6 +217,17 @@ def processFile(dir_name, verbose=False):
         CSV[i] = array('f', [1.0])
         CSVUp[i] = array('f', [1.0])
         CSVDown[i] = array('f', [1.0])
+    # Recoil Variables
+    corrmet_pt         = array('f', [0.0])  
+    corrmet_phi        = array('f', [0.0])  
+    corrmet_pt_scaleH  = array('f', [0.0])  
+    corrmet_phi_scaleH = array('f', [0.0])
+    corrmet_pt_scaleL  = array('f', [0.0])
+    corrmet_phi_scaleL = array('f', [0.0])  
+    corrmet_pt_resH    = array('f', [0.0])
+    corrmet_phi_resH   = array('f', [0.0])
+    corrmet_pt_resL    = array('f', [0.0])
+    corrmet_phi_resL   = array('f', [0.0])   
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -251,6 +264,15 @@ def processFile(dir_name, verbose=False):
                 CSVBranch[i] = new_tree.Branch('jet%d_rCSV' % (i+1), CSV[i], 'jet%d_rCSV/F' % (i+1))
                 CSVUpBranch[i] = new_tree.Branch('jet%d_rCSVUp' % (i+1), CSVUp[i], 'jet%d_rCSVUp/F' % (i+1))
                 CSVDownBranch[i] = new_tree.Branch('jet%d_rCSVDown' % (i+1), CSVDown[i], 'jet%d_rCSVDown/F' % (i+1))
+            corrmet_ptBranch        = new_tree.Branch('corrmet_pt',        corrmet_pt,        'corrmet_pt/F')
+            corrmet_phiBranch       = new_tree.Branch('corrmet_phi',       corrmet_phi,       'corrmet_phi/F')
+            corrmet_pt_scaleHBranch = new_tree.Branch('corrmet_pt_scaleH', corrmet_pt_scaleH, 'corrmet_pt_scaleH/F')
+            corrmet_phi_scaleHBranch= new_tree.Branch('corrmet_phi_scaleH',corrmet_phi_scaleH,'corrmet_phi_scaleH/F')
+            corrmet_pt_scaleLBranch = new_tree.Branch('corrmet_pt_scaleL', corrmet_pt_scaleL, 'corrmet_pt_scaleL/F')
+            corrmet_pt_resHBranch   = new_tree.Branch('corrmet_pt_resH',   corrmet_pt_resH,   'corrmet_pt_resH/F')
+            corrmet_phi_resHBranch  = new_tree.Branch('corrmet_phi_resH',  corrmet_phi_resH,  'corrmet_phi_resH/F')
+            corrmet_pt_resLBranch   = new_tree.Branch('corrmet_pt_resL',   corrmet_pt_resL,   'corrmet_pt_resL/F')
+            corrmet_phi_resLBranch  = new_tree.Branch('corrmet_phi_resL',  corrmet_phi_resL,  'corrmet_pt_resL/F')
             
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -282,6 +304,62 @@ def processFile(dir_name, verbose=False):
                         CSV[i][0] = returnReshapedDiscr(flav, csv, pt, eta, 0)
                         CSVUp[i][0] = returnReshapedDiscr(flav, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(flav, csv, pt, eta, -1)
+                    
+                    cmetpt         = ROOT.Double(obj.met_pt)
+                    cmetphi        = ROOT.Double(obj.met_phi)
+                    cmetpt_scaleH  = ROOT.Double(obj.met_pt)
+                    cmetphi_scaleH = ROOT.Double(obj.met_phi)
+                    cmetpt_scaleL  = ROOT.Double(obj.met_pt)
+                    cmetphi_scaleL = ROOT.Double(obj.met_phi)
+                    cmetpt_resH    = ROOT.Double(obj.met_pt)
+                    cmetphi_resH   = ROOT.Double(obj.met_phi)
+                    cmetpt_resL    = ROOT.Double(obj.met_pt)
+                    cmetphi_resL   = ROOT.Double(obj.met_phi)
+                    applyrecoil    = True
+                    nJets          = int(obj.nJets)
+                    # apply recoil corrections only for Z->ll, Z->vv, and W->lv
+                    if 'DYJets' in dir_name or 'ZJets' in dir_name or 'WJets' in dir_name:
+                        if 'SR' in obj.GetName():
+                            genmetpt  = ROOT.Double(obj.genV_pt)
+                            genmetphi = ROOT.Double(obj.genV_phi)
+                            leppt     = ROOT.Double(0)
+                            lepphi    = ROOT.Double(0)
+                            Upar      = ROOT.Double(0)
+                            Uper      = ROOT.Double(0)
+                        elif 'ZCR' in obj.GetName():
+                            genmetpt  = ROOT.Double(obj.genV_pt)
+                            genmetphi = ROOT.Double(obj.genV_phi)
+                            leppt     = ROOT.Double(obj.Z_pt)
+                            lepphi    = ROOT.Double(obj.Z_phi)
+                            Upar      = ROOT.Double(obj.Upara)
+                            Uper      = ROOT.Double(obj.Uperp)
+                        elif 'WCR' in obj.GetName():
+                            genmetpt  = ROOT.Double(obj.genV_pt)
+                            genmetphi = ROOT.Double(obj.genV_phi)
+                            leppt     = ROOT.Double(obj.lepton1_pt)
+                            lepphi    = ROOT.Double(obj.lepton1_phi)
+                            Upar      = ROOT.Double(obj.Upara)
+                            Uper      = ROOT.Double(obj.Uperp)
+                    # otherwise only copy the met in all the corrmet_ variables
+                    else:
+                        applyrecoil = False
+                        
+                    if applyrecoil:
+                        Recoil.CorrectType2(cmetpt       ,cmetphi       ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
+                        Recoil.CorrectType2(cmetpt_scaleH,cmetphi_scaleH,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
+                        Recoil.CorrectType2(cmetpt_scaleL,cmetphi_scaleL,genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
+                        Recoil.CorrectType2(cmetpt_resH  ,cmetphi_resH  ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
+                        Recoil.CorrectType2(cmetpt_resL  ,cmetphi_resL  ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)        
+                    corrmet_pt[0]         = cmetpt
+                    corrmet_phi[0]        = cmetphi
+                    corrmet_pt_scaleH[0]  = cmetpt_scaleH
+                    corrmet_phi_scaleH[0] = cmetphi_scaleH
+                    corrmet_pt_scaleL[0]  = cmetpt_scaleL
+                    corrmet_phi_scaleL[0] = cmetphi_scaleL
+                    corrmet_pt_resH[0]    = cmetpt_resH
+                    corrmet_phi_resH[0]   = cmetphi_resH
+                    corrmet_pt_resL[0]    = cmetpt_resL
+                    corrmet_phi_resL[0]   = cmetphi_resL
                 
                 # Data
                 else:
@@ -306,6 +384,14 @@ def processFile(dir_name, verbose=False):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
                     CSVDownBranch[i].Fill()
+                corrmet_ptBranch.Fill()
+                corrmet_phiBranch.Fill()
+                corrmet_pt_scaleHBranch.Fill()
+                corrmet_phi_scaleHBranch.Fill()
+                corrmet_pt_scaleLBranch.Fill()
+                corrmet_pt_resHBranch.Fill()
+                corrmet_phi_resHBranch.Fill()
+                corrmet_pt_resLBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
@@ -340,7 +426,7 @@ for d in os.listdir(origin):
         continue
     if not d in samples:
         continue
-    p = multiprocessing.Process(target=processFile, args=(d,False,))
+    p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
 #    processFile(d, True)
