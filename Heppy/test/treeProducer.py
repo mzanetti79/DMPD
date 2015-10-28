@@ -571,7 +571,8 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nJets',            lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
-    NTupleVariable('nJetsNoFatJet',    lambda x: getattr(x, "nJetsNoFatJet", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
+    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), int, help='Number of xcleaned b-jets'),
 ]
 
 
@@ -587,6 +588,9 @@ SignalRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalDMVariables + [
         NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nu nu flag'),
+        NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+        NTupleVariable('nJetsNoFatJet50',    lambda x: getattr(x, "nJetsNoFatJet50", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+        NTupleVariable('nJetsNoFatJet100',    lambda x: getattr(x, "nJetsNoFatJet100", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
