@@ -153,9 +153,9 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWtoEN = False
         event.isWtoMN = False
         
-        event.nJetsNoFatJet30 = 0
-        event.nJetsNoFatJet50 = 0
-        event.nJetsNoFatJet100 = 0
+        event.nJetsNoFatJet30 = -1
+        event.nJetsNoFatJet50 = -1
+        event.nJetsNoFatJet100 = -1
         event.minDeltaPhi = 3.15
         
         if self.cfg_comp.isMC: 
