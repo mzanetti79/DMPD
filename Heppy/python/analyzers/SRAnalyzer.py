@@ -28,10 +28,15 @@ class SRAnalyzer( Analyzer ):
         
         if len(event.xcleanJetsAK8) > 0:
             for i, j in enumerate(event.xcleanJets):
-                if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), j.eta(), j.phi()) > 1.2 and j.pt() > 50.:
-                    event.nJetsNoFatJet += 1
+                if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), j.eta(), j.phi()) > 1.2:
+                    if j.pt() > 30.:
+                        event.nJetsNoFatJet30 += 1
+                    if j.pt() > 50.:
+                        event.nJetsNoFatJet50 += 1
+                    if j.pt() > 100.:
+                        event.nJetsNoFatJet100 += 1
         else:
-            event.nJetsNoFatJet = len(event.xcleanJets)
+            event.nJetsNoFatJet30 = event.nJetsNoFatJet50 = event.nJetsNoFatJet100 = len(event.xcleanJets)
         
         
         # Trigger

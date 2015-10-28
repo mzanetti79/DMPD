@@ -63,6 +63,8 @@ class PreselectionAnalyzer( Analyzer ):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
+            if j.deltaPhi_met < event.minDeltaPhi: event.minDeltaPhi = j.deltaPhi_met
+            
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
@@ -151,7 +153,10 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWtoEN = False
         event.isWtoMN = False
         
-        event.nJetsNoFatJet = 0
+        event.nJetsNoFatJet30 = 0
+        event.nJetsNoFatJet50 = 0
+        event.nJetsNoFatJet100 = 0
+        event.minDeltaPhi = 3.15
         
         if self.cfg_comp.isMC: 
             event.eventWeight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
