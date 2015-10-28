@@ -33,7 +33,7 @@ target = options.target
 json_path = options.json
 verboseon = options.verbose
 
-numberOfJets = {"ZCR" : 3, "WCR" : 4, "TCR" : 3, "SR": 4}
+numberOfJets = {"ZCR" : 3, "WCR" : 4, "TCR" : 3, "SR": 3}
 
 import json
 
@@ -53,6 +53,7 @@ if not os.path.exists(target):
     print "Target directory", target,"does not exist, aborting..."
     exit()
 
+##############################
 
 ### Btagging setup ###
 
@@ -71,9 +72,9 @@ calib = ROOT.BTagCalibration("csvv2", ref_btag_file)
 reader = {}
 for i, w in enumerate(wp):
     reader[w] = {}
-    reader[w][0] = ROOT.BTagCalibrationReader(calib, i, "mujets", "central")
-    reader[w][1] = ROOT.BTagCalibrationReader(calib, i, "mujets", "up")
-    reader[w][-1] = ROOT.BTagCalibrationReader(calib, i, "mujets", "down")
+    reader[w][0] = ROOT.BTagCalibrationReader(calib, i, "comb", "central")
+    reader[w][1] = ROOT.BTagCalibrationReader(calib, i, "comb", "up")
+    reader[w][-1] = ROOT.BTagCalibrationReader(calib, i, "comb", "down")
 
 
 shFile = TFile(ref_csv_file, "READ")
@@ -129,7 +130,7 @@ def returnReshapedDiscr(f, discr, pt, eta, sigma=""):
     y1 = returnNewWorkingPoint(f, i1, pt, eta, sigma)
     return y0 + (discr-x0)*((y1-y0)/(x1-x0))
 
-####################
+##############################
 
 ### ADD RECOIL CORRECTIONS ###
 
@@ -138,7 +139,7 @@ Recoil = ROOT.RecoilCorrector(ref_recoilMC_file)
 Recoil.addDataFile(ref_recoilData_file)
 Recoil.addMCFile(ref_recoilMC_file)
 
-############################## 
+##############################
 
 
 def isJSON(run, lumi):
@@ -261,9 +262,10 @@ def processFile(dir_name, verbose=False):
             CSVUpBranch = {}
             CSVDownBranch = {}
             for i in range(njets):
-                CSVBranch[i] = new_tree.Branch('jet%d_rCSV' % (i+1), CSV[i], 'jet%d_rCSV/F' % (i+1))
-                CSVUpBranch[i] = new_tree.Branch('jet%d_rCSVUp' % (i+1), CSVUp[i], 'jet%d_rCSVUp/F' % (i+1))
-                CSVDownBranch[i] = new_tree.Branch('jet%d_rCSVDown' % (i+1), CSVDown[i], 'jet%d_rCSVDown/F' % (i+1))
+                CSVBranch[i] = new_tree.Branch('jet%d_CSVWeight' % (i+1), CSV[i], 'jet%d_rCSV/F' % (i+1))
+                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVWeightUp' % (i+1), CSVUp[i], 'jet%d_rCSVUp/F' % (i+1))
+                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVWeightDown' % (i+1), CSVDown[i], 'jet%d_rCSVDown/F' % (i+1))
+            
             corrmet_ptBranch        = new_tree.Branch('corrmet_pt',        corrmet_pt,        'corrmet_pt/F')
             corrmet_phiBranch       = new_tree.Branch('corrmet_phi',       corrmet_phi,       'corrmet_phi/F')
             corrmet_pt_scaleHBranch = new_tree.Branch('corrmet_pt_scaleH', corrmet_pt_scaleH, 'corrmet_pt_scaleH/F')
@@ -301,9 +303,16 @@ def processFile(dir_name, verbose=False):
                         eta = getattr(obj, "jet%d_eta" % (i+1), -1)
                         flav = getattr(obj, "jet%d_flavour" % (i+1), -1)
                         csv = getattr(obj, "jet%d_CSV" % (i+1), -1)
-                        CSV[i][0] = returnReshapedDiscr(flav, csv, pt, eta, 0)
-                        CSVUp[i][0] = returnReshapedDiscr(flav, csv, pt, eta, +1)
-                        CSVDown[i][0] = returnReshapedDiscr(flav, csv, pt, eta, -1)
+                        pt = min(pt, 669)
+                        if abs(flav) == 5: fl = 0
+                        elif abs(flav) == 4: fl = 1
+                        else: fl = 2
+                        CSV[i][0] = reader["M"][0].eval(fl, eta, pt)
+                        CSVUp[i][0] = reader["M"][1].eval(fl, eta, pt)
+                        CSVDown[i][0] = reader["M"][-1].eval(fl, eta, pt)
+                        CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                     
                     cmetpt         = ROOT.Double(obj.met_pt)
                     cmetphi        = ROOT.Double(obj.met_phi)
