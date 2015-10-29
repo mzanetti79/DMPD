@@ -432,6 +432,12 @@ MEtAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
+MEtNoHFAnalyzer = copy.deepcopy(MEtAnalyzer)
+MEtNoHFAnalyzer.metCollection = "slimmedMETsNoHF"
+MEtNoHFAnalyzer.noPUMetCollection = "slimmedMETsNoHF"
+MEtNoHFAnalyzer.collectionPostFix = "NoHF"
+
+
 from DMPD.Heppy.analyzers.METNoHFAnalyzer import METNoHFAnalyzer
 METNoHFAnalyzer = cfg.Analyzer(
 
@@ -639,9 +645,8 @@ SignalRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
-        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'theX'      : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
@@ -678,9 +683,8 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
-        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
     },
@@ -716,9 +720,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
-        'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
     },
@@ -753,7 +756,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'    : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
     },
     collections = {
@@ -782,7 +785,7 @@ GammaControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalDMVariables + [],
     globalObjects = {
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         'genmet'     : NTupleObject('genmet',  metType, help='MET at generation level'),
     },
@@ -827,8 +830,8 @@ XZhTreeProducer= cfg.Analyzer(
     globalObjects = {
         'X'         : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
-        'met'       : NTupleObject('met',  metType, help='PF MET after default type 1 corrections'),
-        'rawmet'     : NTupleObject('rawmet',  metType, help='uncorrected (raw) PF MET'),
+        'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         },
     collections = {
         'highptLeptons' : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
@@ -850,6 +853,7 @@ sequence = [
     pileupAnalyzer,
     vertexAnalyzer,
     MEtAnalyzer,
+    MEtNoHFAnalyzer,
     #METNoHFAnalyzer,
     photonAnalyzer,
     leptonAnalyzer,
@@ -941,7 +945,7 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### MC ###
-#selectedComponents = [
+selectedComponents = [
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
@@ -1093,7 +1097,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ###sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-###sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
@@ -1106,10 +1110,10 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
-#]
+]
 
 ## DATA ###
-selectedComponents = [
+#selectedComponents = [
   # Run2015D
 #  sample['DoubleEG_Run2015D-05Oct2015-v1'],
 #  sample['DoubleEG_Run2015D-PromptReco-v4'],
@@ -1119,11 +1123,11 @@ selectedComponents = [
 #  sample['MET_Run2015D-PromptReco-v4'],
 #  sample['SingleElectron_Run2015D-05Oct2015-v1'],
 #  sample['SingleElectron_Run2015D-PromptReco-v4'],
-  sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#  sample['SingleMuon_Run2015D-05Oct2015-v1'],
 #  sample['SingleMuon_Run2015D-PromptReco-v4'],
 #  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
 #  sample['SinglePhoton_Run2015D-PromptReco-v4'],
-]
+#]
 #filterAnalyzer.processName = 'RECO'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
@@ -1155,7 +1159,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 1,
-        nEvents=1000000000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
