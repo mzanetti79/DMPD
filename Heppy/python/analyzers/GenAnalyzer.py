@@ -69,6 +69,10 @@ class GenAnalyzer( Analyzer ):
             setup.services["outputfile"].file.cd("LheWeights")
             self.Hist["LhePDFWeights"] = ROOT.TH1F("LhePDFWeights", ";Weights", 200, 0., 2.)
             self.Hist["LheScaleWeights"] = ROOT.TH1F("LheScaleWeights", ";Weights", 200, 0., 2.)
+            self.Hist["LhePDFWeightsL"] = ROOT.TH1F("LhePDFWeightsL", ";Weights", 200, 0., 2.)
+            self.Hist["LheScaleWeightsL"] = ROOT.TH1F("LheScaleWeightsL", ";Weights", 200, 0., 2.)
+            self.Hist["LhePDFWeightsB"] = ROOT.TH1F("LhePDFWeightsB", ";Weights", 200, 0., 2.)
+            self.Hist["LheScaleWeightsB"] = ROOT.TH1F("LheScaleWeightsB", ";Weights", 200, 0., 2.)
             for i in range(109+1):
                 name = "LheWeight_%d" % i
                 self.Hist[name] = ROOT.TH1F(name, name+";Z p_{T} [GeV]", 2500, 0., 2500.)
@@ -181,8 +185,14 @@ class GenAnalyzer( Analyzer ):
         self.Hist["LheWeight_0"].Fill(event.lheV_pt, weight)
         for i in range(min(109, len(event.LHE_weights))):
             w = abs(event.LHE_weights[i].wgt/event.LHE_originalWeight)
-            if i<9: self.Hist["LheScaleWeights"].Fill(w)
-            else: self.Hist["LhePDFWeights"].Fill(w)
+            if i<9:
+                self.Hist["LheScaleWeights"].Fill(w)
+                if event.lheNb == 0: self.Hist["LheScaleWeightsL"].Fill(w)
+                else: self.Hist["LheScaleWeightsB"].Fill(w)
+            else:
+                self.Hist["LhePDFWeights"].Fill(w)
+                if event.lheNb == 0: self.Hist["LhePDFWeightsL"].Fill(w)
+                else: self.Hist["LhePDFWeightsB"].Fill(w)
             self.Hist["LheWeight_%d" % (i+1)].Fill(event.lheV_pt, w)
             if event.lheNb == 0: self.Hist["LheWeightB_%d" % (i+1)].Fill(event.lheV_pt, w)
             else: self.Hist["LheWeightL_%d" % (i+1)].Fill(event.lheV_pt, w)
