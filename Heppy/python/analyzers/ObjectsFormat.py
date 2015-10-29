@@ -196,10 +196,10 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 metType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [])
 
 metFullType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [
-#    NTupleVariable("ptRaw",    lambda x : x.uncorPt(), float, mcOnly=False, help="Raw MET pt"),
-#    NTupleVariable("phiRaw",    lambda x : x.uncorPhi(), float, mcOnly=False, help="Raw MET phi"),
-#    NTupleVariable("ptGen",    lambda x : x.genMET().pt(), float, mcOnly=False, help="Gen MET pt"),
-#    NTupleVariable("phiGen",    lambda x : x.genMET().phi(), float, mcOnly=False, help="Gen MET phi"),
+    NTupleVariable("ptRaw",    lambda x : x.uncorPt(), float, mcOnly=False, help="Raw MET pt"),
+    NTupleVariable("phiRaw",    lambda x : x.uncorPhi(), float, mcOnly=False, help="Raw MET phi"),
+    NTupleVariable("ptGen",    lambda x : x.genMET().pt(), float, mcOnly=False, help="Gen MET pt"),
+    NTupleVariable("phiGen",    lambda x : x.genMET().phi(), float, mcOnly=False, help="Gen MET phi"),
     NTupleVariable("ptJERUp",    lambda x : x.shiftedPt(0), float, mcOnly=False, help="pt with JER Up (METUncertainty 0)"),
     NTupleVariable("ptJERDown",    lambda x : x.shiftedPt(1), float, mcOnly=False, help="pt with JER Down (METUncertainty 1)"),
     NTupleVariable("ptJESUp",    lambda x : x.shiftedPt(2), float, mcOnly=False, help="pt with JES Up (METUncertainty 2)"),
