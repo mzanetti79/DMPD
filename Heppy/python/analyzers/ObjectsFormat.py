@@ -11,7 +11,7 @@ particleType = NTupleObjectType("particle", baseObjectTypes = [ fourVectorType ]
 ])
 
 candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
+    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), float, help="transverse mass"),
     NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
     NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
     NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
@@ -22,9 +22,9 @@ candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType
 
 
 candidateFullType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
-    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), int, help="transverse mass"),
-    NTupleVariable("cmass",   lambda x : getattr(x, "mC", -1.), int, help="collinear mass"),
-    NTupleVariable("kmass",   lambda x : getattr(x, "mK", -1.), int, help="Mass with kinematic fit"),
+    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), float, help="transverse mass"),
+    NTupleVariable("cmass",   lambda x : getattr(x, "mC", -1.), float, help="collinear mass"),
+    NTupleVariable("kmass",   lambda x : getattr(x, "mK", -1.), float, help="Mass with kinematic fit"),
     NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
     NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
     NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
@@ -63,9 +63,9 @@ muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variable
     NTupleVariable("mediumId", lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else -9, int, help="Muon POG Medium id"),
     NTupleVariable("tightId",  lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else -9, int, help="Muon POG Tight id"),
     # Relative Isolations fixed ratia / variable ratio
-    NTupleVariable("relIso03",   lambda x : x.relIso03, help="Muon PF Rel Iso, R=0.3, pile-up corrected"),
-    NTupleVariable("relIso04",   lambda x : x.relIso04, help="Muon PF Rel Iso, R=0.4, pile-up corrected"),
-    NTupleVariable("miniIso",    lambda x : x.miniRelIso, help="Muon Rel Mini-Iso, pile-up corrected"),
+    NTupleVariable("relIso03",   lambda x : x.relIso03, float, help="Muon PF Rel Iso, R=0.3, pile-up corrected"),
+    NTupleVariable("relIso04",   lambda x : x.relIso04, float, help="Muon PF Rel Iso, R=0.4, pile-up corrected"),
+    NTupleVariable("miniIso",    lambda x : x.miniRelIso, float, help="Muon Rel Mini-Iso, pile-up corrected"),
     # Impact parameters
     NTupleVariable("ip2d", lambda x : x.dB(1), float, help="Lepton 2D impact parameter"),
     NTupleVariable("ip3d", lambda x : x.dB(2), float, help="Lepton 3D impact parameter"),
@@ -81,8 +81,8 @@ electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], 
     NTupleVariable("mediumId", lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Medium id"),
     NTupleVariable("tightId",  lambda x : x.cutBasedId("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight") if abs(x.pdgId())==11 else -9, int, help="Electron POG Cut-based Tight id"),
     # Isolations with the two radia
-    NTupleVariable("relIso03",  lambda x : x.relIso03, help="Electron PF Rel Iso, R=0.3, pile-up corrected"),
-    NTupleVariable("relIso04",  lambda x : x.relIso04, help="Electron PF Rel Iso, R=0.4, pile-up corrected"),
+    NTupleVariable("relIso03",  lambda x : x.relIso03, float, help="Electron PF Rel Iso, R=0.3, pile-up corrected"),
+    NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="Electron PF Rel Iso, R=0.4, pile-up corrected"),
     # Impact parameters
     NTupleVariable("ip2d", lambda x : x.dB(1), float, help="Lepton 2D impact parameter"),
     NTupleVariable("ip3d", lambda x : x.dB(2), float, help="Lepton 3D impact parameter"),
@@ -101,8 +101,8 @@ jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variabl
     #NTupleVariable("rawPt",  lambda x : x.pt()*x.rawFactor(), help="p_{T} before JEC"),
     #NTupleVariable("ptUnc",  lambda x : x.pt()*x.jetEnergyCorrUncertainty(), help="JEC uncertainty"),
     #NTupleVariable("corr",  lambda x : x.pt()*x.rawFactor()*x.corr, help="JEC uncertainty"),
-    NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), help="JEC uncertainty Up"),
-    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESDown", 0), help="JEC uncertainty Down"),
+    NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Up"),
+    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESDown", 0), float, help="JEC uncertainty Down"),
     NTupleVariable("chf",    lambda x : x.chargedHadronEnergyFraction() , float, mcOnly=False,help="Jet charged hadron energy fraction"),
     NTupleVariable("nhf",    lambda x : x.neutralHadronEnergyFraction() , float, mcOnly=False,help="Jet neutral hadron energy fraction"),
     NTupleVariable("phf",    lambda x : x.neutralEmEnergyFraction() , float, mcOnly=False,help="Jet neutral electromagnetic energy fraction"),
@@ -140,8 +140,8 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     #NTupleVariable("mcPt",   lambda x : x.mcJet.pt() if getattr(x,"mcJet",None) else 0., mcOnly=True, help="p_{T} of associated gen jet"),
     #NTupleVariable("rawPt",  lambda x : x.pt()*x.rawFactor(), help="p_{T} before JEC"),
     #NTupleVariable("ptUnc",  lambda x : x.pt()*x.jetEnergyCorrUncertainty(), help="JEC uncertainty"),
-    NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), help="JEC uncertainty Up"),
-    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESUp", 0), help="JEC uncertainty Down"),
+    NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Up"),
+    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Down"),
     NTupleVariable("chf",    lambda x : x.chargedHadronEnergyFraction() , float, mcOnly=False,help="Jet charged hadron energy fraction"),
     NTupleVariable("nhf",    lambda x : x.neutralHadronEnergyFraction() , float, mcOnly=False,help="Jet neutral hadron energy fraction"),
     NTupleVariable("phf",    lambda x : x.neutralEmEnergyFraction() , float, mcOnly=False,help="Jet neutral electromagnetic energy fraction"),
