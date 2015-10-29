@@ -296,7 +296,7 @@ fatJetAnalyzer = cfg.Analyzer(
     recalibrateJets             = False,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     addJECShifts                = False,
-    smearJets                   = True,
+    smearJets                   = False,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -449,6 +449,7 @@ from DMPD.Heppy.analyzers.PreselectionAnalyzer import PreselectionAnalyzer
 PreselectionAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = PreselectionAnalyzer,
+    addJECUncertainties         = True,
     recalibrateMass             = True,
     recalibrationType           = 'AK8PFchs',
     jecPath                     = '%s/src/DMPD/Heppy/python/tools/JEC/' % os.environ['CMSSW_BASE'], 
@@ -925,7 +926,7 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### MC ###
-#selectedComponents = [
+selectedComponents = [
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
@@ -1077,7 +1078,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ###sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-###sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
@@ -1090,25 +1091,25 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ###sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
-#]
+]
 
 ## DATA ###
-selectedComponents = [
+#selectedComponents = [
 # Run2015D
 #sample['DoubleEG_Run2015D-05Oct2015-v1'],
 #sample['DoubleEG_Run2015D-PromptReco-v4'],
 #sample['DoubleMuon_Run2015D-05Oct2015-v1'],
 #sample['DoubleMuon_Run2015D-PromptReco-v4'],
-sample['MET_Run2015D-05Oct2015-v1'],
-sample['MET_Run2015D-PromptReco-v4'],
+#sample['MET_Run2015D-05Oct2015-v1'],
+#sample['MET_Run2015D-PromptReco-v4'],
 #sample['SingleElectron_Run2015D-05Oct2015-v1'],
 #sample['SingleElectron_Run2015D-PromptReco-v4'],
-sample['SingleMuon_Run2015D-05Oct2015-v1'],
-sample['SingleMuon_Run2015D-PromptReco-v4'],
+#sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#sample['SingleMuon_Run2015D-PromptReco-v4'],
 #sample['SinglePhoton_Run2015D-05Oct2015-v1'],
 #sample['SinglePhoton_Run2015D-PromptReco-v4'],
-]
-filterAnalyzer.processName = 'RECO'
+#]
+#filterAnalyzer.processName = 'RECO'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
 #selectedComponents = [sample['SYNCH_TTBar'],]
