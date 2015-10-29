@@ -602,7 +602,7 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
     NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
-    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), int, help='Number of xcleaned b-jets'),
+    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
 ]
 
 
