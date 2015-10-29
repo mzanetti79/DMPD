@@ -94,23 +94,6 @@ class PreselectionAnalyzer( Analyzer ):
                 j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
             self.addCorrectedJetMass(event, j)
             self.addJECUnc(event, j)
-        
-        
-#    def addJESUncertainty(self, event):
-#        path = "%s/src/CMGTools/RootTools/data/jec" % os.environ['CMSSW_BASE'];
-#        globalTag = "GR_70_V2_AN1"
-#        jetFlavour = "AK4PFchs"
-#        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
-#        for i, j in enumerate(event.xcleanJets):
-#            JetUncertainty.setJetEta(j.eta())
-#            JetUncertainty.setJetPt(j.pt())
-#            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
-#        jetFlavour = "AK8PFchs"
-#        JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour));
-#        for i, j in enumerate(event.xcleanJetsAK8):
-#            JetUncertainty.setJetEta(j.eta())
-#            JetUncertainty.setJetPt(j.pt())
-#            j.jetEnergyCorrUncertainty = JetUncertainty.getUncertainty(True) 
     
     
     def addFakeMet(self, event, particles):
@@ -208,7 +191,6 @@ class PreselectionAnalyzer( Analyzer ):
         
         
         self.addJetVariables(event)
-        #self.addJESUncertainty(event)
         
         self.Counter.Fill(-1, event.eventWeight)
         
