@@ -42,6 +42,12 @@ class PreselectionAnalyzer( Analyzer ):
             #Step3 (Construct a FactorizedJetCorrector object) 
             self.JetCorrector = ROOT.FactorizedJetCorrector(self.vPar)
         
+        if self.cfg_ana.addJECUncertainties:
+            path = os.path.expandvars(self.cfg_ana.jecPath)
+            globalTag = self.cfg_ana.mcGT if self.cfg_comp.isMC else self.cfg_ana.dataGT
+            jetFlavour = self.cfg_ana.recalibrationType
+            self.JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour))
+            
     
     def addCorrectedJetMass(self, event, jet):
         if self.cfg_ana.recalibrateMass:
@@ -58,12 +64,27 @@ class PreselectionAnalyzer( Analyzer ):
         jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
         jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
     
+    def addJECUnc(self, event, jet):
+        if self.cfg_ana.addJECUncertainties:
+            self.JetUncertainty.setJetEta(jet.eta())
+            self.JetUncertainty.setJetPt(jet.pt())
+            jet.JECUnc = self.JetUncertainty.getUncertainty(True) 
+            corr = 1./jet.rawFactor()
+            corrUp = corr * max(0, 1+jet.JECUnc)
+            corrDown = corr * max(0, 1-jet.JECUnc)
+        else:
+            corr, corrUp, corrDown = 1, 1, 1
+        
+        jet.ptJESUp = jet.pt() * corrUp * jet.rawFactor()
+        jet.ptJESDown = jet.pt() * corrDown * jet.rawFactor()
+    
     
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
             if j.deltaPhi_met < event.minDeltaPhi: event.minDeltaPhi = j.deltaPhi_met
+            self.addJECUnc(event, j)
             
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
@@ -72,6 +93,7 @@ class PreselectionAnalyzer( Analyzer ):
             if len(j.subjets('SoftDrop')) >= 2:
                 j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
             self.addCorrectedJetMass(event, j)
+            self.addJECUnc(event, j)
         
         
 #    def addJESUncertainty(self, event):
