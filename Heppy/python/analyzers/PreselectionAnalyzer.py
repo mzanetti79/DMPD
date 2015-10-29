@@ -65,7 +65,7 @@ class PreselectionAnalyzer( Analyzer ):
         jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
     
     def addJECUnc(self, event, jet):
-        if self.cfg_ana.addJECUncertainties:
+        if self.cfg_ana.addJECUncertainties and self.cfg_comp.isMC:
             self.JetUncertainty.setJetEta(jet.eta())
             self.JetUncertainty.setJetPt(jet.pt())
             jet.JECUnc = self.JetUncertainty.getUncertainty(True) 
