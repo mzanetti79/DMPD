@@ -589,7 +589,7 @@ globalEventVariables = [
     NTupleVariable('weight_7',         lambda x: abs(x.LHE_weights[6].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>6 else 1, float, help='LHE Weight Id 7'),
     NTupleVariable('weight_8',         lambda x: abs(x.LHE_weights[7].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>7 else 1, float, help='LHE Weight Id 8'),
     NTupleVariable('weight_9',         lambda x: abs(x.LHE_weights[8].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>8 else 1, float, help='LHE Weight Id 9'),
-    NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.), int, help='Number of true interactions'),
+    NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.) if hasattr(x, "nPU") and x.nPU is not None else -1, int, help='Number of true interactions'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
 ]
@@ -926,7 +926,7 @@ for i in mcsamples:
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 #### MC ###
-selectedComponents = [
+#selectedComponents = [
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
@@ -1078,7 +1078,7 @@ selectedComponents = [
 ###sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 ###sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+###sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
@@ -1091,24 +1091,24 @@ sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
 ###sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
-]
+#]
 
 ## DATA ###
-#selectedComponents = [
-# Run2015D
-#sample['DoubleEG_Run2015D-05Oct2015-v1'],
-#sample['DoubleEG_Run2015D-PromptReco-v4'],
-#sample['DoubleMuon_Run2015D-05Oct2015-v1'],
-#sample['DoubleMuon_Run2015D-PromptReco-v4'],
-#sample['MET_Run2015D-05Oct2015-v1'],
-#sample['MET_Run2015D-PromptReco-v4'],
-#sample['SingleElectron_Run2015D-05Oct2015-v1'],
-#sample['SingleElectron_Run2015D-PromptReco-v4'],
-#sample['SingleMuon_Run2015D-05Oct2015-v1'],
-#sample['SingleMuon_Run2015D-PromptReco-v4'],
-#sample['SinglePhoton_Run2015D-05Oct2015-v1'],
-#sample['SinglePhoton_Run2015D-PromptReco-v4'],
-#]
+selectedComponents = [
+  # Run2015D
+#  sample['DoubleEG_Run2015D-05Oct2015-v1'],
+#  sample['DoubleEG_Run2015D-PromptReco-v4'],
+#  sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+#  sample['DoubleMuon_Run2015D-PromptReco-v4'],
+#  sample['MET_Run2015D-05Oct2015-v1'],
+#  sample['MET_Run2015D-PromptReco-v4'],
+#  sample['SingleElectron_Run2015D-05Oct2015-v1'],
+#  sample['SingleElectron_Run2015D-PromptReco-v4'],
+  sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#  sample['SingleMuon_Run2015D-PromptReco-v4'],
+#  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+]
 #filterAnalyzer.processName = 'RECO'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
@@ -1140,7 +1140,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 1,
-        nEvents=1000,
+        nEvents=1000000000,
         )
     looper.loop()
     looper.write()
