@@ -180,15 +180,14 @@ class PreselectionAnalyzer( Analyzer ):
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
 #        event.xcleanJetsAK8JERDown = event.cleanJetsAK8JERDown
         
-        # Swap MET (met) and rawMET (uncorrected) collections
-        event.rawmet = copy.deepcopy(event.met)
-        
-        # MINIAOD v2 (Run 2015D)
-        px_ = event.met.uncorPx()
-        py_ = event.met.uncorPy()
-        pt_ = math.hypot(px_, py_)
-        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
-        
+#        # Swap MET (met) and rawMET (uncorrected) collections
+#        event.rawmet = copy.deepcopy(event.met)
+#        
+#        # MINIAOD v2 (Run 2015D)
+#        px_ = event.met.uncorPx()
+#        py_ = event.met.uncorPy()
+#        pt_ = math.hypot(px_, py_)
+#        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
         
         self.addJetVariables(event)
         
