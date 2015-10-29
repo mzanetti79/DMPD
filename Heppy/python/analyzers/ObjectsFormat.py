@@ -196,6 +196,24 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 metType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [])
 
 metFullType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [
+#    NTupleVariable("ptRaw",    lambda x : x.uncorPt(), float, mcOnly=False, help="Raw MET pt"),
+#    NTupleVariable("phiRaw",    lambda x : x.uncorPhi(), float, mcOnly=False, help="Raw MET phi"),
+#    NTupleVariable("ptGen",    lambda x : x.genMET().pt(), float, mcOnly=False, help="Gen MET pt"),
+#    NTupleVariable("phiGen",    lambda x : x.genMET().phi(), float, mcOnly=False, help="Gen MET phi"),
+    NTupleVariable("ptJERUp",    lambda x : x.shiftedPt(0), float, mcOnly=False, help="pt with JER Up (METUncertainty 0)"),
+    NTupleVariable("ptJERDown",    lambda x : x.shiftedPt(1), float, mcOnly=False, help="pt with JER Down (METUncertainty 1)"),
+    NTupleVariable("ptJESUp",    lambda x : x.shiftedPt(2), float, mcOnly=False, help="pt with JES Up (METUncertainty 2)"),
+    NTupleVariable("ptJESDown",    lambda x : x.shiftedPt(3), float, mcOnly=False, help="pt with JES Down (METUncertainty 3)"),
+    NTupleVariable("ptMUSUp",    lambda x : x.shiftedPt(4), float, mcOnly=False, help="pt with MUS Up (METUncertainty 4)"),
+    NTupleVariable("ptMUSDown",    lambda x : x.shiftedPt(5), float, mcOnly=False, help="pt with MUS Down (METUncertainty 5)"),
+    NTupleVariable("ptELSUp",    lambda x : x.shiftedPt(6), float, mcOnly=False, help="pt with ELS Up (METUncertainty 6)"),
+    NTupleVariable("ptELSDown",    lambda x : x.shiftedPt(7), float, mcOnly=False, help="pt with ELS Down (METUncertainty 7)"),
+    NTupleVariable("ptTAUUp",    lambda x : x.shiftedPt(8), float, mcOnly=False, help="pt with TAU Up (METUncertainty 8)"),
+    NTupleVariable("ptTAUDown",    lambda x : x.shiftedPt(9), float, mcOnly=False, help="pt with TAU Down (METUncertainty 9)"),
+    NTupleVariable("ptUNCUp",    lambda x : x.shiftedPt(10), float, mcOnly=False, help="pt with UNC Up (METUncertainty 10)"),
+    NTupleVariable("ptUNCDown",    lambda x : x.shiftedPt(11), float, mcOnly=False, help="pt with UNC Down (METUncertainty 11)"),
+    NTupleVariable("ptPHOUp",    lambda x : x.shiftedPt(12), float, mcOnly=False, help="pt with PHO Up (METUncertainty 12)"),
+    NTupleVariable("ptPHODown",    lambda x : x.shiftedPt(13), float, mcOnly=False, help="pt with PHO Down (METUncertainty 13)"),
 #    NTupleVariable("calo_pt",    lambda x : x.caloMETPt(), float, mcOnly=False, help="CaloMET pt"), #does not work if not CaloMET
 #    NTupleVariable("calo_phi",    lambda x : x.caloMETPhi(), float, mcOnly=False, help="CaloMET phi"), #does not work if not CaloMET
 #    NTupleVariable("sign",    lambda x : x.metSignificance() if x.isCaloMET() else -1., float, mcOnly=False, help="missing energy significance"), #does not work if not CaloMET
