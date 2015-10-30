@@ -5,10 +5,11 @@ from array import array
 from ROOT import TFile, TH1
 
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
-from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
-from DMPD.Heppy.samples.Data.fileLists import datasamples
-samples = datasamples.copy()
-samples.update(mcsamples)
+#from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
+#from DMPD.Heppy.samples.Data.fileLists import datasamples
+#samples = datasamples.copy()
+#samples.update(mcsamples)
+from DMPD.Heppy.samples.Spring15.xSections import xsections
 
 #ROOT.gROOT.SetBatch(1)
 
@@ -86,7 +87,7 @@ else: print " - BTagWeight Error: No Shape File"
 
 for i, f in enumerate(fl):
     #shape[f].Smooth(100)
-    shape[f].Rebin(10)
+    #shape[f].Rebin(10)
     shape[f].Scale(1./shape[f].Integral())
 
 
@@ -98,22 +99,24 @@ def returnNewWorkingPoint(f, p, pt, eta, sigma):
     integral = shape[fl[f]].Integral(shape[fl[f]].FindBin(workingpoint[p]), shape[fl[f]].GetNbinsX()+1)
     
     sf = reader[wp[p-1]][sigma].eval(f, eta, pt)
-    if sf == 0: return workingpoint[p]
+    if sf <= 0: return workingpoint[p]
     integral /= sf
     
     n = shape[fl[f]].GetNbinsX()+1
-    step = 10
+    step = 100
     for i in list(reversed(range(0, n, step))):
-        if shape[fl[f]].Integral(i-step, n) >= integral:
+        if shape[fl[f]].Integral(i-step + 1, n) >= integral:
             for j in list(reversed(range(0, i, step/10))):
-                if shape[fl[f]].Integral(j-step/10, n) >= integral:
-                    return (j-0.5*step/10)/(n-1)
+                if shape[fl[f]].Integral(j-step/10 + 1, n) >= integral:
+                    for k in list(reversed(range(0, j, step/100))):
+                        if shape[fl[f]].Integral(k-step/100 + 1, n) >= integral:
+                            return (k-1.)/(n-1.)
 
     return workingpoint[p]
 
 
 def returnReshapedDiscr(f, discr, pt, eta, sigma=""):
-    if discr<0.01 or discr>0.99: return discr
+    if discr<0.001 or discr>1: return discr
     if f<0 or f>2: return discr
     i0, i1 = 0, 4
     x0, x1 = 0., 1.
@@ -192,7 +195,7 @@ def processFile(dir_name, verbose=False):
     ref_hist = ref_file.Get('Counters/Counter')
     totalEntries = ref_hist.GetBinContent(0)
     if isMC:
-        weightXS = samples[dir_name]['xsec']/totalEntries
+        weightXS = xsections[dir_name]/totalEntries
         weightXS *= applyKfactor(dir_name)
     else:
         weightXS = 1.
@@ -248,6 +251,7 @@ def processFile(dir_name, verbose=False):
         
         # Copy trees
         elif obj.IsA().InheritsFrom("TTree"):
+            if obj.GetName() != "TCR": continue
             nev = obj.GetEntriesFast()
             njets = numberOfJets[obj.GetName()] if obj.GetName() in numberOfJets else 0 #FIXME
             new_file.cd()
@@ -262,9 +266,9 @@ def processFile(dir_name, verbose=False):
             CSVUpBranch = {}
             CSVDownBranch = {}
             for i in range(njets):
-                CSVBranch[i] = new_tree.Branch('jet%d_CSVWeight' % (i+1), CSV[i], 'jet%d_rCSV/F' % (i+1))
-                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVWeightUp' % (i+1), CSVUp[i], 'jet%d_rCSVUp/F' % (i+1))
-                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVWeightDown' % (i+1), CSVDown[i], 'jet%d_rCSVDown/F' % (i+1))
+                CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1))
+                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1))
+                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1))
             
             corrmet_ptBranch        = new_tree.Branch('corrmet_pt',        corrmet_pt,        'corrmet_pt/F')
             corrmet_phiBranch       = new_tree.Branch('corrmet_phi',       corrmet_phi,       'corrmet_phi/F')
@@ -307,9 +311,9 @@ def processFile(dir_name, verbose=False):
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
-                        CSV[i][0] = reader["M"][0].eval(fl, eta, pt)
-                        CSVUp[i][0] = reader["M"][1].eval(fl, eta, pt)
-                        CSVDown[i][0] = reader["M"][-1].eval(fl, eta, pt)
+#                        CSV[i][0] = reader["M"][0].eval(fl, eta, pt)
+#                        CSVUp[i][0] = reader["M"][1].eval(fl, eta, pt)
+#                        CSVDown[i][0] = reader["M"][-1].eval(fl, eta, pt)
                         CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
                         CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
@@ -433,7 +437,7 @@ jobs = []
 for d in os.listdir(origin):
     if d.startswith('.') or 'Chunk' in d:
         continue
-    if not d in samples:
+    if not d in xsections.keys():
         continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
