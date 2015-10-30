@@ -151,4 +151,18 @@ xsections   = {
     'ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph' : 0.05827,
     'ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph' : 0.05827,
     'ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph' : 0.05827,
+    #
+    'SingleMuon_Run2015D-PromptReco' : -999.,
+    'SingleElectron_Run2015D-PromptReco' : -999.,
+    'DoubleEG_Run2015D-PromptReco' : -999.,
+    'DoubleMuon_Run2015D-PromptReco' : -999.,
+    'SinglePhoton_Run2015D-PromptReco' : -999.,
+    'SingleMuon_Run2015D-05Oct2015' : -999.,
+    'MET_Run2015D-PromptReco' : -999.,
+    'MET_Run2015D-05Oct2015' : -999.,
+    'DoubleMuon_Run2015D-05Oct2015' : -999.,
+    'SinglePhoton_Run2015D-05Oct2015' : -999.,
+    'SingleElectron_Run2015D-05Oct2015' : -999.,
+    'DoubleEG_Run2015D-05Oct2015' : -999.,
+    
 }

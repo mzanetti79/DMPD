@@ -13,19 +13,19 @@ from DMPD.Heppy.samples.Spring15.xSections import xsections
 
 #ROOT.gROOT.SetBatch(1)
 
-ref_pu_file = "%s/src/DMPD/Heppy/python/tools/PU.root" % os.environ['CMSSW_BASE']
-ref_btag_file = "%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv" % os.environ['CMSSW_BASE']
-ref_csv_file = "%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root" % os.environ['CMSSW_BASE']
-ref_recoilMC_file = "%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root" % os.environ['CMSSW_BASE']
-ref_recoilData_file = "%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root" % os.environ['CMSSW_BASE']
+ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU.root' % os.environ['CMSSW_BASE']
+ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
+ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
+ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
+ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
 
 import optparse
-usage = "usage: %prog [options]"
+usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
-parser.add_option("-i", "--input", action="store", type="string", dest="origin", default="")
-parser.add_option("-o", "--output", action="store", type="string", dest="target", default="")
-parser.add_option("-j", "--json", action="store", type="string", dest="json", default="")
-parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
+parser.add_option('-i', '--input', action='store', type='string', dest='origin', default='')
+parser.add_option('-o', '--output', action='store', type='string', dest='target', default='')
+parser.add_option('-j', '--json', action='store', type='string', dest='json', default='')
+parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False)
 
 (options, args) = parser.parse_args()
 
@@ -34,12 +34,12 @@ target = options.target
 json_path = options.json
 verboseon = options.verbose
 
-numberOfJets = {"ZCR" : 3, "WCR" : 4, "TCR" : 3, "SR": 3}
+numberOfJets = {'ZCR' : 3, 'WCR' : 4, 'TCR' : 3, 'SR': 3}
 
 import json
 
 if len(json_path) <= 0 or not os.path.exists(json_path):
-    print "  WARNING, no JSON file (-j option) has been specified"#. Press Enter to continue"
+    print '  WARNING, no JSON file (-j option) has been specified'#. Press Enter to continue'
     #raw_input()
     isJson_file = False
 else:
@@ -48,10 +48,10 @@ else:
     isJson_file = True
 
 if not os.path.exists(origin):
-    print "Origin directory", origin, "does not exist, aborting..."
+    print 'Origin directory', origin, 'does not exist, aborting...'
     exit()
 if not os.path.exists(target):
-    print "Target directory", target,"does not exist, aborting..."
+    print 'Target directory', target,'does not exist, aborting...'
     exit()
 
 ##############################
@@ -64,26 +64,26 @@ ROOT.gSystem.Load('libCondFormatsBTagObjects')
 # OR using standalone code:
 ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/BTAG/BTagCalibrationStandalone.cc+' % os.environ['CMSSW_BASE'])
 
-fl = ["B", "C", "L"]
-wp = ["L", "M", "T"]
+fl = ['B', 'C', 'L']
+wp = ['L', 'M', 'T']
 workingpoint = [0., 0.605, 0.890, 0.980, 1.]
 shape = {}
 
-calib = ROOT.BTagCalibration("csvv2", ref_btag_file)
+calib = ROOT.BTagCalibration('csvv2', ref_btag_file)
 reader = {}
 for i, w in enumerate(wp):
     reader[w] = {}
-    reader[w][0] = ROOT.BTagCalibrationReader(calib, i, "comb", "central")
-    reader[w][1] = ROOT.BTagCalibrationReader(calib, i, "comb", "up")
-    reader[w][-1] = ROOT.BTagCalibrationReader(calib, i, "comb", "down")
+    reader[w][0] = ROOT.BTagCalibrationReader(calib, i, 'comb', 'central')
+    reader[w][1] = ROOT.BTagCalibrationReader(calib, i, 'comb', 'up')
+    reader[w][-1] = ROOT.BTagCalibrationReader(calib, i, 'comb', 'down')
 
 
-shFile = TFile(ref_csv_file, "READ")
+shFile = TFile(ref_csv_file, 'READ')
 shFile.cd()
 if not shFile.IsZombie():
     for i, f in enumerate(fl):
-        shape[f] = shFile.Get("j_bTagDiscr"+f)
-else: print " - BTagWeight Error: No Shape File"
+        shape[f] = shFile.Get('j_bTagDiscr'+f)
+else: print ' - BTagWeight Error: No Shape File'
 
 for i, f in enumerate(fl):
     #shape[f].Smooth(100)
@@ -92,8 +92,8 @@ for i, f in enumerate(fl):
 
 
 def returnNewWorkingPoint(f, p, pt, eta, sigma):
-    if f<0 or f>2: print " - BTagWeight Error: unrecognized flavour", f
-    if p<0 or p>4: print " - BTagWeight Error: working point", p, "not defined"
+    if f<0 or f>2: print ' - BTagWeight Error: unrecognized flavour', f
+    if p<0 or p>4: print ' - BTagWeight Error: working point', p, 'not defined'
     if p==0 or p==4: return workingpoint[p]
     
     integral = shape[fl[f]].Integral(shape[fl[f]].FindBin(workingpoint[p]), shape[fl[f]].GetNbinsX()+1)
@@ -115,7 +115,7 @@ def returnNewWorkingPoint(f, p, pt, eta, sigma):
     return workingpoint[p]
 
 
-def returnresUpapedDiscr(f, discr, pt, eta, sigma=""):
+def returnresUpapedDiscr(f, discr, pt, eta, sigma=''):
     if discr<0.001 or discr>1: return discr
     if f<0 or f>2: return discr
     i0, i1 = 0, 4
@@ -146,7 +146,7 @@ Recoil.addMCFile(ref_recoilMC_file)
 
 
 def isJSON(run, lumi):
-    runstr = "%d" % run
+    runstr = '%d' % run
     if not runstr in json_data:
         return False
     else:
@@ -169,43 +169,43 @@ def applyKfactor(name):
 
 def processFile(dir_name, verbose=False):
     
-    #print "##################################################"
-    print dir_name#, ":"
-    #print "##################################################"
+    #print '##################################################'
+    print dir_name#, ':'
+    #print '##################################################'
     
     isMC = not '2015' in dir_name
     
     # Unweighted input
-    ref_file_name = origin + "/" + dir_name + "/Loop/tree.root"
+    ref_file_name = origin + '/' + dir_name + '/Loop/tree.root'
     if not os.path.exists(ref_file_name): 
-        print "  WARNING: file", ref_file_name, "does not exist, continuing"
+        print '  WARNING: file', ref_file_name, 'does not exist, continuing'
         return True
     
     # Weighted output
-    new_file_name = target + "/" + dir_name + ".root"
+    new_file_name = target + '/' + dir_name + '.root'
     if os.path.exists(new_file_name):
-        print "  WARNING: weighted file exists, overwriting", new_file_name
+        print '  WARNING: weighted file exists, overwriting', new_file_name
         #return True
     
-    new_file = TFile(new_file_name, "RECREATE")
+    new_file = TFile(new_file_name, 'RECREATE')
     new_file.cd()
     
     # Get event number
-    ref_file = TFile(ref_file_name, "READ")
+    ref_file = TFile(ref_file_name, 'READ')
     ref_hist = ref_file.Get('Counters/Counter')
     totalEntries = ref_hist.GetBinContent(0)
     if isMC:
-        weightXS = xsections[dir_name]/totalEntries
+        weightXS = xsections[dir_name[:-3]]/totalEntries
         weightXS *= applyKfactor(dir_name)
     else:
         weightXS = 1.
     
     # PU reweighting
-    puFile = TFile(ref_pu_file, "READ")
-    puData = puFile.Get("data")
-    puMC = puFile.Get("mc")
-    puRatio = puFile.Get("ratio")
-    if verbose: print "PU histogram entries: ", puRatio.GetEntries()
+    puFile = TFile(ref_pu_file, 'READ')
+    puData = puFile.Get('data')
+    puMC = puFile.Get('mc')
+    puRatio = puFile.Get('ratio')
+    if verbose: print 'PU histogram entries: ', puRatio.GetEntries()
     
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
@@ -225,33 +225,34 @@ def processFile(dir_name, verbose=False):
     cormet_pt         = array('f', [0.0])  
     cormet_phi        = array('f', [0.0])  
     cormet_ptScaleUp  = array('f', [0.0])  
-    cormet_phiScaleUp = array('f', [0.0])
-    cormet_ptScaleDown  = array('f', [0.0])
-    cormet_phiScaleDown = array('f', [0.0])  
+    cormet_ptScaleDown= array('f', [0.0])
     cormet_ptResUp    = array('f', [0.0])
-    cormet_phiResUp   = array('f', [0.0])
-    cormet_ptResDown    = array('f', [0.0])
-    cormet_phiResDown   = array('f', [0.0])   
-    
+    cormet_ptResDown  = array('f', [0.0])
+    corfakemet_pt         = array('f', [0.0])  
+    corfakemet_phi        = array('f', [0.0])  
+    corfakemet_ptScaleUp  = array('f', [0.0])  
+    corfakemet_ptScaleDown= array('f', [0.0])
+    corfakemet_ptResUp    = array('f', [0.0])
+    corfakemet_ptResDown  = array('f', [0.0])
+
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
           
         # Copy and rescale histograms
-        if obj.IsA().InheritsFrom("TH1"):
-            if verbose: print " + TH1:", obj.GetName()
+        if obj.IsA().InheritsFrom('TH1'):
+            if verbose: print ' + TH1:', obj.GetName()
             new_file.cd()
-            #if "SR" in obj.GetName() or "CR" in obj.GetName():
+            #if 'SR' in obj.GetName() or 'CR' in obj.GetName():
             #    obj.Add(ref_hist)
-            if "Counter" in obj.GetName():
+            if 'Counter' in obj.GetName():
                 obj.Scale(weightXS)
             obj.SetBinContent(0, totalEntries)
             new_file.cd()
             obj.Write()
         
         # Copy trees
-        elif obj.IsA().InheritsFrom("TTree"):
-            if obj.GetName() != "TCR": continue
+        elif obj.IsA().InheritsFrom('TTree'):
             nev = obj.GetEntriesFast()
             njets = numberOfJets[obj.GetName()] if obj.GetName() in numberOfJets else 0 #FIXME
             new_file.cd()
@@ -273,23 +274,26 @@ def processFile(dir_name, verbose=False):
             cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
             cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
             cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
-            cormet_phiScaleUpBranch  = new_tree.Branch('cormet_phiScaleUp',  cormet_phiScaleUp,  'cormet_phiScaleUp/F')
             cormet_ptScaleDownBranch = new_tree.Branch('cormet_ptScaleDown', cormet_ptScaleDown, 'cormet_ptScaleDown/F')
             cormet_ptResUpBranch     = new_tree.Branch('cormet_ptResUp',     cormet_ptResUp,     'cormet_ptResUp/F')
-            cormet_phiResUpBranch    = new_tree.Branch('cormet_phiResUp',    cormet_phiResUp,    'cormet_phiResUp/F')
             cormet_ptResDownBranch   = new_tree.Branch('cormet_ptResDown',   cormet_ptResDown,   'cormet_ptResDown/F')
-            cormet_phiResDownBranch  = new_tree.Branch('cormet_phiResDown',  cormet_phiResDown,  'cormet_ptResDown/F')
-            
+            corfakemet_ptBranch          = new_tree.Branch('corfakemet_pt',          corfakemet_pt,          'corfakemet_pt/F')
+            corfakemet_phiBranch         = new_tree.Branch('corfakemet_phi',         corfakemet_phi,         'corfakemet_phi/F')
+            corfakemet_ptScaleUpBranch   = new_tree.Branch('corfakemet_ptScaleUp',   corfakemet_ptScaleUp,   'corfakemet_ptScaleUp/F')
+            corfakemet_ptScaleDownBranch = new_tree.Branch('corfakemet_ptScaleDown', corfakemet_ptScaleDown, 'corfakemet_ptScaleDown/F')
+            corfakemet_ptResUpBranch     = new_tree.Branch('corfakemet_ptResUp',     corfakemet_ptResUp,     'corfakemet_ptResUp/F')
+            corfakemet_ptResDownBranch   = new_tree.Branch('corfakemet_ptResDown',   corfakemet_ptResDown,   'corfakemet_ptResDown/F')
+
             # looping over events
             for event in range(0, obj.GetEntries()):
-                if verbose and (event%10000==0 or event==nev-1): print " = TTree:", obj.GetName(), "events:", nev, "\t", int(100*float(event+1)/float(nev)), "%\r",
-                #print ".",#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
+                if verbose and (event%10000==0 or event==nev-1): print ' = TTree:', obj.GetName(), 'events:', nev, '\t', int(100*float(event+1)/float(nev)), '%\r',
+                #print '.',#*int(20*float(event)/float(nev)),#printProgressBar(event, nev)
                 obj.GetEntry(event)
                 
                 # Initialize
                 eventWeight[0] = xsWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
                 for i in range(njets):
-                    csv = getattr(obj, "jet%d_CSV" % (i+1), -999)
+                    csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
                 
                 # Weights
@@ -303,17 +307,17 @@ def processFile(dir_name, verbose=False):
                     pileupWeightUp[0] = pileupWeightDown[0] = pileupWeight[0]
                     
                     for i in range(njets):
-                        pt = getattr(obj, "jet%d_pt" % (i+1), -1)
-                        eta = getattr(obj, "jet%d_eta" % (i+1), -1)
-                        flav = getattr(obj, "jet%d_flavour" % (i+1), -1)
-                        csv = getattr(obj, "jet%d_CSV" % (i+1), -1)
+                        pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
+                        eta = getattr(obj, 'jet%d_eta' % (i+1), -1)
+                        flav = getattr(obj, 'jet%d_flavour' % (i+1), -1)
+                        csv = getattr(obj, 'jet%d_CSV' % (i+1), -1)
                         pt = min(pt, 669)
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
-#                        CSV[i][0] = reader["M"][0].eval(fl, eta, pt)
-#                        CSVUp[i][0] = reader["M"][1].eval(fl, eta, pt)
-#                        CSVDown[i][0] = reader["M"][-1].eval(fl, eta, pt)
+#                        CSV[i][0] = reader['M'][0].eval(fl, eta, pt)
+#                        CSVUp[i][0] = reader['M'][1].eval(fl, eta, pt)
+#                        CSVDown[i][0] = reader['M'][-1].eval(fl, eta, pt)
                         CSV[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, 0)
                         CSVUp[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, -1)
@@ -328,52 +332,98 @@ def processFile(dir_name, verbose=False):
                     cmetphiResUp     = ROOT.Double(obj.met_phi)
                     cmetptResDown    = ROOT.Double(obj.met_pt)
                     cmetphiResDown   = ROOT.Double(obj.met_phi)
+                    cfmetpt           = ROOT.Double(0.)
+                    cfmetphi          = ROOT.Double(0.)
+                    cfmetptScaleUp    = ROOT.Double(0.)
+                    cfmetphiScaleUp   = ROOT.Double(0.)
+                    cfmetptScaleDown  = ROOT.Double(0.)
+                    cfmetphiScaleDown = ROOT.Double(0.)
+                    cfmetptResUp      = ROOT.Double(0.)
+                    cfmetphiResUp     = ROOT.Double(0.)
+                    cfmetptResDown    = ROOT.Double(0.)
+                    cfmetphiResDown   = ROOT.Double(0.)
+
                     applyrecoil    = True
                     nJets          = int(obj.nJets)
+                    
                     # apply recoil corrections only for Z->ll, Z->vv, and W->lv
                     if 'DYJets' in dir_name or 'ZJets' in dir_name or 'WJets' in dir_name:
-                        if 'SR' in obj.GetName():
+                        if obj.GetName()=='ZCR' or obj.GetName()=='WCR'or obj.GetName()=='SR':
                             genmetpt  = ROOT.Double(obj.genV_pt)
                             genmetphi = ROOT.Double(obj.genV_phi)
-                            leppt     = ROOT.Double(0)
-                            lepphi    = ROOT.Double(0)
-                            Upar      = ROOT.Double(0)
-                            Uper      = ROOT.Double(0)
-                        elif 'ZCR' in obj.GetName():
-                            genmetpt  = ROOT.Double(obj.genV_pt)
-                            genmetphi = ROOT.Double(obj.genV_phi)
-                            leppt     = ROOT.Double(obj.Z_pt)
-                            lepphi    = ROOT.Double(obj.Z_phi)
-                            Upar      = ROOT.Double(obj.Upara)
-                            Uper      = ROOT.Double(obj.Uperp)
-                        elif 'WCR' in obj.GetName():
-                            genmetpt  = ROOT.Double(obj.genV_pt)
-                            genmetphi = ROOT.Double(obj.genV_phi)
-                            leppt     = ROOT.Double(obj.lepton1_pt)
-                            lepphi    = ROOT.Double(obj.lepton1_phi)
-                            Upar      = ROOT.Double(obj.Upara)
-                            Uper      = ROOT.Double(obj.Uperp)
-                    # otherwise only copy the met in all the cormet_ variables
-                    else:
-                        applyrecoil = False
-                        
-                    if applyrecoil:
-                        Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
-                        Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
-                        Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
-                        Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
-                        Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)        
+                            leppt     = ROOT.Double(0.)
+                            lepphi    = ROOT.Double(0.)
+                            Upar      = ROOT.Double(0.)
+                            Uper      = ROOT.Double(0.)
+                            if obj.GetName()=='SR':
+                                leppt     = ROOT.Double(0.)
+                                lepphi    = ROOT.Double(0.)
+                                Upar      = ROOT.Double(0.)
+                                Uper      = ROOT.Double(0.)
+                            elif obj.GetName()=='ZCR':
+                                leppt     = ROOT.Double(obj.Z_pt)
+                                lepphi    = ROOT.Double(obj.Z_phi)
+                                Upar      = ROOT.Double(obj.Upara)
+                                Uper      = ROOT.Double(obj.Uperp)
+                            elif obj.GetName()=='WCR':
+                                leppt     = ROOT.Double(obj.lepton1_pt)
+                                lepphi    = ROOT.Double(obj.lepton1_phi)
+                                Upar      = ROOT.Double(obj.Upara)
+                                Uper      = ROOT.Double(obj.Uperp)
+                            else:
+                                applyrecoil = False
+                            
+                            if applyrecoil:
+                                ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
+                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
+                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
+                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
+                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
+                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)   
+                                if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                                    ### correct fakeMET only in ZCR and WCR
+                                    ### set reconstructed leptons and recoil to zero
+                                    ### leave genmet set as standard. it is correct as it is always the genV pt
+                                    cfmetpt           = ROOT.Double(obj.fakemet_pt)
+                                    cfmetphi          = ROOT.Double(obj.fakemet_phi)
+                                    cfmetptScaleUp    = ROOT.Double(obj.fakemet_pt)
+                                    cfmetphiScaleUp   = ROOT.Double(obj.fakemet_phi)
+                                    cfmetptScaleDown  = ROOT.Double(obj.fakemet_pt)
+                                    cfmetphiScaleDown = ROOT.Double(obj.fakemet_phi)
+                                    cfmetptResUp      = ROOT.Double(obj.fakemet_pt)
+                                    cfmetphiResUp     = ROOT.Double(obj.fakemet_phi)
+                                    cfmetptResDown    = ROOT.Double(obj.fakemet_pt)                                
+                                    cfmetphiResDown   = ROOT.Double(obj.fakemet_phi)                                
+                                    genmetpt  = ROOT.Double(obj.genV_pt)
+                                    genmetphi = ROOT.Double(obj.genV_phi)
+                                    leppt     = ROOT.Double(0.)
+                                    lepphi    = ROOT.Double(0.)
+                                    Upar      = ROOT.Double(0.)
+                                    Uper      = ROOT.Double(0.)
+                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
+                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
+                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)   
+                                pass
+                            pass
+                        pass
+                    pass
+                    
+                    # fill the variables 
                     cormet_pt[0]         = cmetpt
                     cormet_phi[0]        = cmetphi
                     cormet_ptScaleUp[0]  = cmetptScaleUp
-                    cormet_phiScaleUp[0] = cmetphiScaleUp
-                    cormet_ptScaleDown[0]  = cmetptScaleDown
-                    cormet_phiScaleDown[0] = cmetphiScaleDown
+                    cormet_ptScaleDown[0]= cmetptScaleDown
                     cormet_ptResUp[0]    = cmetptResUp
-                    cormet_phiResUp[0]   = cmetphiResUp
-                    cormet_ptResDown[0]    = cmetptResDown
-                    cormet_phiResDown[0]   = cmetphiResDown
-                
+                    cormet_ptResDown[0]  = cmetptResDown
+                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                        corfakemet_pt[0]         = cfmetpt
+                        corfakemet_phi[0]        = cfmetphi
+                        corfakemet_ptScaleUp[0]  = cfmetptScaleUp
+                        corfakemet_ptScaleDown[0]= cfmetptScaleDown
+                        corfakemet_ptResUp[0]    = cfmetptResUp
+                        corfakemet_ptResDown[0]  = cfmetptResDown               
                 # Data
                 else:
                     # Check JSON
@@ -400,35 +450,40 @@ def processFile(dir_name, verbose=False):
                 cormet_ptBranch.Fill()
                 cormet_phiBranch.Fill()
                 cormet_ptScaleUpBranch.Fill()
-                cormet_phiScaleUpBranch.Fill()
                 cormet_ptScaleDownBranch.Fill()
                 cormet_ptResUpBranch.Fill()
-                cormet_phiResUpBranch.Fill()
                 cormet_ptResDownBranch.Fill()
+                if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                    corfakemet_ptBranch.Fill()
+                    corfakemet_phiBranch.Fill()
+                    corfakemet_ptScaleUpBranch.Fill()
+                    corfakemet_ptScaleDownBranch.Fill()
+                    corfakemet_ptResUpBranch.Fill()
+                    corfakemet_ptResDownBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
-            if verbose: print " "
+            if verbose: print ' '
         
         # Directories
         elif obj.IsFolder():
             subdir = obj.GetName()
-            if verbose: print " \ Directory", subdir, ":"
+            if verbose: print ' \ Directory', subdir, ':'
             new_file.mkdir(subdir)
             new_file.cd(subdir)
             for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
                 subobj = subkey.ReadObj()
-                if subobj.IsA().InheritsFrom("TH1"):
-                    if verbose: print "   + TH1:", subobj.GetName()
+                if subobj.IsA().InheritsFrom('TH1'):
+                    if verbose: print '   + TH1:', subobj.GetName()
                     if not 'Eff' in subdir:
                         subobj.Scale(weightXS)
                         subobj.SetBinContent(0, totalEntries)
                     new_file.cd(subdir)
                     subobj.Write()
-            new_file.cd("..")
+            new_file.cd('..')
         
         else:
-            if verbose: print "- Unknown object:", obj.GetName()
+            if verbose: print '- Unknown object:', obj.GetName()
     new_file.Close() 
 
 
@@ -437,12 +492,12 @@ jobs = []
 for d in os.listdir(origin):
     if d.startswith('.') or 'Chunk' in d:
         continue
-    if not d in xsections.keys():
+    if not d[:-3] in xsections.keys():
         continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
 #    processFile(d, True)
     
-#print "\nDone."
+#print '\nDone.'
 
