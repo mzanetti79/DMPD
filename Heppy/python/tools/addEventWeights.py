@@ -115,7 +115,7 @@ def returnNewWorkingPoint(f, p, pt, eta, sigma):
     return workingpoint[p]
 
 
-def returnReshapedDiscr(f, discr, pt, eta, sigma=""):
+def returnresUpapedDiscr(f, discr, pt, eta, sigma=""):
     if discr<0.001 or discr>1: return discr
     if f<0 or f>2: return discr
     i0, i1 = 0, 4
@@ -222,16 +222,16 @@ def processFile(dir_name, verbose=False):
         CSVUp[i] = array('f', [1.0])
         CSVDown[i] = array('f', [1.0])
     # Recoil Variables
-    corrmet_pt         = array('f', [0.0])  
-    corrmet_phi        = array('f', [0.0])  
-    corrmet_pt_scaleH  = array('f', [0.0])  
-    corrmet_phi_scaleH = array('f', [0.0])
-    corrmet_pt_scaleL  = array('f', [0.0])
-    corrmet_phi_scaleL = array('f', [0.0])  
-    corrmet_pt_resH    = array('f', [0.0])
-    corrmet_phi_resH   = array('f', [0.0])
-    corrmet_pt_resL    = array('f', [0.0])
-    corrmet_phi_resL   = array('f', [0.0])   
+    cormet_pt         = array('f', [0.0])  
+    cormet_phi        = array('f', [0.0])  
+    cormet_ptScaleUp  = array('f', [0.0])  
+    cormet_phiScaleUp = array('f', [0.0])
+    cormet_ptScaleDown  = array('f', [0.0])
+    cormet_phiScaleDown = array('f', [0.0])  
+    cormet_ptResUp    = array('f', [0.0])
+    cormet_phiResUp   = array('f', [0.0])
+    cormet_ptResDown    = array('f', [0.0])
+    cormet_phiResDown   = array('f', [0.0])   
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -270,15 +270,15 @@ def processFile(dir_name, verbose=False):
                 CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1))
                 CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1))
             
-            corrmet_ptBranch        = new_tree.Branch('corrmet_pt',        corrmet_pt,        'corrmet_pt/F')
-            corrmet_phiBranch       = new_tree.Branch('corrmet_phi',       corrmet_phi,       'corrmet_phi/F')
-            corrmet_pt_scaleHBranch = new_tree.Branch('corrmet_pt_scaleH', corrmet_pt_scaleH, 'corrmet_pt_scaleH/F')
-            corrmet_phi_scaleHBranch= new_tree.Branch('corrmet_phi_scaleH',corrmet_phi_scaleH,'corrmet_phi_scaleH/F')
-            corrmet_pt_scaleLBranch = new_tree.Branch('corrmet_pt_scaleL', corrmet_pt_scaleL, 'corrmet_pt_scaleL/F')
-            corrmet_pt_resHBranch   = new_tree.Branch('corrmet_pt_resH',   corrmet_pt_resH,   'corrmet_pt_resH/F')
-            corrmet_phi_resHBranch  = new_tree.Branch('corrmet_phi_resH',  corrmet_phi_resH,  'corrmet_phi_resH/F')
-            corrmet_pt_resLBranch   = new_tree.Branch('corrmet_pt_resL',   corrmet_pt_resL,   'corrmet_pt_resL/F')
-            corrmet_phi_resLBranch  = new_tree.Branch('corrmet_phi_resL',  corrmet_phi_resL,  'corrmet_pt_resL/F')
+            cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
+            cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
+            cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
+            cormet_phiScaleUpBranch  = new_tree.Branch('cormet_phiScaleUp',  cormet_phiScaleUp,  'cormet_phiScaleUp/F')
+            cormet_ptScaleDownBranch = new_tree.Branch('cormet_ptScaleDown', cormet_ptScaleDown, 'cormet_ptScaleDown/F')
+            cormet_ptResUpBranch     = new_tree.Branch('cormet_ptResUp',     cormet_ptResUp,     'cormet_ptResUp/F')
+            cormet_phiResUpBranch    = new_tree.Branch('cormet_phiResUp',    cormet_phiResUp,    'cormet_phiResUp/F')
+            cormet_ptResDownBranch   = new_tree.Branch('cormet_ptResDown',   cormet_ptResDown,   'cormet_ptResDown/F')
+            cormet_phiResDownBranch  = new_tree.Branch('cormet_phiResDown',  cormet_phiResDown,  'cormet_ptResDown/F')
             
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -314,20 +314,20 @@ def processFile(dir_name, verbose=False):
 #                        CSV[i][0] = reader["M"][0].eval(fl, eta, pt)
 #                        CSVUp[i][0] = reader["M"][1].eval(fl, eta, pt)
 #                        CSVDown[i][0] = reader["M"][-1].eval(fl, eta, pt)
-                        CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
-                        CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
-                        CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        CSV[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, 0)
+                        CSVUp[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, +1)
+                        CSVDown[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, -1)
                     
-                    cmetpt         = ROOT.Double(obj.met_pt)
-                    cmetphi        = ROOT.Double(obj.met_phi)
-                    cmetpt_scaleH  = ROOT.Double(obj.met_pt)
-                    cmetphi_scaleH = ROOT.Double(obj.met_phi)
-                    cmetpt_scaleL  = ROOT.Double(obj.met_pt)
-                    cmetphi_scaleL = ROOT.Double(obj.met_phi)
-                    cmetpt_resH    = ROOT.Double(obj.met_pt)
-                    cmetphi_resH   = ROOT.Double(obj.met_phi)
-                    cmetpt_resL    = ROOT.Double(obj.met_pt)
-                    cmetphi_resL   = ROOT.Double(obj.met_phi)
+                    cmetpt           = ROOT.Double(obj.met_pt)
+                    cmetphi          = ROOT.Double(obj.met_phi)
+                    cmetptScaleUp    = ROOT.Double(obj.met_pt)
+                    cmetphiScaleUp   = ROOT.Double(obj.met_phi)
+                    cmetptScaleDown  = ROOT.Double(obj.met_pt)
+                    cmetphiScaleDown = ROOT.Double(obj.met_phi)
+                    cmetptResUp      = ROOT.Double(obj.met_pt)
+                    cmetphiResUp     = ROOT.Double(obj.met_phi)
+                    cmetptResDown    = ROOT.Double(obj.met_pt)
+                    cmetphiResDown   = ROOT.Double(obj.met_phi)
                     applyrecoil    = True
                     nJets          = int(obj.nJets)
                     # apply recoil corrections only for Z->ll, Z->vv, and W->lv
@@ -353,26 +353,26 @@ def processFile(dir_name, verbose=False):
                             lepphi    = ROOT.Double(obj.lepton1_phi)
                             Upar      = ROOT.Double(obj.Upara)
                             Uper      = ROOT.Double(obj.Uperp)
-                    # otherwise only copy the met in all the corrmet_ variables
+                    # otherwise only copy the met in all the cormet_ variables
                     else:
                         applyrecoil = False
                         
                     if applyrecoil:
-                        Recoil.CorrectType2(cmetpt       ,cmetphi       ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
-                        Recoil.CorrectType2(cmetpt_scaleH,cmetphi_scaleH,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
-                        Recoil.CorrectType2(cmetpt_scaleL,cmetphi_scaleL,genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
-                        Recoil.CorrectType2(cmetpt_resH  ,cmetphi_resH  ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
-                        Recoil.CorrectType2(cmetpt_resL  ,cmetphi_resL  ,genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)        
-                    corrmet_pt[0]         = cmetpt
-                    corrmet_phi[0]        = cmetphi
-                    corrmet_pt_scaleH[0]  = cmetpt_scaleH
-                    corrmet_phi_scaleH[0] = cmetphi_scaleH
-                    corrmet_pt_scaleL[0]  = cmetpt_scaleL
-                    corrmet_phi_scaleL[0] = cmetphi_scaleL
-                    corrmet_pt_resH[0]    = cmetpt_resH
-                    corrmet_phi_resH[0]   = cmetphi_resH
-                    corrmet_pt_resL[0]    = cmetpt_resL
-                    corrmet_phi_resL[0]   = cmetphi_resL
+                        Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
+                        Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
+                        Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
+                        Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
+                        Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)        
+                    cormet_pt[0]         = cmetpt
+                    cormet_phi[0]        = cmetphi
+                    cormet_ptScaleUp[0]  = cmetptScaleUp
+                    cormet_phiScaleUp[0] = cmetphiScaleUp
+                    cormet_ptScaleDown[0]  = cmetptScaleDown
+                    cormet_phiScaleDown[0] = cmetphiScaleDown
+                    cormet_ptResUp[0]    = cmetptResUp
+                    cormet_phiResUp[0]   = cmetphiResUp
+                    cormet_ptResDown[0]    = cmetptResDown
+                    cormet_phiResDown[0]   = cmetphiResDown
                 
                 # Data
                 else:
@@ -397,14 +397,14 @@ def processFile(dir_name, verbose=False):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
                     CSVDownBranch[i].Fill()
-                corrmet_ptBranch.Fill()
-                corrmet_phiBranch.Fill()
-                corrmet_pt_scaleHBranch.Fill()
-                corrmet_phi_scaleHBranch.Fill()
-                corrmet_pt_scaleLBranch.Fill()
-                corrmet_pt_resHBranch.Fill()
-                corrmet_phi_resHBranch.Fill()
-                corrmet_pt_resLBranch.Fill()
+                cormet_ptBranch.Fill()
+                cormet_phiBranch.Fill()
+                cormet_ptScaleUpBranch.Fill()
+                cormet_phiScaleUpBranch.Fill()
+                cormet_ptScaleDownBranch.Fill()
+                cormet_ptResUpBranch.Fill()
+                cormet_phiResUpBranch.Fill()
+                cormet_ptResDownBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
