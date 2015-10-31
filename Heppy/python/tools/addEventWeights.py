@@ -426,6 +426,13 @@ def processFile(dir_name, verbose=False):
                         corfakemet_ptResDown[0]  = cfmetptResDown               
                 # Data
                 else:
+                    cormet_pt[0]         = obj.met_pt
+                    cormet_phi[0]        = obj.met_phi
+                    cormet_ptScaleUp[0]  = obj.met_pt
+                    cormet_ptScaleDown[0]= obj.met_pt
+                    cormet_ptResUp[0]    = obj.met_pt
+                    cormet_ptResDown[0]  = obj.met_pt
+
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
                     # Filters
