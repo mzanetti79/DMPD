@@ -66,6 +66,13 @@ var_template = {
       "max" : 4.5,
       "log" : True,
     },
+    "nBtagJets": {
+      "title" : "number of b-jets",
+      "nbins" : 5,
+      "min" : -0.5,
+      "max" : 4.5,
+      "log" : True,
+    },
     "eventWeight": {
       "title" : "event weight",
       "nbins" : 100,
@@ -76,7 +83,7 @@ var_template = {
     
     # MET
     "met_pt": {
-      "title" : "raw #slash{E}_{T} (GeV)",
+      "title" : "#slash{E}_{T} (GeV)",
       "nbins" : -1,
       "bins" : [200, 300, 400, 500, 700, 1000],
       "min" : 200,
@@ -84,67 +91,45 @@ var_template = {
       "log" : True,
     },
 #    "met_pt": {
-#      "title" : "raw #slash{E}_{T} (GeV)",
+#      "title" : "#slash{E}_{T} (GeV)",
 #      "nbins" : 20,
 #      "min" : 200,
 #      "max" : 1200,
 #      "log" : True,
 #    },
 #    "met_pt": {
-#      "title" : "raw #slash{E}_{T} (GeV)",
-#      "nbins" : 20,
+#      "title" : "#slash{E}_{T} (GeV)",
+#      "nbins" : 50,
 #      "min" : 0,
-#      "max" : 400,
+#      "max" : 200,
 #      "log" : True,
 #    },
     "met_phi": {
-      "title" : "raw #slash{E}_{T} #varphi",
+      "title" : "#slash{E}_{T} #varphi",
       "nbins" : 50,
       "min" : -3.15,
       "max" : 3.15,
       "log" : False,
     },
-#    "pfmet_pt": {
-#      "title" : "#slash{E}_{T} (GeV)",
-#      "nbins" : -1,
-#      "bins" : [200, 300, 400, 500, 700, 1000],
-#      "min" : 200,
-#      "max" : 1200,
-#      "log" : True,
-#    },
-    "pfmet_pt": {
-      "title" : "type-1 #slash{E}_{T} (GeV)",
+    "met_ptRaw": {
+      "title" : "raw #slash{E}_{T} (GeV)",
       "nbins" : 50,
       "min" : 0,
       "max" : 250,
       "log" : True,
     },
-    "pfmet_phi": {
-      "title" : "type-1 #slash{E}_{T} #varphi",
-      "nbins" : 50,
-      "min" : -3.15,
-      "max" : 3.15,
-      "log" : False,
-    },
-    "met_calo_pt": {
-      "title" : "calo #slash{E}_{T} (GeV)",
+    "cormet_pt": {
+      "title" : "#slash{E}_{T} (GeV)",
       "nbins" : 50,
       "min" : 0,
       "max" : 250,
-      "log" : False,
-    },
-    "met_tk_pt": {
-      "title" : "tracker #slash{E}_{T} (GeV)",
-      "nbins" : 50,
-      "min" : 0,
-      "max" : 250,
-      "log" : False,
+      "log" : True,
     },
     "fakemet_pt": {
       "title" : "fake #slash{E}_{T} (GeV)",
-      "nbins" : 40,
+      "nbins" : 30,
       "min" : 200,
-      "max" : 1000,
+      "max" : 800,
       "log" : True,
     },
     "fakemet_phi": {
@@ -154,11 +139,11 @@ var_template = {
       "max" : 3.15,
       "log" : False,
     },
-    "UperpScale": {
-      "title" : "U_{#perp} (GeV)",
+    "minDeltaPhi": {
+      "title" : "min #varphi (jet-#slash{E}_{T})",
       "nbins" : 50,
-      "min" : -200,
-      "max" : 200,
+      "min" : 0,
+      "max" : 3.15,
       "log" : False,
     },
     
@@ -213,7 +198,7 @@ var_template = {
       "max" : 1,
       "log" : False,
     },
-    "jet[N]_rCSV": {
+    "jet[N]_CSVR": {
       "title" : "jet [N] CSV",
       "nbins" : 50,
       "min" : 0,
@@ -691,13 +676,6 @@ var_template = {
       "nbins" : 50,
       "min" : -3.14,
       "max" : 3.14,
-      "log" : False,
-    },
-    "topMass(pt1,eta1,phi1,mass1,csv1,pt2,eta2,phi2,mass2,csv2,pt3,eta3,phi3,mass3,csv3,pt4,eta4,phi4,mass4,csv4)": {
-      "title" : "Top mass",
-      "nbins" : 100,
-      "min" : 0,
-      "max" : 250,
       "log" : False,
     },
     

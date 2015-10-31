@@ -6,7 +6,7 @@ sample = {
     'Data' : {
         'order' : 0,
         #'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'MET_Run2015B_PromptReco_v1', 'MET_Run2015B_17Jul2015_v1'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
-        'files' : ['SingleMuon_Run2015C_PromptReco_v1', 'SingleElectron_Run2015C_PromptReco_v1', 'MET_Run2015C_PromptReco_v1'] + ['SingleMuon_Run2015D_PromptReco_v3', 'SingleElectron_Run2015D_PromptReco_v3', 'MET_Run2015D_PromptReco_v3'],
+        'files' : ['SingleMuon_Run2015D-05Oct2015-v1', 'SingleMuon_Run2015D-PromptReco-v4', 'SingleElectron_Run2015D-05Oct2015-v1', 'SingleElectron_Run2015D-PromptReco-v4', 'DoubleMuon_Run2015D-05Oct2015-v1', 'DoubleMuon_Run2015D-PromptReco-v4', 'DoubleEG_Run2015D-05Oct2015-v1', 'DoubleEG_Run2015D-PromptReco-v4', 'MET_Run2015D-05Oct2015-v1', 'MET_Run2015D-PromptReco-v4'],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
@@ -17,8 +17,7 @@ sample = {
     },
     'DYJetsToLL' : {
         'order' : 1,
-        'files' : ['DYJetsToLL_M50_amcatnloFXFX_pythia8_v3'],
-        #'files' : ['DYJetsToLL_M50_madgraphMLM_pythia8_v1'],
+        'files' : ['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
         'fillcolor' : 418,
         'fillstyle' : 1001,
         'linecolor' : 418,
@@ -29,7 +28,7 @@ sample = {
     },
     'DYJetsToLL_HT' : {
         'order' : 1,
-        'files' : ['DYJetsToLL_M50_HT100to200_madgraphMLM_pythia8_v2', 'DYJetsToLL_M50_HT200to400_madgraphMLM_pythia8_v2', 'DYJetsToLL_M50_HT400to600_madgraphMLM_pythia8_v2', 'DYJetsToLL_M50_HT600toInf_madgraphMLM_pythia8_v2'],
+        'files' : ['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2', 'DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 418,
         'fillstyle' : 1001,
         'linecolor' : 418,
@@ -38,9 +37,20 @@ sample = {
         'weight': 1.,
         'plot': True,
     },
-    'ZJetsToNuNu_HT' : {
+    'DYJetsToNuNu' : {
         'order' : 1,
-        'files' : ['ZJetsToNuNu_HT100to200_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT200to400_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT400to600_madgraphMLM_pythia8_v1', 'ZJetsToNuNu_HT600toInf_madgraphMLM_pythia8_v1'],
+        'files' : ['DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+        'fillcolor' : 856,
+        'fillstyle' : 1001,
+        'linecolor' : 856,
+        'linestyle' : 1,
+        'label' : "Z(#nu#nu) + jets",
+        'weight': 1.,
+        'plot': True,
+    },
+    'DYJetsToNuNu_HT' : {
+        'order' : 1,
+        'files' : ['ZJetsToNuNu_HT-100To200_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
         'fillcolor' : 856,
         'fillstyle' : 1001,
         'linecolor' : 856,#856
@@ -51,7 +61,7 @@ sample = {
     },
     'WJetsToLNu' : {
         'order' : 2,
-        'files' : ['WJetsToLNu_amcatnloFXFX_pythia8_v1'],
+        'files' : ['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
         'fillcolor' : 881,
         'fillstyle' : 1001,
         'linecolor' : 881,
@@ -62,18 +72,18 @@ sample = {
     },
     'WJetsToLNu_HT' : {
         'order' : 2,
-        'files' : ['WJetsToLNu_HT_100To200_madgraphMLM_pythia8_v1', 'WJetsToLNu_HT_200To400_madgraphMLM_pythia8_v1', 'WJetsToLNu_HT_400To600_madgraphMLM_pythia8_v3', 'WJetsToLNu_HT_600ToInf_madgraphMLM_pythia8_v1'],
+        'files' : ['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 881,
         'fillstyle' : 1001,
         'linecolor' : 881,
         'linestyle' : 1,
         'label' : "W(l#nu) + jets",
-        'weight': 1.21, #FIXME
+        'weight': 1.,
         'plot': True,
     },
     'TTbar' : {
         'order' : 3,
-        'files' : ['TT_powheg_pythia8_v2'],
+        'files' : ['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
         #'files' : ['TTJets_madgraphMLM_pythia8_v2'],
         'fillcolor' : 798,
         'fillstyle' : 1001,
@@ -85,7 +95,7 @@ sample = {
     },
     'ST' : {
         'order' : 4,
-        'files' : ['ST_tW_antitop_5f_inclusiveDecays_powheg_pythia8_v1','ST_t_channel_antitop_4f_leptonDecays_amcatnlo_pythia8_v1','ST_t_channel_top_4f_leptonDecays_amcatnlo_pythia8_v1','ST_s_channel_4f_leptonDecays_amcatnlo_pythia8_v1'],
+        'files' : ['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1', 'ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v2'],
         'fillcolor' : 801,
         'fillstyle' : 1001,
         'linecolor' : 801,
@@ -96,7 +106,7 @@ sample = {
     },
     'VV' : {
         'order' : 5,
-        'files' : ['ZZ_pythia8_v3','WZ_pythia8_v1','WW_pythia8_v1'],
+        'files' : ['WW_TuneCUETP8M1_13TeV-pythia8-v1','WZ_TuneCUETP8M1_13TeV-pythia8-v1','ZZ_TuneCUETP8M1_13TeV-pythia8-v1'],
         'fillcolor' : 602,
         'fillstyle' : 1001,
         'linecolor' : 602,
@@ -117,11 +127,12 @@ sample = {
         'plot': True,
     },
     
+
 #################### ALL BBbarDM SCALAR
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-10' : {
+    'bbDMs_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -131,9 +142,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-20' : {
+    'bbDMs_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -143,9 +154,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-50' : {
+    'bbDMs_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -155,9 +166,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-100' : {
+    'bbDMs_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -167,9 +178,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-200' : {
+    'bbDMs_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -179,9 +190,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-300' : {
+    'bbDMs_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -191,9 +202,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-500' : {
+    'bbDMs_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -203,9 +214,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-1000' : {
+    'bbDMs_Mchi1_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -215,9 +226,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-10_Mphi-10' : {
+    'bbDMs_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -227,9 +238,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-10_Mphi-100' : {
+    'bbDMs_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -239,9 +250,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-10_Mphi-50' : {
+    'bbDMs_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -251,9 +262,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-150_Mphi-1000' : {
+    'bbDMs_Mchi150_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -263,9 +274,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-150_Mphi-200' : {
+    'bbDMs_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -275,9 +286,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-150_Mphi-500' : {
+    'bbDMs_Mchi150_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -287,9 +298,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-50_Mphi-50' : {
+    'bbDMs_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -299,9 +310,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-500_Mphi-500' : {
+    'bbDMs_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -313,9 +324,9 @@ sample = {
 
 
 
-    'BBbarDMJets_scalar_Mchi-1000_Mphi-10000' : {
+    'bbDMs_Mchi1000_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -325,9 +336,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1_Mphi-10000' : {
+    'bbDMs_Mchi1_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -337,9 +348,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-10_Mphi-10000' : {
+    'bbDMs_Mchi10_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -349,9 +360,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-10_Mphi-15' : {
+    'bbDMs_Mchi10_Mphi15' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-15_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-15_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -361,9 +372,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1000_Mphi-10' : {
+    'bbDMs_Mchi1000_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -373,9 +384,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-1000_Mphi-1000' : {
+    'bbDMs_Mchi1000_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1000_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -385,9 +396,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-150_Mphi-10000' : {
+    'bbDMs_Mchi150_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -397,9 +408,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-150_Mphi-295' : {
+    'bbDMs_Mchi150_Mphi295' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-295_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -409,9 +420,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-50_Mphi-10' : {
+    'bbDMs_Mchi50_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -421,9 +432,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-50_Mphi-95' : {
+    'bbDMs_Mchi50_Mphi95' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-95_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-95_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -433,9 +444,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-500_Mphi-10' : {
+    'bbDMs_Mchi500_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -445,9 +456,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-500_Mphi-10000' : {
+    'bbDMs_Mchi500_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -457,9 +468,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_scalar_Mchi-500_Mphi-995' : {
+    'bbDMs_Mchi500_Mphi995' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-995_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-995_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -471,9 +482,9 @@ sample = {
 
 #################### ALL BBbarDM PSEUDOSCALAR
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10' : {
+    'bbDMps_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -483,9 +494,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100' : {
+    'bbDMps_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -495,9 +506,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20' : {
+    'bbDMps_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -507,9 +518,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200' : {
+    'bbDMps_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -519,9 +530,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300' : {
+    'bbDMps_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -531,9 +542,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50' : {
+    'bbDMps_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -543,9 +554,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500' : {
+    'bbDMps_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -555,9 +566,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10' : {
+    'bbDMps_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -567,9 +578,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100' : {
+    'bbDMps_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -579,9 +590,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50' : {
+    'bbDMps_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -591,9 +602,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000' : {
+    'bbDMps_Mchi150_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -603,9 +614,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200' : {
+    'bbDMps_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -615,9 +626,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500' : {
+    'bbDMps_Mchi150_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -627,9 +638,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200' : {
+    'bbDMps_Mchi50_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -639,9 +650,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50' : {
+    'bbDMps_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -651,9 +662,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500' : {
+    'bbDMps_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -663,9 +674,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000' : {
+    'bbDMps_Mchi1000_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -675,9 +686,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000' : {
+    'bbDMps_Mchi1_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -687,9 +698,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10000' : {
+    'bbDMps_Mchi1_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -699,9 +710,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000' : {
+    'bbDMps_Mchi10_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -711,9 +722,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15' : {
+    'bbDMps_Mchi10_Mphi15' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-15_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -723,9 +734,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10' : {
+    'bbDMps_Mchi1000_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -735,9 +746,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000' : {
+    'bbDMps_Mchi1000_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1000_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -747,9 +758,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000' : {
+    'bbDMps_Mchi150_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -759,9 +770,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295' : {
+    'bbDMps_Mchi150_Mphi295' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -771,9 +782,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10' : {
+    'bbDMps_Mchi50_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -783,9 +794,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95' : {
+    'bbDMps_Mchi50_Mphi95' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-95_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -795,9 +806,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10' : {
+    'bbDMps_Mchi500_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -807,9 +818,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000' : {
+    'bbDMps_Mchi500_Mphi10000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-10000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -819,9 +830,9 @@ sample = {
         'plot': False,
     },
 
-    'BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995' : {
+    'bbDMps_Mchi500_Mphi995' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-995_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -833,9 +844,9 @@ sample = {
 
 #################### ALL TTbarDM SCALAR
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-10' : {
+    'ttDMs_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -845,9 +856,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-20' : {
+    'ttDMs_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -857,9 +868,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-50' : {
+    'ttDMs_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -869,9 +880,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-100' : {
+    'ttDMs_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -881,9 +892,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-200' : {
+    'ttDMs_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -893,9 +904,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-300' : {
+    'ttDMs_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -905,9 +916,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-500' : {
+    'ttDMs_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -917,9 +928,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-1_Mphi-1000' : {
+    'ttDMs_Mchi1_Mphi1000' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v2'],
+        'files' : ['TTbarDMJets_scalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -929,9 +940,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-10_Mphi-10' : {
+    'ttDMs_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -941,9 +952,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-10_Mphi-100' : {
+    'ttDMs_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -953,9 +964,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-10_Mphi-50' : {
+    'ttDMs_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -965,21 +976,21 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-150_Mphi-1000' : {
-        'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v3'],
-        'fillcolor' : 623,
-        'fillstyle' : 3005,
-        'linecolor' : 623,
-        'linestyle' : 1,
-        'label' : "ttDM m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
-        'plot': False,
-    },
+#    'ttDMs_Mchi150_Mphi1000' : {
+#        'order' : 1001,
+#        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+#        'fillcolor' : 623,
+#        'fillstyle' : 3005,
+#        'linecolor' : 623,
+#        'linestyle' : 1,
+#        'label' : "ttDM m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
+#        'weight': 1.,
+#        'plot': False,
+#    },
 
-    'TTbarDMJets_scalar_Mchi-150_Mphi-200' : {
+    'ttDMs_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -989,21 +1000,21 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-150_Mphi-500' : {
-        'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v3'],
-        'fillcolor' : 623,
-        'fillstyle' : 3005,
-        'linecolor' : 623,
-        'linestyle' : 1,
-        'label' : "ttDM m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-        'weight': 1.,
-        'plot': False,
-    },
+#    'ttDMs_Mchi150_Mphi500' : {
+#        'order' : 1001,
+#        'files' : ['TTbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+#        'fillcolor' : 623,
+#        'fillstyle' : 3005,
+#        'linecolor' : 623,
+#        'linestyle' : 1,
+#        'label' : "ttDM m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
+#        'weight': 1.,
+#        'plot': False,
+#    },
 
-    'TTbarDMJets_scalar_Mchi-50_Mphi-50' : {
+    'ttDMs_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1013,9 +1024,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-500_Mphi-500' : {
+    'ttDMs_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1025,9 +1036,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_scalar_Mchi-50_Mphi-200' : {
+    'ttDMs_Mchi50_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1038,9 +1049,9 @@ sample = {
     },
 
 
-    'TTbarDMJets_scalar_Mchi-50_Mphi-300' : {
+    'ttDMs_Mchi50_Mphi300' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_scalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1052,9 +1063,9 @@ sample = {
 
 #################### ALL TTbarDM PSEUDOSCALAR
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10' : {
+    'ttDMps_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1064,9 +1075,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100' : {
+    'ttDMps_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1076,9 +1087,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20' : {
+    'ttDMps_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1088,9 +1099,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200' : {
+    'ttDMps_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1100,9 +1111,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300' : {
+    'ttDMps_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1112,9 +1123,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50' : {
+    'ttDMps_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1124,9 +1135,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500' : {
+    'ttDMps_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1136,9 +1147,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10' : {
+    'ttDMps_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1148,9 +1159,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100' : {
+    'ttDMps_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1160,9 +1171,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50' : {
+    'ttDMps_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1172,9 +1183,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000' : {
+    'ttDMps_Mchi150_Mphi1000' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1184,9 +1195,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200' : {
+    'ttDMps_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1196,9 +1207,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500' : {
+    'ttDMps_Mchi150_Mphi500' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1208,9 +1219,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200' : {
+    'ttDMps_Mchi50_Mphi200' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1220,9 +1231,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50' : {
+    'ttDMps_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1232,9 +1243,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500' : {
+    'ttDMps_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1244,9 +1255,9 @@ sample = {
         'plot': False,
     },
 
-    'TTbarDMJets_pseudoscalar_Mchi-50_Mphi-300' : {
+    'ttDMps_Mchi50_Mphi300' : {
         'order' : 1001,
-        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1258,9 +1269,9 @@ sample = {
     
 #################### ALL HF(bb+tt)DM SCALAR
 
-    'hfDMJets_scalar_Mchi-1_Mphi-10' : {
+    'hfDMs_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1270,9 +1281,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-20' : {
+    'hfDMs_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1282,9 +1293,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-50' : {
+    'hfDMs_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1294,9 +1305,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-100' : {
+    'hfDMs_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 625,
         'fillstyle' : 3005,
         'linecolor' : 625,
@@ -1306,9 +1317,9 @@ sample = {
         'plot': True,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-200' : {
+    'hfDMs_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -1318,9 +1329,9 @@ sample = {
         'plot': True,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-300' : {
+    'hfDMs_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1330,9 +1341,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-500' : {
+    'hfDMs_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 633,
         'fillstyle' : 3005,
         'linecolor' : 633,
@@ -1342,9 +1353,9 @@ sample = {
         'plot': True,
     },
 
-    'hfDMJets_scalar_Mchi-1_Mphi-1000' : {
+    'hfDMs_Mchi1_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-1_Mphi-1000_madgraphMLM_pythia8_v2'],
+        'files' : ['BBbarDMJets_scalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 635,
         'fillstyle' : 3005,
         'linecolor' : 635,
@@ -1354,9 +1365,9 @@ sample = {
         'plot': True,
     },
 
-    'hfDMJets_scalar_Mchi-10_Mphi-10' : {
+    'hfDMs_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1366,9 +1377,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-10_Mphi-100' : {
+    'hfDMs_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1378,9 +1389,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-10_Mphi-50' : {
+    'hfDMs_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1390,21 +1401,21 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-150_Mphi-1000' : {
-        'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v3'],
-        'fillcolor' : 623,
-        'fillstyle' : 3005,
-        'linecolor' : 623,
-        'linestyle' : 1,
-        'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
-        'plot': False,
-    },
+#    'hfDMs_Mchi150_Mphi1000' : {
+#        'order' : 1001,
+#        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+#        'fillcolor' : 623,
+#        'fillstyle' : 3005,
+#        'linecolor' : 623,
+#        'linestyle' : 1,
+#        'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
+#        'weight': 10.,
+#        'plot': False,
+#    },
 
-    'hfDMJets_scalar_Mchi-150_Mphi-200' : {
+    'hfDMs_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1414,21 +1425,21 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-150_Mphi-500' : {
-        'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v3'],
-        'fillcolor' : 623,
-        'fillstyle' : 3005,
-        'linecolor' : 623,
-        'linestyle' : 1,
-        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
-        'plot': False,
-    },
+#    'hfDMs_Mchi150_Mphi500' : {
+#        'order' : 1001,
+#        'files' : ['BBbarDMJets_scalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+#        'fillcolor' : 623,
+#        'fillstyle' : 3005,
+#        'linecolor' : 623,
+#        'linestyle' : 1,
+#        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
+#        'weight': 10.,
+#        'plot': False,
+#    },
 
-    'hfDMJets_scalar_Mchi-50_Mphi-50' : {
+    'hfDMs_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1438,9 +1449,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_scalar_Mchi-500_Mphi-500' : {
+    'hfDMs_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_scalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1452,9 +1463,9 @@ sample = {
     
 #################### ALL HF(bb+tt)DM PSEUDOSCALAR
     
-        'hfDMJets_pseudoscalar_Mchi-1_Mphi-10' : {
+    'hfDMps_Mchi1_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1464,9 +1475,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-100' : {
+    'hfDMps_Mchi1_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1476,9 +1487,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-20' : {
+    'hfDMps_Mchi1_Mphi20' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1488,9 +1499,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-200' : {
+    'hfDMps_Mchi1_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1500,9 +1511,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-300' : {
+    'hfDMps_Mchi1_Mphi300' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1512,9 +1523,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-50' : {
+    'hfDMps_Mchi1_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1524,9 +1535,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-1_Mphi-500' : {
+    'hfDMps_Mchi1_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1536,9 +1547,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-10_Mphi-10' : {
+    'hfDMps_Mchi10_Mphi10' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1548,9 +1559,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-10_Mphi-100' : {
+    'hfDMps_Mchi10_Mphi100' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1560,9 +1571,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-10_Mphi-50' : {
+    'hfDMps_Mchi10_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-10_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1572,9 +1583,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-150_Mphi-1000' : {
+    'hfDMps_Mchi150_Mphi1000' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1584,9 +1595,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-150_Mphi-200' : {
+    'hfDMps_Mchi150_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1596,9 +1607,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-150_Mphi-500' : {
+    'hfDMps_Mchi150_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-150_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1608,9 +1619,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-50_Mphi-200' : {
+    'hfDMps_Mchi50_Mphi200' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1620,9 +1631,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-50_Mphi-50' : {
+    'hfDMps_Mchi50_Mphi50' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1632,9 +1643,9 @@ sample = {
         'plot': False,
     },
 
-    'hfDMJets_pseudoscalar_Mchi-500_Mphi-500' : {
+    'hfDMps_Mchi500_Mphi500' : {
         'order' : 1001,
-        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1','TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_madgraphMLM_pythia8_v1'],
+        'files' : ['BBbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1','TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1803,347 +1814,4 @@ sample = {
     },
 }
 
-#samplegroups = {
-
-    ##'QCD' : {
-        ##'order' : 1,
-        ##'files' : ['QCD_HT100To250','QCD_HT250To500','QCD_HT500To1000','QCD_HT1000ToInf'],
-        ###'files' : ['QCD_HT500To1000','QCD_HT1000ToInf'],
-        ##'color' : 920,#9909,
-        ##'lcolor': 921,#9909,
-        ##'label' : 'QCD',
-        ##'weight': 1.,
-        ##},
-
-    #'singleT' : {
-        #'order' : 2,
-        #'files' : ['TToLeptons_schannel','TbarToLeptons_schannel','TToLeptons_tchannel','TbarToLeptons_tchannel','T_tWchannel','Tbar_tWchannel'],
-        #'color' : 9908,
-        #'lcolor': 9918,
-        #'label' : 'single t',
-        #'weight': 1.,
-        #},
-
-    #'TT' : {
-        #'order' : 3,
-        #'files' : ['TTJets'],
-        #'color' : 9903,
-        #'lcolor': 9913,
-        #'label' : 't#bar{t}',
-        #'weight': 1.,
-        #},
-
-    #'Gamma' : {
-        #'order' : 4,
-        #'files' : ['GJets_HT100to200','GJets_HT200to400','GJets_HT400to600','GJets_HT600toInf'],
-        #'color' : 9904,
-        #'lcolor': 9914,
-        #'label' : '#gamma + jets',
-        #'weight': 1.,
-        #},
-
-    #'Zmumu' : {
-        #'order' : 5,
-        #'files' : ['DYJetsToLL_M50_HT100to200','DYJetsToLL_M50_HT200to400','DYJetsToLL_M50_HT400to600','DYJetsToLL_M50_HT600toInf'],
-        #'color' : 9905,
-        #'lcolor': 9915,
-        #'label' : 'Z#rightarrow#mu#mu + jets',
-        #'weight': 1.,
-        #},
-
-    #'Wmunu' : {
-        #'order' : 6,
-        #'files' : ['WJetsToLNu_HT100to200','WJetsToLNu_HT200to400','WJetsToLNu_HT400to600','WJetsToLNu_HT600toInf'],
-        #'color' : 9901,
-        #'lcolor': 9911,
-        #'label' : 'W#rightarrow#mu#nu + jets',
-        #'weight': 1.,
-        #},
-
-    #'Znunu' : {
-        #'order' : 7,
-        #'files' : ['ZJetsToNuNu_HT100to200','ZJetsToNuNu_HT200to400','ZJetsToNuNu_HT400to600','ZJetsToNuNu_HT600toInf'],
-        #'color' : 9906,
-        #'lcolor': 9916,
-        #'label' : 'Z#rightarrow#nu#nu + jets',
-        #'weight': 1.,
-        #},
-
-    #'signal_DMM1AV' : {
-        #'order' : 9,
-        #'files' : ['DM_Monojet_M1_AV'],
-        #'color' : 0,
-        #'lcolor': 9957,
-        #'label' : 'DM M1 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-    #'signal_DMM10AV' : {
-        #'order' : 10,
-        #'files' : ['DM_Monojet_M10_AV'],
-        #'color' : 0,
-        #'lcolor': 9956,
-        #'label' : 'DM M10 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-    
-    #'signal_DMM10V' : {
-        #'order' : 11,
-        #'files' : ['DM_Monojet_M10_V'],
-        #'color' : 0,
-        #'lcolor': 9955,
-        #'label' : 'DM M10 V [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-    
-    #'signal_DMM100AV' : {
-        #'order' : 12,
-        #'files' : ['DM_Monojet_M100_AV'],
-        #'color' : 0,
-        #'lcolor': 9954,
-        #'label' : 'DM M100 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-        
-    #'signal_DMM100V' : {
-        #'order' : 13,
-        #'files' : ['DM_Monojet_M100_V'],
-        #'color' : 0,
-        #'lcolor': 9953,
-        #'label' : 'DM M100 V [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-    
-    #'signal_DMM1000AV' : {
-        #'order' : 14,
-        #'files' : ['DM_Monojet_M1000_AV'],
-        #'color' : 0,
-        #'lcolor': 9952,
-        #'label' : 'DM M1000 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-    
-    #'signal_DMM1000V' : {
-        #'order' : 15,
-        #'files' : ['DM_Monojet_M1000_V'],
-        #'color' : 0,
-        #'lcolor': 9951,
-        #'label' : 'DM M1000 V [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-    #'signal_ZnunuHbb' : {
-        #'order' : 16,
-        #'files' : ['ZH_HToBB_ZToNuNu'],
-        #'color' : 60,
-        #'lcolor': 60,
-        #'label' : 'Z#rightarrow#nu#nu + H#rightarrowbb [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-    #'signal_DMMonoB' : {
-        #'order' : 17,
-        #'files' : ['DM_MonoB'],
-        #'color' : 70,
-        #'lcolor': 70,
-        #'label' : 'DM-b/bb [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-    #'signal_DMMonoVbb' : {
-        #'order' : 18,
-        #'files' : ['DM_MonoVbb'],
-        #'color' : 80,
-        #'lcolor': 80,
-        #'label' : 'DM-Z(bb) [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-    #'signal_DMMonoH' : {
-        #'order' : 19,
-        #'files' : ['DM_MonoH'],
-        #'color' : 90,
-        #'lcolor': 90,
-        #'label' : 'DM-H(bb) [#sigma=1pb]',
-        #'weight': 1.,
-        #},
-
-#}
-
-samplegroups = {
-
-    'QCD' : {
-        'order' : 1,
-        #'files' : ['QCD_HT100To250','QCD_HT250To500','QCD_HT500To1000','QCD_HT1000ToInf'],
-        #'files' : ['QCD_HT500To1000','QCD_HT1000ToInf'],
-        'files' : ['QCD_HT1000ToInf'],
-        'color' : 920,#9909,
-        'lcolor': 921,#9909,
-        'label' : 'QCD',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],
-        },
-
-    'Top' : {
-        'order' : 2,
-        'files' : ['Top'],
-        'color' : 9903,
-        'lcolor': 9913,
-        'label' : 't',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],
-        },
-
-    'Gamma' : {
-        'order' : 4,
-        'files' : ['GJets'],
-        'color' : 9904,
-        'lcolor': 9914,
-        'label' : '#gamma + jets',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],
-        },
-
-    'Zmumu' : {
-        'order' : 5,
-        'files' : ['DYJetsToLL'],
-        'color' : 9905,
-        'lcolor': 9915,
-        'label' : 'Z#rightarrow#mu#mu + jets',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],        
-        },
-
-    'Wmunu' : {
-        'order' : 6,
-        'files' : ['WJetsToLNu'],
-        'color' : 9901,
-        'lcolor': 9911,
-        'label' : 'W#rightarrow#mu#nu + jets',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],        
-        },
-
-    'Znunu' : {
-        'order' : 7,
-        'files' : ['ZJetsToNuNu'],
-        'color' : 9906,
-        'lcolor': 9916,
-        'label' : 'Z#rightarrow#nu#nu + jets',
-        'weight': 1.,
-        'region': ['SR','ZCR','WCR','GCR'],        
-        },
-
-    #'signal_DMM1AV' : {
-        #'order' : 9,
-        #'files' : ['DM_Monojet_M1_AV'],
-        #'color' : 0,
-        #'lcolor': 9957,
-        #'label' : 'DM M1 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-
-    #'signal_DMM10AV' : {
-        #'order' : 10,
-        #'files' : ['DM_Monojet_M10_AV'],
-        #'color' : 0,
-        #'lcolor': 9956,
-        #'label' : 'DM M10 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-    
-    #'signal_DMM10V' : {
-        #'order' : 11,
-        #'files' : ['DM_Monojet_M10_V'],
-        #'color' : 0,
-        #'lcolor': 9955,
-        #'label' : 'DM M10 V [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-    
-    #'signal_DMM100AV' : {
-        #'order' : 12,
-        #'files' : ['DM_Monojet_M100_AV'],
-        #'color' : 0,
-        #'lcolor': 9954,
-        #'label' : 'DM M100 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-        
-    #'signal_DMM100V' : {
-        #'order' : 13,
-        #'files' : ['DM_Monojet_M100_V'],
-        #'color' : 0,
-        #'lcolor': 9953,
-        #'label' : 'DM M100 V [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-    
-    #'signal_DMM1000AV' : {
-        #'order' : 14,
-        #'files' : ['DM_Monojet_M1000_AV'],
-        #'color' : 0,
-        #'lcolor': 9952,
-        #'label' : 'DM M1000 AV [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-    
-    #'signal_DMM1000V' : {
-        #'order' : 15,
-        #'files' : ['DM_Monojet_M1000_V'],
-        #'color' : 0,
-        #'lcolor': 9951,
-        #'label' : 'DM M1000 V [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-
-    #'signal_ZnunuHbb' : {
-        #'order' : 16,
-        #'files' : ['ZH_HToBB_ZToNuNu'],
-        #'color' : 60,
-        #'lcolor': 60,
-        #'label' : 'Z#rightarrow#nu#nu + H#rightarrowbb [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-
-    #'signal_DMMonoB' : {
-    #    'order' : 17,
-    #    'files' : ['DM_MonoB'],
-    #    'color' : 0,
-    #    'lcolor': 9950,
-    #    'label' : 'DM+bb [#sigma=1pb]',
-    #    'weight': 1.,
-    #    'region': ['SR'],        
-    #    },
-
-    #'signal_DMMonoVbb' : {
-        #'order' : 18,
-        #'files' : ['DM_MonoVbb'],
-        #'color' : 80,
-        #'lcolor': 80,
-        #'label' : 'DM-Z(bb) [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-
-    #'signal_DMMonoH' : {
-        #'order' : 19,
-        #'files' : ['DM_MonoH'],
-        #'color' : 90,
-        #'lcolor': 90,
-        #'label' : 'DM-H(bb) [#sigma=1pb]',
-        #'weight': 1.,
-        #'region': ['SR'],        
-        #},
-
-}
-    
-samplegroups = OrderedDict(sorted(samplegroups.iteritems(), key=lambda x: x[1]['order']))
+#samplegroups = OrderedDict(sorted(samplegroups.iteritems(), key=lambda x: x[1]['order']))
