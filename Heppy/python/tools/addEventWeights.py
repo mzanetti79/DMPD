@@ -157,10 +157,10 @@ def isJSON(run, lumi):
 
 def applyKfactor(name):
     if 'madgraph' in name and ('DYJets' in name or 'ZJets' in name):
-        if 'HT100to200' in name: return 1.5992641737053377
-        elif 'HT200to400' in name: return 1.388778036943685
-        elif 'HT400to600' in name: return 1.5360789955333298
-        elif 'HT600toInf' in name: return 1.1347900247061118
+        if 'HT-100To200' in name: return 1.5992641737053377
+        elif 'HT-200To400' in name: return 1.388778036943685
+        elif 'HT-400To600' in name: return 1.5360789955333298
+        elif 'HT-600ToInf' in name: return 1.1347900247061118
         else: return 1.
     elif 'madgraph' in name and 'WJets' in name:
         return 1.21
