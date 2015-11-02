@@ -155,18 +155,6 @@ def isJSON(run, lumi):
     return False
 
 
-def applyKfactor(name):
-    if 'madgraph' in name and ('DYJets' in name or 'ZJets' in name):
-        if 'HT-100To200' in name: return 1.5992641737053377
-        elif 'HT-200To400' in name: return 1.388778036943685
-        elif 'HT-400To600' in name: return 1.5360789955333298
-        elif 'HT-600ToInf' in name: return 1.1347900247061118
-        else: return 1.
-    elif 'madgraph' in name and 'WJets' in name:
-        return 1.21
-    else:
-        return 1.
-
 def processFile(dir_name, verbose=False):
     
     #print '##################################################'
@@ -194,11 +182,8 @@ def processFile(dir_name, verbose=False):
     ref_file = TFile(ref_file_name, 'READ')
     ref_hist = ref_file.Get('Counters/Counter')
     totalEntries = ref_hist.GetBinContent(0)
-    if isMC:
-        weightXS = xsections[dir_name[:-3]]/totalEntries
-        weightXS *= applyKfactor(dir_name)
-    else:
-        weightXS = 1.
+    if isMC: weightXS = xsections[dir_name[:-3]]/totalEntries
+    else: weightXS = 1.
     
     # PU reweighting
     puFile = TFile(ref_pu_file, 'READ')
@@ -436,9 +421,15 @@ def processFile(dir_name, verbose=False):
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
                     # Filters
-                    elif not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
+                    elif not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_HBHENoiseIsoFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
                     # Filter by PD
-                    else: xsWeight[0] = 1.
+                    else:
+                        xsWeight[0] = 1.
+                        #den = 0
+                        #if 'SingleMuon' in dir_name and obj.HLT_SingleMu: den +=1
+                        #if 'SingleElectron' in dir_name and obj.HLT_SingleElectron: den +=1
+                        #if 'MET' in dir_name and obj.HLT_MET: den +=1
+                        #xsWeight[0] = 1./max(den, 1.)
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 # Total
@@ -501,6 +492,7 @@ for d in os.listdir(origin):
         continue
     if not d[:-3] in xsections.keys():
         continue
+    if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
