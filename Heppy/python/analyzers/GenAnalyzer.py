@@ -55,7 +55,7 @@ class GenAnalyzer( Analyzer ):
             # LHE
             setup.services["outputfile"].file.mkdir("Lhe")
             setup.services["outputfile"].file.cd("Lhe")
-            self.Hist["LheZpt"] = ROOT.TH1F("LheZpt", ";Z p_{T} [GeV]", 2500, 0., 2500.)
+            self.Hist["LheVpt"] = ROOT.TH1F("LheVpt", ";Z p_{T} [GeV]", 2500, 0., 2500.)
             self.Hist["LheHT"] = ROOT.TH1F("LheHT", ";HT [GeV]", 150, 0., 1500.)
             self.Hist["LheNj"] = ROOT.TH1F("LheNj", ";Number of partons", 6, -0.5, 5.5)
             self.Hist["LheNb"] = ROOT.TH1F("LheNb", ";Number of b-quarks", 6, -0.5, 5.5)
@@ -173,7 +173,7 @@ class GenAnalyzer( Analyzer ):
         if not hasattr(event, "lheV_pt"):
             return True
             
-        self.Hist["LheZpt"].Fill(event.lheV_pt, weight)
+        self.Hist["LheVpt"].Fill(event.lheV_pt, weight)
         self.Hist["LheHT"].Fill(event.lheHT, weight)
         self.Hist["LheNj"].Fill(event.lheNj, weight)
         self.Hist["LheNb"].Fill(event.lheNb, weight)
