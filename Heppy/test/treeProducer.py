@@ -171,9 +171,6 @@ leptonAnalyzer = cfg.Analyzer(
     # NOTE -> SPRING15 25ns        
     el_effectiveAreas           = 'Spring15_25ns_v1',
     ele_tightId                 = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto',
-    # NOTE -> PHYS14
-    #el_effectiveAreas           = 'Phys14_25ns_v1', #(can be 'Data2012' or 'Phys14_25ns_v1')
-    #ele_tightId                 = 'POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto',
 
     ### Electron selection - First step
     inclusive_electron_id       = '',
@@ -194,9 +191,6 @@ leptonAnalyzer = cfg.Analyzer(
     # NOTE -> SPRING15 25ns        
     loose_electron_id           = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto',
     loose_electron_isoCut       = lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.126 ) or  ( electron.isEE() and electron.relIso03 < 0.144 ) ) ,
-    # NOTE -> PHYS14
-    #loose_electron_id           = 'POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto',
-    #loose_electron_isoCut       = lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.158721 ) or  ( electron.isEE() and electron.relIso03 < 0.177032 ) ) ,
 
     ### Muon - General
     ##############################
@@ -223,8 +217,6 @@ leptonAnalyzer = cfg.Analyzer(
     loose_muon_relIso           = 1.e99,
     # NOTE -> SPRING15 25ns        
     loose_muon_isoCut           = lambda muon : muon.relIso04 < 0.25,
-    # NOTE -> PHYS14
-    #loose_muon_isoCut           = lambda muon : muon.relIso04 < 0.2,
 
     # Mini-isolation, with pT dependent cone: will fill in the miniRelIso, miniRelIsoCharged, miniRelIsoNeutral variables of the leptons (see https://indico.cern.ch/event/368826/ )
     doMiniIsolation = True, # off by default since it requires access to all PFCandidates
@@ -344,8 +336,8 @@ tauAnalyzer = cfg.Analyzer(
     #inclusive_decayModeID = "decayModeFindingNewDMs", # ignored if not set or ""
     #inclusive_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
     inclusive_decayModeID = "decayModeFinding", # ignored if not set or ""
-    inclusive_tauID = "byCombinedIsolationDeltaBetaCorrRaw3Hits",
-    inclusive_tauIDnHits = 5,
+    inclusive_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
+    inclusive_tauIDcut = 1e99, #NOTE -> inclusive_tauID < inclusive_tauIDcut
     inclusive_vetoLeptonsPOG = False, # If True, the following two IDs are required
     inclusive_tauAntiMuonID = "",
     inclusive_tauAntiElectronID = "",
@@ -359,16 +351,14 @@ tauAnalyzer = cfg.Analyzer(
     #loose_decayModeID = "decayModeFinding", # ignored if not set or ""
     #loose_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
     loose_decayModeID = "decayModeFinding", # ignored if not set or ""
-    loose_tauID = "byCombinedIsolationDeltaBetaCorrRaw3Hits",
-    loose_tauIDnHits = 5,
+    loose_tauID = "byLooseCombinedIsolationDeltaBetaCorr3Hits",
+    loose_tauIDcut = 1e99, #NOTE -> loose_tauID < loose_tauIDcut
     loose_vetoLeptonsPOG = False, # If True, the following two IDs are required
     loose_tauAntiMuonID = "",
     loose_tauAntiElectronID = "",
     loose_tauLooseID = "decayModeFinding"
     ### ====================== ###
     )
-
-    #if ( tau.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits") >= 5 ) continue;
 
 ##############################
 ### PHOTONANALYZER         ###
@@ -383,7 +373,7 @@ photonAnalyzer = cfg.Analyzer(
     photons                     = 'slimmedPhotons',
     ptMin                       = 15,
     etaMax                      = 2.5,
-    gammaID                     = 'POG_PHYS14_25ns_Loose',#'POG_PHYS14_25ns_Loose_hardcoded',
+    gammaID                     = 'POG_SPRING15_50ns_Loose',#'POG_PHYS14_25ns_Loose_hardcoded',
     gamma_isoCorr               = 'rhoArea',
     do_mc_match                 = True,
     do_randomCone               = False,
@@ -442,6 +432,25 @@ METNoHFAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
+######################################
+### TRIGGER MATCHING ANALYZERS     ###
+######################################
+from PhysicsTools.Heppy.analyzers.core.TriggerMatchAnalyzer import TriggerMatchAnalyzer
+TriggerMatchAnalyzer = cfg.Analyzer(
+   
+   class_object = TriggerMatchAnalyzer,
+   
+   processName = 'PAT',
+   label = '',
+   unpackPathNames = True,
+   trgObjSelectors = [lambda ob: ob.pt()>10, lambda ob: abs(ob.eta())<2.5],
+   collToMatch = "selectedLeptons",
+   collMatchSelectors = [lambda lep,ob: abs(lep.pt()/ob.pt()-1)<0.5],
+   collMatchDRCut = 0.3,
+   univoqueMatching = True,
+   verbose = False
+)
+
 ##############################
 ### ANALYSIS ANALYZERS     ###
 ##############################
@@ -480,15 +489,12 @@ XCleaningAnalyzer = cfg.Analyzer(
     mu_clean_pt  = 20.,
     mu_clean_id  = 'POG_ID_Tight',
     mu_clean_iso = lambda x : x.relIso04 < 0.15,
-    #mu_clean_iso = lambda x : x.relIso04 < 0.12,
     mu_tau_dr    = 0.4,
     mu_jet_dr    = 0.4,
     mu_fatjet_dr = 0.4,
     ele_clean_pt = 20.,
     ele_clean_id = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto',
     ele_clean_iso= lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.126 ) or  ( electron.isEE() and electron.relIso03 < 0.144 ) ) ,
-    #ele_clean_id = 'POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Veto',
-    #ele_clean_iso= lambda x : ( ( x.isEB() and x.relIso03 <  0.069537 ) or  ( x.isEE() and x.relIso03 < 0.078265 ) ),
     ele_tau_dr   = 0.4,
     ele_jet_dr   = 0.4,
     ele_fatjet_dr= 0.4,
@@ -860,6 +866,7 @@ sequence = [
 #    SyncAnalyzerGCR,
 #    SyncAnalyzerZCR,
 #    SyncAnalyzerWCR,
+    TriggerMatchAnalyzer,
     PreselectionAnalyzer,
     ##### Analysis Analyzers
 #    ZeroLeptonAnalyzer,
@@ -898,7 +905,6 @@ output_service = cfg.Service(
 ### INPUT                  ###
 ##############################
 from PhysicsTools.Heppy.utils.miniAodFiles import miniAodFiles
-#from DMPD.Heppy.samples.Phys14.fileLists import samples
 from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
 from DMPD.Heppy.samples.Data.fileLists import datasamples
 
@@ -926,7 +932,12 @@ for i in mcsamples:
     )
 
 testCompontent = cfg.Component(
-        files   = ['dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleElectron/MINIAOD/PromptReco-v4/000/258/434/00000/6E2297F2-806E-E511-AA49-02163E014614.root',],
+        #files   = ['dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleElectron/MINIAOD/PromptReco-v4/000/258/434/00000/6E2297F2-806E-E511-AA49-02163E014614.root',],
+        files   = [
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/025A01CA-8B6F-E511-B7A5-0025905A6084.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/0433E4CA-8B6F-E511-BAF9-0025905A60BC.root',
+        ],
         name    = "test",
         json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
         splitFactor = 1,
@@ -1109,23 +1120,41 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
 #]
 
-## DATA ###
+
+
+# DATA 05-Oct-2015 RunC and PromptReco-v4 ###
+#selectedComponents = [
+ #Run2015D
+ #sample['DoubleEG_Run2015D-PromptReco-v4'],
+ #sample['DoubleMuon_Run2015D-PromptReco-v4'],
+ #sample['MET_Run2015D-PromptReco-v4'],
+ #sample['SingleElectron_Run2015D-PromptReco-v4'],
+ #sample['SingleMuon_Run2015D-PromptReco-v4'],
+##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+
+ #sample['DoubleEG_Run2015C-05Oct2015-v1'],
+ #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+ #sample['MET_Run2015C-05Oct2015-v1'],
+ #sample['SingleElectron_Run2015C-05Oct2015-v1'],
+ #sample['SingleMuon_Run2015C-05Oct2015-v1'],
+##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
+#]
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'RECO'
+
+## DATA 05-Oct-2015 RunD ###
 #selectedComponents = [
 #  # Run2015D
 #  sample['DoubleEG_Run2015D-05Oct2015-v1'],
-#  sample['DoubleEG_Run2015D-PromptReco-v4'],
 #  sample['DoubleMuon_Run2015D-05Oct2015-v1'],
-#  sample['DoubleMuon_Run2015D-PromptReco-v4'],
 #  sample['MET_Run2015D-05Oct2015-v1'],
-#  sample['MET_Run2015D-PromptReco-v4'],
 #  sample['SingleElectron_Run2015D-05Oct2015-v1'],
-#  sample['SingleElectron_Run2015D-PromptReco-v4'],
 #  sample['SingleMuon_Run2015D-05Oct2015-v1'],
-#  sample['SingleMuon_Run2015D-PromptReco-v4'],
 ##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 #]
-filterAnalyzer.processName = 'RECO'
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'PAT'
+
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
 #selectedComponents = [sample['SYNCH_TTBar'],]
@@ -1155,7 +1184,7 @@ if __name__ == '__main__':
     looper = Looper(
         'DM',
         config,
-        nPrint = 1,
+        nPrint = 0,
         nEvents=1000,
         )
     looper.loop()

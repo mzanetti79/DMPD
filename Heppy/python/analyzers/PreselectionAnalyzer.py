@@ -178,6 +178,19 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanPhotons = event.selectedPhotons
         event.xcleanJets    = event.cleanJets
         event.xcleanJetsAK8 = event.cleanJetsAK8
+        
+        
+        for i in event.xcleanLeptons:
+            setattr(i,'trigMatch',    False)
+            setattr(i,'trigMatchPt',  -999. )
+            setattr(i,'trigMatchEta', -999. )
+            setattr(i,'trigMatchPhi', -999. )
+            if hasattr(i,'matchedTrgObj'):
+                i.trigMatch    = True
+                i.trigMatchPt  = i.matchedTrgObj.pt()
+                i.trigMatchEta = i.matchedTrgObj.eta()
+                i.trigMatchPhi = i.matchedTrgObj.phi()
+
 #        event.xcleanJetsJERUp      = event.cleanJetsJERUp
 #        event.xcleanJetsAK8JERUp   = event.cleanJetsAK8JERUp
 #        event.xcleanJetsJERDown    = event.cleanJetsJERDown
