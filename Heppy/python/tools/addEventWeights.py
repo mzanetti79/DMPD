@@ -417,6 +417,13 @@ def processFile(dir_name, verbose=False):
                     cormet_ptScaleDown[0]= obj.met_pt
                     cormet_ptResUp[0]    = obj.met_pt
                     cormet_ptResDown[0]  = obj.met_pt
+                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                        corfakemet_pt[0]         = obj.met_pt
+                        corfakemet_phi[0]        = obj.met_phi
+                        corfakemet_ptScaleUp[0]  = obj.met_pt
+                        corfakemet_ptScaleDown[0]= obj.met_pt
+                        corfakemet_ptResUp[0]    = obj.met_pt
+                        corfakemet_ptResDown[0]  = obj.met_pt               
 
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
