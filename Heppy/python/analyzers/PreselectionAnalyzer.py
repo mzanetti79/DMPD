@@ -168,6 +168,9 @@ class PreselectionAnalyzer( Analyzer ):
         else:
             event.eventWeight = 1.
         
+        # Inclusive lepton collections
+        event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
+        event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon()]
         
         # Build clean collections
         event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
