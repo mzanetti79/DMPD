@@ -54,7 +54,7 @@ triggerAnalyzer= cfg.Analyzer(
     #grouping several paths into a single flag
     # v* can be used to ignore the version of a path
     triggerBits={
-        'SingleMu'       : ['HLT_IsoMu22_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
+        'SingleMu'       : ['HLT_IsoMu20_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MuonEG'         : ['HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v*'],        
