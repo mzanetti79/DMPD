@@ -9,7 +9,7 @@ from ROOT import TFile, TH1
 #from DMPD.Heppy.samples.Data.fileLists import datasamples
 #samples = datasamples.copy()
 #samples.update(mcsamples)
-from DMPD.Heppy.samples.Spring15.xSections import xsections
+from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors
 
 #ROOT.gROOT.SetBatch(1)
 
@@ -182,19 +182,22 @@ def processFile(dir_name, verbose=False):
     ref_file = TFile(ref_file_name, 'READ')
     ref_hist = ref_file.Get('Counters/Counter')
     totalEntries = ref_hist.GetBinContent(0)
-    if isMC: weightXS = xsections[dir_name[:-3]]/totalEntries
-    else: weightXS = 1.
+    if isMC: 
+        weightXS = xsections[dir_name[:-3]]/totalEntries
+        kfactorXS = kfactors[dir_name[:-3]]
+    else: weightXS = kfactorXS = 1.
     
     # PU reweighting
     puFile = TFile(ref_pu_file, 'READ')
-    puData = puFile.Get('data')
-    puMC = puFile.Get('mc')
     puRatio = puFile.Get('ratio')
+    puRatioUp = puFile.Get('ratioUp')
+    puRatioDown = puFile.Get('ratioDown')
     if verbose: print 'PU histogram entries: ', puRatio.GetEntries()
     
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
+    kfactorWeight  = array('f', [1.0])  # weight due to the MC sample cross section
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     pileupWeightUp = array('f', [1.0])
     pileupWeightDown = array('f', [1.0])
@@ -245,6 +248,7 @@ def processFile(dir_name, verbose=False):
             # New branches
             eventWeightBranch = new_tree.Branch('eventWeight', eventWeight, 'eventWeight/F')
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
+            kfactorWeightBranch = new_tree.Branch('kfactorWeight', kfactorWeight, 'kfactorWeight/F')
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
             pileupWeightUpBranch = new_tree.Branch('pileupWeightUp', pileupWeightUp, 'pileupWeightUp/F')
             pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
@@ -276,7 +280,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
                 for i in range(njets):
                     csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
@@ -285,11 +289,12 @@ def processFile(dir_name, verbose=False):
                 if isMC:
                     # Cross section
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
+                    kfactorWeight[0] = kfactorXS
                     # PU reweighting
-                    #nbin = puData.FindBin(obj.nPV)
-                    #pileupWeight[0] = puData.GetBinContent(nbin) / puMC.GetBinContent(nbin) if puMC.GetBinContent(nbin) > 0. else 0.
-                    pileupWeight[0] = puRatio.GetBinContent(puRatio.FindBin(obj.nPV) )#if obj.nPV < puRatio.GetXaxis().GetMax() else puRatio.GetNbinsX())
-                    pileupWeightUp[0] = pileupWeightDown[0] = pileupWeight[0]
+                    puBin = min(puData.FindBin(obj.nPU), 50)
+                    pileupWeight[0] = puRatio.GetBinContent(puBin)
+                    pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
+                    pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)
                     
                     for i in range(njets):
                         pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
@@ -445,6 +450,7 @@ def processFile(dir_name, verbose=False):
                 # Fill the branches
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
+                kfactorWeightBranch.Fill()
                 pileupWeightBranch.Fill()
                 pileupWeightUpBranch.Fill()
                 pileupWeightDownBranch.Fill()
@@ -499,7 +505,7 @@ for d in os.listdir(origin):
         continue
     if not d[:-3] in xsections.keys():
         continue
-    if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
+    #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
