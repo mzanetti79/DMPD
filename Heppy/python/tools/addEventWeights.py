@@ -184,7 +184,8 @@ def processFile(dir_name, verbose=False):
     totalEntries = ref_hist.GetBinContent(0)
     if isMC: 
         weightXS = xsections[dir_name[:-3]]/totalEntries
-        kfactorXS = kfactors[dir_name[:-3]]
+        if dir_name[:-3] in kfactors: kfactorXS = kfactors[dir_name[:-3]]
+        else: kfactorXS = 1.
     else: weightXS = kfactorXS = 1.
     
     # PU reweighting
@@ -291,7 +292,7 @@ def processFile(dir_name, verbose=False):
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
                     kfactorWeight[0] = kfactorXS
                     # PU reweighting
-                    puBin = min(puData.FindBin(obj.nPU), 50)
+                    puBin = min(puRatio.FindBin(obj.nPU), 50)
                     pileupWeight[0] = puRatio.GetBinContent(puBin)
                     pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
                     pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)

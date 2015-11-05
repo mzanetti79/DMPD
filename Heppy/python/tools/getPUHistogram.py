@@ -124,7 +124,7 @@ def setPUHistogram():
     ratioUp.Divide(dataUp)
     ratioDown.Divide(dataDown)
     
-    outFile = TFile("./PU.root", "RECREATE")
+    outFile = TFile("./PU/PU.root", "RECREATE")
     outFile.cd()
     mc.Write()
     data.Write()
@@ -134,7 +134,7 @@ def setPUHistogram():
     ratioUp.Write()
     ratioDown.Write()
     outFile.Close()
-    print "Histograms written to ./PU.root file"
+    print "Histograms written to ./PU/PU.root file"
     
     leg = TLegend(0.65, 0.7, 0.98, 0.9)
     leg.SetBorderSize(0)
