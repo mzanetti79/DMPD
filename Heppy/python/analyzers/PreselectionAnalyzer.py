@@ -182,10 +182,10 @@ class PreselectionAnalyzer( Analyzer ):
         
         for i in event.xcleanLeptons:
             setattr(i,'trigMatch',    False)
-            setattr(i,'trigMatchPt',  -999. )
-            setattr(i,'trigMatchEta', -999. )
-            setattr(i,'trigMatchPhi', -999. )
-            if hasattr(i,'matchedTrgObj'):
+            setattr(i,'trigMatchPt',  -999.)
+            setattr(i,'trigMatchEta', -999.)
+            setattr(i,'trigMatchPhi', -999.)
+            if hasattr(i,'matchedTrgObj') and (i.matchedTrgObj is not None):
                 i.trigMatch    = True
                 i.trigMatchPt  = i.matchedTrgObj.pt()
                 i.trigMatchEta = i.matchedTrgObj.eta()

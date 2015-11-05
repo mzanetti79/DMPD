@@ -440,7 +440,7 @@ TriggerMatchAnalyzer = cfg.Analyzer(
    
    class_object = TriggerMatchAnalyzer,
    
-   processName = 'PAT',
+   processName = 'RECO',
    label = '',
    unpackPathNames = True,
    trgObjSelectors = [lambda ob: ob.pt()>10, lambda ob: abs(ob.eta())<2.5],
@@ -932,11 +932,10 @@ for i in mcsamples:
     )
 
 testCompontent = cfg.Component(
-        #files   = ['dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleElectron/MINIAOD/PromptReco-v4/000/258/434/00000/6E2297F2-806E-E511-AA49-02163E014614.root',],
         files   = [
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root',
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/025A01CA-8B6F-E511-B7A5-0025905A6084.root',
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/0433E4CA-8B6F-E511-BAF9-0025905A60BC.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/258/159/00000/6CA1C627-246C-E511-8A6A-02163E014147.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015C_25ns/SingleMuon/MINIAOD/05Oct2015-v1/50000/AAC7E1E8-1274-E511-886D-0025905A60C6.root',
         ],
         name    = "test",
         json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
@@ -1121,39 +1120,33 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #]
 
 
+### DATA ###
+selectedComponents = [
+ ###Run2015D PromptReco
+ sample['DoubleEG_Run2015D-PromptReco-v4'],
+ sample['DoubleMuon_Run2015D-PromptReco-v4'],
+ sample['MET_Run2015D-PromptReco-v4'],
+ sample['SingleElectron_Run2015D-PromptReco-v4'],
+ sample['SingleMuon_Run2015D-PromptReco-v4'],
+#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 
-# DATA 05-Oct-2015 RunC and PromptReco-v4 ###
-#selectedComponents = [
- #Run2015D
- #sample['DoubleEG_Run2015D-PromptReco-v4'],
- #sample['DoubleMuon_Run2015D-PromptReco-v4'],
- #sample['MET_Run2015D-PromptReco-v4'],
- #sample['SingleElectron_Run2015D-PromptReco-v4'],
- #sample['SingleMuon_Run2015D-PromptReco-v4'],
-##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+ ###Run2015C O5Oct2015
+ sample['DoubleEG_Run2015C-05Oct2015-v1'],
+ sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+ sample['MET_Run2015C-05Oct2015-v1'],
+ sample['SingleElectron_Run2015C-05Oct2015-v1'],
+ sample['SingleMuon_Run2015C-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
 
- #sample['DoubleEG_Run2015C-05Oct2015-v1'],
- #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
- #sample['MET_Run2015C-05Oct2015-v1'],
- #sample['SingleElectron_Run2015C-05Oct2015-v1'],
- #sample['SingleMuon_Run2015C-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
-#]
-#filterAnalyzer.processName = 'RECO'
-#TriggerMatchAnalyzer.processName = 'RECO'
-
-## DATA 05-Oct-2015 RunD ###
-#selectedComponents = [
-#  # Run2015D
-#  sample['DoubleEG_Run2015D-05Oct2015-v1'],
-#  sample['DoubleMuon_Run2015D-05Oct2015-v1'],
-#  sample['MET_Run2015D-05Oct2015-v1'],
-#  sample['SingleElectron_Run2015D-05Oct2015-v1'],
-#  sample['SingleMuon_Run2015D-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
-#]
-#filterAnalyzer.processName = 'RECO'
-#TriggerMatchAnalyzer.processName = 'PAT'
+ ### Run2015D
+ sample['DoubleEG_Run2015D-05Oct2015-v1'],
+ sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+ sample['MET_Run2015D-05Oct2015-v1'],
+ sample['SingleElectron_Run2015D-05Oct2015-v1'],
+ sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
+]
+filterAnalyzer.processName = 'RECO'
 
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
@@ -1162,7 +1155,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sample['SYNCH_WJetsToLNu'],]
 #selectedComponents = [sample['SYNCH_RSGravitonToGaGa'],]
 #selectedComponents = [sample['SYNCH_ADDMonojet'],sample['SYNCH_TTBar'],sample['SYNCH_DYJetsToLL'],sample['SYNCH_WJetsToLNu'],sample['SYNCH_RSGravitonToGaGa'],]
-selectedComponents = [testCompontent,]
+#selectedComponents = [testCompontent,]
+#filterAnalyzer.processName = 'RECO'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("preprocessor.py")
