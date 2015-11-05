@@ -44,7 +44,7 @@ class SRAnalyzer( Analyzer ):
         if event.isZ2NN: self.Hist["Z2NNCounter"].AddBinContent(1, event.eventWeight)
         
         # MET
-        if not event.met.pt() > 200: #self.cfg_ana.met_pt:
+        if not event.met.pt() > self.cfg_ana.met_pt:
             event.isZ2NN = False
             event.isSR = False
         
