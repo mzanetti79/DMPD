@@ -140,8 +140,37 @@ class PreselectionAnalyzer( Analyzer ):
         recoilX = - event.met.px() - lepton.px()
         recoilY = - event.met.py() - lepton.py()
         event.Upara = (recoilX*lepton.px() + recoilY*lepton.py())/lepton.pt()
-        event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()        
+        event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()      
+        
+        # W' -> WH -> lnubb
+        if len(event.highptFatJets)>0:
+            pz = 0.
+            a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.met.px() + 2.*lepton.py()*event.met.py()
+            A = 4*( lepton.energy()**2 - lepton.pz()**2 )
+            B = -4*a*lepton.pz()
+            C = 4*lepton.energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
+            D = B**2 - 4*A*C
+            if D>0:
+                pz = min((-B+math.sqrt(D))/(2*A), (-B-math.sqrt(D))/(2*A))
+            else:
+                pz = -B/(2*A)
+            kmet = event.met.p4()
+            kmet.SetPz(pz)
+            
+            event.X = lepton.p4() + kmet + event.highptFatJets[0].p4()
+            event.X.mT = (lepton.p4() + kmet + event.highptFatJets[0].p4()).mass()
+            cmet = event.met.p4()
+            cmet.SetPz(lepton.pz())
+            event.X.mC = (lepton.p4() + cmet + event.highptFatJets[0].p4()).mass()
+            event.X.mK = (lepton.p4() + kmet + kH).mass()
+            event.X.deltaR = deltaR(kmet.eta(), kmet.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
+            event.X.deltaEta = abs(kmet.eta() - event.highptFatJets[0].eta())
+            event.X.deltaPhi = abs(deltaPhi(kmet.phi(), event.highptFatJets[0].phi()))
+            event.X.charge = lepton.charge()
+        else:
+            event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         return True
+    
     
     def createX(self, event):
         event.theX = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)

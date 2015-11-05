@@ -576,6 +576,9 @@ class XZhAnalyzer( Analyzer ):
         
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(8, event.eventWeight)
         
+        if event.Z.pt() < self.cfg_ana.Z_pt:
+            return True
+        
         #########################
         #   Part 3: Candidates  #
         #########################
@@ -593,6 +596,7 @@ class XZhAnalyzer( Analyzer ):
         event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
         event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
         event.X.deltaPhi = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
+        event.X.charge = 0
         
 #        elif len(event.highptLeptons) == 1:
 #            event.X = event.highptLeptons[0].p4() + event.met.p4() + event.highptFatJets[0].p4()
@@ -613,9 +617,6 @@ class XZhAnalyzer( Analyzer ):
 #            cmet.SetPz(event.highptLeptons[0].pz())
 #            event.X.mC = (event.highptLeptons[0].p4() + cmet + event.highptFatJets[0].p4()).mass()
 #            event.X.mK = (event.highptLeptons[0].p4() + kmet + kH).mass()
-        
-        if event.Z.pt() < self.cfg_ana.Z_pt:
-            return True
         
         # Fill tree
         event.isXZh = True
