@@ -1,4 +1,4 @@
-xsections   = {
+xsections = {
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 129.0,
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.263,
     'BBbarDMJets_pseudoscalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 5.241e-05,
@@ -164,4 +164,24 @@ xsections   = {
     'SinglePhoton_Run2015D-05Oct2015' : 1.,
     'SingleElectron_Run2015D-05Oct2015' : 1.,
     'DoubleEG_Run2015D-05Oct2015' : 1.,
+}
+
+
+kfactors = {
+    'DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.129,
+    'DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.538,
+    'DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.390,
+    'DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.599,
+    'WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.520,
+    'WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.,
+    'WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.410,
+    'WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.,
+    'WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.617,
+    'WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.,
+    'WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.037,
+    'WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 1.,
+    'ZJetsToNuNu_HT-100To200_13TeV-madgraph' : 1.588,
+    'ZJetsToNuNu_HT-200To400_13TeV-madgraph' : 1.600,
+    'ZJetsToNuNu_HT-400To600_13TeV-madgraph' : 1.359,
+    'ZJetsToNuNu_HT-600ToInf_13TeV-madgraph' : 1.428,
 }
