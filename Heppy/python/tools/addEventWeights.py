@@ -13,7 +13,7 @@ from DMPD.Heppy.samples.Spring15.xSections import xsections
 
 #ROOT.gROOT.SetBatch(1)
 
-ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU.root' % os.environ['CMSSW_BASE']
+ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
 ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
 ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
 ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
@@ -115,7 +115,7 @@ def returnNewWorkingPoint(f, p, pt, eta, sigma):
     return workingpoint[p]
 
 
-def returnresUpapedDiscr(f, discr, pt, eta, sigma=''):
+def returnReshapedDiscr(f, discr, pt, eta, sigma=''):
     if discr<0.001 or discr>1: return discr
     if f<0 or f>2: return discr
     i0, i1 = 0, 4
@@ -303,9 +303,9 @@ def processFile(dir_name, verbose=False):
 #                        CSV[i][0] = reader['M'][0].eval(fl, eta, pt)
 #                        CSVUp[i][0] = reader['M'][1].eval(fl, eta, pt)
 #                        CSVDown[i][0] = reader['M'][-1].eval(fl, eta, pt)
-                        CSV[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, 0)
-                        CSVUp[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, +1)
-                        CSVDown[i][0] = returnresUpapedDiscr(fl, csv, pt, eta, -1)
+                        CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                     
                     cmetpt           = ROOT.Double(obj.met_pt)
                     cmetphi          = ROOT.Double(obj.met_phi)
