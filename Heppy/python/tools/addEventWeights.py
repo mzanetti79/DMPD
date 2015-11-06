@@ -13,6 +13,7 @@ from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors
 
 #ROOT.gROOT.SetBatch(1)
 
+ref_kf_file = '%s/src/DMPD/Heppy/python/tools/Kfactors.root' % os.environ['CMSSW_BASE']
 ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
 ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
 ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
@@ -188,6 +189,13 @@ def processFile(dir_name, verbose=False):
         else: kfactorXS = 1.
     else: weightXS = kfactorXS = 1.
     
+    
+    # K factors
+    ref_kf_file = TFile(ref_kf_file, 'READ')
+    zkf = ref_kf_file.Get("Zkfactor")
+    wkf = ref_kf_file.Get("Wkfactor")
+    if verbose: print 'Kfactors histogram entries: ', zkf.GetEntries(), wkf.GetEntries()
+    
     # PU reweighting
     puFile = TFile(ref_pu_file, 'READ')
     puRatio = puFile.Get('ratio')
@@ -197,8 +205,10 @@ def processFile(dir_name, verbose=False):
     
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
-    xsWeight  = array('f', [1.0])  # weight due to the MC sample cross section
-    kfactorWeight  = array('f', [1.0])  # weight due to the MC sample cross section
+    xsWeight = array('f', [1.0])  # weight due to the MC sample cross section
+    kfactorWeight = array('f', [1.0])  # weight due to the MC sample cross section
+    kfactorWeightUp = array('f', [1.0])
+    kfactorWeightDown = array('f', [1.0])
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     pileupWeightUp = array('f', [1.0])
     pileupWeightDown = array('f', [1.0])
@@ -250,6 +260,8 @@ def processFile(dir_name, verbose=False):
             eventWeightBranch = new_tree.Branch('eventWeight', eventWeight, 'eventWeight/F')
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
             kfactorWeightBranch = new_tree.Branch('kfactorWeight', kfactorWeight, 'kfactorWeight/F')
+            kfactorWeightUpBranch = new_tree.Branch('kfactorWeightUp', kfactorWeightUp, 'kfactorWeightUp/F')
+            kfactorWeightDownBranch = new_tree.Branch('kfactorWeightDown', kfactorWeightDown, 'kfactorWeightDown/F')
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
             pileupWeightUpBranch = new_tree.Branch('pileupWeightUp', pileupWeightUp, 'pileupWeightUp/F')
             pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
@@ -281,7 +293,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
                 for i in range(njets):
                     csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
@@ -290,9 +302,21 @@ def processFile(dir_name, verbose=False):
                 if isMC:
                     # Cross section
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
-                    kfactorWeight[0] = kfactorXS
+                    
+                    # K factors
+                    #kfactorWeight[0] = kfactorXS
+                    kfBin = max(zkf.GetXaxis().GetXmin(), min(zkf.FindBin(obj.genVpt), zkf.GetXaxis().GetXmax()))
+                    if 'WJets' in dir_name and 'madgraph' in dir_name:
+                        kfactorWeight[0] = wkf.GetBinContent(kfBin)
+                        kfactorWeightUp[0] = wkf.GetBinContent(kfBin) + wkf.GetBinError(kfBin)
+                        kfactorWeightDown[0] = wkf.GetBinContent(kfBin) - wkf.GetBinError(kfBin)
+                    elif ('ZJets' in dir_name or 'DYJets' in dir_name) and 'madgraph' in dir_name:
+                        kfactorWeight[0] = zkf.GetBinContent(kfBin)
+                        kfactorWeightUp[0] = zkf.GetBinContent(kfBin) + zkf.GetBinError(kfBin)
+                        kfactorWeightDown[0] = zkf.GetBinContent(kfBin) - zkf.GetBinError(kfBin)
+                    
                     # PU reweighting
-                    puBin = min(puRatio.FindBin(obj.nPU), 50)
+                    puBin = min(puRatio.FindBin(obj.nPU), puRatio.GetXaxis().GetXmax())
                     pileupWeight[0] = puRatio.GetBinContent(puBin)
                     pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
                     pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)
@@ -452,6 +476,8 @@ def processFile(dir_name, verbose=False):
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
                 kfactorWeightBranch.Fill()
+                kfactorWeightUpBranch.Fill()
+                kfactorWeightDownBranch.Fill()
                 pileupWeightBranch.Fill()
                 pileupWeightUpBranch.Fill()
                 pileupWeightDownBranch.Fill()
