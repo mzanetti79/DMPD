@@ -167,6 +167,7 @@ class PreselectionAnalyzer( Analyzer ):
                 pz = -B/(2*A)
             kmet = event.met.p4()
             kmet.SetPz(pz)
+            kH = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
             
             event.X = lepton.p4() + kmet +  event.cleanJetsAK8[0].p4()
             event.X.mT = (lepton.p4() + kmet +  event.cleanJetsAK8[0].p4()).mass()
