@@ -21,6 +21,17 @@ class PreselectionAnalyzer( Analyzer ):
             for i, l in enumerate(Labels):
                 self.Counter.GetXaxis().SetBinLabel(i+1, l)
             setup.services["outputfile"].file.cd("..")
+            setup.services["outputfile"].file.mkdir("Acceptance")
+            setup.services["outputfile"].file.cd("Acceptance")
+            self.ZCRall = ROOT.TH1F("ZCRall", "ZCRall", 110, 0, 110)
+            self.ZCRall.Sumw2()
+            self.WCRall = ROOT.TH1F("WCRall", "WCRall", 110, 0, 110)
+            self.WCRall.Sumw2()
+            self.ZCRacc = ROOT.TH1F("ZCRacc", "ZCRacc", 110, 0, 110)
+            self.ZCRacc.Sumw2()
+            self.WCRacc = ROOT.TH1F("WCRacc", "WCRacc", 110, 0, 110)
+            self.WCRacc.Sumw2()
+            setup.services["outputfile"].file.cd("..")
     
     
         # Jet Mass Recalibration
@@ -197,6 +208,12 @@ class PreselectionAnalyzer( Analyzer ):
         else:
             event.eventWeight = 1.
         
+        for i in range(min(109, len(event.LHE_weights))):
+            w = abs(event.LHE_weights[i].wgt/event.LHE_originalWeight)
+            self.ZCRall.Fill(i, w)
+            self.WCRall.Fill(i, w)
+        
+        
         # Inclusive lepton collections
         event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
         event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon()]
@@ -268,6 +285,9 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoMN = True
                 event.isWCR = True
+                
+                if len(event.selectedMuons) == 1:
+                    for i in range(min(109, len(event.LHE_weights))): self.WCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
             
             ###   W(enu) Control Region   ###
             elif len(event.selectedElectrons) >= 1:
@@ -277,6 +297,9 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.AddBinContent(4, event.eventWeight)
                 event.isWtoEN = True
                 event.isWCR = True
+                
+                if len(event.selectedElectrons) == 1:
+                    for i in range(min(109, len(event.LHE_weights))): self.WCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
                  
             ### ============================== ###
             
@@ -288,6 +311,8 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.AddBinContent(3, event.eventWeight)
                 event.isZtoMM = True
                 event.isZCR = True
+                
+                for i in range(min(109, len(event.LHE_weights))): self.ZCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
             
             ###   Z(ee) Control Region   ###
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
@@ -297,7 +322,9 @@ class PreselectionAnalyzer( Analyzer ):
                 self.Counter.AddBinContent(3, event.eventWeight)
                 event.isZtoEE = True
                 event.isZCR = True
-            
+                
+                for i in range(min(109, len(event.LHE_weights))): self.ZCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
+                
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
