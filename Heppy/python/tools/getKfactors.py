@@ -6,17 +6,17 @@ from array import array
 from ROOT import gROOT, gStyle, gRandom
 from ROOT import TFile, TChain, TTree, TCut, TH1F, TH2F, THStack, TGraph, TGaxis
 from ROOT import TStyle, TCanvas, TPad, TLegend, TLatex, TText
-#from DMPD.Heppy.tools.samples import *
-#from DMPD.Heppy.samples.Spring15.xSections import xsections
-#from utils import *
+from DMPD.Heppy.tools.samples import *
+from DMPD.Heppy.samples.Spring15.xSections import xsections
+from utils import *
 
-#gROOT.SetBatch(True)
+gROOT.SetBatch(True)
 gStyle.SetOptStat(0)
 #gStyle.SetErrorX(1)
 RATIO       = 4
 
 #NTUPLEDIR   = "/lustre/cmsdata/DM/ntuples/Prod_v20/"
-NTUPLEDIR   = "/homeui/pazzini/lustreSymbLink/CMSSW_7_4_14/src/DMPD/Heppy/test/Prod_v18_MC/"
+NTUPLEDIR   = "/homeui/pazzini/lustreSymbLink/CMSSW_7_4_14/src/DMPD/Heppy/test/Prod_v21_MCall/"
 
 
 ROOTFILE = "./scalefactors_v2.root"
@@ -49,11 +49,11 @@ def getKfactors():
     
     
 
-def LheZpt(type="Lhe", bkg="WJetsToLNu"):
-    #kfactors = [1, 1.398+0.054, 1.065+0.203, 0.887+0.309, 0.738+0.369]
+def deriveKfactors(type="Lhe", bkg="WJetsToLNu"):
+    boson = 'W' if bkg.startswith('W') else 'Z'
 
     nloFile = TFile(NTUPLEDIR + sample[bkg]['files'][0] + "/Loop/tree.root", "READ")
-    nloHist = nloFile.Get(type+"/"+type+"Zpt")
+    nloHist = nloFile.Get(type+"/"+type+boson+"pt")
     nloHist.Rebin(10)
     nloHist.Scale(xsections[sample[bkg]['files'][0][:-3]] / nloFile.Get('Counters/Counter').GetBinContent(0))
     nloHist.GetXaxis().SetRangeUser(0., 1000)
@@ -67,7 +67,7 @@ def LheZpt(type="Lhe", bkg="WJetsToLNu"):
     loHist = [None]*n
     for i in range(n):
         loFile[i] = TFile(NTUPLEDIR + loSamples[i] + "/Loop/tree.root", "READ")
-        loHist[i] = loFile[i].Get(type+"/"+type+"Zpt")
+        loHist[i] = loFile[i].Get(type+"/"+type+boson+"pt")
         loHist[i].Rebin(10)
         loHist[i].Scale(xsections[loSamples[i][:-3]] / loFile[i].Get('Counters/Counter').GetBinContent(0))
         loHist[i].GetXaxis().SetRangeUser(0., 1000)
@@ -78,7 +78,7 @@ def LheZpt(type="Lhe", bkg="WJetsToLNu"):
     kfactors = [1, 1, 1, 1]
     
     for k in reversed(range(n)):
-        lowbin, highbin = nloHist.FindBin(ranges[k][0]), nloHist.GetNbinsX()+1
+        lowbin, highbin = nloHist.FindBin(ranges[k][0]+1)+1, nloHist.GetNbinsX()+1
         nloInt = nloHist.Integral(lowbin, highbin)
         for i in list(reversed(range(k+1, n))): nloInt -= loHist[i].Integral(lowbin, highbin)
         kfactors[k] = nloInt/loHist[k].Integral(lowbin, highbin)
@@ -122,7 +122,11 @@ def LheZpt(type="Lhe", bkg="WJetsToLNu"):
     ratio.GetYaxis().SetRangeUser(0.8, 1.2)
     ratio.Draw("HE")
     
-    print "Ratio:", nloHist.Integral(nloHist.FindBin(100), nloHist.FindBin(1.e99))/loSum.Integral(nloHist.FindBin(100), nloHist.FindBin(1.e99))
+    print "Ratio:", nloHist.Integral(nloHist.FindBin(100), nloHist.FindBin(1.e99))/loSum.Integral(nloHist.FindBin(100)+1, nloHist.FindBin(1.e99))
+    
+    print "Summary:"
+    for i in range(n):
+        print "    '"+loSamples[i][:-3]+"' : %.3f"',' % kfactors[i]
     
     c1.Print("plots/Hist/"+type+bkg+"Ratio.png")
     c1.Print("plots/Hist/"+type+bkg+"Ratio.pdf")
@@ -262,6 +266,8 @@ def LheHT():
     if not gROOT.IsBatch(): raw_input("Press Enter to continue...")
 
 
-getKfactors()
-#LheZpt()
+#getKfactors()
+deriveKfactors("Gen", "DYJetsToLL")
+deriveKfactors("Gen", "DYJetsToNuNu")
+deriveKfactors("Gen", "WJetsToLNu")
 #GenZpt()
