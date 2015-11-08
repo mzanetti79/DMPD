@@ -191,9 +191,9 @@ def processFile(dir_name, verbose=False):
     
     
     # K factors
-    ref_kf_file = TFile(ref_kf_file, 'READ')
-    zkf = ref_kf_file.Get("Zkfactor")
-    wkf = ref_kf_file.Get("Wkfactor")
+    kfFile = TFile(ref_kf_file, 'READ')
+    zkf = kfFile.Get("Zkfactor")
+    wkf = kfFile.Get("Wkfactor")
     if verbose: print 'Kfactors histogram entries: ', zkf.GetEntries(), wkf.GetEntries()
     
     # PU reweighting
