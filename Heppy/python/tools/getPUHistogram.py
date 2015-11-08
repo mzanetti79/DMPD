@@ -120,9 +120,9 @@ def setPUHistogram():
     ratioUp = dataUp.Clone("ratioUp")
     ratioDown = dataDown.Clone("ratioDown")
     
-    ratio.Divide(data)
-    ratioUp.Divide(dataUp)
-    ratioDown.Divide(dataDown)
+    ratio.Divide(mc)
+    ratioUp.Divide(mc)
+    ratioDown.Divide(mc)
     
     outFile = TFile("./PU/PU.root", "RECREATE")
     outFile.cd()
