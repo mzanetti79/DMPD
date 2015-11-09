@@ -58,7 +58,7 @@ triggerAnalyzer= cfg.Analyzer(
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MuonEG'         : ['HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v*'],        
-        'SingleElectron' : ['HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele27_WP85_Gsf_v*', 'HLT_Ele27_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
+        'SingleElectron' : ['HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele23_WP85_Gsf_v*', 'HLT_Ele27_WP85_Gsf_v*', 'HLT_Ele27_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
         'SinglePhoton'   : ['HLT_Photon165_HE10', 'HLT_Photon175'],
         'MET'            : [
                             'HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight_v*',
