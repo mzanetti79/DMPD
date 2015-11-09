@@ -19,6 +19,7 @@ ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CM
 ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
 ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
 ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
+ref_trigger_file = '%s/src/DMPD/Heppy/python/tools/HLT/TriggerEffSF.root' % os.environ['CMSSW_BASE']
 
 import optparse
 usage = 'usage: %prog [options]'
@@ -203,6 +204,27 @@ def processFile(dir_name, verbose=False):
     puRatioDown = puFile.Get('ratioDown')
     if verbose: print 'PU histogram entries: ', puRatio.GetEntries()
     
+    # trigger SF
+    trigFile = TFile(ref_trigger_file, 'READ')
+    #
+    trigMuBarSF = trigFile.Get('MuTrig_Bar_SF')
+    trigMuBarSFUp = trigFile.Get('MuTrig_Bar_SFUp')
+    trigMuBarSFDown = trigFile.Get('MuTrig_Bar_SFDown')
+    trigMuEndSF = trigFile.Get('MuTrig_End_SF')
+    trigMuEndSFUp = trigFile.Get('MuTrig_End_SFUp')
+    trigMuEndSFDown = trigFile.Get('MuTrig_End_SFDown')
+    #
+    trigEleBarSF = trigFile.Get('EleTrig_Bar_SF')
+    trigEleBarSFUp = trigFile.Get('EleTrig_Bar_SFUp')
+    trigEleBarSFDown = trigFile.Get('EleTrig_Bar_SFDown')
+    trigEleEndSF = trigFile.Get('EleTrig_End_SF')
+    trigEleEndSFUp = trigFile.Get('EleTrig_End_SFUp')
+    trigEleEndSFDown = trigFile.Get('EleTrig_End_SFDown')
+    #
+    trigMETSF = trigFile.Get('METTrig_SF')
+    trigMETSFUp = trigFile.Get('METTrig_SFUp')
+    trigMETSFDown = trigFile.Get('METTrig_SFDown')
+    
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight = array('f', [1.0])  # weight due to the MC sample cross section
@@ -212,6 +234,9 @@ def processFile(dir_name, verbose=False):
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     pileupWeightUp = array('f', [1.0])
     pileupWeightDown = array('f', [1.0])
+    triggerWeight = array('f', [1.0])  # weight from trigger SF
+    triggerWeightUp = array('f', [1.0])
+    triggerWeightDown = array('f', [1.0])    
     # Lists of arrays do not work #@!
     CSV = {}
     CSVUp = {}
@@ -265,6 +290,9 @@ def processFile(dir_name, verbose=False):
             pileupWeightBranch = new_tree.Branch('pileupWeight', pileupWeight, 'pileupWeight/F')
             pileupWeightUpBranch = new_tree.Branch('pileupWeightUp', pileupWeightUp, 'pileupWeightUp/F')
             pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
+            triggerWeightBranch = new_tree.Branch('triggerWeight', triggerWeight, 'triggerWeight/F')
+            triggerWeightUpBranch = new_tree.Branch('triggerWeightUp', triggerWeightUp, 'triggerWeightUp/F')
+            triggerWeightDownBranch = new_tree.Branch('triggerWeightDown', triggerWeightDown, 'triggerWeightDown/F')            
             CSVBranch = {}
             CSVUpBranch = {}
             CSVDownBranch = {}
@@ -293,7 +321,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = triggerWeight[0] = triggerWeightUp[0] = triggerWeightDown[0] = 1.
                 for i in range(njets):
                     csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
@@ -320,6 +348,53 @@ def processFile(dir_name, verbose=False):
                     pileupWeight[0] = puRatio.GetBinContent(puBin)
                     pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
                     pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)
+                    
+                    # triger SF
+                    ### SINGLE MUON
+                    if obj.HLT_BIT_HLT_IsoMu20_v:
+                        if 'ZCR' in obj.GetName() and obj.isZtoMM:
+                            triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
+                            triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
+                            triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
+                        elif 'WCR' in obj.GetName() and obj.lepton1_isMuon:
+                            triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
+                            triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
+                            triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
+                        elif 'TCR' in obj.GetName():
+                            if obj.lepton1_isMuon:
+                                triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
+                                triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
+                                triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))                        
+                            elif obj.lepton2_isMuon:
+                                triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton2_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton2_pt), trigMuEndSF.GetXaxis().GetXmax()))
+                                triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton2_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton2_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
+                                triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton2_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton2_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
+                    ### SINGLE ELECTRON
+                    #elif obj.HLT_BIT_HLT_Ele23_WPLoose_Gsf_v or obj.HLT_BIT_HLT_Ele23_WP85_Gsf_v:
+                    elif obj.HLT_BIT_HLT_Ele23_WPLoose_Gsf_v:
+                        if 'ZCR' in obj.GetName() and obj.isZtoEE:
+                            triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
+                            triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
+                            triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
+                        elif 'WCR' in obj.GetName() and obj.lepton1_isElectron:
+                            triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
+                            triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
+                            triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
+                        elif 'TCR' in obj.GetName():
+                            if obj.lepton1_isElectron:
+                                triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
+                                triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
+                                triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))                        
+                            elif obj.lepton2_isElectron:
+                                triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton2_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton2_pt), trigEleEndSF.GetXaxis().GetXmax()))
+                                triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton2_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton2_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
+                                triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton2_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton2_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
+                    ### MET
+                    elif obj.HLT_BIT_HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_NoiseCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v:
+                        if 'SR' in obj.GetName():
+                            triggerWeight[0]    = trigMETSF.GetBinContent(min(trigMETSF.FindBin(obj.met_pt), trigMETSF.GetXaxis().GetXmax()))
+                            triggerWeightUp[0]  = trigMETSFUp.GetBinContent(min(trigMETSFUp.FindBin(obj.met_pt), trigMETSFUp.GetXaxis().GetXmax()))
+                            triggerWeightDown[0]= trigMETSFDown.GetBinContent(min(trigMETSFDown.FindBin(obj.met_pt), trigMETSFDown.GetXaxis().GetXmax()))
                     
                     for i in range(njets):
                         pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
@@ -470,7 +545,7 @@ def processFile(dir_name, verbose=False):
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 # Total
-                eventWeight[0] = xsWeight[0] * pileupWeight[0]
+                eventWeight[0] = xsWeight[0] * pileupWeight[0] * triggerWeight[0]
                 
                 # Fill the branches
                 eventWeightBranch.Fill()
@@ -481,6 +556,9 @@ def processFile(dir_name, verbose=False):
                 pileupWeightBranch.Fill()
                 pileupWeightUpBranch.Fill()
                 pileupWeightDownBranch.Fill()
+                triggerWeightBranch.Fill()
+                triggerWeightUpBranch.Fill()
+                triggerWeightDownBranch.Fill()                
                 for i in range(njets):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
@@ -533,7 +611,7 @@ for d in os.listdir(origin):
     if not d[:-3] in xsections.keys():
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
-    #if not ('WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' in d): continue
+    if not ('WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' in d): continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
