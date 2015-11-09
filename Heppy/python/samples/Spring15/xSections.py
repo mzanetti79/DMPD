@@ -154,16 +154,24 @@ xsections = {
     #
     'SingleMuon_Run2015D-PromptReco' : 1.,
     'SingleElectron_Run2015D-PromptReco' : 1.,
-    'DoubleEG_Run2015D-PromptReco' : 1.,
     'DoubleMuon_Run2015D-PromptReco' : 1.,
+    'DoubleEG_Run2015D-PromptReco' : 1.,
     'SinglePhoton_Run2015D-PromptReco' : 1.,
-    'SingleMuon_Run2015D-05Oct2015' : 1.,
     'MET_Run2015D-PromptReco' : 1.,
-    'MET_Run2015D-05Oct2015' : 1.,
-    'DoubleMuon_Run2015D-05Oct2015' : 1.,
-    'SinglePhoton_Run2015D-05Oct2015' : 1.,
+    #
+    'SingleMuon_Run2015D-05Oct2015' : 1.,
     'SingleElectron_Run2015D-05Oct2015' : 1.,
+    'DoubleMuon_Run2015D-05Oct2015' : 1.,
     'DoubleEG_Run2015D-05Oct2015' : 1.,
+    'SinglePhoton_Run2015D-05Oct2015' : 1.,
+    'MET_Run2015D-05Oct2015' : 1.,
+    #
+    'SingleMuon_Run2015C-05Oct2015' : 1.,
+    'SingleElectron_Run2015C-05Oct2015' : 1.,
+    'DoubleMuon_Run2015C-05Oct2015' : 1.,
+    'DoubleEG_Run2015C-05Oct2015' : 1.,
+    'SinglePhoton_Run2015C-05Oct2015' : 1.,
+    'MET_Run2015C-05Oct2015' : 1.,
 }
 
 
