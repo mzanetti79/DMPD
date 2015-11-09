@@ -304,19 +304,19 @@ def processFile(dir_name, verbose=False):
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
                     
                     # K factors
-                    #kfactorWeight[0] = kfactorXS
-                    kfBin = max(zkf.GetXaxis().GetXmin(), min(zkf.FindBin(obj.genVpt), zkf.GetXaxis().GetXmax()))
-                    if 'WJets' in dir_name and 'madgraph' in dir_name:
-                        kfactorWeight[0] = wkf.GetBinContent(kfBin)
-                        kfactorWeightUp[0] = wkf.GetBinContent(kfBin) + wkf.GetBinError(kfBin)
-                        kfactorWeightDown[0] = wkf.GetBinContent(kfBin) - wkf.GetBinError(kfBin)
-                    elif ('ZJets' in dir_name or 'DYJets' in dir_name) and 'madgraph' in dir_name:
-                        kfactorWeight[0] = zkf.GetBinContent(kfBin)
-                        kfactorWeightUp[0] = zkf.GetBinContent(kfBin) + zkf.GetBinError(kfBin)
-                        kfactorWeightDown[0] = zkf.GetBinContent(kfBin) - zkf.GetBinError(kfBin)
+                    kfactorWeight[0] = kfactorXS
+#                    kfBin = max(zkf.GetXaxis().GetXmin(), min(zkf.FindBin(obj.genVpt), zkf.GetXaxis().GetXmax()))
+#                    if 'WJets' in dir_name and 'madgraph' in dir_name:
+#                        kfactorWeight[0] = wkf.GetBinContent(kfBin)
+#                        kfactorWeightUp[0] = wkf.GetBinContent(kfBin) + wkf.GetBinError(kfBin)
+#                        kfactorWeightDown[0] = wkf.GetBinContent(kfBin) - wkf.GetBinError(kfBin)
+#                    elif ('ZJets' in dir_name or 'DYJets' in dir_name) and 'madgraph' in dir_name:
+#                        kfactorWeight[0] = zkf.GetBinContent(kfBin)
+#                        kfactorWeightUp[0] = zkf.GetBinContent(kfBin) + zkf.GetBinError(kfBin)
+#                        kfactorWeightDown[0] = zkf.GetBinContent(kfBin) - zkf.GetBinError(kfBin)
                     
                     # PU reweighting
-                    puBin = min(puRatio.FindBin(obj.nPU), puRatio.GetXaxis().GetXmax())
+                    puBin = min(puRatio.FindBin(obj.nPU), puRatio.GetNbinsX())
                     pileupWeight[0] = puRatio.GetBinContent(puBin)
                     pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
                     pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)
@@ -533,6 +533,7 @@ for d in os.listdir(origin):
     if not d[:-3] in xsections.keys():
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
+    #if not ('WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' in d): continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
