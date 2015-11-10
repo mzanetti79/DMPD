@@ -92,13 +92,13 @@ class PreselectionAnalyzer( Analyzer ):
     
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
-            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
+            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
             if j.deltaPhi_met < event.minDeltaPhi: event.minDeltaPhi = j.deltaPhi_met
             self.addJECUnc(event, j)
             
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
-            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.met.phi()))
+            j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
             j.dR_subjets = -1.
             if len(j.subjets('SoftDrop')) >= 2:
@@ -252,7 +252,7 @@ class PreselectionAnalyzer( Analyzer ):
 #        pt_ = math.hypot(px_, py_)
 #        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
         
-        self.addJetVariables(event)
+        
         
         self.Counter.Fill(-1, event.eventWeight)
         
@@ -370,6 +370,8 @@ class PreselectionAnalyzer( Analyzer ):
             self.Counter.AddBinContent(2, event.eventWeight)
             event.isSR = True
             
+        # Add jet variables (after fakemet computation)
+        self.addJetVariables(event)
         
         return True
     
