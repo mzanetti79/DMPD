@@ -49,11 +49,11 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="PF Rel Iso, R=0.4, pile-up corrected"),
     NTupleVariable("miniIso", lambda x : getattr(x, "miniRelIso", -1.), float, help="Rel Mini-Iso, pile-up corrected"),
     # Cut Based Identification
-    #NTupleVariable("vetoId",   lambda x : getattr(x, "isHEEP", 0) if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto"), int, help="Cut Based Veto id" ),
-    NTupleVariable("looseId",   lambda x : x.muonID("POG_ID_Loose") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose"), int, help="Cut Based Loose id" ),
-    NTupleVariable("mediumId",   lambda x : x.muonID("POG_ID_Medium") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium"), int, help="Cut Based Medium id"),
-    NTupleVariable("tightId",   lambda x : x.muonID("POG_ID_Tight") if x.isMuon() else x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight"), int, help="Cut Based Tight id"),
-    NTupleVariable("highptId",   lambda x : x.muonID("POG_ID_HighPt") if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),
+    NTupleVariable("vetoId",  lambda x : 1                          if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto")    and ( ( x.isEB() and x.relIso03 < 0.1260 ) or  ( x.isEE() and x.relIso03 < 0.1440 ) ) ), int, help="Cut Based Veto id" ),
+    NTupleVariable("looseId", lambda x : x.muonID("POG_ID_Loose")   if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose")   and ( ( x.isEB() and x.relIso03 < 0.0893 ) or  ( x.isEE() and x.relIso03 < 0.1210 ) ) ), int, help="Cut Based Loose id" ),
+    NTupleVariable("mediumId",lambda x : x.muonID("POG_ID_Medium")  if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Medium")  and ( ( x.isEB() and x.relIso03 < 0.0766 ) or  ( x.isEE() and x.relIso03 < 0.0678 ) ) ), int, help="Cut Based Medium id"),
+    NTupleVariable("tightId", lambda x : x.muonID("POG_ID_Tight")   if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight")   and ( ( x.isEB() and x.relIso03 < 0.0354 ) or  ( x.isEE() and x.relIso03 < 0.0646 ) ) ), int, help="Cut Based Tight id"),
+    NTupleVariable("highptId",lambda x : x.muonID("POG_ID_HighPt")  if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),   
 
     NTupleVariable("trigMatch",    lambda x : x.trigMatch if hasattr(x,'trigMatch') else False, int, help="Is trigger matched" ),
     NTupleVariable("trigMatchPt",  lambda x : x.trigMatchPt if hasattr(x,'trigMatchPt') else -999., float, help="Pt of trigger object" ),
