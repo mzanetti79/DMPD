@@ -19,20 +19,7 @@ class PreselectionAnalyzer( Analyzer ):
             self.Counter = ROOT.TH1F("Counter", "Counter", len(Labels), 0, len(Labels))
             self.Counter.Sumw2()
             for i, l in enumerate(Labels):
-                self.Counter.GetXaxis().SetBinLabel(i+1, l)
-            setup.services["outputfile"].file.cd("..")
-            setup.services["outputfile"].file.mkdir("Acceptance")
-            setup.services["outputfile"].file.cd("Acceptance")
-            self.ZCRall = ROOT.TH1F("ZCRall", "ZCRall", 110, 0, 110)
-            self.ZCRall.Sumw2()
-            self.WCRall = ROOT.TH1F("WCRall", "WCRall", 110, 0, 110)
-            self.WCRall.Sumw2()
-            self.ZCRacc = ROOT.TH1F("ZCRacc", "ZCRacc", 110, 0, 110)
-            self.ZCRacc.Sumw2()
-            self.WCRacc = ROOT.TH1F("WCRacc", "WCRacc", 110, 0, 110)
-            self.WCRacc.Sumw2()
-            setup.services["outputfile"].file.cd("..")
-    
+                self.Counter.GetXaxis().SetBinLabel(i+1, l)   
     
         # Jet Mass Recalibration
         if self.cfg_ana.recalibrateMass:
@@ -47,7 +34,7 @@ class PreselectionAnalyzer( Analyzer ):
             self.vPar.push_back(self.L2JetPar);
             self.vPar.push_back(self.L3JetPar);
             # Add residuals if needed
-            if self.cfg_comp.isMC: 
+            if not self.cfg_comp.isMC: 
                 self.ResJetPar = ROOT.JetCorrectorParameters("%s/%s_L2L3Residual_%s.txt" % (path,globalTag,jetFlavour))
                 self.vPar.push_back(self.ResJetPar);
             #Step3 (Construct a FactorizedJetCorrector object) 
@@ -203,18 +190,7 @@ class PreselectionAnalyzer( Analyzer ):
         event.nJetsNoFatJet50 = -1
         event.nJetsNoFatJet100 = -1
         event.minDeltaPhi = 3.15
-        
-        if self.cfg_comp.isMC: 
-            event.eventWeight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
-            for i in range(min(109, len(event.LHE_weights))):
-                w = abs(event.LHE_weights[i].wgt/event.LHE_originalWeight)
-                self.ZCRall.Fill(i, w)
-                self.WCRall.Fill(i, w)
-        else:
-            event.eventWeight = 1.
-        
-        
-        
+               
         # Inclusive lepton collections
         event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
         event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon()]
@@ -254,7 +230,7 @@ class PreselectionAnalyzer( Analyzer ):
         
         
         
-        self.Counter.Fill(-1, event.eventWeight)
+        self.Counter.Fill(-1, event.weight)
         
         
         ########################################
@@ -274,34 +250,28 @@ class PreselectionAnalyzer( Analyzer ):
         ### Count Leptons and select Regions ###
         ########################################
         
-        self.Counter.AddBinContent(1, event.eventWeight)
+        self.Counter.AddBinContent(1, event.weight)
         
         ### Two leptons
         if len(event.selectedLeptons) >= 2:
-            ###   W(mnu) Control Region   ###
-            if len(event.selectedMuons) >= 1:
-                self.addFakeMet(event, [event.selectedMuons[0]])
-                self.createW(event, event.selectedMuons[0])
-                event.xcleanLeptons = event.selectedMuons + event.selectedElectrons + event.otherLeptons
-                self.Counter.AddBinContent(4, event.eventWeight)
-                event.isWtoMN = True
-                event.isWCR = True
+            ####   W(mnu) Control Region   ###
+            #if len(event.selectedMuons) >= 1:
+                #self.addFakeMet(event, [event.selectedMuons[0]])
+                #self.createW(event, event.selectedMuons[0])
+                #event.xcleanLeptons = event.selectedMuons + event.selectedElectrons + event.otherLeptons
+                #self.Counter.AddBinContent(4, event.weight)
+                #event.isWtoMN = True
+                #event.isWCR = True
                 
-                if len(event.selectedMuons) == 1 and self.cfg_comp.isMC: 
-                    for i in range(min(109, len(event.LHE_weights))): self.WCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
-            
-            ###   W(enu) Control Region   ###
-            elif len(event.selectedElectrons) >= 1:
-                self.addFakeMet(event, [event.selectedElectrons[0]])
-                self.createW(event, event.selectedElectrons[0])
-                event.xcleanLeptons = event.selectedElectrons + event.selectedMuons + event.otherLeptons
-                self.Counter.AddBinContent(4, event.eventWeight)
-                event.isWtoEN = True
-                event.isWCR = True
+            ####   W(enu) Control Region   ###
+            #elif len(event.selectedElectrons) >= 1:
+                #self.addFakeMet(event, [event.selectedElectrons[0]])
+                #self.createW(event, event.selectedElectrons[0])
+                #event.xcleanLeptons = event.selectedElectrons + event.selectedMuons + event.otherLeptons
+                #self.Counter.AddBinContent(4, event.weight)
+                #event.isWtoEN = True
+                #event.isWCR = True
                 
-                if len(event.selectedElectrons) == 1 and self.cfg_comp.isMC: 
-                    for i in range(min(109, len(event.LHE_weights))): self.WCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
-                 
             ### ============================== ###
             
             ###   Z(mm) Control Region   ###
@@ -309,33 +279,30 @@ class PreselectionAnalyzer( Analyzer ):
                 self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 event.xcleanLeptons = event.selectedMuons
-                self.Counter.AddBinContent(3, event.eventWeight)
+                self.Counter.AddBinContent(3, event.weight)
                 event.isZtoMM = True
                 event.isZCR = True
                 
-                if self.cfg_comp.isMC: 
-                    for i in range(min(109, len(event.LHE_weights))): self.ZCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
-            
             ###   Z(ee) Control Region   ###
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.createZ(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 event.xcleanLeptons = event.selectedElectrons
-                self.Counter.AddBinContent(3, event.eventWeight)
+                self.Counter.AddBinContent(3, event.weight)
                 event.isZtoEE = True
                 event.isZCR = True
-                
-                if self.cfg_comp.isMC:                 
-                    for i in range(min(109, len(event.LHE_weights))): self.ZCRacc.Fill(i, abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
                 
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
                 event.xcleanLeptons = [event.selectedElectrons[0]] + [event.selectedMuons[0]]
                 event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
-                self.Counter.AddBinContent(5, event.eventWeight)
+                self.Counter.AddBinContent(5, event.weight)
                 event.isTCR = True
-            
+                
+            else :
+                return False # protection against events with, e.g., 1 e and 1 mu with same charge
+                
         
         ### One lepton
         elif len(event.selectedLeptons) == 1:
@@ -343,31 +310,50 @@ class PreselectionAnalyzer( Analyzer ):
             if len(event.selectedMuons) == 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
-                event.xcleanLeptons = event.selectedMuons + [x for x in event.otherLeptons if x.isMuon()]
-                self.Counter.AddBinContent(4, event.eventWeight)
+                event.xcleanLeptons = event.selectedMuons
+                #event.xcleanLeptons = event.selectedMuons + [x for x in event.otherLeptons if x.isMuon()]
+                self.Counter.AddBinContent(4, event.weight)
                 event.isWtoMN = True
                 event.isWCR = True
+
+                event.mtophad = -1
+                if len(event.xcleanJets) > 1:
+                    tophad = event.xcleanJets[0].p4() + event.xcleanJets[1].p4()
+                    if len(event.xcleanJets) >= 3:
+                        tophad = tophad + event.xcleanJets[2].p4()
+                    event.mtophad = tophad.M()
             
             ###   W(enu) Control Region   ###
             elif len(event.selectedElectrons) == 1:
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
-                event.xcleanLeptons = event.selectedElectrons + [x for x in event.otherLeptons if x.isElectron()]
-                self.Counter.AddBinContent(4, event.eventWeight)
+                event.xcleanLeptons = event.selectedElectrons
+                #event.xcleanLeptons = event.selectedElectrons + [x for x in event.otherLeptons if x.isElectron()]
+                self.Counter.AddBinContent(4, event.weight)
                 event.isWtoEN = True
                 event.isWCR = True
+        
+                event.mtophad = -1
+                if len(event.xcleanJets) > 1:
+                    tophad = event.xcleanJets[0].p4() + event.xcleanJets[1].p4()
+                    if len(event.xcleanJets) >= 3:
+                        tophad = tophad + event.xcleanJets[2].p4()
+                    event.mtophad = tophad.M()
+        
+            else :
+                return False # protection (useless here)
         
         ### One photon
         elif len(event.selectedPhotons) >= 1:
             self.addFakeMet(event, [event.selectedPhotons[0]])
-            self.Counter.AddBinContent(6, event.eventWeight)
+            self.Counter.AddBinContent(6, event.weight)
             event.isGCR = True
         
         ### No leptons nor photons
         else:
             self.addFakeMet(event, [])
             self.createX(event)
-            self.Counter.AddBinContent(2, event.eventWeight)
+            self.Counter.AddBinContent(2, event.weight)
             event.isSR = True
             
         # Add jet variables (after fakemet computation)

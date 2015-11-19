@@ -29,7 +29,7 @@ generatorAnalyzer= cfg.Analyzer(
     savePreFSRParticleIds = [ 1,2,3,4,5, 11,12,13,14,15,16, 21 ],
     makeAllGenParticles = True, # Make also the list of all genParticles, for other analyzers to handle
     makeSplittedGenLists = True, # Make also the splitted lists
-    allGenTaus = False,
+    allGenTaus = True,
     makeLHEweights = True,
     )
 
@@ -485,7 +485,7 @@ XCleaningAnalyzer = cfg.Analyzer(
     cleanJets = True,
     cleanJetsAK8 = False,
     cleanFromMuons = True,
-    cleanFromElectrons = False,
+    cleanFromElectrons = True,
     mu_clean_pt  = 20.,
     mu_clean_id  = 'POG_ID_Tight',
     mu_clean_iso = lambda x : x.relIso04 < 0.15,
@@ -493,8 +493,10 @@ XCleaningAnalyzer = cfg.Analyzer(
     mu_jet_dr    = 0.4,
     mu_fatjet_dr = 0.4,
     ele_clean_pt = 20.,
-    ele_clean_id = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto',
-    ele_clean_iso= lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.126 ) or  ( electron.isEE() and electron.relIso03 < 0.144 ) ) ,
+    ele_clean_id = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight',
+    ele_clean_iso= lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.0354 ) or  ( electron.isEE() and electron.relIso03 < 0.0646 ) ) ,
+    #ele_clean_id = 'POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto',
+    #ele_clean_iso= lambda electron : ( ( electron.isEB() and electron.relIso03 < 0.1260 ) or  ( electron.isEE() and electron.relIso03 < 0.1440 ) )
     ele_tau_dr   = 0.4,
     ele_jet_dr   = 0.4,
     ele_fatjet_dr= 0.4,
@@ -595,7 +597,7 @@ globalEventVariables = [
     NTupleVariable('lheVpt',           lambda x: getattr(x, "lheV_pt", -1.), float, help='Vector boson pt at LHE level'),
     NTupleVariable('genVpt',           lambda x: x.genV.pt() if hasattr(x, "genV") else -1., float, help='Vector boson pt at Gen level'),
     NTupleVariable('genNb',            lambda x: len(x.genbquarks) if hasattr(x, "genbquarks") else -1, int, help='Number of b-quarks at generator level'),
-    NTupleVariable('genNl',            lambda x: len(x.genleps) if hasattr(x, "genleps") else -1, int, help='Number of leptons at generator level'),
+    NTupleVariable('genNl',            lambda x: ( len(x.genleps)+len(x.gentaus) ) if ( hasattr(x, "genleps") and hasattr(x, "genleps") ) else -1, int, help='Number of leptons at generator level'),
     NTupleVariable('weight_1',         lambda x: abs(x.LHE_weights[0].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>0 else 1, float, help='LHE Weight Id 1'),
     NTupleVariable('weight_2',         lambda x: abs(x.LHE_weights[1].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>1 else 1, float, help='LHE Weight Id 2'),
     NTupleVariable('weight_3',         lambda x: abs(x.LHE_weights[2].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>2 else 1, float, help='LHE Weight Id 3'),
@@ -605,10 +607,16 @@ globalEventVariables = [
     NTupleVariable('weight_7',         lambda x: abs(x.LHE_weights[6].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>6 else 1, float, help='LHE Weight Id 7'),
     NTupleVariable('weight_8',         lambda x: abs(x.LHE_weights[7].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>7 else 1, float, help='LHE Weight Id 8'),
     NTupleVariable('weight_9',         lambda x: abs(x.LHE_weights[8].wgt/x.LHE_originalWeight) if hasattr(x, "LHE_weights") and len(x.LHE_weights)>8 else 1, float, help='LHE Weight Id 9'),
+    NTupleVariable('FacScaleUp',       lambda x: getattr(x, "FacScaleUp", 1.), float, help='Factorization Scale Up'),
+    NTupleVariable('FacScaleDown',     lambda x: getattr(x, "FacScaleDown", 1.), float, help='Factorization Scale Down'),
+    NTupleVariable('RenScaleUp',       lambda x: getattr(x, "RenScaleUp", 1.), float, help='Renormalization Scale Up'),
+    NTupleVariable('RenScaleDown',     lambda x: getattr(x, "RenScaleDown", 1.), float, help='Renormalization Scale Down'),
+    NTupleVariable('LHEweight',        lambda x: getattr(x, "weight", 1.), float, help='LHE weight'),
+    NTupleVariable('PDFweight',        lambda x: getattr(x, "PDFweight", 1.), float, help='PDF weight'),
     NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.) if hasattr(x, "nPU") and x.nPU is not None else -1, int, help='Number of true interactions'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
-    NTupleVariable('HT',              lambda x: sum([x.pt() for x in x.xcleanJets]), int, help='HT from AK4 jets with pt>30 GeV'),
+    NTupleVariable('HT',               lambda x: sum([x.pt() for x in x.xcleanJets]), int, help='HT from AK4 jets with pt>30 GeV'),
 ]
 globalDMVariables = globalEventVariables + [
     NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
@@ -713,6 +721,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
         NTupleVariable('Upara', lambda x: x.Upara, float, help='parallel component of the recoil (MET - lepton)'),
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - lepton)'),
+        NTupleVariable('mtophad', lambda x: x.mtophad, float, help='invariant mass of the first 2 or 3 jets'),
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
@@ -724,8 +733,8 @@ WControlRegionTreeProducer= cfg.Analyzer(
     },
     collections = {
         'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 1, help='Muon or Electron collection'),
-        'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 4, help='inclusive Electron collection'),
-        'inclusiveMuons'       : NTupleCollection('muon', leptonType, 4, help='inclusive Muon collection'),
+        #'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 4, help='inclusive Electron collection'),
+        #'inclusiveMuons'       : NTupleCollection('muon', leptonType, 4, help='inclusive Muon collection'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
@@ -934,7 +943,7 @@ for i in mcsamples:
 
 testDataCompontent = cfg.Component(
         files   = [
-            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root',
             #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/258/159/00000/6CA1C627-246C-E511-8A6A-02163E014147.root',
             #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015C_25ns/SingleMuon/MINIAOD/05Oct2015-v1/50000/AAC7E1E8-1274-E511-886D-0025905A60C6.root',
         ],
@@ -945,12 +954,13 @@ testDataCompontent = cfg.Component(
 
 testMCCompontent = cfg.MCComponent(
         files   = [
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/50000/00759690-D16E-E511-B29E-00261894382D.root',
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/50000/00E88378-6F6F-E511-9D54-001E6757EAA4.root',
+            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/50000/00759690-D16E-E511-B29E-00261894382D.root',
+            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/50000/00E88378-6F6F-E511-9D54-001E6757EAA4.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/40000/2CDA4C3C-586D-E511-9259-A0000420FE80.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/40000/2E21760F-5E6D-E511-802C-0025905938A8.root',
         ],
         isMC    = True,
         name    = "test",
-        #json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
         splitFactor = 1,
     )
 
@@ -1073,10 +1083,10 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
  ##sample['ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1'],
  ##sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
 
+ #####sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
  ####sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
  ####sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
  ####sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- ####sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
  ####sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
  #sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1136,36 +1146,36 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #### DATA ###
 #selectedComponents = [
  ####Run2015D PromptReco
- ##sample['DoubleEG_Run2015D-PromptReco-v4'],
- ##sample['DoubleMuon_Run2015D-PromptReco-v4'],
- ##sample['MET_Run2015D-PromptReco-v4'],
- ##sample['SingleElectron_Run2015D-PromptReco-v4'],
- ##sample['SingleMuon_Run2015D-PromptReco-v4'],
+ #sample['DoubleEG_Run2015D-PromptReco-v4'],
+ #sample['DoubleMuon_Run2015D-PromptReco-v4'],
+ #sample['MET_Run2015D-PromptReco-v4'],
+ #sample['SingleElectron_Run2015D-PromptReco-v4'],
+ #sample['SingleMuon_Run2015D-PromptReco-v4'],
 ##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 
  ####Run2015C O5Oct2015
- ##sample['DoubleEG_Run2015C-05Oct2015-v1'],
- ##sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+ #sample['DoubleEG_Run2015C-05Oct2015-v1'],
+ #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
  #sample['MET_Run2015C-05Oct2015-v1'],
- ##sample['SingleElectron_Run2015C-05Oct2015-v1'],
- ##sample['SingleMuon_Run2015C-05Oct2015-v1'],
+ #sample['SingleElectron_Run2015C-05Oct2015-v1'],
+ #sample['SingleMuon_Run2015C-05Oct2015-v1'],
 ##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
 #]
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'RECO'
 
-#### DATA ###
-#selectedComponents = [
- ### Run2015D
- #sample['DoubleEG_Run2015D-05Oct2015-v1'],
- #sample['DoubleMuon_Run2015D-05Oct2015-v1'],
- #sample['MET_Run2015D-05Oct2015-v1'],
- #sample['SingleElectron_Run2015D-05Oct2015-v1'],
- #sample['SingleMuon_Run2015D-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
-#]
-#filterAnalyzer.processName = 'RECO'
-#TriggerMatchAnalyzer.processName = 'PAT'
+### DATA ###
+selectedComponents = [
+ ## Run2015D
+ sample['DoubleEG_Run2015D-05Oct2015-v1'],
+ sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+ sample['MET_Run2015D-05Oct2015-v1'],
+ sample['SingleElectron_Run2015D-05Oct2015-v1'],
+ sample['SingleMuon_Run2015D-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
+]
+filterAnalyzer.processName = 'RECO'
+TriggerMatchAnalyzer.processName = 'PAT'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
 #selectedComponents = [sample['SYNCH_TTBar'],]
@@ -1174,10 +1184,9 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #selectedComponents = [sample['SYNCH_RSGravitonToGaGa'],]
 #selectedComponents = [sample['SYNCH_ADDMonojet'],sample['SYNCH_TTBar'],sample['SYNCH_DYJetsToLL'],sample['SYNCH_WJetsToLNu'],sample['SYNCH_RSGravitonToGaGa'],]
 
-
-selectedComponents = [testDataCompontent,]
-filterAnalyzer.processName = 'RECO'
-TriggerMatchAnalyzer.processName = 'PAT'
+#selectedComponents = [testDataCompontent,]
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'PAT'
 
 #selectedComponents = [testMCCompontent,]
 #TriggerMatchAnalyzer.processName = 'PAT'
@@ -1203,7 +1212,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=10000,
         )
     looper.loop()
     looper.write()
