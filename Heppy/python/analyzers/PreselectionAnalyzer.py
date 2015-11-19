@@ -93,12 +93,12 @@ class PreselectionAnalyzer( Analyzer ):
             self.addCorrectedJetMass(event, j)
             self.addJECUnc(event, j)
     
-    
     def addFakeMet(self, event, particles):
         # Copy regular met
         event.fakemet = copy.deepcopy(event.met)
         px, py = event.met.px(), event.met.py()
-        for i, p in enumerate(particles):
+        
+        for p in particles:
             if not p:
                 continue
             else:
@@ -106,9 +106,8 @@ class PreselectionAnalyzer( Analyzer ):
                 py += p.py()
         
         event.fakemet.setP4(ROOT.reco.Particle.LorentzVector(px, py, 0, math.hypot(px, py)))
+                
         return True
-    
-    
     
     def createZ(self, event, leptons):
         theZ = leptons[0].p4() + leptons[1].p4()
@@ -295,8 +294,8 @@ class PreselectionAnalyzer( Analyzer ):
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
-                event.xcleanLeptons = [event.selectedElectrons[0]] + [event.selectedMuons[0]]
-                event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
+                event.xcleanLeptons =  [event.selectedMuons[0]] + [event.selectedElectrons[0]]
+                #event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 self.Counter.AddBinContent(5, event.weight)
                 event.isTCR = True
                 
@@ -343,11 +342,11 @@ class PreselectionAnalyzer( Analyzer ):
             else :
                 return False # protection (useless here)
         
-        ### One photon
-        elif len(event.selectedPhotons) >= 1:
-            self.addFakeMet(event, [event.selectedPhotons[0]])
-            self.Counter.AddBinContent(6, event.weight)
-            event.isGCR = True
+        #### One photon
+        #elif len(event.selectedPhotons) >= 1:
+            #self.addFakeMet(event, [event.selectedPhotons[0]])
+            #self.Counter.AddBinContent(6, event.weight)
+            #event.isGCR = True
         
         ### No leptons nor photons
         else:

@@ -63,25 +63,7 @@ class GenAnalyzer( Analyzer ):
             self.Hist["LheNl"] = ROOT.TH1F("LheNl", ";Number of light quarks", 6, -0.5, 5.5)
             self.Hist["LheNg"] = ROOT.TH1F("LheNg", ";Number of gluons", 6, -0.5, 5.5)
             setup.services["outputfile"].file.cd("..")
-            
-            # Weights
-            setup.services["outputfile"].file.mkdir("LheWeights")
-            setup.services["outputfile"].file.cd("LheWeights")
-            self.Hist["LhePDFWeights"] = ROOT.TH1F("LhePDFWeights", ";Weights", 200, 0., 2.)
-            self.Hist["LheScaleWeights"] = ROOT.TH1F("LheScaleWeights", ";Weights", 200, 0., 2.)
-            self.Hist["LhePDFWeightsL"] = ROOT.TH1F("LhePDFWeightsL", ";Weights", 200, 0., 2.)
-            self.Hist["LheScaleWeightsL"] = ROOT.TH1F("LheScaleWeightsL", ";Weights", 200, 0., 2.)
-            self.Hist["LhePDFWeightsB"] = ROOT.TH1F("LhePDFWeightsB", ";Weights", 200, 0., 2.)
-            self.Hist["LheScaleWeightsB"] = ROOT.TH1F("LheScaleWeightsB", ";Weights", 200, 0., 2.)
-            for i in range(109+1):
-                name = "LheWeight_%d" % i
-                self.Hist[name] = ROOT.TH1F(name, name+";Z p_{T} [GeV]", 2500, 0., 2500.)
-                name = "LheWeightB_%d" % i
-                self.Hist[name] = ROOT.TH1F(name, name+";Z+b(b) p_{T} [GeV]", 2500, 0., 2500.)
-                name = "LheWeightL_%d" % i
-                self.Hist[name] = ROOT.TH1F(name, name+";Z+light p_{T} [GeV]", 2500, 0., 2500.)
-            setup.services["outputfile"].file.cd("..")
-            
+                       
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
@@ -99,10 +81,10 @@ class GenAnalyzer( Analyzer ):
         # LHE weights
         
         event.weight       = abs(event.LHE_originalWeight)/event.LHE_originalWeight
-        event.FacScaleUp   = abs(event.LHE_weights[2].wgt/event.LHE_originalWeight)
-        event.FacScaleDown = abs(event.LHE_weights[3].wgt/event.LHE_originalWeight)
-        event.RenScaleUp   = abs(event.LHE_weights[4].wgt/event.LHE_originalWeight)
-        event.RenScaleDown = abs(event.LHE_weights[7].wgt/event.LHE_originalWeight)
+        event.FacScaleUp   = abs(event.LHE_weights[1].wgt/event.LHE_originalWeight)
+        event.FacScaleDown = abs(event.LHE_weights[2].wgt/event.LHE_originalWeight)
+        event.RenScaleUp   = abs(event.LHE_weights[3].wgt/event.LHE_originalWeight)
+        event.RenScaleDown = abs(event.LHE_weights[6].wgt/event.LHE_originalWeight)
         PDFw = []
         for i in range(10,min(109, len(event.LHE_weights))): 
             PDFw.append(abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))

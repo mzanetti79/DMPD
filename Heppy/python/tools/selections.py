@@ -11,6 +11,7 @@ selection = {
     # SR
     "SR1" : "triggerMET && nElectrons==0 && nMuons==0 && met_pt>200 && minDeltaPhi>0.5 && cat1",
     "SR2" : "triggerMET && nElectrons==0 && nMuons==0 && met_pt>200 && minDeltaPhi>0.5 && cat2",
+    "SR"  : "triggerMET && nElectrons==0 && nMuons==0 && met_pt>200 && minDeltaPhi>0.5 && (cat1 || cat2)",
     # W
     "WeInc" : "triggerEle && nElectrons==1 && lepton1_isElectron && lepton1_tightId && lepton1_pt>30 && W_tmass>50",
     "WmInc" : "triggerMuo && nMuons==1 && lepton1_isMuon && lepton1_tightId && lepton1_pt>30 && lepton1_relIso04<0.15 && W_tmass>50",

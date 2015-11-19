@@ -424,8 +424,6 @@ class XZhAnalyzer( Analyzer ):
 
 #        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
 #        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
-        
-    
     
     def process(self, event):
         event.isXZh = False
@@ -437,6 +435,12 @@ class XZhAnalyzer( Analyzer ):
         event.Z = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         
+        # Skip events with less than 1 fat-jet with pt > fatjet_pt
+        if len(event.cleanJetsAK8) < 1:
+            return True
+        if event.cleanJetsAK8[0].pt() < self.cfg_ana.fatjet_pt:
+            return True
+                
          # All
         self.Hist["Z2EECounter"].AddBinContent(0, event.eventWeight)
         self.Hist["Z2MMCounter"].AddBinContent(0, event.eventWeight)
