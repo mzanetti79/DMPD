@@ -2,14 +2,14 @@
 
 import os, multiprocessing
 from array import array
-from ROOT import TFile, TH1
+from ROOT import TFile, TH1, TF1
 
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
 #from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
 #from DMPD.Heppy.samples.Data.fileLists import datasamples
 #samples = datasamples.copy()
 #samples.update(mcsamples)
-from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors
+from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsectionsunc
 
 #ROOT.gROOT.SetBatch(1)
 
@@ -20,6 +20,7 @@ ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.enviro
 ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
 ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
 ref_trigger_file = '%s/src/DMPD/Heppy/python/tools/HLT/TriggerEffSF.root' % os.environ['CMSSW_BASE']
+ref_ewcorr_file = '%s/src/DMPD/Heppy/python/tools/EW/scalefactors_v4.root' % os.environ['CMSSW_BASE']
 
 import optparse
 usage = 'usage: %prog [options]'
@@ -135,16 +136,24 @@ def returnReshapedDiscr(f, discr, pt, eta, sigma=''):
     y1 = returnNewWorkingPoint(f, i1, pt, eta, sigma)
     return y0 + (discr-x0)*((y1-y0)/(x1-x0))
 
-##############################
-
-### ADD RECOIL CORRECTIONS ###
+### RECOIL CORRECTIONS SETUP ###
 
 ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/RECOIL/RecoilCorrector.hh+' % os.environ['CMSSW_BASE'])
 Recoil = ROOT.RecoilCorrector(ref_recoilMC_file)
 Recoil.addDataFile(ref_recoilData_file)
 Recoil.addMCFile(ref_recoilMC_file)
 
-##############################
+### ELECTROWEAK CORRECTIONS SETUP ###
+
+ewFile = TFile(ref_ewcorr_file, 'READ')
+ewFile.cd()
+
+if ewFile.IsZombie():
+    print 'No EW corrections file found, aborting...'
+    exit()
+    
+ewcorrFunc_z     = ewFile.Get("z_ewkcorr/z_ewkcorr_func")
+ewcorrFunc_w     = ewFile.Get("w_ewkcorr/w_ewkcorr_func")
 
 
 def isJSON(run, lumi):
@@ -228,12 +237,14 @@ def processFile(dir_name, verbose=False):
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight = array('f', [1.0])  # weight due to the MC sample cross section
+    sigxsWeight = array('f', [1.0])  # weight due to the MC sample cross section
     kfactorWeight = array('f', [1.0])  # weight due to the MC sample cross section
     kfactorWeightUp = array('f', [1.0])
     kfactorWeightDown = array('f', [1.0])
     pileupWeight = array('f', [1.0])  # weight from PU reweighting
     pileupWeightUp = array('f', [1.0])
     pileupWeightDown = array('f', [1.0])
+    electroweakWeight = array('f', [1.0])  # weight from EW corrections
     triggerWeight = array('f', [1.0])  # weight from trigger SF
     triggerWeightUp = array('f', [1.0])
     triggerWeightDown = array('f', [1.0])    
@@ -284,6 +295,7 @@ def processFile(dir_name, verbose=False):
             # New branches
             eventWeightBranch = new_tree.Branch('eventWeight', eventWeight, 'eventWeight/F')
             xsWeightBranch = new_tree.Branch('xsWeight', xsWeight, 'xsWeight/F')
+            sigxsWeightBranch = new_tree.Branch('sigxsWeight', sigxsWeight, 'sigxsWeight/F')
             kfactorWeightBranch = new_tree.Branch('kfactorWeight', kfactorWeight, 'kfactorWeight/F')
             kfactorWeightUpBranch = new_tree.Branch('kfactorWeightUp', kfactorWeightUp, 'kfactorWeightUp/F')
             kfactorWeightDownBranch = new_tree.Branch('kfactorWeightDown', kfactorWeightDown, 'kfactorWeightDown/F')
@@ -293,6 +305,7 @@ def processFile(dir_name, verbose=False):
             triggerWeightBranch = new_tree.Branch('triggerWeight', triggerWeight, 'triggerWeight/F')
             triggerWeightUpBranch = new_tree.Branch('triggerWeightUp', triggerWeightUp, 'triggerWeightUp/F')
             triggerWeightDownBranch = new_tree.Branch('triggerWeightDown', triggerWeightDown, 'triggerWeightDown/F')            
+            electroweakWeightBranch = new_tree.Branch('electroweakWeight', electroweakWeight, 'electroweakWeight/F')
             CSVBranch = {}
             CSVUpBranch = {}
             CSVDownBranch = {}
@@ -321,35 +334,46 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = triggerWeight[0] = triggerWeightUp[0] = triggerWeightDown[0] = 1.
+                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = triggerWeight[0] = triggerWeightUp[0] = triggerWeightDown[0] = electroweakWeight[0] = sigxsWeight[0] = 1.
                 for i in range(njets):
                     csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
                 
                 # Weights
                 if isMC:
-                    # Cross section
+                    ''' XSECTION '''
                     xsWeight[0] = weightXS if obj.genWeight > 0. else -weightXS
                     
-                    # K factors
-                    kfactorWeight[0] = kfactorXS
-#                    kfBin = max(zkf.GetXaxis().GetXmin(), min(zkf.FindBin(obj.genVpt), zkf.GetXaxis().GetXmax()))
-#                    if 'WJets' in dir_name and 'madgraph' in dir_name:
-#                        kfactorWeight[0] = wkf.GetBinContent(kfBin)
-#                        kfactorWeightUp[0] = wkf.GetBinContent(kfBin) + wkf.GetBinError(kfBin)
-#                        kfactorWeightDown[0] = wkf.GetBinContent(kfBin) - wkf.GetBinError(kfBin)
-#                    elif ('ZJets' in dir_name or 'DYJets' in dir_name) and 'madgraph' in dir_name:
-#                        kfactorWeight[0] = zkf.GetBinContent(kfBin)
-#                        kfactorWeightUp[0] = zkf.GetBinContent(kfBin) + zkf.GetBinError(kfBin)
-#                        kfactorWeightDown[0] = zkf.GetBinContent(kfBin) - zkf.GetBinError(kfBin)
+                    ''' SIGNAL XSECTION WEIGHT [ RELATIVE UNCERTAINTY -> delta(sigma)/sigma ]'''
+                    sigxsWeight[0] = (1.+abs(xsectionsunc[dir_name[:-3]]/xsections[dir_name[:-3]])) if dir_name[:-3] in xsectionsunc else 1.
                     
-                    # PU reweighting
+                    ''' K-FACTOR '''
+                    kfactorWeight[0] = kfactorXS
+                    ''' OLD K-FACTOR 
+                    kfBin = max(zkf.GetXaxis().GetXmin(), min(zkf.FindBin(obj.genVpt), zkf.GetXaxis().GetXmax()))
+                    if 'WJets' in dir_name and 'madgraph' in dir_name:
+                        kfactorWeight[0] = wkf.GetBinContent(kfBin)
+                        kfactorWeightUp[0] = wkf.GetBinContent(kfBin) + wkf.GetBinError(kfBin)
+                        kfactorWeightDown[0] = wkf.GetBinContent(kfBin) - wkf.GetBinError(kfBin)
+                    elif ('ZJets' in dir_name or 'DYJets' in dir_name) and 'madgraph' in dir_name:
+                        kfactorWeight[0] = zkf.GetBinContent(kfBin)
+                        kfactorWeightUp[0] = zkf.GetBinContent(kfBin) + zkf.GetBinError(kfBin)
+                        kfactorWeightDown[0] = zkf.GetBinContent(kfBin) - zkf.GetBinError(kfBin)
+                    '''
+                    
+                    ''' PILEUP '''
                     puBin = min(puRatio.FindBin(obj.nPU), puRatio.GetNbinsX())
                     pileupWeight[0] = puRatio.GetBinContent(puBin)
                     pileupWeightUp[0] = puRatioUp.GetBinContent(puBin)
                     pileupWeightDown[0] = puRatioDown.GetBinContent(puBin)
                     
-                    # triger SF
+                    ''' ELECTROWEAK '''                    
+                    if 'DYJets' in dir_name or 'ZJets' in dir_name:
+                        electroweakWeight[0]    = ewcorrFunc_z.Eval(obj.genVpt)
+                    elif 'WJets' in dir_name:
+                        electroweakWeight[0]    = ewcorrFunc_w.Eval(obj.genVpt)
+                    
+                    ''' TRIGGER '''
                     ### SINGLE MUON
                     if obj.HLT_BIT_HLT_IsoMu20_v:
                         if 'ZCR' in obj.GetName() and obj.isZtoMM:
@@ -370,8 +394,7 @@ def processFile(dir_name, verbose=False):
                                 triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton2_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton2_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
                                 triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton2_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton2_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
                     ### SINGLE ELECTRON
-                    #elif obj.HLT_BIT_HLT_Ele23_WPLoose_Gsf_v or obj.HLT_BIT_HLT_Ele23_WP85_Gsf_v:
-                    elif obj.HLT_BIT_HLT_Ele23_WPLoose_Gsf_v:
+                    elif obj.HLT_BIT_HLT_Ele27_WPLoose_Gsf_v or obj.HLT_BIT_HLT_Ele27_WP85_Gsf_v:
                         if 'ZCR' in obj.GetName() and obj.isZtoEE:
                             triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
                             triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
@@ -396,6 +419,7 @@ def processFile(dir_name, verbose=False):
                             triggerWeightUp[0]  = trigMETSFUp.GetBinContent(min(trigMETSFUp.FindBin(obj.met_pt), trigMETSFUp.GetXaxis().GetXmax()))
                             triggerWeightDown[0]= trigMETSFDown.GetBinContent(min(trigMETSFDown.FindBin(obj.met_pt), trigMETSFDown.GetXaxis().GetXmax()))
                     
+                    ''' BTAGGING '''
                     for i in range(njets):
                         pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
                         eta = getattr(obj, 'jet%d_eta' % (i+1), -1)
@@ -412,6 +436,7 @@ def processFile(dir_name, verbose=False):
                         CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                     
+                    ''' RECOIL '''
                     cmetpt           = ROOT.Double(obj.met_pt)
                     cmetphi          = ROOT.Double(obj.met_phi)
                     cmetptScaleUp    = ROOT.Double(obj.met_pt)
@@ -523,12 +548,12 @@ def processFile(dir_name, verbose=False):
                     cormet_ptResUp[0]    = obj.met_pt
                     cormet_ptResDown[0]  = obj.met_pt
                     if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
-                        corfakemet_pt[0]         = obj.met_pt
-                        corfakemet_phi[0]        = obj.met_phi
-                        corfakemet_ptScaleUp[0]  = obj.met_pt
-                        corfakemet_ptScaleDown[0]= obj.met_pt
-                        corfakemet_ptResUp[0]    = obj.met_pt
-                        corfakemet_ptResDown[0]  = obj.met_pt               
+                        corfakemet_pt[0]         = obj.fakemet_pt
+                        corfakemet_phi[0]        = obj.fakemet_phi
+                        corfakemet_ptScaleUp[0]  = obj.fakemet_pt
+                        corfakemet_ptScaleDown[0]= obj.fakemet_pt
+                        corfakemet_ptResUp[0]    = obj.fakemet_pt
+                        corfakemet_ptResDown[0]  = obj.fakemet_pt               
 
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
@@ -550,12 +575,14 @@ def processFile(dir_name, verbose=False):
                 # Fill the branches
                 eventWeightBranch.Fill()
                 xsWeightBranch.Fill()
+                sigxsWeightBranch.Fill()
                 kfactorWeightBranch.Fill()
                 kfactorWeightUpBranch.Fill()
                 kfactorWeightDownBranch.Fill()
                 pileupWeightBranch.Fill()
                 pileupWeightUpBranch.Fill()
                 pileupWeightDownBranch.Fill()
+                electroweakWeightBranch.Fill()
                 triggerWeightBranch.Fill()
                 triggerWeightUpBranch.Fill()
                 triggerWeightDownBranch.Fill()                
@@ -611,7 +638,7 @@ for d in os.listdir(origin):
     if not d[:-3] in xsections.keys():
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
-    if not ('_HT-' in d): continue
+    #if not ('_HT-' in d): continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()

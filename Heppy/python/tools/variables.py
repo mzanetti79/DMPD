@@ -829,6 +829,7 @@ var_template = {
       "nbins" : 1,
       "min" : -0.5,
       "max" : 0.5,
+      "bins" : [-0.5,0.5],
       "log" : False,
     },
 }
