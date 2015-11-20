@@ -247,7 +247,10 @@ def processFile(dir_name, verbose=False):
     electroweakWeight = array('f', [1.0])  # weight from EW corrections
     triggerWeight = array('f', [1.0])  # weight from trigger SF
     triggerWeightUp = array('f', [1.0])
-    triggerWeightDown = array('f', [1.0])    
+    triggerWeightDown = array('f', [1.0])
+    btagWeight = array('f', [1.0])  # weight from btag SF
+    btagWeightUp = array('f', [1.0])
+    btagWeightDown = array('f', [1.0])
     # Lists of arrays do not work #@!
     CSV = {}
     CSVUp = {}
@@ -304,7 +307,10 @@ def processFile(dir_name, verbose=False):
             pileupWeightDownBranch = new_tree.Branch('pileupWeightDown', pileupWeightDown, 'pileupWeightDown/F')
             triggerWeightBranch = new_tree.Branch('triggerWeight', triggerWeight, 'triggerWeight/F')
             triggerWeightUpBranch = new_tree.Branch('triggerWeightUp', triggerWeightUp, 'triggerWeightUp/F')
-            triggerWeightDownBranch = new_tree.Branch('triggerWeightDown', triggerWeightDown, 'triggerWeightDown/F')            
+            triggerWeightDownBranch = new_tree.Branch('triggerWeightDown', triggerWeightDown, 'triggerWeightDown/F')
+            btagWeightBranch = new_tree.Branch('btagWeight', btagWeight, 'btagWeight/F')
+            btagWeightUpBranch = new_tree.Branch('btagWeightUp', btagWeightUp, 'btagWeightUp/F')
+            btagWeightDownBranch = new_tree.Branch('btagWeightDown', btagWeightDown, 'btagWeightDown/F')
             electroweakWeightBranch = new_tree.Branch('electroweakWeight', electroweakWeight, 'electroweakWeight/F')
             CSVBranch = {}
             CSVUpBranch = {}
@@ -334,7 +340,7 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = triggerWeight[0] = triggerWeightUp[0] = triggerWeightDown[0] = electroweakWeight[0] = sigxsWeight[0] = 1.
+                eventWeight[0] = xsWeight[0] = kfactorWeight[0] = kfactorWeightUp[0] = kfactorWeightDown[0] = pileupWeight[0] = pileupWeightUp[0] = pileupWeightDown[0] = triggerWeight[0] = triggerWeightUp[0] = triggerWeightDown[0] = btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = electroweakWeight[0] = sigxsWeight[0] = 1.
                 for i in range(njets):
                     csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
@@ -420,6 +426,11 @@ def processFile(dir_name, verbose=False):
                             triggerWeightDown[0]= trigMETSFDown.GetBinContent(min(trigMETSFDown.FindBin(obj.met_pt), trigMETSFDown.GetXaxis().GetXmax()))
                     
                     ''' BTAGGING '''
+                    # Reshaping
+                    nbjets = 0
+                    sf = [1]*3
+                    sfUp = [1]*3
+                    sfDown = [1]*3
                     for i in range(njets):
                         pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
                         eta = getattr(obj, 'jet%d_eta' % (i+1), -1)
@@ -435,6 +446,55 @@ def processFile(dir_name, verbose=False):
                         CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
                         CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        if i<3:
+                            sf[i] = reader['M'][0].eval(f, eta, pt)
+                            sfUp[i] = reader['M'][1].eval(f, eta, pt)
+                            sfDown[i] = reader['M'][-1].eval(f, eta, pt)
+                            if csv>=workingpoint[2]: nbjets += 1
+                        
+                    # Calculate weight
+                    if njets <= 0:
+                        btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
+                    elif njets == 1:
+                        if nbjets == 0:
+                            btagWeight[0] *= (1.-sf[0])
+                            btagWeightUp[0] *= (1.-sfUp[0])
+                            btagWeightDown[0] *= (1.-sfDown[0])
+                        else:
+                            btagWeight[0] *= sf[0]
+                            btagWeightUp[0] *= sfUp[0]
+                            btagWeightDown[0] *= sfDown[0]
+                    elif njets == 2:
+                        if nbjets == 0:
+                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])
+                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])
+                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])
+                        elif nbjets == 1:
+                            btagWeight[0] *= (1.-sf[0])*sf[1] + sf[0]*(1.-sf[1])
+                            btagWeightUp[0] *= (1.-sfUp[0])*sfUp[1] + sfUp[0]*(1.-sfUp[1])
+                            btagWeightDown[0] *= (1.-sfDown[0])*sfDown[1] + sfDown[0]*(1.-sfDown[1])
+                        else:
+                            btagWeight[0] *= sf[0]*sf[1]
+                            btagWeightUp[0] *= sfUp[0]*sfUp[1]
+                            btagWeightDown[0] *= sfDown[0]*sfDown[1]
+                    else:
+                        if nbjets == 0:
+                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])*(1.-sf[2])
+                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])*(1.-sfUp[2])
+                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])*(1.-sfDown[2])
+                        elif nbjets == 1:
+                            btagWeight[0] *= sf[0]*(1.-sf[1])*(1.-sf[2]) + sf[1]*(1.-sf[0])*(1.-sf[2]) + sf[2]*(1.-sf[0])*(1.-sf[1])
+                            btagWeightUp[0] *= sfUp[0]*(1.-sfUp[1])*(1.-sfUp[2]) + sfUp[1]*(1.-sfUp[0])*(1.-sfUp[2]) + sfUp[2]*(1.-sfUp[0])*(1.-sfUp[1])
+                            btagWeightDown[0] *= sfDown[0]*(1.-sfDown[1])*(1.-sfDown[2]) + sfDown[1]*(1.-sfDown[0])*(1.-sfDown[2]) + sfDown[2]*(1.-sfDown[0])*(1.-sfDown[1])
+                        elif nbjets == 2:
+                            btagWeight[0] *= sf[0]*sf[1]*(1.-sf[2]) + sf[0]*sf[2]*(1.-sf[1]) + sf[1]*sf[2]*(1.-sf[0])
+                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*(1.-sfUp[2]) + sfUp[0]*sfUp[2]*(1.-sfUp[1]) + sfUp[1]*sfUp[2]*(1.-sfUp[0])
+                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*(1.-sfDown[2]) + sfDown[0]*sfDown[2]*(1.-sfDown[1]) + sfDown[1]*sfDown[2]*(1.-sfDown[0])
+                        else:
+                            btagWeight[0] *= sf[0]*sf[1]*sf[2]
+                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*sfUp[2]
+                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*sfDown[2]
+                    
                     
                     ''' RECOIL '''
                     cmetpt           = ROOT.Double(obj.met_pt)
@@ -585,7 +645,10 @@ def processFile(dir_name, verbose=False):
                 electroweakWeightBranch.Fill()
                 triggerWeightBranch.Fill()
                 triggerWeightUpBranch.Fill()
-                triggerWeightDownBranch.Fill()                
+                triggerWeightDownBranch.Fill()
+                btagWeightBranch.Fill()
+                btagWeightUpBranch.Fill()
+                btagWeightDownBranch.Fill()
                 for i in range(njets):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
