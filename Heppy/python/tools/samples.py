@@ -6,7 +6,7 @@ sample = {
     'Data' : {
         'order' : 0,
         #'files' : ['SingleMuon_Run2015B_PromptReco_v1', 'SingleMuon_Run2015B_17Jul2015_v1', 'SingleElectron_Run2015B_PromptReco_v1', 'SingleElectron_Run2015B_17Jul2015_v1', 'MET_Run2015B_PromptReco_v1', 'MET_Run2015B_17Jul2015_v1'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
-        'files' : ['SingleMuon_Run2015D-05Oct2015-v1', 'SingleMuon_Run2015D-PromptReco-v4', 'SingleElectron_Run2015D-05Oct2015-v1', 'SingleElectron_Run2015D-PromptReco-v4', 'MET_Run2015D-05Oct2015-v1', 'MET_Run2015D-PromptReco-v4'], #'DoubleMuon_Run2015D-05Oct2015-v1', 'DoubleMuon_Run2015D-PromptReco-v4', 'DoubleEG_Run2015D-05Oct2015-v1', 'DoubleEG_Run2015D-PromptReco-v4', 
+        'files' : ['SingleMuon_Run2015C-05Oct2015-v1', 'SingleMuon_Run2015D-05Oct2015-v1', 'SingleMuon_Run2015D-PromptReco-v4', 'SingleElectron_Run2015C-05Oct2015-v1', 'SingleElectron_Run2015D-05Oct2015-v1', 'SingleElectron_Run2015D-PromptReco-v4', 'MET_Run2015C-05Oct2015-v1', 'MET_Run2015D-05Oct2015-v1', 'MET_Run2015D-PromptReco-v4'], #'DoubleMuon_Run2015D-05Oct2015-v1', 'DoubleMuon_Run2015D-PromptReco-v4', 'DoubleEG_Run2015D-05Oct2015-v1', 'DoubleEG_Run2015D-PromptReco-v4', 
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
@@ -56,6 +56,17 @@ sample = {
         'linecolor' : 856,#856
         'linestyle' : 1,
         'label' : "Z(#nu#nu) + jets",
+        'weight': 1.,
+        'plot': True,
+    },
+    'DYJets_HT' : {
+        'order' : 1,
+        'files' : ['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2', 'DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'ZJetsToNuNu_HT-100To200_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1', 'ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
+        'fillcolor' : 418,
+        'fillstyle' : 1001,
+        'linecolor' : 418,
+        'linestyle' : 1,
+        'label' : "Z + jets",
         'weight': 1.,
         'plot': True,
     },
@@ -118,11 +129,23 @@ sample = {
     'QCD' : {
         'order' : 6,
         'files' : ['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-        'fillcolor' : 920,
+        'fillcolor' : 921,
         'fillstyle' : 1001,
-        'linecolor' : 920,
+        'linecolor' : 921,
         'linestyle' : 1,
-        'label' : "QCD",
+        'label' : "multijet",
+        'weight': 1.,
+        'plot': True,
+    },
+    
+    'AllBkg' : {
+        'order' : 99,
+        'files' : ['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1', 'DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1', 'WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1', 'TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1', 'ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1', 'ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1', 'ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v2', 'WW_TuneCUETP8M1_13TeV-pythia8-v1','WZ_TuneCUETP8M1_13TeV-pythia8-v1','ZZ_TuneCUETP8M1_13TeV-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+        'fillcolor' : 856,
+        'fillstyle' : 1001,
+        'linecolor' : 856,
+        'linestyle' : 1,
+        'label' : "EWK backgrounds",
         'weight': 1.,
         'plot': True,
     },
@@ -1277,7 +1300,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1289,7 +1312,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1301,7 +1324,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1313,7 +1336,7 @@ sample = {
         'linecolor' : 625,
         'linestyle' : 1,
         'label' : "m_{#Phi}=100 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': True,
     },
 
@@ -1325,7 +1348,7 @@ sample = {
         'linecolor' : 628,
         'linestyle' : 1,
         'label' : "m_{#Phi}=200 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': True,
     },
 
@@ -1337,7 +1360,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1349,7 +1372,7 @@ sample = {
         'linecolor' : 633,
         'linestyle' : 1,
         'label' : "m_{#Phi}=500 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': True,
     },
 
@@ -1361,7 +1384,7 @@ sample = {
         'linecolor' : 635,
         'linestyle' : 1,
         'label' : "m_{#Phi}=1000 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': True,
     },
 
@@ -1373,7 +1396,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1385,7 +1408,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1397,7 +1420,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1409,7 +1432,7 @@ sample = {
 #        'linecolor' : 623,
 #        'linestyle' : 1,
 #        'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-#        'weight': 10.,
+#        'weight': 1.,
 #        'plot': False,
 #    },
 
@@ -1421,7 +1444,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1433,7 +1456,7 @@ sample = {
 #        'linecolor' : 623,
 #        'linestyle' : 1,
 #        'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-#        'weight': 10.,
+#        'weight': 1.,
 #        'plot': False,
 #    },
 
@@ -1445,7 +1468,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1457,7 +1480,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
     
@@ -1471,7 +1494,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1483,7 +1506,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1495,7 +1518,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=20 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1507,7 +1530,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1519,7 +1542,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=300 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1531,7 +1554,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1543,7 +1566,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=1 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1555,7 +1578,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=10 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1567,7 +1590,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=100 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1579,7 +1602,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=10 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1591,7 +1614,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=1000 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1603,7 +1626,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1615,7 +1638,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=150 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1627,7 +1650,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=200 GeV m_{#Chi}=50 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1639,7 +1662,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=50 GeV m_{#Chi}=50 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
 
@@ -1651,7 +1674,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "DM+h.f. m_{#Phi}=500 GeV m_{#Chi}=500 GeV",
-        'weight': 10.,
+        'weight': 1.,
         'plot': False,
     },
     
@@ -1664,7 +1687,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "m_{X} = 600 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M800' : {
@@ -1675,7 +1698,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "m_{X} = 800 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M1000' : {
@@ -1686,7 +1709,7 @@ sample = {
         'linecolor' : 623,
         'linestyle' : 1,
         'label' : "m_{X} = 1000 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': True,
     },
     'XZh_M1200' : {
@@ -1697,7 +1720,7 @@ sample = {
         'linecolor' : 625,
         'linestyle' : 1,
         'label' : "m_{X} = 1200 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M1400' : {
@@ -1708,7 +1731,7 @@ sample = {
         'linecolor' : 625,
         'linestyle' : 1,
         'label' : "m_{X} = 1400 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M1600' : {
@@ -1719,7 +1742,7 @@ sample = {
         'linecolor' : 628,
         'linestyle' : 1,
         'label' : "m_{X} = 1600 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M1800' : {
@@ -1730,7 +1753,7 @@ sample = {
         'linecolor' : 628,
         'linestyle' : 1,
         'label' : "m_{X} = 1800 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M2000' : {
@@ -1741,7 +1764,7 @@ sample = {
         'linecolor' : 628,
         'linestyle' : 1,
         'label' : "m_{X} = 2000 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': True,
     },
     'XZh_M2500' : {
@@ -1752,7 +1775,7 @@ sample = {
         'linecolor' : 629,
         'linestyle' : 1,
         'label' : "m_{X} = 2500 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M3000' : {
@@ -1763,7 +1786,7 @@ sample = {
         'linecolor' : 633,
         'linestyle' : 1,
         'label' : "m_{X} = 3000 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': True,
     },
     'XZh_M3500' : {
@@ -1774,7 +1797,7 @@ sample = {
         'linecolor' : 634,
         'linestyle' : 1,
         'label' : "m_{X} = 3500 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     'XZh_M4000' : {
@@ -1785,7 +1808,7 @@ sample = {
         'linecolor' : 635,
         'linestyle' : 1,
         'label' : "m_{X} = 4000 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': True,
     },
     'XZh_M4500' : {
@@ -1796,7 +1819,7 @@ sample = {
         'linecolor' : 635,
         'linestyle' : 1,
         'label' : "m_{X} = 4500 GeV",
-        'weight': 0.1,
+        'weight': 1.,
         'plot': False,
     },
     
@@ -1813,5 +1836,55 @@ sample = {
         'plot': True,
     },
 }
+
+
+sample['DYJetsToLL_0b'] = sample['DYJetsToLL'].copy()
+sample['DYJetsToLL_0b']['fillcolor'] = sample['DYJetsToLL_0b']['linecolor'] = 410
+sample['DYJetsToLL_1b'] = sample['DYJetsToLL'].copy()
+sample['DYJetsToLL_1b']['fillcolor'] = sample['DYJetsToLL_1b']['linecolor'] = 418
+sample['DYJetsToLL_2b'] = sample['DYJetsToLL'].copy()
+sample['DYJetsToLL_2b']['fillcolor'] = sample['DYJetsToLL_2b']['linecolor'] = 419
+
+sample['DYJetsToLL_HT_0b'] = sample['DYJetsToLL_HT'].copy()
+sample['DYJetsToLL_HT_0b']['fillcolor'] = sample['DYJetsToLL_HT_0b']['linecolor'] = 410
+sample['DYJetsToLL_HT_1b'] = sample['DYJetsToLL_HT'].copy()
+sample['DYJetsToLL_HT_1b']['fillcolor'] = sample['DYJetsToLL_HT_1b']['linecolor'] = 418
+sample['DYJetsToLL_HT_2b'] = sample['DYJetsToLL_HT'].copy()
+sample['DYJetsToLL_HT_2b']['fillcolor'] = sample['DYJetsToLL_HT_2b']['linecolor'] = 419
+
+sample['DYJetsToNuNu_0b'] = sample['DYJetsToNuNu'].copy()
+sample['DYJetsToNuNu_0b']['fillcolor'] = sample['DYJetsToNuNu_0b']['linecolor'] = 851
+sample['DYJetsToNuNu_1b'] = sample['DYJetsToNuNu'].copy()
+sample['DYJetsToNuNu_1b']['fillcolor'] = sample['DYJetsToNuNu_1b']['linecolor'] = 861
+sample['DYJetsToNuNu_2b'] = sample['DYJetsToNuNu'].copy()
+sample['DYJetsToNuNu_2b']['fillcolor'] = sample['DYJetsToNuNu_2b']['linecolor'] = 862
+
+sample['DYJetsToNuNu_HT_0b'] = sample['DYJetsToNuNu_HT'].copy()
+sample['DYJetsToNuNu_HT_0b']['fillcolor'] = sample['DYJetsToNuNu_HT_0b']['linecolor'] = 851
+sample['DYJetsToNuNu_HT_1b'] = sample['DYJetsToNuNu_HT'].copy()
+sample['DYJetsToNuNu_HT_1b']['fillcolor'] = sample['DYJetsToNuNu_HT_1b']['linecolor'] = 861
+sample['DYJetsToNuNu_HT_2b'] = sample['DYJetsToNuNu_HT'].copy()
+sample['DYJetsToNuNu_HT_2b']['fillcolor'] = sample['DYJetsToNuNu_HT_2b']['linecolor'] = 862
+
+sample['WJetsToLNu_0b'] = sample['WJetsToLNu'].copy()
+sample['WJetsToLNu_0b']['fillcolor'] = sample['WJetsToLNu_0b']['linecolor'] = 880
+sample['WJetsToLNu_1b'] = sample['WJetsToLNu'].copy()
+sample['WJetsToLNu_1b']['fillcolor'] = sample['WJetsToLNu_1b']['linecolor'] = 881
+sample['WJetsToLNu_2b'] = sample['WJetsToLNu'].copy()
+sample['WJetsToLNu_2b']['fillcolor'] = sample['WJetsToLNu_2b']['linecolor'] = 882
+
+sample['WJetsToLNu_HT_0b'] = sample['WJetsToLNu_HT'].copy()
+sample['WJetsToLNu_HT_0b']['fillcolor'] = sample['WJetsToLNu_HT_0b']['linecolor'] = 880
+sample['WJetsToLNu_HT_1b'] = sample['WJetsToLNu_HT'].copy()
+sample['WJetsToLNu_HT_1b']['fillcolor'] = sample['WJetsToLNu_HT_1b']['linecolor'] = 881
+sample['WJetsToLNu_HT_2b'] = sample['WJetsToLNu_HT'].copy()
+sample['WJetsToLNu_HT_2b']['fillcolor'] = sample['WJetsToLNu_HT_2b']['linecolor'] = 882
+
+
+
+sample['TTbar_0l'] = sample['TTbar'].copy()
+sample['TTbar_1l'] = sample['TTbar'].copy()
+sample['TTbar_2l'] = sample['TTbar'].copy()
+
 
 #samplegroups = OrderedDict(sorted(samplegroups.iteritems(), key=lambda x: x[1]['order']))
