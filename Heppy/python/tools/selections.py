@@ -26,6 +26,7 @@ selection = {
     "TInc" : "triggerMuo && lepton1_isMuon!=lepton2_isMuon && lepton1_pt>30 && lepton2_pt>30 && lepton1_tightId && lepton2_tightId && (lepton1_isMuon ? lepton1_relIso04<0.15 : lepton2_relIso04<0.15)",
     "TCR" : "TInc && (cat1 || cat2)",
     # Other
+    "QCDCR" : "triggerMET && nElectrons==0 && nMuons==0 && met_pt>200 && minDeltaPhi<0.5 && (cat1 || cat2)",
     "monoX" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && jet1_pt>110 && abs(jet1_dPhi_met)>2 && jet1_chf > 0.2 && jet1_nhf < 0.7 && jet1_phf < 0.7 && (nJets==1 || (nJets==2 && jet2_nhf < 0.7 && jet2_phf < 0.9 && abs(jet2_dPhi_jet1) < 2.5)) && nElectrons==0 && nTaus==0 && nPhotons==0",
     "monoB" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && jet1_pt>50 && jet1_chf>0.1 && jet1_nhf<0.8 && jet1_CSVR>0.890 && ((nJets==1 && abs(jet1_dPhi_met)>2) || (nJets==2 && jet2_nhf<0.7 && jet2_phf<0.9 && abs(jet2_dPhi_jet1)<2.5 && jet2_CSVR>0.890)) && nElectrons==0 && nMuons==0 && nTaus==0", # && abs(H_dPhi_met)>2
     

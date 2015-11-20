@@ -80,14 +80,22 @@ var_template = {
       "max" : 1,
       "log" : False,
     },
+    "genNl": {
+      "title" : "number of leptons at generation level",
+      "nbins" : 4,
+      "min" : -0.5,
+      "max" : 3.5,
+      "log" : True,
+    },
+    
     
     # MET
     "met_pt": {
       "title" : "#slash{E}_{T} (GeV)",
       "nbins" : -1,
       "bins" : [200, 300, 400, 500, 700, 1000],
-      "min" : 200,
-      "max" : 1000,
+      "min" : 0,
+      "max" : 0,
       "log" : True,
     },
 #    "met_pt": {
@@ -160,34 +168,57 @@ var_template = {
       "log" : True,
     },
     "fakemet_pt": {
-      "title" : "fake #slash{E}_{T} (GeV)",
-      "nbins" : 30,
+      "title" : "hadronic recoil (GeV)",
+      "nbins" : -1,
+      "bins" : [200, 300, 400, 500, 700, 1000],
       "min" : 200,
-      "max" : 800,
+      "max" : 1000,
       "log" : True,
     },
     "fakemet_phi": {
-      "title" : "fake #slash{E}_{T} #varphi",
+      "title" : "hadronic recoil #varphi",
       "nbins" : 50,
       "min" : -3.15,
       "max" : 3.15,
       "log" : False,
     },
-    "minDeltaPhi": {
-      "title" : "min #varphi (jet-#slash{E}_{T})",
+    "corfakemet_pt": {
+      "title" : "hadronic recoil (GeV)",
+      "nbins" : -1,
+      "bins" : [200, 300, 400, 500, 700, 1000],
+      "min" : 200,
+      "max" : 1000,
+      "log" : True,
+    },
+    "corfakemet_phi": {
+      "title" : "hadronic recoil #varphi",
       "nbins" : 50,
-      "min" : 0,
+      "min" : -3.15,
       "max" : 3.15,
       "log" : False,
+    },
+    "HT": {
+      "title" : "HT (GeV)",
+      "nbins" : 100,
+      "min" : 0,
+      "max" : 1000,
+      "log" : True,
+    },
+    "minDeltaPhi": {
+      "title" : "min #Delta #varphi (jet-#slash{E}_{T})",
+      "nbins" : 28,
+      "min" : 0,
+      "max" : 3.15,
+      "log" : True,
     },
     
     
     # Jets
     "jet[N]_pt": {
       "title" : "jet [N] p_{T} (GeV)",
-      "nbins" : 25,
+      "nbins" : 40,
       "min" : 0,
-      "max" : 500,
+      "max" : 800,
       "log" : True,
     },
     "jet[N]_eta": {
@@ -213,14 +244,14 @@ var_template = {
     },
     "jet[N]_dPhi_met": {
       "title" : "#Delta #varphi  jet[N]-#slash{E}_{T}",
-      "nbins" : 30,
+      "nbins" : 14,
       "min" : 0,
       "max" : 3.15,
       "log" : False,
     },
     "jet[N]_dPhi_jet1": {
       "title" : "#Delta #varphi  jet[N]-jet1",
-      "nbins" : 30,
+      "nbins" : 14,
       "min" : 0,
       "max" : 3.15,
       "log" : False,
@@ -501,7 +532,7 @@ var_template = {
       "title" : "lepton [N] p_{T} (GeV)",
       "nbins" : 50,
       "min" : 0,
-      "max" : 400,
+      "max" : 500,
       "log" : True,
     },
     "lepton[N]_eta": {
@@ -694,7 +725,7 @@ var_template = {
     "W_tmass": {
       "title" : "W candidate m_{T} (GeV)",
       "nbins" : 50,
-      "min" : 0,
+      "min" : 50,
       "max" : 200,
       "log" : False,
     },
@@ -827,10 +858,17 @@ var_template = {
     "0*run": {
       "title" : "",
       "nbins" : 1,
+      "bins" : [-0.5,0.5],
       "min" : -0.5,
       "max" : 0.5,
-      "bins" : [-0.5,0.5],
       "log" : False,
+    },
+    "0==0": {
+      "title" : "",
+      "nbins" : 5,
+      "min" : 0,
+      "max" : 5,
+      "log" : True,
     },
 }
 
@@ -844,5 +882,8 @@ for n, v in var_template.iteritems():
     else:
         variable[n] = v
 
-
-
+# Custom settings
+variable['jet2_pt']['max'] = 400
+variable['jet3_pt']['max'] = 200
+variable['jet4_pt']['max'] = 200
+variable['lepton2_pt']['max'] = 250
