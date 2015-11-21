@@ -266,12 +266,12 @@ def processFile(dir_name, verbose=False):
     cormet_ptScaleDown= array('f', [0.0])
     cormet_ptResUp    = array('f', [0.0])
     cormet_ptResDown  = array('f', [0.0])
-    corfakemet_pt         = array('f', [0.0])  
-    corfakemet_phi        = array('f', [0.0])  
-    corfakemet_ptScaleUp  = array('f', [0.0])  
-    corfakemet_ptScaleDown= array('f', [0.0])
-    corfakemet_ptResUp    = array('f', [0.0])
-    corfakemet_ptResDown  = array('f', [0.0])
+    fakecormet_pt         = array('f', [0.0])  
+    fakecormet_phi        = array('f', [0.0])  
+    fakecormet_ptScaleUp  = array('f', [0.0])  
+    fakecormet_ptScaleDown= array('f', [0.0])
+    fakecormet_ptResUp    = array('f', [0.0])
+    fakecormet_ptResDown  = array('f', [0.0])
 
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -326,12 +326,12 @@ def processFile(dir_name, verbose=False):
             cormet_ptScaleDownBranch = new_tree.Branch('cormet_ptScaleDown', cormet_ptScaleDown, 'cormet_ptScaleDown/F')
             cormet_ptResUpBranch     = new_tree.Branch('cormet_ptResUp',     cormet_ptResUp,     'cormet_ptResUp/F')
             cormet_ptResDownBranch   = new_tree.Branch('cormet_ptResDown',   cormet_ptResDown,   'cormet_ptResDown/F')
-            corfakemet_ptBranch          = new_tree.Branch('corfakemet_pt',          corfakemet_pt,          'corfakemet_pt/F')
-            corfakemet_phiBranch         = new_tree.Branch('corfakemet_phi',         corfakemet_phi,         'corfakemet_phi/F')
-            corfakemet_ptScaleUpBranch   = new_tree.Branch('corfakemet_ptScaleUp',   corfakemet_ptScaleUp,   'corfakemet_ptScaleUp/F')
-            corfakemet_ptScaleDownBranch = new_tree.Branch('corfakemet_ptScaleDown', corfakemet_ptScaleDown, 'corfakemet_ptScaleDown/F')
-            corfakemet_ptResUpBranch     = new_tree.Branch('corfakemet_ptResUp',     corfakemet_ptResUp,     'corfakemet_ptResUp/F')
-            corfakemet_ptResDownBranch   = new_tree.Branch('corfakemet_ptResDown',   corfakemet_ptResDown,   'corfakemet_ptResDown/F')
+            fakecormet_ptBranch          = new_tree.Branch('fakecormet_pt',          fakecormet_pt,          'fakecormet_pt/F')
+            fakecormet_phiBranch         = new_tree.Branch('fakecormet_phi',         fakecormet_phi,         'fakecormet_phi/F')
+            fakecormet_ptScaleUpBranch   = new_tree.Branch('fakecormet_ptScaleUp',   fakecormet_ptScaleUp,   'fakecormet_ptScaleUp/F')
+            fakecormet_ptScaleDownBranch = new_tree.Branch('fakecormet_ptScaleDown', fakecormet_ptScaleDown, 'fakecormet_ptScaleDown/F')
+            fakecormet_ptResUpBranch     = new_tree.Branch('fakecormet_ptResUp',     fakecormet_ptResUp,     'fakecormet_ptResUp/F')
+            fakecormet_ptResDownBranch   = new_tree.Branch('fakecormet_ptResDown',   fakecormet_ptResDown,   'fakecormet_ptResDown/F')
 
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -593,12 +593,12 @@ def processFile(dir_name, verbose=False):
                     cormet_ptResUp[0]    = cmetptResUp
                     cormet_ptResDown[0]  = cmetptResDown
                     if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
-                        corfakemet_pt[0]         = cfmetpt
-                        corfakemet_phi[0]        = cfmetphi
-                        corfakemet_ptScaleUp[0]  = cfmetptScaleUp
-                        corfakemet_ptScaleDown[0]= cfmetptScaleDown
-                        corfakemet_ptResUp[0]    = cfmetptResUp
-                        corfakemet_ptResDown[0]  = cfmetptResDown               
+                        fakecormet_pt[0]         = cfmetpt
+                        fakecormet_phi[0]        = cfmetphi
+                        fakecormet_ptScaleUp[0]  = cfmetptScaleUp
+                        fakecormet_ptScaleDown[0]= cfmetptScaleDown
+                        fakecormet_ptResUp[0]    = cfmetptResUp
+                        fakecormet_ptResDown[0]  = cfmetptResDown               
                 # Data
                 else:
                     cormet_pt[0]         = obj.met_pt
@@ -608,12 +608,12 @@ def processFile(dir_name, verbose=False):
                     cormet_ptResUp[0]    = obj.met_pt
                     cormet_ptResDown[0]  = obj.met_pt
                     if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
-                        corfakemet_pt[0]         = obj.fakemet_pt
-                        corfakemet_phi[0]        = obj.fakemet_phi
-                        corfakemet_ptScaleUp[0]  = obj.fakemet_pt
-                        corfakemet_ptScaleDown[0]= obj.fakemet_pt
-                        corfakemet_ptResUp[0]    = obj.fakemet_pt
-                        corfakemet_ptResDown[0]  = obj.fakemet_pt               
+                        fakecormet_pt[0]         = obj.fakemet_pt
+                        fakecormet_phi[0]        = obj.fakemet_phi
+                        fakecormet_ptScaleUp[0]  = obj.fakemet_pt
+                        fakecormet_ptScaleDown[0]= obj.fakemet_pt
+                        fakecormet_ptResUp[0]    = obj.fakemet_pt
+                        fakecormet_ptResDown[0]  = obj.fakemet_pt               
 
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
@@ -660,12 +660,12 @@ def processFile(dir_name, verbose=False):
                 cormet_ptResUpBranch.Fill()
                 cormet_ptResDownBranch.Fill()
                 if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
-                    corfakemet_ptBranch.Fill()
-                    corfakemet_phiBranch.Fill()
-                    corfakemet_ptScaleUpBranch.Fill()
-                    corfakemet_ptScaleDownBranch.Fill()
-                    corfakemet_ptResUpBranch.Fill()
-                    corfakemet_ptResDownBranch.Fill()
+                    fakecormet_ptBranch.Fill()
+                    fakecormet_phiBranch.Fill()
+                    fakecormet_ptScaleUpBranch.Fill()
+                    fakecormet_ptScaleDownBranch.Fill()
+                    fakecormet_ptResUpBranch.Fill()
+                    fakecormet_ptResDownBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
