@@ -87,14 +87,16 @@ class GenAnalyzer( Analyzer ):
         if hasattr(event, "LHE_originalWeight"):
             event.weight       = abs(event.LHE_originalWeight)/event.LHE_originalWeight
             if hasattr(event, "LHE_weights"):
-                event.FacScaleUp   = abs(event.LHE_weights[1].wgt/event.LHE_originalWeight)
-                event.FacScaleDown = abs(event.LHE_weights[2].wgt/event.LHE_originalWeight)
-                event.RenScaleUp   = abs(event.LHE_weights[3].wgt/event.LHE_originalWeight)
-                event.RenScaleDown = abs(event.LHE_weights[6].wgt/event.LHE_originalWeight)
-                PDFw = []
-                for i in range(9,min(109, len(event.LHE_weights))): 
-                    PDFw.append(abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
-                event.PDFweight = math.sqrt(sum(n*n for n in PDFw)/len(PDFw))
+                if len(event.LHE_weights) > 6:
+                    event.FacScaleUp   = abs(event.LHE_weights[1].wgt/event.LHE_originalWeight)
+                    event.FacScaleDown = abs(event.LHE_weights[2].wgt/event.LHE_originalWeight)
+                    event.RenScaleUp   = abs(event.LHE_weights[3].wgt/event.LHE_originalWeight)
+                    event.RenScaleDown = abs(event.LHE_weights[6].wgt/event.LHE_originalWeight)
+                    PDFw = []
+                    if len(event.LHE_weights) > 8:
+                        for i in range(9,min(109, len(event.LHE_weights))): PDFw.append(abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
+                    event.PDFweight = math.sqrt(sum(n*n for n in PDFw)/len(PDFw))
+                pass
             pass
         pass
 
