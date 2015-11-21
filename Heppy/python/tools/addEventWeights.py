@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 
-import os, multiprocessing
+import os, multiprocessing, math
 from array import array
-from ROOT import TFile, TH1, TF1
+from ROOT import TFile, TH1, TF1, TLorentzVector
 
 #from DMPD.Heppy.samples.Phys14.fileLists import samples
 #from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
@@ -13,8 +13,13 @@ from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsections
 
 #ROOT.gROOT.SetBatch(1)
 
+#1.28/fb   Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt
+#2.1/fb    Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt
+
 ref_kf_file = '%s/src/DMPD/Heppy/python/tools/Kfactors.root' % os.environ['CMSSW_BASE']
-ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
+#ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
+ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU_1p3fb.root' % os.environ['CMSSW_BASE']
+#ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU_2p1fb.root' % os.environ['CMSSW_BASE']
 ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
 ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
 ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
@@ -32,10 +37,10 @@ parser.add_option('-v', '--verbose', action='store_true', dest='verbose', defaul
 
 (options, args) = parser.parse_args()
 
-origin = options.origin
-target = options.target
-json_path = options.json
-verboseon = options.verbose
+origin      = options.origin
+target      = options.target
+json_path   = options.json
+verboseon   = options.verbose
 
 numberOfJets = {'ZCR' : 3, 'WCR' : 4, 'TCR' : 3, 'SR': 3}
 
@@ -216,19 +221,13 @@ def processFile(dir_name, verbose=False):
     # trigger SF
     trigFile = TFile(ref_trigger_file, 'READ')
     #
-    trigMuBarSF = trigFile.Get('MuTrig_Bar_SF')
-    trigMuBarSFUp = trigFile.Get('MuTrig_Bar_SFUp')
-    trigMuBarSFDown = trigFile.Get('MuTrig_Bar_SFDown')
-    trigMuEndSF = trigFile.Get('MuTrig_End_SF')
-    trigMuEndSFUp = trigFile.Get('MuTrig_End_SFUp')
-    trigMuEndSFDown = trigFile.Get('MuTrig_End_SFDown')
+    trigMuSF = trigFile.Get('MuTrig_SF')
+    trigMuSFUp = trigFile.Get('MuTrig_SFUp')
+    trigMuSFDown = trigFile.Get('MuTrig_SFDown')
     #
-    trigEleBarSF = trigFile.Get('EleTrig_Bar_SF')
-    trigEleBarSFUp = trigFile.Get('EleTrig_Bar_SFUp')
-    trigEleBarSFDown = trigFile.Get('EleTrig_Bar_SFDown')
-    trigEleEndSF = trigFile.Get('EleTrig_End_SF')
-    trigEleEndSFUp = trigFile.Get('EleTrig_End_SFUp')
-    trigEleEndSFDown = trigFile.Get('EleTrig_End_SFDown')
+    trigEleSF = trigFile.Get('EleTrig_SF')
+    trigEleSFUp = trigFile.Get('EleTrig_SFUp')
+    trigEleSFDown = trigFile.Get('EleTrig_SFDown')
     #
     trigMETSF = trigFile.Get('METTrig_SF')
     trigMETSFUp = trigFile.Get('METTrig_SFUp')
@@ -319,7 +318,6 @@ def processFile(dir_name, verbose=False):
                 CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1))
                 CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1))
                 CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1))
-            
             cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
             cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
             cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
@@ -382,48 +380,40 @@ def processFile(dir_name, verbose=False):
                     ''' TRIGGER '''
                     ### SINGLE MUON
                     if obj.HLT_BIT_HLT_IsoMu20_v:
-                        if 'ZCR' in obj.GetName() and obj.isZtoMM:
-                            triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
-                            triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
-                            triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
-                        elif 'WCR' in obj.GetName() and obj.lepton1_isMuon:
-                            triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
-                            triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
-                            triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
+                        if ( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.lepton1_isMuon ) :
+                            triggerWeight[0]        = trigMuSF.GetBinContent( min(trigMuSF.GetXaxis().FindBin(obj.lepton1_pt), trigMuSF.GetNbinsX()), min(trigMuSF.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSF.GetNbinsY()) ) 
+                            triggerWeightUp[0]      = trigMuSFUp.GetBinContent( min(trigMuSFUp.GetXaxis().FindBin(obj.lepton1_pt), trigMuSFUp.GetNbinsX()), min(trigMuSFUp.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSFUp.GetNbinsY()) ) 
+                            triggerWeightDown[0]    = trigMuSFDown.GetBinContent( min(trigMuSFDown.GetXaxis().FindBin(obj.lepton1_pt), trigMuSFDown.GetNbinsX()), min(trigMuSFDown.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSFDown.GetNbinsY()) ) 
                         elif 'TCR' in obj.GetName():
                             if obj.lepton1_isMuon:
-                                triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton1_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton1_pt), trigMuEndSF.GetXaxis().GetXmax()))
-                                triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton1_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton1_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
-                                triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton1_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton1_pt), trigMuEndSFDown.GetXaxis().GetXmax()))                        
+                                triggerWeight[0]    = trigMuSF.GetBinContent( min(trigMuSF.GetXaxis().FindBin(obj.lepton1_pt), trigMuSF.GetNbinsX()), min(trigMuSF.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSF.GetNbinsY()) ) 
+                                triggerWeightUp[0]  = trigMuSFUp.GetBinContent( min(trigMuSFUp.GetXaxis().FindBin(obj.lepton1_pt), trigMuSFUp.GetNbinsX()), min(trigMuSFUp.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSFUp.GetNbinsY()) ) 
+                                triggerWeightDown[0]= trigMuSFDown.GetBinContent( min(trigMuSFDown.GetXaxis().FindBin(obj.lepton1_pt), trigMuSFDown.GetNbinsX()), min(trigMuSFDown.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigMuSFDown.GetNbinsY()) ) 
                             elif obj.lepton2_isMuon:
-                                triggerWeight[0]    = trigMuBarSF.GetBinContent(min(trigMuBarSF.FindBin(obj.lepton2_pt), trigMuBarSF.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSF.GetBinContent(min(trigMuEndSF.FindBin(obj.lepton2_pt), trigMuEndSF.GetXaxis().GetXmax()))
-                                triggerWeightUp[0]  = trigMuBarSFUp.GetBinContent(min(trigMuBarSFUp.FindBin(obj.lepton2_pt), trigMuBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFUp.GetBinContent(min(trigMuEndSFUp.FindBin(obj.lepton2_pt), trigMuEndSFUp.GetXaxis().GetXmax()))
-                                triggerWeightDown[0]= trigMuBarSFDown.GetBinContent(min(trigMuBarSFDown.FindBin(obj.lepton2_pt), trigMuBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.2 else trigMuEndSFDown.GetBinContent(min(trigMuEndSFDown.FindBin(obj.lepton2_pt), trigMuEndSFDown.GetXaxis().GetXmax()))
+                                triggerWeight[0]    = trigMuSF.GetBinContent( min(trigMuSF.GetXaxis().FindBin(obj.lepton2_pt), trigMuSF.GetNbinsX()), min(trigMuSF.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigMuSF.GetNbinsY()) ) 
+                                triggerWeightUp[0]  = trigMuSFUp.GetBinContent( min(trigMuSFUp.GetXaxis().FindBin(obj.lepton2_pt), trigMuSFUp.GetNbinsX()), min(trigMuSFUp.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigMuSFUp.GetNbinsY()) )
+                                triggerWeightDown[0]= trigMuSFDown.GetBinContent( min(trigMuSFDown.GetXaxis().FindBin(obj.lepton2_pt), trigMuSFDown.GetNbinsX()), min(trigMuSFDown.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigMuSFDown.GetNbinsY()) )
                     ### SINGLE ELECTRON
                     elif obj.HLT_BIT_HLT_Ele27_WPLoose_Gsf_v or obj.HLT_BIT_HLT_Ele27_WP85_Gsf_v:
-                        if 'ZCR' in obj.GetName() and obj.isZtoEE:
-                            triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
-                            triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
-                            triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
-                        elif 'WCR' in obj.GetName() and obj.lepton1_isElectron:
-                            triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
-                            triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
-                            triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
+                        if ( 'ZCR' in obj.GetName() and obj.isZtoEE ) or ( 'WCR' in obj.GetName() and obj.lepton1_isElectron ) :
+                            triggerWeight[0]        = trigEleSF.GetBinContent( min(trigEleSF.GetXaxis().FindBin(obj.lepton1_pt), trigEleSF.GetNbinsX()), min(trigEleSF.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSF.GetNbinsY()) ) 
+                            triggerWeightUp[0]      = trigEleSFUp.GetBinContent( min(trigEleSFUp.GetXaxis().FindBin(obj.lepton1_pt), trigEleSFUp.GetNbinsX()), min(trigEleSFUp.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSFUp.GetNbinsY()) ) 
+                            triggerWeightDown[0]    = trigEleSFDown.GetBinContent( min(trigEleSFDown.GetXaxis().FindBin(obj.lepton1_pt), trigEleSFDown.GetNbinsX()), min(trigEleSFDown.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSFDown.GetNbinsY()) ) 
                         elif 'TCR' in obj.GetName():
                             if obj.lepton1_isElectron:
-                                triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton1_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton1_pt), trigEleEndSF.GetXaxis().GetXmax()))
-                                triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton1_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton1_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
-                                triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton1_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton1_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton1_pt), trigEleEndSFDown.GetXaxis().GetXmax()))                        
+                                triggerWeight[0]    = trigEleSF.GetBinContent( min(trigEleSF.GetXaxis().FindBin(obj.lepton1_pt), trigEleSF.GetNbinsX()), min(trigEleSF.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSF.GetNbinsY()) ) 
+                                triggerWeightUp[0]  = trigEleSFUp.GetBinContent( min(trigEleSFUp.GetXaxis().FindBin(obj.lepton1_pt), trigEleSFUp.GetNbinsX()), min(trigEleSFUp.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSFUp.GetNbinsY()) ) 
+                                triggerWeightDown[0]= trigEleSFDown.GetBinContent( min(trigEleSFDown.GetXaxis().FindBin(obj.lepton1_pt), trigEleSFDown.GetNbinsX()), min(trigEleSFDown.GetYaxis().FindBin(abs(obj.lepton1_eta)), trigEleSFDown.GetNbinsY()) ) 
                             elif obj.lepton2_isElectron:
-                                triggerWeight[0]    = trigEleBarSF.GetBinContent(min(trigEleBarSF.FindBin(obj.lepton2_pt), trigEleBarSF.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSF.GetBinContent(min(trigEleEndSF.FindBin(obj.lepton2_pt), trigEleEndSF.GetXaxis().GetXmax()))
-                                triggerWeightUp[0]  = trigEleBarSFUp.GetBinContent(min(trigEleBarSFUp.FindBin(obj.lepton2_pt), trigEleBarSFUp.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSFUp.GetBinContent(min(trigEleEndSFUp.FindBin(obj.lepton2_pt), trigEleEndSFUp.GetXaxis().GetXmax()))
-                                triggerWeightDown[0]= trigEleBarSFDown.GetBinContent(min(trigEleBarSFDown.FindBin(obj.lepton2_pt), trigEleBarSFDown.GetXaxis().GetXmax())) if abs(obj.lepton2_eta) < 1.4442 else trigEleEndSFDown.GetBinContent(min(trigEleEndSFDown.FindBin(obj.lepton2_pt), trigEleEndSFDown.GetXaxis().GetXmax()))
+                                triggerWeight[0]    = trigEleSF.GetBinContent( min(trigEleSF.GetXaxis().FindBin(obj.lepton2_pt), trigEleSF.GetNbinsX()), min(trigEleSF.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigEleSF.GetNbinsY()) ) 
+                                triggerWeightUp[0]  = trigEleSFUp.GetBinContent( min(trigEleSFUp.GetXaxis().FindBin(obj.lepton2_pt), trigEleSFUp.GetNbinsX()), min(trigEleSFUp.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigEleSFUp.GetNbinsY()) )
+                                triggerWeightDown[0]= trigEleSFDown.GetBinContent( min(trigEleSFDown.GetXaxis().FindBin(obj.lepton2_pt), trigEleSFDown.GetNbinsX()), min(trigEleSFDown.GetYaxis().FindBin(abs(obj.lepton2_eta)), trigEleSFDown.GetNbinsY()) )
                     ### MET
-                    elif obj.HLT_BIT_HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_NoiseCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v:
+                    elif ( obj.HLT_BIT_HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight_v   or obj.HLT_BIT_HLT_PFMETNoMu90_JetIdCleaned_PFMHTNoMu90_IDTight_v   or obj.HLT_BIT_HLT_PFMETNoMu90_PFMHTNoMu90_IDTight_v                or obj.HLT_BIT_HLT_PFMETNoMu120_NoiseCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_JetIdCleaned_PFMHTNoMu120_IDTight_v or obj.HLT_BIT_HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v ):
                         if 'SR' in obj.GetName():
-                            triggerWeight[0]    = trigMETSF.GetBinContent(min(trigMETSF.FindBin(obj.met_pt), trigMETSF.GetXaxis().GetXmax()))
-                            triggerWeightUp[0]  = trigMETSFUp.GetBinContent(min(trigMETSFUp.FindBin(obj.met_pt), trigMETSFUp.GetXaxis().GetXmax()))
-                            triggerWeightDown[0]= trigMETSFDown.GetBinContent(min(trigMETSFDown.FindBin(obj.met_pt), trigMETSFDown.GetXaxis().GetXmax()))
+                            triggerWeight[0]        = trigMETSF.GetBinContent(min(trigMETSF.FindBin(obj.met_pt), trigMETSF.GetNbinsX()))
+                            triggerWeightUp[0]      = trigMETSFUp.GetBinContent(min(trigMETSFUp.FindBin(obj.met_pt), trigMETSFUp.GetNbinsX()))
+                            triggerWeightDown[0]    = trigMETSFDown.GetBinContent(min(trigMETSFDown.FindBin(obj.met_pt), trigMETSFDown.GetNbinsX()))
                     
                     ''' BTAGGING '''
                     # Reshaping
@@ -447,9 +437,9 @@ def processFile(dir_name, verbose=False):
                         CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                         if i<3:
-                            sf[i] = reader['M'][0].eval(f, eta, pt)
-                            sfUp[i] = reader['M'][1].eval(f, eta, pt)
-                            sfDown[i] = reader['M'][-1].eval(f, eta, pt)
+                            sf[i] = reader['M'][0].eval(fl, eta, pt)
+                            sfUp[i] = reader['M'][1].eval(fl, eta, pt)
+                            sfDown[i] = reader['M'][-1].eval(fl, eta, pt)
                             if csv>=workingpoint[2]: nbjets += 1
                         
                     # Calculate weight
@@ -497,6 +487,8 @@ def processFile(dir_name, verbose=False):
                     
                     
                     ''' RECOIL '''
+                    ### fill default values
+                    # in every region
                     cmetpt           = ROOT.Double(obj.met_pt)
                     cmetphi          = ROOT.Double(obj.met_phi)
                     cmetptScaleUp    = ROOT.Double(obj.met_pt)
@@ -517,13 +509,24 @@ def processFile(dir_name, verbose=False):
                     cfmetphiResUp     = ROOT.Double(0.)
                     cfmetptResDown    = ROOT.Double(0.)
                     cfmetphiResDown   = ROOT.Double(0.)
+                    # with valid fakemet in CRs
+                    if (obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR'):
+                        cfmetpt           = ROOT.Double(obj.fakemet_pt)
+                        cfmetphi          = ROOT.Double(obj.fakemet_phi)
+                        cfmetptScaleUp    = ROOT.Double(obj.fakemet_pt)
+                        cfmetphiScaleUp   = ROOT.Double(obj.fakemet_phi)
+                        cfmetptScaleDown  = ROOT.Double(obj.fakemet_pt)
+                        cfmetphiScaleDown = ROOT.Double(obj.fakemet_phi)
+                        cfmetptResUp      = ROOT.Double(obj.fakemet_pt)
+                        cfmetphiResUp     = ROOT.Double(obj.fakemet_phi)
+                        cfmetptResDown    = ROOT.Double(obj.fakemet_pt)
+                        cfmetphiResDown   = ROOT.Double(obj.fakemet_phi)
 
-                    applyrecoil    = True
-                    nJets          = int(obj.nJets)
+                    applyrecoil    = True # safety (maybe useless now)
                     
-                    # apply recoil corrections only for Z->ll, Z->vv, and W->lv
+                    # configure input parameters (GENMET / RECO_V_PT / RECOIL) only for Z->ll, Z->vv, and W->lv
                     if 'DYJets' in dir_name or 'ZJets' in dir_name or 'WJets' in dir_name:
-                        if obj.GetName()=='ZCR' or obj.GetName()=='WCR'or obj.GetName()=='SR':
+                        if obj.GetName()=='ZCR' or obj.GetName()=='WCR'or obj.GetName()=='SR' or obj.GetName()=='TCR' :
                             genmetpt  = ROOT.Double(obj.genV_pt)
                             genmetphi = ROOT.Double(obj.genV_phi)
                             leppt     = ROOT.Double(0.)
@@ -545,61 +548,68 @@ def processFile(dir_name, verbose=False):
                                 lepphi    = ROOT.Double(obj.lepton1_phi)
                                 Upar      = ROOT.Double(obj.Upara)
                                 Uper      = ROOT.Double(obj.Uperp)
+                            elif obj.GetName()=='TCR':
+                                # in situ evaluation of pseudo-boson (mu^\pm + e^\mp)
+                                l1 = l2 = TLorentzVector(0,0,0,0) 
+                                l1.SetPtEtaPhiM(obj.lepton1_pt,obj.lepton1_eta,obj.lepton1_phi,obj.lepton1_mass)
+                                l2.SetPtEtaPhiM(obj.lepton2_pt,obj.lepton2_eta,obj.lepton2_phi,obj.lepton2_mass)
+                                pseudoboson = l1+l2
+                                recoilX = - obj.met_pt*math.cos(obj.met_phi) - pseudoboson.Px()
+                                recoilY = - obj.met_pt*math.cos(obj.met_phi) - pseudoboson.Py()
+                                pseudoUpara = (recoilX*pseudoboson.Px() + recoilY*pseudoboson.Py())/pseudoboson.Pt()
+                                pseudoUperp = (recoilX*pseudoboson.Py() - recoilY*pseudoboson.Px())/pseudoboson.Pt()    
+                                
+                                leppt     = ROOT.Double(pseudoboson.Pt())
+                                lepphi    = ROOT.Double(pseudoboson.Phi())
+                                Upar      = ROOT.Double(pseudoUpara)
+                                Uper      = ROOT.Double(pseudoUperp)
                             else:
                                 applyrecoil = False
                             
                             if applyrecoil:
                                 ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
-                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
-                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
-                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
-                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
-                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)   
-                                if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
-                                    ### correct fakeMET only in ZCR and WCR
-                                    ### set reconstructed leptons and recoil to zero
-                                    ### leave genmet set as standard. it is correct as it is always the genV pt
-                                    cfmetpt           = ROOT.Double(obj.fakemet_pt)
-                                    cfmetphi          = ROOT.Double(obj.fakemet_phi)
-                                    cfmetptScaleUp    = ROOT.Double(obj.fakemet_pt)
-                                    cfmetphiScaleUp   = ROOT.Double(obj.fakemet_phi)
-                                    cfmetptScaleDown  = ROOT.Double(obj.fakemet_pt)
-                                    cfmetphiScaleDown = ROOT.Double(obj.fakemet_phi)
-                                    cfmetptResUp      = ROOT.Double(obj.fakemet_pt)
-                                    cfmetphiResUp     = ROOT.Double(obj.fakemet_phi)
-                                    cfmetptResDown    = ROOT.Double(obj.fakemet_pt)                                
-                                    cfmetphiResDown   = ROOT.Double(obj.fakemet_phi)                                
+                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
+                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,njets)        
+                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,njets)        
+                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,njets)        
+                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,njets)   
+                                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
+                                    ### correct fakeMET only in ZCR and WCR (and TCR)
+                                    ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
                                     genmetpt  = ROOT.Double(obj.genV_pt)
                                     genmetphi = ROOT.Double(obj.genV_phi)
                                     leppt     = ROOT.Double(0.)
                                     lepphi    = ROOT.Double(0.)
                                     Upar      = ROOT.Double(0.)
                                     Uper      = ROOT.Double(0.)
-                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,nJets)        
-                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,nJets)        
-                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,nJets)   
+                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
+                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,njets)        
+                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,njets)        
+                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,njets)        
+                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,njets)   
                                 pass
                             pass
                         pass
                     pass
                     
-                    # fill the variables 
+                    ### fill the variables
+                    # add corrected MET in all regions
                     cormet_pt[0]         = cmetpt
                     cormet_phi[0]        = cmetphi
                     cormet_ptScaleUp[0]  = cmetptScaleUp
                     cormet_ptScaleDown[0]= cmetptScaleDown
                     cormet_ptResUp[0]    = cmetptResUp
                     cormet_ptResDown[0]  = cmetptResDown
-                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                    # add corrected fake-MET in control regions only
+                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                         fakecormet_pt[0]         = cfmetpt
                         fakecormet_phi[0]        = cfmetphi
                         fakecormet_ptScaleUp[0]  = cfmetptScaleUp
                         fakecormet_ptScaleDown[0]= cfmetptScaleDown
                         fakecormet_ptResUp[0]    = cfmetptResUp
                         fakecormet_ptResDown[0]  = cfmetptResDown               
-                # Data
+                #### Data
+                ### fill the recoil corrected variables for consistency (with uncorrected values)
                 else:
                     cormet_pt[0]         = obj.met_pt
                     cormet_phi[0]        = obj.met_phi
@@ -607,7 +617,7 @@ def processFile(dir_name, verbose=False):
                     cormet_ptScaleDown[0]= obj.met_pt
                     cormet_ptResUp[0]    = obj.met_pt
                     cormet_ptResDown[0]  = obj.met_pt
-                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                         fakecormet_pt[0]         = obj.fakemet_pt
                         fakecormet_phi[0]        = obj.fakemet_phi
                         fakecormet_ptScaleUp[0]  = obj.fakemet_pt
@@ -659,7 +669,7 @@ def processFile(dir_name, verbose=False):
                 cormet_ptScaleDownBranch.Fill()
                 cormet_ptResUpBranch.Fill()
                 cormet_ptResDownBranch.Fill()
-                if obj.GetName()=='ZCR' or obj.GetName()=='WCR':
+                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                     fakecormet_ptBranch.Fill()
                     fakecormet_phiBranch.Fill()
                     fakecormet_ptScaleUpBranch.Fill()
@@ -702,6 +712,8 @@ for d in os.listdir(origin):
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
     #if not ('_HT-' in d): continue
+    #if not 'BBbarDMJets_scalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' in d:
+        #continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()

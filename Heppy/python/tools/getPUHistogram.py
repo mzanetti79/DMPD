@@ -2,7 +2,8 @@
 
 import os
 from array import array
-from ROOT import gStyle, TFile, TH1F, TCanvas, TLegend
+from ROOT import gStyle, TFile, TH1F, TCanvas, TLegend, ROOT, gROOT
+
 gStyle.SetOptStat(0)
 
 import optparse
@@ -13,8 +14,9 @@ parser.add_option("-m", "--mcFile", action="store", type="string", default=False
 parser.add_option("-r", "--mcReweightedFile", action="store", type="string", default=False, dest="mcReweightedFileName")
 parser.add_option("-p", "--plot", action="store_true", default=False, dest="doPlot")
 parser.add_option("-s", "--save", action="store_true", default=False, dest="doSave")
-
+parser.add_option("-b", "--batch", action="store_true", default=False, dest="batch")
 (options, args) = parser.parse_args()
+if options.batch: gROOT.SetBatch(True)
 
 dataFileName = options.dataFileName
 mcFileName = options.mcFileName
@@ -86,8 +88,12 @@ doSave = options.doSave
 #pileupCalc.py -i ../JSON/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt --inputLumiJSON ../JSON/pileup_latest.txt --calcMode true --minBiasXsec 72450 --maxPileupBin 50 --numPileupBins 50 PU_72450.root
 #pileupCalc.py -i ../JSON/Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt --inputLumiJSON ../JSON/pileup_latest.txt --calcMode true --minBiasXsec 65550 --maxPileupBin 50 --numPileupBins 50 PU_65550.root
 
+#1.28/fb   Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt
+#2.1/fb    Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt
 
-def setPUHistogram():
+LUMI = ["1p3fb","2p1fb"]
+
+def setPUHistogram(l):
     # https://raw.githubusercontent.com/cms-sw/cmssw/CMSSW_7_4_X/SimGeneral/MixingModule/python/mix_2015_25ns_Startup_PoissonOOTPU_cfi.py
     probValue = [4.8551E-07, 1.74806E-06, 3.30868E-06, 1.62972E-05, 4.95667E-05, 0.000606966, 0.003307249, 0.010340741, 0.022852296, 0.041948781, 0.058609363, 0.067475755, 0.072817826, 0.075931405, 0.076782504, 0.076202319, 0.074502547, 0.072355135, 0.069642102, 0.064920999, 0.05725576, 0.047289348, 0.036528446, 0.026376131, 0.017806872, 0.011249422, 0.006643385, 0.003662904, 0.001899681, 0.00095614, 0.00050028, 0.000297353, 0.000208717, 0.000165856, 0.000139974, 0.000120481, 0.000103826, 8.88868E-05, 7.53323E-05, 6.30863E-05, 5.21356E-05, 4.24754E-05, 3.40876E-05, 2.69282E-05, 2.09267E-05, 1.5989E-05, 4.8551E-06, 2.42755E-06, 4.8551E-07, 2.42755E-07, 1.21378E-07, 4.8551E-08]
     mc = TH1F("mc", "nPV distribution", 50, 0, 50)
@@ -97,20 +103,20 @@ def setPUHistogram():
     mc.SetLineColor(1)
     mc.SetLineStyle(2)
     mc.Scale(1./mc.Integral())
-    
-    puFile = TFile("./PU/PU_80000.root", "READ")
+       
+    puFile = TFile("./PU/PU_%s_69000.root"%l, "READ")
     data = puFile.Get("pileup")
     data.SetLineWidth(3)
     data.SetLineColor(1)
     data.Scale(1./data.Integral())
     
-    puUpFile = TFile("./PU/PU_84000.root", "READ")
+    puUpFile = TFile("./PU/PU_%s_72450.root"%l, "READ")
     dataUp = puUpFile.Get("pileup")
     dataUp.SetLineWidth(3)
     dataUp.SetLineColor(634)
     dataUp.Scale(1./dataUp.Integral())
     
-    puDownFile = TFile("./PU/PU_76000.root", "READ")
+    puDownFile = TFile("./PU/PU_%s_65550.root"%l, "READ")
     dataDown = puDownFile.Get("pileup")
     dataDown.SetLineWidth(3)
     dataDown.SetLineColor(598)
@@ -124,7 +130,7 @@ def setPUHistogram():
     ratioUp.Divide(mc)
     ratioDown.Divide(mc)
     
-    outFile = TFile("./PU/PU.root", "RECREATE")
+    outFile = TFile("./PU/PU_%s.root"%l, "RECREATE")
     outFile.cd()
     mc.Write()
     data.Write()
@@ -134,7 +140,7 @@ def setPUHistogram():
     ratioUp.Write()
     ratioDown.Write()
     outFile.Close()
-    print "Histograms written to ./PU/PU.root file"
+    print "Histograms written to ./PU/PU_%s.root file"%l
     
     leg = TLegend(0.65, 0.7, 0.98, 0.9)
     leg.SetBorderSize(0)
@@ -158,7 +164,8 @@ def setPUHistogram():
     data.Draw("SAME, HIST")
     mc.Draw("SAME, L")
     leg.Draw()
-    c1.Print("PU/PU.pdf")
-    c1.Print("PU/PU.png")
-    
-setPUHistogram()
+    c1.Print("PU/PU_%s.pdf"%l)
+    c1.Print("PU/PU_%s.png"%l)
+       
+for i in LUMI:       
+    setPUHistogram(i)
