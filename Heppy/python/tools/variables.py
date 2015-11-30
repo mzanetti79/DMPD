@@ -182,7 +182,7 @@ var_template = {
       "max" : 3.15,
       "log" : False,
     },
-    "corfakemet_pt": {
+    "fakecormet_pt": {
       "title" : "hadronic recoil (GeV)",
       "nbins" : -1,
       "bins" : [200, 300, 400, 500, 700, 1000],
@@ -190,7 +190,7 @@ var_template = {
       "max" : 1000,
       "log" : True,
     },
-    "corfakemet_phi": {
+    "fakecormet_phi": {
       "title" : "hadronic recoil #varphi",
       "nbins" : 50,
       "min" : -3.15,
@@ -595,14 +595,14 @@ var_template = {
       "title" : "lepton [N] PFIso_{03}",
       "nbins" : 50,
       "min" : 0,
-      "max" : 0.20,
+      "max" : 0.25,
       "log" : True,
     },
     "lepton[N]_relIso04": {
       "title" : "lepton [N] PFIso_{04}",
       "nbins" : 50,
       "min" : 0,
-      "max" : 0.20,
+      "max" : 0.25,
       "log" : True,
     },
     "lepton[N]_miniIso": {
@@ -725,7 +725,7 @@ var_template = {
     "W_tmass": {
       "title" : "W candidate m_{T} (GeV)",
       "nbins" : 50,
-      "min" : 50,
+      "min" : 0,
       "max" : 200,
       "log" : False,
     },
@@ -755,6 +755,13 @@ var_template = {
       "nbins" : 50,
       "min" : -3.14,
       "max" : 3.14,
+      "log" : False,
+    },
+    "T_mass": {
+      "title" : "Top candidate mass (GeV)",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 400,
       "log" : False,
     },
     
