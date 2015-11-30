@@ -1,6 +1,7 @@
 from PhysicsTools.Heppy.analyzers.core.Analyzer import Analyzer
 from PhysicsTools.Heppy.analyzers.core.AutoHandle import AutoHandle
 from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
+from PhysicsTools.Heppy.physicsutils.genutils import isNotFromHadronicShower, realGenMothers, realGenDaughters
 import copy
 import math
 import ROOT
@@ -50,6 +51,7 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenBquark1eta"] = ROOT.TH1F("GenBquark1eta", ";b-quark 1 #eta", 50, -5, 5.)
             self.Hist["GenBquark2pt"] = ROOT.TH1F("GenBquark2pt", ";b-quark 2 p_{T} [GeV]", 250, 0., 2500.)
             self.Hist["GenBquark2eta"] = ROOT.TH1F("GenBquark2eta", ";b-quark 2 #eta", 50, -5, 5.)
+
             setup.services["outputfile"].file.cd("..")
             
             # LHE
@@ -73,6 +75,11 @@ class GenAnalyzer( Analyzer ):
         event.genV = ROOT.reco.GenParticle()
         event.genmet = ROOT.reco.Particle.LorentzVector()
         event.genChi = []
+        event.genLeptFromW   = []
+        event.genTauHadFromW = []
+        event.genTauLepFromW = []
+        event.genWtauHad = 0
+        event.genWtauLep = 0
         event.weight = 1.
         event.FacScaleUp   = 1.
         event.FacScaleDown = 1.
@@ -140,6 +147,20 @@ class GenAnalyzer( Analyzer ):
                     self.Hist["GenWmass"].Fill(event.genVBosons[0].mass(), event.weight)
                     self.Hist["GenWpt"].Fill(event.genVBosons[0].pt(), event.weight)
                     self.Hist["GenWeta"].Fill(event.genVBosons[0].eta(), event.weight)
+                    # check the W->lv decay
+                    for d in realGenDaughters(event.genVBosons[0]):
+                        # save only if is leptonic
+                        if abs(d.pdgId()) == 11 or abs(d.pdgId()) == 13 or abs(d.pdgId()) == 15:
+                            event.genLeptFromW.append(d)
+                            # if tau split hadronic and leptonic contributions
+                            if abs(d.pdgId()) == 15: 
+                                taulep = [i for i in realGenDaughters(d) if (abs(i.pdgId()) == 11 or abs(i.pdgId()) == 13) ]
+                                if len(taulep) > 0:
+                                    event.genTauLepFromW.append(d)
+                                    event.genWtauLep = 1
+                                else:
+                                    event.genTauHadFromW.append(d)
+                                    event.genWtauHad = 1
         # Higgs
         if hasattr(event, "genHiggsBosons"):
             if len(event.genHiggsBosons) > 0:
