@@ -721,6 +721,9 @@ WControlRegionTreeProducer= cfg.Analyzer(
         NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
         NTupleVariable('Upara', lambda x: x.Upara, float, help='parallel component of the recoil (MET - lepton)'),
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - lepton)'),
+        NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+        NTupleVariable('nJetsNoFatJet50',    lambda x: getattr(x, "nJetsNoFatJet50", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+        NTupleVariable('nJetsNoFatJet100',    lambda x: getattr(x, "nJetsNoFatJet100", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
         NTupleVariable('T_mass', lambda x: x.mtophad, float, help='invariant mass of the first 2 or 3 jets'),
     ],
     globalObjects = {
@@ -851,6 +854,33 @@ XZhTreeProducer= cfg.Analyzer(
         }
     )
 
+
+##############################
+### SAME-SIGN REGION TREE  ###
+##############################
+SSRegionTreeProducer= cfg.Analyzer(
+    class_object=AutoFillTreeProducer,
+    name='SSRegionTreeProducer',
+    treename='SSR',
+    filter = lambda x: x.isSSR,
+    verbose=False,
+    vectorTree = False,
+    globalVariables = globalDMVariables + [],
+    globalObjects = {
+        'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
+        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+    },
+    collections = {
+        #'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 1, help='Muon or Electron collection'),
+        'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 4, help='inclusive Electron collection'),
+        'inclusiveMuons'       : NTupleCollection('muon', leptonType, 4, help='inclusive Muon collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 8, help='cleaned Jet collection'),
+        'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
+    }
+)
+
+
+
 ##############################
 ### SEQUENCE               ###
 ##############################
@@ -903,6 +933,7 @@ sequence = [
     TTbarControlRegionTreeProducer,
     #GammaControlRegionTreeProducer,
     XZhTreeProducer,
+    SSRegionTreeProducer,
     ]
 
 ##############################
@@ -1149,19 +1180,19 @@ selectedComponents = [
 ##  sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
 ##  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
-sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
-sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
 ]
 TriggerMatchAnalyzer.processName = 'PAT'
@@ -1212,7 +1243,7 @@ TriggerMatchAnalyzer.processName = 'PAT'
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'PAT'
 
-#selectedComponents = [testMCCompontent,]
+selectedComponents = [testMCCompontent,]
 #TriggerMatchAnalyzer.processName = 'PAT'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor

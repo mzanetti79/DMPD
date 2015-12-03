@@ -180,6 +180,7 @@ class PreselectionAnalyzer( Analyzer ):
         event.isWCR = False
         event.isTCR = False
         event.isGCR = False
+        event.isSSR = False
         event.isZtoEE = False
         event.isZtoMM = False
         event.isWtoEN = False
@@ -248,7 +249,7 @@ class PreselectionAnalyzer( Analyzer ):
         
         
         ########################################
-        ###    Very preliminary selections   ###
+        ###            Preselections         ###
         ########################################
         
         if not event.passedVertexAnalyzer:
@@ -259,12 +260,13 @@ class PreselectionAnalyzer( Analyzer ):
         #    return False
         #self.Counter.Fill(1)
         
+        self.Counter.AddBinContent(1, event.weight)
         
         ########################################
         ### Count Leptons and select Regions ###
         ########################################
         
-        self.Counter.AddBinContent(1, event.weight)
+        
         
         ### Two leptons
         if len(event.selectedLeptons) >= 2:
@@ -307,7 +309,7 @@ class PreselectionAnalyzer( Analyzer ):
                 event.isZCR = True
                 
             ###   TTbar Control Region   ###
-            elif len(event.selectedElectrons) == 1 and len(event.selectedMuons) == 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
+            elif len(event.selectedElectrons) >= 1 and len(event.selectedMuons) >= 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
                 event.xcleanLeptons =  [event.selectedMuons[0]] + [event.selectedElectrons[0]]
                 #event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
@@ -372,6 +374,14 @@ class PreselectionAnalyzer( Analyzer ):
             
         # Add jet variables (after fakemet computation)
         self.addJetVariables(event)
+        
+        
+        ########################################
+        ###             Same-sign            ###
+        ########################################
+        
+        if (len(event.inclusiveMuons) >= 1 and event.inclusiveMuons[0].pt() > 10) or (len(event.selectedElectrons) >= 1 and event.selectedElectrons[0].pt() > 25.): event.isSSR = True
+            
         
         return True
     
