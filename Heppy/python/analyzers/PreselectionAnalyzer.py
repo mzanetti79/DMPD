@@ -47,6 +47,46 @@ class PreselectionAnalyzer( Analyzer ):
             self.JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour))
             
     
+    def isHEEP(self, event, e):
+        if not e.isElectron(): return False
+        if not e.pt() > 35.: return False
+        
+        if abs(e.superCluster().eta()) < 1.4442:
+            if not e.ecalDrivenSeed(): return False
+            if not abs(e.deltaEtaSeedClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta()) < 0.004: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 1./e.superCluster().energy() + 0.05: return False
+            if not (e.full5x5_e2x5Max()/e.full5x5_e5x5() > 0.94 or e.full5x5_e1x5()/e.full5x5_e5x5() > 0.83): return False
+            if not e.gsfTrack().hitPattern().numberOfHits(1) <= 1: return False
+            if not abs(e.gsfTrack().dxy(event.goodVertices[0].position())) < 0.02: return False
+        elif abs(e.superCluster().eta()) > 1.566 and abs(e.superCluster().eta()) < 2.5:
+            if not e.ecalDrivenSeed(): return False
+            if not abs(e.deltaEtaSeedClusterTrackAtVtx() - e.superCluster().eta() + e.superCluster().seed().eta()) < 0.006: return False
+            if not abs(e.deltaPhiSuperClusterTrackAtVtx()) < 0.06: return False
+            if not e.hadronicOverEm() < 5./e.superCluster().energy() + 0.05: return False
+            if not full5x5sigmaIetaIeta < 0.03: return False
+            if not e.gsfTrack().hitPattern().numberOfHits(1) <= 1: return False
+            if not abs(e.gsfTrack().dxy(event.goodVertices[0].position())) < 0.05: return False
+        else:
+            return False
+    
+    
+    def isCustomTracker(self, event, m):
+        m.isCustomTracker = False
+        if not m.isMuon(): return False
+
+        if not m.isTrackerMuon(): return False
+        if not m.numberOfMatchedStations() > 1: return False
+        if not m.bestTrack().ptError()/m.bestTrack().pt() < 0.3: return False
+        if not abs(m.bestTrack().dxy(event.goodVertices[0].position())) < 0.2: return False
+        if not abs(m.bestTrack().dz(event.goodVertices[0].position())) < 0.5: return False
+        if not m.innerTrack().isNonnull(): return False
+        if not m.innerTrack().hitPattern().numberOfValidPixelHits() > 0: return False
+        if not m.innerTrack().hitPattern().trackerLayersWithMeasurement() > 5: return False
+        
+        return True
+    
+    
     def addCorrectedJetMass(self, event, jet):
         if self.cfg_ana.recalibrateMass:
             self.JetCorrector.setJetPt(jet.pt() * jet.rawFactor())
@@ -76,6 +116,12 @@ class PreselectionAnalyzer( Analyzer ):
         jet.ptJESUp = jet.pt() * corrUp * jet.rawFactor()
         jet.ptJESDown = jet.pt() * corrDown * jet.rawFactor()
     
+    ##########
+    
+    def addLeptonVariables(self, event):
+        for i, l in enumerate(event.inclusiveLeptons):
+            l.isHEEP = self.isHEEP(event, l)
+            l.isCustomTracker = self.isCustomTracker(event, l)
     
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
@@ -92,6 +138,10 @@ class PreselectionAnalyzer( Analyzer ):
                 j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
             self.addCorrectedJetMass(event, j)
             self.addJECUnc(event, j)
+    
+    
+    
+    
     
     def addFakeMet(self, event, particles):
         # Copy regular met
