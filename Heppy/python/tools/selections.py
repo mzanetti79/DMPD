@@ -44,15 +44,15 @@ selection = {
     "preEle" : "HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v && isZtoEE && lepton1_pt>115 && lepton2_pt>35 && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
     "preMuo" : "HLT_BIT_HLT_Mu45_eta2p1_v && isZtoMM && (lepton1_highptId || lepton2_highptId) && lepton1_pt>50 && lepton2_pt>20 && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
     "preLep" : "(HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v && isZtoEE && lepton1_pt>115 && lepton2_pt>20 && lepton1_miniIso<0.1 && lepton2_miniIso<0.1) || (HLT_BIT_HLT_Mu45_eta2p1_v && isZtoMM && (lepton1_highptId || lepton2_highptId) && lepton1_pt>50 && lepton2_pt>20 && lepton1_miniIso<0.1 && lepton2_miniIso<0.1)",
-    "preNeu" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && fatjet1_pt>200 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && fatjet1_dPhi_met>2 && nFatJets==1 && nMuons==0 && nElectrons==0 && jet2_dPhi_jet1<0.8 && nJets<=2",
+    "preNeu" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && fatjet1_pt>200 && fatjet1_chf>0.1 && fatjet1_nhf<0.8",
     # XZh
     "Zcut" : "Z_pt>200 && Z_mass>70 && Z_mass<110",
     "Hcut" : "fatjet1_pt>200 && (fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<145)",
-    "antiHcut" : "fatjet1_pt>200 && fatjet1_prunedMassCorr>30 && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>145)",
+    "Hanticut" : "fatjet1_pt>200 && fatjet1_prunedMassCorr>30 && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>145)",
     "Bcut" : "(fatjet1_dR>0.3 ? fatjet1_CSV1>0.605 && fatjet1_CSV2>0.605 : fatjet1_CSV1>0.605 || fatjet1_CSV2>0.605)",
     "XZheebb" : "preEle && Zcut && Hcut && Bcut",
     "XZhmmbb" : "preMuo && Zcut && Hcut && Bcut",
-    "XZhnnbb" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && fatjet1_pt>200 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && fatjet1_dPhi_met>2 && nFatJets==1 && nMuons==0 && nElectrons==0 && jet2_dPhi_jet1<2 && nJets<=2 && (fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<145) && (fatjet1_dR>0.3 ? fatjet1_CSV1>0.605 && fatjet1_CSV2>0.605 : fatjet1_CSV1>0.605 || fatjet1_CSV2>0.605)",
+    "XZhnnbb" : "preNeu && Hcut && Bcut && fatjet1_dPhi_met>2 && nFatJets==1 && nMuons==0 && nElectrons==0",
     "XZheebbNoHm" : "preEle && Zcut && fatjet1_pt>200 && Bcut",
     "XZhmmbbNoHm" : "preMuo && Zcut && fatjet1_pt>200 && Bcut",
 }
