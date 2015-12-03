@@ -299,8 +299,7 @@ class XZhAnalyzer( Analyzer ):
     
     
     
-    def addHEEP(self, event, e, doPlot=False):
-        e.isHEEP = False        
+    def plotHEEP(self, event, e):
         if not e.isElectron(): return False
 
         # define electron variables
@@ -320,58 +319,35 @@ class XZhAnalyzer( Analyzer ):
         dxy                 = e.gsfTrack().dxy(event.goodVertices[0].position())
                 
         if not scEt > 35.: return False
-                
-        # Plot
-        if doPlot:
-          if abs(scEta) < 1.4442:
-              for i in range(self.Hist["ElecBarrelHEEP"].GetNbinsX()): self.Hist["ElecBarrelHEEP"].AddBinContent(i+1)            
-              if isEcalDriven: self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
-              if abs(deltaEtaSeedIn) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
-              if abs(deltaPhiIn) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
-              if HoE < 1./scE + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
-              if (full5x5e2x5e5x5 > 0.94 or full5x5e1x5e5x5 > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
-              if inLayLostHits <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
-              if abs(dxy) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
-          elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
-              for i in range(self.Hist["ElecEndcapHEEP"].GetNbinsX()): self.Hist["ElecEndcapHEEP"].AddBinContent(i+1)            
-              if isEcalDriven: self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
-              if abs(deltaEtaSeedIn) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
-              if abs(deltaPhiIn) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
-              if HoE < 5./scE + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
-              if full5x5sigmaIetaIeta < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
-              if inLayLostHits <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
-              if abs(dxy) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
-                        
-        if abs(scEta) < 1.4442:
-            if not isEcalDriven: return False
-            if not abs(deltaEtaSeedIn) < 0.004: return False
-            if not abs(deltaPhiIn) < 0.06: return False
-            if not HoE < 1./scE + 0.05: return False
-            if not (full5x5e2x5e5x5 > 0.94 or full5x5e1x5e5x5 > 0.83): return False
-            if not inLayLostHits <= 1: return False
-            if not abs(dxy) < 0.02: return False
-        elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
-            if not isEcalDriven: return False
-            if not abs(deltaEtaSeedIn) < 0.006: return False
-            if not abs(deltaPhiIn) < 0.06: return False
-            if not HoE < 5./scE + 0.05: return False
-            if not full5x5sigmaIetaIeta < 0.03: return False
-            if not inLayLostHits <= 1: return False
-            if not abs(dxy) < 0.05: return False
-        else:
-            return False        
         
-        if doPlot:
+        if abs(scEta) < 1.4442:
+            for i in range(self.Hist["ElecBarrelHEEP"].GetNbinsX()): self.Hist["ElecBarrelHEEP"].AddBinContent(i+1)            
+            if isEcalDriven: self.Hist["EffElecBarrelHEEP"].AddBinContent(1)
+            if abs(deltaEtaSeedIn) < 0.004: self.Hist["EffElecBarrelHEEP"].AddBinContent(2)
+            if abs(deltaPhiIn) < 0.06: self.Hist["EffElecBarrelHEEP"].AddBinContent(3)
+            if HoE < 1./scE + 0.05: self.Hist["EffElecBarrelHEEP"].AddBinContent(4)
+            if (full5x5e2x5e5x5 > 0.94 or full5x5e1x5e5x5 > 0.83): self.Hist["EffElecBarrelHEEP"].AddBinContent(5)
+            if inLayLostHits <= 1: self.Hist["EffElecBarrelHEEP"].AddBinContent(6)
+            if abs(dxy) < 0.02: self.Hist["EffElecBarrelHEEP"].AddBinContent(7)
+        elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
+            for i in range(self.Hist["ElecEndcapHEEP"].GetNbinsX()): self.Hist["ElecEndcapHEEP"].AddBinContent(i+1)            
+            if isEcalDriven: self.Hist["EffElecEndcapHEEP"].AddBinContent(1)
+            if abs(deltaEtaSeedIn) < 0.006: self.Hist["EffElecEndcapHEEP"].AddBinContent(2)
+            if abs(deltaPhiIn) < 0.06: self.Hist["EffElecEndcapHEEP"].AddBinContent(3)
+            if HoE < 5./scE + 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(4)
+            if full5x5sigmaIetaIeta < 0.03: self.Hist["EffElecEndcapHEEP"].AddBinContent(5)
+            if inLayLostHits <= 1: self.Hist["EffElecEndcapHEEP"].AddBinContent(6)
+            if abs(dxy) < 0.05: self.Hist["EffElecEndcapHEEP"].AddBinContent(7)
+        
+        if e.isHEEP:
             if abs(scEta) < 1.4442:
                 self.Hist["EffElecBarrelHEEP"].AddBinContent(8)
             elif abs(scEta) > 1.566 and abs(scEta) < 2.5:
                 self.Hist["EffElecEndcapHEEP"].AddBinContent(8)
-        
-        e.isHEEP = True
         return True
     
-    def addCustomTracker(self, event, m, doPlot=False):
-        m.isCustomTracker = False
+    
+    def plotCustomTracker(self, event, m):
         if not m.isMuon(): return False
         
         # define muon variables
@@ -385,29 +361,16 @@ class XZhAnalyzer( Analyzer ):
         nTrkLayMeas = m.innerTrack().hitPattern().trackerLayersWithMeasurement()
 
         # Plot
-        if doPlot:
-          for i in range(self.Hist["MuonCustomTracker"].GetNbinsX()): self.Hist["MuonCustomTracker"].AddBinContent(i+1)
-          if isTrk: self.Hist["EffMuonCustomTracker"].AddBinContent(1)
-          if nMatchSt > 1: self.Hist["EffMuonCustomTracker"].AddBinContent(2)
-          if sigmaPt < 0.3: self.Hist["EffMuonCustomTracker"].AddBinContent(3)
-          if abs(dxy) < 0.2: self.Hist["EffMuonCustomTracker"].AddBinContent(4)
-          if abs(dz) < 0.5: self.Hist["EffMuonCustomTracker"].AddBinContent(5)
-          if validTrk and nPixHits > 0: self.Hist["EffMuonCustomTracker"].AddBinContent(6)
-          if nTrkLayMeas > 5: self.Hist["EffMuonCustomTracker"].AddBinContent(7)
+        for i in range(self.Hist["MuonCustomTracker"].GetNbinsX()): self.Hist["MuonCustomTracker"].AddBinContent(i+1)
+        if isTrk: self.Hist["EffMuonCustomTracker"].AddBinContent(1)
+        if nMatchSt > 1: self.Hist["EffMuonCustomTracker"].AddBinContent(2)
+        if sigmaPt < 0.3: self.Hist["EffMuonCustomTracker"].AddBinContent(3)
+        if abs(dxy) < 0.2: self.Hist["EffMuonCustomTracker"].AddBinContent(4)
+        if abs(dz) < 0.5: self.Hist["EffMuonCustomTracker"].AddBinContent(5)
+        if validTrk and nPixHits > 0: self.Hist["EffMuonCustomTracker"].AddBinContent(6)
+        if nTrkLayMeas > 5: self.Hist["EffMuonCustomTracker"].AddBinContent(7)
         
-        if not isTrk: return False
-        if not nMatchSt > 1: return False
-        if not sigmaPt < 0.3: return False
-        if not abs(dxy) < 0.2: return False
-        if not abs(dz) < 0.5: return False
-        if not validTrk: return False
-        if not nPixHits > 0: return False
-        if not nTrkLayMeas > 5: return False
-        
-        if doPlot:
-            self.Hist["EffMuonCustomTracker"].AddBinContent(8)
-        
-        m.isCustomTracker = True
+        if m.isCustomTracker(): self.Hist["EffMuonCustomTracker"].AddBinContent(8)
         return True
     
 #    def addCorrectedJetMass(self, event, jet):
@@ -446,10 +409,11 @@ class XZhAnalyzer( Analyzer ):
         self.Hist["Z2MMCounter"].AddBinContent(0, event.eventWeight)
         
         # Attach electron HEEP Id
-        for i, l in enumerate(event.inclusiveLeptons): self.addHEEP(event, l, i==0)
+        #for i, l in enumerate(event.inclusiveLeptons): self.addHEEP(event, l, i==0)
         
         # Attach muon Custom Tracker Id
-        for i, l in enumerate(event.inclusiveLeptons): self.addCustomTracker(event, l, i==0)
+        #for i, l in enumerate(event.inclusiveLeptons): self.addCustomTracker(event, l, i==0)
+        
 
         ### Preliminary operations ###
         # Gen info
@@ -487,56 +451,81 @@ class XZhAnalyzer( Analyzer ):
         if muonTrigger and muonAcc: self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
         
         # Id
-        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and self.addHEEP(event, x)] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
+        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and x.isHEEP] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
         #event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
-        event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and self.addCustomTracker(event, x)] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
+        event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isCustomTracker] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
         
-        event.highptIdElectrons.sort(key = lambda l : l.pt(), reverse = True)
-        event.highptIdMuons.sort(key = lambda l : l.pt(), reverse = True)
+#        event.highptIdElectrons.sort(key = lambda l : l.pt(), reverse = True)
+#        event.highptIdMuons.sort(key = lambda l : l.pt(), reverse = True)
+#        
+#        elecId = len(event.highptIdElectrons) >= 2 and event.highptIdElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdElectrons[1].pt() > self.cfg_ana.elec2pt
+#        muonId = len(event.highptIdMuons) >= 2 and event.highptIdMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdMuons[0].muonID("POG_ID_HighPt") or event.highptIdMuons[1].muonID("POG_ID_HighPt"))
+#        
+#        if not elecId and not muonId:
+#            return True
+#        if elecTrigger and elecId: self.Hist["Z2EECounter"].AddBinContent(3, event.eventWeight)
+#        if muonTrigger and muonId: self.Hist["Z2MMCounter"].AddBinContent(3, event.eventWeight)
+#        
+#        # Iso
+#        event.highptIdIsoElectrons = [x for x in event.highptIdElectrons if x.miniRelIso<0.1]
+#        event.highptIdIsoMuons = [x for x in event.highptIdMuons if x.miniRelIso<0.1]
+#        
+#        event.highptIdIsoElectrons.sort(key = lambda l : l.pt(), reverse = True)
+#        event.highptIdIsoMuons.sort(key = lambda l : l.pt(), reverse = True)
+#        
+#        elecIdIso = len(event.highptIdIsoElectrons) >= 2 and event.highptIdIsoElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdIsoElectrons[1].pt() > self.cfg_ana.elec2pt
+#        muonIdIso = len(event.highptIdIsoMuons) >= 2 and event.highptIdIsoMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdIsoMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdIsoMuons[0].muonID("POG_ID_HighPt") or event.highptIdIsoMuons[1].muonID("POG_ID_HighPt"))
+#        
+#        if not elecIdIso and not muonIdIso:
+#            return True
+#        if elecTrigger and elecIdIso: self.Hist["Z2EECounter"].AddBinContent(4, event.eventWeight)
+#        if muonTrigger and muonIdIso: self.Hist["Z2MMCounter"].AddBinContent(4, event.eventWeight)
+#        
+#        # Categorization
+#        if elecIdIso and muonIdIso:
+#            if elecTrigger and event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt():
+#                event.isZ2EE = True
+#            elif muonTrigger and event.highptIdIsoElectrons[0].pt() < event.highptIdIsoMuons[0].pt():
+#                event.isZ2EE = False
+#            else:
+#                event.isZ2EE = event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt()
+#        elif elecIdIso and not muonIdIso and elecTrigger:
+#            event.isZ2EE = True
+#        elif muonIdIso and not elecIdIso and muonTrigger:
+#            event.isZ2EE = False
+#        else:
+#            return True
+#        event.isZ2MM = not event.isZ2EE
         
-        elecId = len(event.highptIdElectrons) >= 2 and event.highptIdElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdElectrons[1].pt() > self.cfg_ana.elec2pt
-        muonId = len(event.highptIdMuons) >= 2 and event.highptIdMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdMuons[0].muonID("POG_ID_HighPt") or event.highptIdMuons[1].muonID("POG_ID_HighPt"))
+        # Check Z->mumu first
+        if len(event.highptIdMuons) >=2:
+            for i in range(1, len(event.highptIdMuons)):
+                Zmass = (event.highptIdMuons[0].p4() + event.highptIdMuons[i].p4()).mass()
+                if event.highptIdMuons[0].charge() != event.highptIdMuons[i].charge() and Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
+                    event.isZ2MM = True
+                    break
+        if not event.isZ2MM and len(event.highptIdElectrons) >=2:
+            for i in range(1, len(event.highptIdElectrons)):
+                Zmass = (event.highptIdElectrons[0].p4() + event.highptIdElectrons[i].p4()).mass()
+                if event.highptIdElectrons[0].charge() != event.highptIdElectrons[i].charge() and Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
+                    event.isZ2EE = True
+                    break
         
-        if not elecId and not muonId:
+        if not event.isZ2MM and not event.isZ2EE:
             return True
-        if elecTrigger and elecId: self.Hist["Z2EECounter"].AddBinContent(3, event.eventWeight)
-        if muonTrigger and muonId: self.Hist["Z2MMCounter"].AddBinContent(3, event.eventWeight)
-        
-        # Iso
-        event.highptIdIsoElectrons = [x for x in event.highptIdElectrons if x.miniRelIso<0.1]
-        event.highptIdIsoMuons = [x for x in event.highptIdMuons if x.miniRelIso<0.1]
-        
-        event.highptIdIsoElectrons.sort(key = lambda l : l.pt(), reverse = True)
-        event.highptIdIsoMuons.sort(key = lambda l : l.pt(), reverse = True)
-        
-        elecIdIso = len(event.highptIdIsoElectrons) >= 2 and event.highptIdIsoElectrons[0].pt() > self.cfg_ana.elec1pt and event.highptIdIsoElectrons[1].pt() > self.cfg_ana.elec2pt
-        muonIdIso = len(event.highptIdIsoMuons) >= 2 and event.highptIdIsoMuons[0].pt() > self.cfg_ana.muon1pt and event.highptIdIsoMuons[1].pt() > self.cfg_ana.muon2pt and (event.highptIdIsoMuons[0].muonID("POG_ID_HighPt") or event.highptIdIsoMuons[1].muonID("POG_ID_HighPt"))
-        
-        if not elecIdIso and not muonIdIso:
-            return True
-        if elecTrigger and elecIdIso: self.Hist["Z2EECounter"].AddBinContent(4, event.eventWeight)
-        if muonTrigger and muonIdIso: self.Hist["Z2MMCounter"].AddBinContent(4, event.eventWeight)
-        
-        # Categorization
-        if elecIdIso and muonIdIso:
-            if elecTrigger and event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt():
-                event.isZ2EE = True
-            elif muonTrigger and event.highptIdIsoElectrons[0].pt() < event.highptIdIsoMuons[0].pt():
-                event.isZ2EE = False
-            else:
-                event.isZ2EE = event.highptIdIsoElectrons[0].pt() > event.highptIdIsoMuons[0].pt()
-        elif elecIdIso and not muonIdIso and elecTrigger:
-            event.isZ2EE = True
-        elif muonIdIso and not elecIdIso and muonTrigger:
-            event.isZ2EE = False
-        else:
-            return True
-        event.isZ2MM = not event.isZ2EE
         
         #for i, m in enumerate(event.highptMuons):
         #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
         
         event.highptLeptons = event.highptIdIsoElectrons if event.isZ2EE else event.highptIdIsoMuons
+        
+        # Lepton plots
+        if event.isZ2EE:
+            self.plotHEEP(event, event.highptLeptons[0])
+            self.plotHEEP(event, event.highptLeptons[1])
+        else:
+            self.plotCustomTracker(event, event.highptLeptons[0])
+            self.plotCustomTracker(event, event.highptLeptons[1])
         
         self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
         
@@ -547,21 +536,19 @@ class XZhAnalyzer( Analyzer ):
         event.Z.deltaEta = abs(event.highptLeptons[0].eta() - event.highptLeptons[1].eta())
         event.Z.deltaPhi = deltaPhi(event.highptLeptons[0].phi(), event.highptLeptons[1].phi())
         # Z candidate
-        if event.Z.mass() < 50. or event.highptLeptons[0].charge() == event.highptLeptons[1].charge():
-            return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5, event.eventWeight)
+        #if event.Z.mass() < 50. or event.highptLeptons[0].charge() == event.highptLeptons[1].charge():
+        #    return True
+        #self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5, event.eventWeight)
         
         # Z mass
-        if event.Z.mass() < self.cfg_ana.Z_mass_low or event.Z.mass() > self.cfg_ana.Z_mass_high:
-            return True
+        #if event.Z.mass() < self.cfg_ana.Z_mass_low or event.Z.mass() > self.cfg_ana.Z_mass_high:
+        #    return True
+        
         # Z pt
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(6, event.eventWeight)
         if event.Z.pt() < self.cfg_ana.Z_pt:
             return True
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(7, event.eventWeight)
-        
-        # Fill tree
-        event.isXZh = True
         
         #########################
         #    Part 2: Jets       #
@@ -594,9 +581,9 @@ class XZhAnalyzer( Analyzer ):
         
         # A/Z' candidate
         event.X = event.Z + event.highptFatJets[0].p4()
-        event.X.mT = event.X.mass()
+        event.X.mT = 0
         event.X.mC = event.X.mass()
-        event.X.mK = (event.Z + kH).mass()
+        event.X.mK = 0
         event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
         event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
         event.X.deltaPhi = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
@@ -625,16 +612,16 @@ class XZhAnalyzer( Analyzer ):
         # Fill tree
         event.isXZh = True
         
-        # ---------- Estimate cuts ----------
-        if event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) > 130:
-            return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(9, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9, event.eventWeight)
-        if len(event.highptFatJets[0].subjets('SoftDrop')) < 2 or not (event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):
-            return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(10, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(10, event.eventWeight)
-        if len(event.highptFatJets[0].subjets('SoftDrop')) < 2 or not (event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):
-            return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(11, event.eventWeight)
+#        # ---------- Estimate cuts ----------
+#        if event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) > 130:
+#            return True
+#        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(9, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(9, event.eventWeight)
+#        if len(event.highptFatJets[0].subjets('SoftDrop')) < 2 or not (event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 or event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):
+#            return True
+#        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(10, event.eventWeight) if event.isZ2EE else self.Hist["Z2MMCounter"].AddBinContent(10, event.eventWeight)
+#        if len(event.highptFatJets[0].subjets('SoftDrop')) < 2 or not (event.highptFatJets[0].subjets('SoftDrop')[0].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605 and event.highptFatJets[0].subjets('SoftDrop')[1].bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.605):
+#            return True
+#        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(11, event.eventWeight)
         
         return True
 
