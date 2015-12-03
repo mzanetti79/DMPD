@@ -184,11 +184,6 @@ class PreselectionAnalyzer( Analyzer ):
         event.isZtoMM = False
         event.isWtoEN = False
         event.isWtoMN = False
-        
-        event.nJetsNoFatJet30 = -1
-        event.nJetsNoFatJet50 = -1
-        event.nJetsNoFatJet100 = -1
-        event.minDeltaPhi = 3.15
                
         # Inclusive lepton collections
         event.inclusiveElectrons = [x for x in event.inclusiveLeptons if x.isElectron()]
@@ -200,6 +195,26 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanPhotons = event.selectedPhotons
         event.xcleanJets    = event.cleanJets
         event.xcleanJetsAK8 = event.cleanJetsAK8
+        
+        # nJetsNotFatJet variables
+        event.nJetsNoFatJet30 = -1
+        event.nJetsNoFatJet50 = -1
+        event.nJetsNoFatJet100 = -1
+        if len(event.xcleanJetsAK8) > 0:
+            for i, j in enumerate(event.xcleanJets):
+                if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), j.eta(), j.phi()) > 1.2:
+                    if j.pt() > 30.:
+                        event.nJetsNoFatJet30 += 1
+                    if j.pt() > 50.:
+                        event.nJetsNoFatJet50 += 1
+                    if j.pt() > 100.:
+                        event.nJetsNoFatJet100 += 1
+        else:
+            event.nJetsNoFatJet30 = event.nJetsNoFatJet50 = event.nJetsNoFatJet100 = len(event.xcleanJets)
+        
+        event.minDeltaPhi = 3.15
+        
+        
         
         
         for i in event.xcleanLeptons:

@@ -26,18 +26,6 @@ class SRAnalyzer( Analyzer ):
     
         event.isZ2NN = True
         
-        if len(event.xcleanJetsAK8) > 0:
-            for i, j in enumerate(event.xcleanJets):
-                if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), j.eta(), j.phi()) > 1.2:
-                    if j.pt() > 30.:
-                        event.nJetsNoFatJet30 += 1
-                    if j.pt() > 50.:
-                        event.nJetsNoFatJet50 += 1
-                    if j.pt() > 100.:
-                        event.nJetsNoFatJet100 += 1
-        else:
-            event.nJetsNoFatJet30 = event.nJetsNoFatJet50 = event.nJetsNoFatJet100 = len(event.xcleanJets)
-        
         
         # Trigger
         if not event.HLT_BIT_HLT_PFMET170_NoiseCleaned_v: event.isZ2NN = False
