@@ -56,9 +56,9 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("highptId",lambda x : x.muonID("POG_ID_HighPt")  if x.isMuon() else getattr(x, "isHEEP", 0), int, help="Cut Based Tight id"),   
 
     NTupleVariable("trigMatch",    lambda x : x.trigMatch if hasattr(x,'trigMatch') else False, int, help="Is trigger matched" ),
-    NTupleVariable("trigMatchPt",  lambda x : x.trigMatchPt if hasattr(x,'trigMatchPt') else -999., float, help="Pt of trigger object" ),
-    NTupleVariable("trigMatchPhi", lambda x : x.trigMatchPhi if hasattr(x,'trigMatchPhi') else -999., float, help="Phi of trigger object" ),
-    NTupleVariable("trigMatchEta", lambda x : x.trigMatchEta if hasattr(x,'trigMatchEta') else -999., float, help="Eta of trigger object" ),
+    #NTupleVariable("trigMatchPt",  lambda x : x.trigMatchPt if hasattr(x,'trigMatchPt') else -999., float, help="Pt of trigger object" ),
+    #NTupleVariable("trigMatchPhi", lambda x : x.trigMatchPhi if hasattr(x,'trigMatchPhi') else -999., float, help="Phi of trigger object" ),
+    #NTupleVariable("trigMatchEta", lambda x : x.trigMatchEta if hasattr(x,'trigMatchEta') else -999., float, help="Eta of trigger object" ),
 ])
 
 muonType = NTupleObjectType("muon", baseObjectTypes = [ particleType ], variables = [
