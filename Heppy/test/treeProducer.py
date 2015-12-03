@@ -54,7 +54,7 @@ triggerAnalyzer= cfg.Analyzer(
     #grouping several paths into a single flag
     # v* can be used to ignore the version of a path
     triggerBits={
-        'SingleMu'       : ['HLT_IsoMu20_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
+        'SingleMu'       : ['HLT_IsoMu20_v*', 'HLT_IsoTkMu20_v*', 'HLT_IsoMu27_v*', 'HLT_Mu45_eta2p1_v*', 'HLT_Mu50_v*'],
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MuonEG'         : ['HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v*'],        
@@ -529,7 +529,7 @@ XZhAnalyzer = cfg.Analyzer(
     jetlep_dR = 0.8,
     Z_mass_low = 70.,
     Z_mass_high = 110.,
-    Z_pt = 0.,#200.,
+    Z_pt = 200.,
     jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
     )
 
@@ -637,6 +637,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalDMVariables + [
         NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nu nu flag'),
+        NTupleVariable('isXZh',    lambda x: x.isXZh, int, help='boosted X -> Zh flag'),
         NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
         NTupleVariable('nJetsNoFatJet50',    lambda x: getattr(x, "nJetsNoFatJet50", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
         NTupleVariable('nJetsNoFatJet100',    lambda x: getattr(x, "nJetsNoFatJet100", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
@@ -678,7 +679,8 @@ ZControlRegionTreeProducer= cfg.Analyzer(
     vectorTree = False,
     globalVariables = globalDMVariables + [
         NTupleVariable('isZtoEE',  lambda x: x.isZtoEE, int, help='Z -> mu mu flag'),
-        NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag'),\
+        NTupleVariable('isZtoMM',  lambda x: x.isZtoMM, int, help='Z -> e e flag'),
+        NTupleVariable('isXZh',    lambda x: x.isXZh, int, help='boosted X -> Zh flag'),
         NTupleVariable('Upara', lambda x: x.Upara, float, help='parallel component of the recoil (MET - dilepton)'),
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - dilepton)'), 
     ],
@@ -719,6 +721,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     globalVariables = globalDMVariables + [
         NTupleVariable('isWtoEN',  lambda x: x.isWtoEN, int, help='W -> mu nu flag'),
         NTupleVariable('isWtoMN',  lambda x: x.isWtoMN, int, help='W -> e nu flag'),
+        NTupleVariable('isXZh',    lambda x: x.isXZh, int, help='boosted X -> Zh flag'),
         NTupleVariable('Upara', lambda x: x.Upara, float, help='parallel component of the recoil (MET - lepton)'),
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - lepton)'),
         NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
