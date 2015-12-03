@@ -189,34 +189,34 @@ class PreselectionAnalyzer( Analyzer ):
         event.Upara = (recoilX*lepton.px() + recoilY*lepton.py())/lepton.pt()
         event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()      
         
-        # W' -> WH -> lnubb
-        if len( event.cleanJetsAK8)>0:
-            pz = 0.
-            a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.met.px() + 2.*lepton.py()*event.met.py()
-            A = 4*( lepton.energy()**2 - lepton.pz()**2 )
-            B = -4*a*lepton.pz()
-            C = 4*lepton.energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
-            D = B**2 - 4*A*C
-            if D>0:
-                pz = min((-B+math.sqrt(D))/(2*A), (-B-math.sqrt(D))/(2*A))
-            else:
-                pz = -B/(2*A)
-            kmet = event.met.p4()
-            kmet.SetPz(pz)
-            kH = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
-            
-            event.X = lepton.p4() + kmet +  event.cleanJetsAK8[0].p4()
-            event.X.mT = (lepton.p4() + kmet +  event.cleanJetsAK8[0].p4()).mass()
-            cmet = event.met.p4()
-            cmet.SetPz(lepton.pz())
-            event.X.mC = (lepton.p4() + cmet +  event.cleanJetsAK8[0].p4()).mass()
-            event.X.mK = (lepton.p4() + kmet + kH).mass()
-            event.X.deltaR = deltaR(kmet.eta(), kmet.phi(),  event.cleanJetsAK8[0].eta(),  event.cleanJetsAK8[0].phi())
-            event.X.deltaEta = abs(kmet.eta() -  event.cleanJetsAK8[0].eta())
-            event.X.deltaPhi = abs(deltaPhi(kmet.phi(),  event.cleanJetsAK8[0].phi()))
-            event.X.charge = lepton.charge()
+        return True
+    
+    
+    def createKinW(self, event, lepton):
+        # Kinematic reconstruction
+        pz = 0.
+        a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.met.px() + 2.*lepton.py()*event.met.py()
+        A = 4*( lepton.energy()**2 - lepton.pz()**2 )
+        B = -4*a*lepton.pz()
+        C = 4*lepton.energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
+        D = B**2 - 4*A*C
+        if D>0:
+            s1 = (-B+math.sqrt(D))/(2*A)
+            s2 = (-B-math.sqrt(D))/(2*A)
+            pz = s1 if abs(s1) < abs(s2) else s2
         else:
-            event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+            pz = -B/(2*A)
+        event.neutrino = ROOT.reco.Particle.LorentzVector(event.met.px(), event.met.py(), pz, math.hypot(event.met.pt(), pz))
+        
+        thekW = lepton.p4() + event.neutrino
+        thekW.charge = lepton.charge()
+        thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
+        thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
+        thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
+        thekW.deltaPhi_met = abs(deltaPhi(thekW.phi(), event.met.phi()))
+        thekW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
+        event.thekW = thekW     
+        
         return True
     
     
