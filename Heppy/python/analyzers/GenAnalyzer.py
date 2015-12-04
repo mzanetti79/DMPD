@@ -87,8 +87,6 @@ class GenAnalyzer( Analyzer ):
         event.RenScaleDown = 1.
         event.PDFweight    = 1.
         
-        if not hasattr(event, "genParticles"):
-            return True
         
         # LHE weights
         if hasattr(event, "LHE_originalWeight"):
@@ -106,6 +104,9 @@ class GenAnalyzer( Analyzer ):
                 pass
             pass
         pass
+        
+        if not hasattr(event, "genParticles"):
+            return True
 
         if hasattr(event, "genVBosons") and len(event.genVBosons) > 0:
             event.genV = event.genVBosons[0]
