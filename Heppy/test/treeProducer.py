@@ -245,10 +245,11 @@ jetAnalyzer = cfg.Analyzer(
     relaxJetId                  = False,
     doPuId                      = True,
     doQG                        = False,
+    do_mc_match                 = True,
     recalibrateJets             = True,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     addJECShifts                = False,
-    smearJets                   = False,
+    smearJets                   = True,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -289,10 +290,11 @@ fatJetAnalyzer = cfg.Analyzer(
     relaxJetId                  = False,
     doPuId                      = False, # Not commissioned in 7.0.X
     doQG                        = False,
+    do_mc_match                 = True,
     recalibrateJets             = True,
     shiftJEC                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     addJECShifts                = False,
-    smearJets                   = False,
+    smearJets                   = True,
     shiftJER                    = 0, # set to +1 or -1 to get +/-1 sigma shifts
     cleanJetsFromFirstPhoton    = False,
     cleanJetsFromTaus           = False,
@@ -373,7 +375,7 @@ photonAnalyzer = cfg.Analyzer(
     photons                     = 'slimmedPhotons',
     ptMin                       = 15,
     etaMax                      = 2.5,
-    gammaID                     = 'POG_SPRING15_50ns_Loose',#'POG_PHYS14_25ns_Loose_hardcoded',
+    gammaID                     = 'POG_SPRING15_25ns_Loose',#'POG_PHYS14_25ns_Loose_hardcoded',
     gamma_isoCorr               = 'rhoArea',
     do_mc_match                 = True,
     do_randomCone               = False,
@@ -620,7 +622,7 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nJets',            lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
-    NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
+#    NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
     NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
 ]
 
@@ -838,8 +840,8 @@ XZhTreeProducer= cfg.Analyzer(
         NTupleVariable('isZtoMM',     lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
         NTupleVariable('isGenZtoEE',  lambda x: x.isGenZ2EE, int, help='Z -> ee at gen level flag'),
         NTupleVariable('isGenZtoMM',  lambda x: x.isGenZ2MM, int, help='Z -> mumu at gen level flag'),
-        NTupleVariable('nMuons',      lambda x: len(x.highptIdIsoMuons), int, help='Number of selected muons'),
-        NTupleVariable('nElectrons',  lambda x: len(x.highptIdIsoElectrons), int, help='Number of selected electrons'),
+        NTupleVariable('nMuons',      lambda x: len(x.highptIdMuons), int, help='Number of selected muons'),
+        NTupleVariable('nElectrons',  lambda x: len(x.highptIdElectrons), int, help='Number of selected electrons'),
         NTupleVariable('nTaus',       lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
         NTupleVariable('nPhotons',    lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
         NTupleVariable('nJets',       lambda x: len(x.cleanJets), int, help='Number of xcleaned jets'),
@@ -856,31 +858,6 @@ XZhTreeProducer= cfg.Analyzer(
         'highptFatJets' : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
         }
     )
-
-
-##############################
-### SAME-SIGN REGION TREE  ###
-##############################
-SSRegionTreeProducer= cfg.Analyzer(
-    class_object=AutoFillTreeProducer,
-    name='SSRegionTreeProducer',
-    treename='SSR',
-    filter = lambda x: x.isSSR,
-    verbose=False,
-    vectorTree = False,
-    globalVariables = globalDMVariables + [],
-    globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
-        'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
-    },
-    collections = {
-        #'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 1, help='Muon or Electron collection'),
-        'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 4, help='inclusive Electron collection'),
-        'inclusiveMuons'       : NTupleCollection('muon', leptonType, 4, help='inclusive Muon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 8, help='cleaned Jet collection'),
-        'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
-    }
-)
 
 
 
@@ -936,7 +913,6 @@ sequence = [
     TTbarControlRegionTreeProducer,
     #GammaControlRegionTreeProducer,
     XZhTreeProducer,
-    SSRegionTreeProducer,
     ]
 
 ##############################
