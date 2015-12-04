@@ -12,7 +12,7 @@ particleType = NTupleObjectType("particle", baseObjectTypes = [ fourVectorType ]
 
 candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), float, help="transverse mass"),
-    NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
+    #NTupleVariable("charge",   lambda x : getattr(x, "charge", -9.), int, help="charge"),
     NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
     NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
     NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
