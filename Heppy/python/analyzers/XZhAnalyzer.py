@@ -13,8 +13,7 @@ class XZhAnalyzer( Analyzer ):
         # define hist dictionary
         self.Hist = {}
         # define labels
-        Z2LLlabels = ["Trigger", "Lep Acc", "Lep Id", "Lep Iso", "Z cand", "Z mass", "Z p_{T}", "Jet p_{T}", "h mass", "b-tag 1", "b-tag 2"]
-        Z2NNlabels = ["Trigger", "e/#mu veto", "Jet p_{T}", "#slash{E}_{T}", "#Delta #varphi > 2.5", "h mass", "b-tag 1", "b-tag 2"]
+        Z2LLlabels = ["Trigger", "Lep Acc", "Z cand", "Z p_{T}", "Jet p_{T}"]
         HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|", "All"]
         CstTrklabels = ["isTracker", "Matched Stations", "#delta p_{T}/p_{T}", "|d_{xy}|", "|d_{z}|", "Pixel Hits", "Trk Lay w/ Meas", "All"]
         # define binning
@@ -431,8 +430,8 @@ class XZhAnalyzer( Analyzer ):
         
         if not elecTrigger and not muonTrigger:
             return True
-        if elecTrigger: self.Hist["Z2EECounter"].AddBinContent(1, event.eventWeight)
-        if muonTrigger: self.Hist["Z2MMCounter"].AddBinContent(1, event.eventWeight)
+        self.Hist["Z2EECounter"].AddBinContent(1, event.eventWeight)
+        self.Hist["Z2MMCounter"].AddBinContent(1, event.eventWeight)
         
         #########################
         #    Part 1: Leptons    #
@@ -447,8 +446,8 @@ class XZhAnalyzer( Analyzer ):
         
         if not elecAcc and not muonAcc:
             return True
-        if elecTrigger and elecAcc: self.Hist["Z2EECounter"].AddBinContent(2, event.eventWeight)
-        if muonTrigger and muonAcc: self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
+        self.Hist["Z2EECounter"].AddBinContent(2, event.eventWeight)
+        self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
         
         # Id
         event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and x.isHEEP] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
@@ -497,21 +496,32 @@ class XZhAnalyzer( Analyzer ):
 #            return True
 #        event.isZ2MM = not event.isZ2EE
         
-        
+        ### Z boson recontruction ###
+        # criteria: the same flavour, opposite sign piar of leptons within Z mass with the largest pT
+        l1, l2 = -1, -1
+        Zpt = -1
         # Check Z->mumu first
         if len(event.highptIdMuons) >=2:
-            for i in range(1, len(event.highptIdMuons)):
-                
-                Zmass = (event.highptIdMuons[0].p4() + event.highptIdMuons[i].p4()).mass()
-                if event.highptIdMuons[0].charge() != event.highptIdMuons[i].charge() and Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
-                    event.isZ2MM = True
-                    break
-        if not event.isZ2MM and len(event.highptIdElectrons) >=2:
-            for i in range(1, len(event.highptIdElectrons)):
-                Zmass = (event.highptIdElectrons[0].p4() + event.highptIdElectrons[i].p4()).mass()
-                if event.highptIdElectrons[0].charge() != event.highptIdElectrons[i].charge() and Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
-                    event.isZ2EE = True
-                    break
+            for i in range(0, len(event.highptIdMuons)):
+                for j in range(1, len(event.highptIdMuons)):
+                    Zcand = event.highptIdMuons[i].p4() + event.highptIdMuons[j].p4()
+                    isOS = event.highptIdMuons[i].charge() != event.highptIdMuons[j].charge()
+                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
+                    if isOS and isZmass and Zcand.pt() > Zpt:
+                        l1, l2 = i, j
+                        event.isZ2MM = True
+                        Zpt = Zcand.pt()
+        # Then try electrons
+        if len(event.highptIdElectrons) >=2:
+            for i in range(0, len(event.highptIdElectrons)):
+                for j in range(1, len(event.highptIdElectrons)):
+                    Zcand = event.highptIdElectrons[i].p4() + event.highptIdElectrons[j].p4()
+                    isOS = event.highptIdElectrons[i].charge() != event.highptIdElectrons[j].charge()
+                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
+                    if isOS and isZmass and Zcand.pt() > Zpt:
+                        l1, l2 = i, j
+                        event.isZ2EE = True
+                        Zpt = Zcand.pt()
         
         if not event.isZ2MM and not event.isZ2EE:
             return True
@@ -519,7 +529,7 @@ class XZhAnalyzer( Analyzer ):
         #for i, m in enumerate(event.highptMuons):
         #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
         
-        event.highptLeptons = event.highptIdElectrons if event.isZ2EE else event.highptIdMuons
+        event.highptLeptons = [event.highptIdElectrons[l1], event.highptIdElectrons[l2]] if event.isZ2EE else [event.highptIdMuons[l1], event.highptIdMuons[l2]]
         
         # Lepton plots
         if event.isZ2EE:
@@ -547,10 +557,10 @@ class XZhAnalyzer( Analyzer ):
         #    return True
         
         # Z pt
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(6, event.eventWeight)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(3, event.eventWeight)
         if event.Z.pt() < self.cfg_ana.Z_pt:
             return True
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(7, event.eventWeight)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(4, event.eventWeight)
         
         #########################
         #    Part 2: Jets       #
@@ -567,7 +577,7 @@ class XZhAnalyzer( Analyzer ):
         if len(event.highptFatJets) < 1:
             return True
         
-        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(8, event.eventWeight)
+        self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(5, event.eventWeight)
         
         if event.Z.pt() < self.cfg_ana.Z_pt:
             return True
