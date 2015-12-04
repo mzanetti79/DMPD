@@ -381,6 +381,8 @@ xsections = {
     'WWTo4Q_4f_13TeV_amcatnloFXFX_madspin_pythia8' : 51.723,
     'WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8' : 49.997,
     'TT_TuneCUETP8M1_13TeV-powheg-pythia8-ext' : 831.76,
+    'TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8' : 0.2529,
+    'TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8' : 0.2043,
 
     ### DATA - CROSS SECTION SET TO 1 FOR COMPATIBILITY IN THE ADDEVENTSWEIGHT SCRIPT (NOTE -> TO BE CHANGED AT SOME POINT)
     'SingleMuon_Run2015D-PromptReco' : 1.,
