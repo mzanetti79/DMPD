@@ -587,15 +587,15 @@ class XZhAnalyzer( Analyzer ):
         #########################
         
         # h candidate with pseudo-kin fit
-        kH = event.highptFatJets[0].p4()
-        k = 125.0/event.highptFatJets[0].mass() if event.highptFatJets[0].mass() > 0 else 0. #.userFloat(self.cfg_ana.jetAlgo)
-        kH = ROOT.reco.Particle.LorentzVector(event.highptFatJets[0].px()*k, event.highptFatJets[0].py()*k, event.highptFatJets[0].pz()*k, event.highptFatJets[0].energy()*k)
+        #kH = event.highptFatJets[0].p4()
+        #k = 125.0/event.highptFatJets[0].mass() if event.highptFatJets[0].mass() > 0 else 0. #.userFloat(self.cfg_ana.jetAlgo)
+        #kH = ROOT.reco.Particle.LorentzVector(event.highptFatJets[0].px()*k, event.highptFatJets[0].py()*k, event.highptFatJets[0].pz()*k, event.highptFatJets[0].energy()*k)
         
         # A/Z' candidate
         event.X = event.Z + event.highptFatJets[0].p4()
-        event.X.mT = 0
-        event.X.mC = event.X.mass()
-        event.X.mK = 0
+        event.X.mT = (event.X + event.met.p4()).mass()
+        #event.X.mC = event.X.mass()
+        #event.X.mK = kH.mass()
         event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
         event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
         event.X.deltaPhi = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
