@@ -370,7 +370,7 @@ class XZhAnalyzer( Analyzer ):
         if validTrk and nPixHits > 0: self.Hist["EffMuonCustomTracker"].AddBinContent(6)
         if nTrkLayMeas > 5: self.Hist["EffMuonCustomTracker"].AddBinContent(7)
         
-        if m.isCustomTracker(): self.Hist["EffMuonCustomTracker"].AddBinContent(8)
+        if m.isCustomTracker: self.Hist["EffMuonCustomTracker"].AddBinContent(8)
         return True
     
 #    def addCorrectedJetMass(self, event, jet):
@@ -497,9 +497,11 @@ class XZhAnalyzer( Analyzer ):
 #            return True
 #        event.isZ2MM = not event.isZ2EE
         
+        
         # Check Z->mumu first
         if len(event.highptIdMuons) >=2:
             for i in range(1, len(event.highptIdMuons)):
+                
                 Zmass = (event.highptIdMuons[0].p4() + event.highptIdMuons[i].p4()).mass()
                 if event.highptIdMuons[0].charge() != event.highptIdMuons[i].charge() and Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high:
                     event.isZ2MM = True
@@ -517,7 +519,7 @@ class XZhAnalyzer( Analyzer ):
         #for i, m in enumerate(event.highptMuons):
         #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
         
-        event.highptLeptons = event.highptIdIsoElectrons if event.isZ2EE else event.highptIdIsoMuons
+        event.highptLeptons = event.highptIdElectrons if event.isZ2EE else event.highptIdMuons
         
         # Lepton plots
         if event.isZ2EE:
