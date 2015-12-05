@@ -41,9 +41,8 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     # Charge
     NTupleVariable("charge",   lambda x : x.charge(), int, help="Lepton charge"),
     # Impact parameters
-    NTupleVariable("ip2d", lambda x : x.dB(1), float, help="Lepton 2D impact parameter"),
-    NTupleVariable("ip3d", lambda x : x.dB(2), float, help="Lepton 3D impact parameter"),
-    NTupleVariable("dz",  lambda x : x.dz(), float, help="Lepton dz"),
+    NTupleVariable("dxy", lambda x : getattr(x, "dxyPV", -99.), float, help="Lepton dxy w.r.t. PV"),
+    NTupleVariable("dz",  lambda x : getattr(x, "dzPV", -99.), float, help="Lepton dz w.r.t. PV"),
     # Isolations with the two radia
     NTupleVariable("relIso03",  lambda x : x.relIso03, float, help="PF Rel Iso, R=0.3, pile-up corrected"),
     NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="PF Rel Iso, R=0.4, pile-up corrected"),
