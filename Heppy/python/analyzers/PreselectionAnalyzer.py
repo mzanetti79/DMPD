@@ -47,6 +47,8 @@ class PreselectionAnalyzer( Analyzer ):
             self.JetUncertainty = ROOT.JetCorrectionUncertainty("%s/%s_Uncertainty_%s.txt" % (path,globalTag,jetFlavour))
             
     
+
+    
     def isHEEP(self, e, v):
         if not e.isElectron(): return False
         if not e.pt() > 35.: return False
@@ -120,10 +122,13 @@ class PreselectionAnalyzer( Analyzer ):
     ##########
     
     def addLeptonVariables(self, event):
+        v = event.goodVertices[0].position()
         for i, l in enumerate(event.inclusiveLeptons):
-            l.isHEEP = self.isHEEP(l, event.goodVertices[0].position())
-            l.isCustomTracker = self.isCustomTracker(l, event.goodVertices[0].position())
-        if len(event.inclusiveLeptons)>0 and event.inclusiveLeptons[0].isHEEP is None: print self.isHEEP(event.inclusiveLeptons[0], event.goodVertices[0].position()), event.inclusiveLeptons[0].pt(), event.inclusiveLeptons[0].eta(), event.inclusiveLeptons[0].phi()
+            l.isHEEP = self.isHEEP(l, v)
+            l.isCustomTracker = self.isCustomTracker(l, v)
+            l.dxyPV = l.gsfTrack().dxy(v) if l.isElectron() else l.bestTrack().dxy(v)
+            l.dzPV  = l.gsfTrack().dz(v)  if l.isElectron() else l.bestTrack().dz(v)
+    
     
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
@@ -140,9 +145,33 @@ class PreselectionAnalyzer( Analyzer ):
                 j.dR_subjets = deltaR(j.subjets('SoftDrop')[0].eta(), j.subjets('SoftDrop')[0].phi(), j.subjets('SoftDrop')[1].eta(), j.subjets('SoftDrop')[1].phi())
             self.addCorrectedJetMass(event, j)
             self.addJECUnc(event, j)
+            #if i==0:
+            #    self.addBBTagVariables(j)
     
     
+    ##########
     
+    def addBBTagVariables(self, j):
+#        j.z_ratio          = -1.
+#        j.tau_dot          = -1.
+#        j.tau_21           = -1.
+#        j.SV_pt_0          = -1.
+#        j.SV_mass_0        = -1.
+#        j.SV_EnergyRatio_0 = -1.
+#        j.SV_EnergyRatio_1 = -1.
+#        j.contSV           = 0
+#        j.vertexNTracks    = 0
+        
+        muonTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFMuons')
+        elecTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFElectrons')
+        ipTagInfo = j.tagInfoTrackIP('slimmedJetsAK8ImpactParameter')
+        svTagInfo = j.tagInfoSecondaryVertex('slimmedJetsAK8pfInclusiveSecondaryVertexFinder')
+        maxSVDeltaRToJet = 0.7
+        print svTagInfo.nVertexCandidates()
+        print muonTagInfos.leptons()
+        print elecTagInfos.leptons()
+        
+        
     
     
     def addFakeMet(self, event, particles):
@@ -194,12 +223,6 @@ class PreselectionAnalyzer( Analyzer ):
         return True
     
     
-    def createTop(self, event, lepton):
-        # Top reconstruction with dR method
-        
-        
-        
-        return True
     
     # X candidate
     # number of leptons:
@@ -263,6 +286,47 @@ class PreselectionAnalyzer( Analyzer ):
                 event.theX.SetE(math.sqrt(mX**2 + event.theX.Px()**2+event.theX.Py()**2+event.theX.Pz()**2))
                 event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*event.met.pt()*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), event.met.phi())) ) )
         return True
+    
+    
+    def createT(self, event):
+        # Top reconstruction with dR method
+        event.T_mass = -1.
+        
+        # Promote the highest b-tagged jets as b
+        xcleanJetsCSV = event.xcleanJetsAK8 + event.xcleanJetsNoAK8
+        if not len(xcleanJetsCSV) >= 4:
+            return True
+        
+        xcleanJetsCSV.sort(key = lambda l : l.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
+        b1 = xcleanJetsCSV[0]
+        xcleanJetsCSV.pop(0)
+        b2 = xcleanJetsCSV[0]
+        xcleanJetsCSV.pop(0)
+        
+        # Select the closest jets
+        mindR = 99.
+        l1, l2 = -1, -1
+        for i in range(len(xcleanJetsCSV)):
+            for j in range(1, len(xcleanJetsCSV)):
+                if deltaR(xcleanJetsCSV[i].eta(), xcleanJetsCSV[i].phi(), xcleanJetsCSV[j].eta(), xcleanJetsCSV[j].phi()) < mindR:
+                    Wmass = (xcleanJetsCSV[i].p4() + xcleanJetsCSV[j].p4()).mass()
+                    if Wmass > 60 and Wmass < 100:
+                        l1, l2 = i, j
+                        mindR = deltaR(xcleanJetsCSV[i].eta(), xcleanJetsCSV[i].phi(), xcleanJetsCSV[j].eta(), xcleanJetsCSV[j].phi())
+        
+        if l1 < 0 or l2 < 0:
+            return True
+        
+        W = xcleanJetsCSV[l1].p4() + xcleanJetsCSV[l2].p4()
+        T = W + (b1 if deltaR(b1.eta(), b1.phi(), W.eta(), W.phi()) < deltaR(b2.eta(), b2.phi(), W.eta(), W.phi()) else b2).p4()
+        event.T_mass = T.mass()
+        
+        return True
+    
+    
+    
+    
+    
     
     def process(self, event):
         event.isSR = False
@@ -387,37 +451,23 @@ class PreselectionAnalyzer( Analyzer ):
             if len(event.selectedMuons) == 1:
                 self.addFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
-                self.createKinW(event, event.selectedMuons[0])
                 self.createX(event, event.selectedMuons[0])
+                self.createT(event)
                 event.xcleanLeptons = event.selectedMuons
                 self.Counter.AddBinContent(4, event.weight)
                 event.isWtoMN = True
                 event.isWCR = True
-
-                event.mtophad = -1
-                if len(event.xcleanJets) > 1:
-                    tophad = event.xcleanJets[0].p4() + event.xcleanJets[1].p4()
-                    if len(event.xcleanJets) >= 3:
-                        tophad = tophad + event.xcleanJets[2].p4()
-                    event.mtophad = tophad.M()
             
             ###   W(enu) Control Region   ###
             elif len(event.selectedElectrons) == 1:
                 self.addFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
-                self.createKinW(event, event.selectedElectrons[0])
                 self.createX(event, event.selectedElectrons[0])
+                self.createT(event)
                 event.xcleanLeptons = event.selectedElectrons
                 self.Counter.AddBinContent(4, event.weight)
                 event.isWtoEN = True
                 event.isWCR = True
-        
-                event.mtophad = -1
-                if len(event.xcleanJets) > 1:
-                    tophad = event.xcleanJets[0].p4() + event.xcleanJets[1].p4()
-                    if len(event.xcleanJets) >= 3:
-                        tophad = tophad + event.xcleanJets[2].p4()
-                    event.mtophad = tophad.M()
         
             else :
                 return False # protection (useless here)
@@ -432,11 +482,13 @@ class PreselectionAnalyzer( Analyzer ):
         else:
             self.addFakeMet(event, [])
             self.createX(event)
+            self.createT(event)
             self.Counter.AddBinContent(2, event.weight)
             event.isSR = True
-            
+        
         # Add jet variables (after fakemet computation)
         self.addJetVariables(event)
+        
         # Add lepton id
         self.addLeptonVariables(event)
         
