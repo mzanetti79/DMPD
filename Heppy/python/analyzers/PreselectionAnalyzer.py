@@ -194,30 +194,10 @@ class PreselectionAnalyzer( Analyzer ):
         return True
     
     
-    def createKinW(self, event, lepton):
-        # Kinematic reconstruction
-        pz = 0.
-        a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.met.px() + 2.*lepton.py()*event.met.py()
-        A = 4*( lepton.energy()**2 - lepton.pz()**2 )
-        B = -4*a*lepton.pz()
-        C = 4*lepton.energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
-        D = B**2 - 4*A*C
-        if D>0:
-            s1 = (-B+math.sqrt(D))/(2*A)
-            s2 = (-B-math.sqrt(D))/(2*A)
-            pz = s1 if abs(s1) < abs(s2) else s2
-        else:
-            pz = -B/(2*A)
-        event.neutrino = ROOT.reco.Particle.LorentzVector(event.met.px(), event.met.py(), pz, math.hypot(event.met.pt(), pz))
+    def createTop(self, event, lepton):
+        # Top reconstruction with dR method
         
-        thekW = lepton.p4() + event.neutrino
-        thekW.charge = lepton.charge()
-        thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
-        thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
-        thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
-        thekW.deltaPhi_met = abs(deltaPhi(thekW.phi(), event.met.phi()))
-        thekW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
-        event.thekW = thekW     
+        
         
         return True
     
@@ -230,9 +210,42 @@ class PreselectionAnalyzer( Analyzer ):
         event.theX = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         if len(event.xcleanJetsAK8) > 0:
             event.theX = event.xcleanJetsAK8[0].p4()
-            if not lepton is None and hasattr(event, "neutrino"):
+            # --- 1 lepton case: kinematic reconstruction of the neutrino pz
+            if not lepton is None:
+                # Step 1: solve 2nd degree equation
+                pz = 0.
+                a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.met.px() + 2.*lepton.py()*event.met.py()
+                A = 4*( lepton.energy()**2 - lepton.pz()**2 )
+                B = -4*a*lepton.pz()
+                C = 4*lepton.energy()**2 * (event.met.px()**2  + event.met.py()**2) - a**2
+                D = B**2 - 4*A*C
+                # If there are real solutions, use the one with lowest pz
+                if D>=0:
+                    s1 = (-B+math.sqrt(D))/(2*A)
+                    s2 = (-B-math.sqrt(D))/(2*A)
+                    pz = s1 if abs(s1) < abs(s2) else s2
+                # Otherwise, use real part
+                else:
+                    pz = -B/(2*A)
+                
+                # Neutrino candidate
+                event.neutrino = ROOT.reco.Particle.LorentzVector(event.met.px(), event.met.py(), pz, math.hypot(event.met.pt(), pz))
+                
+                # Kinematic W
+                thekW = lepton.p4() + event.neutrino
+                thekW.charge = lepton.charge()
+                thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
+                thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
+                thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
+                thekW.deltaPhi_met = abs(deltaPhi(thekW.phi(), event.met.phi()))
+                thekW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
+                event.thekW = thekW
+                
+                
                 event.theX += lepton.p4() + event.neutrino
-                event.theX.mT = event.theX.Mt()
+                event.theX.mT = (lepton.p4() + event.met.p4() + event.xcleanJetsAK8[0].p4()).Mt()
+                
+            # --- 0  lepton case: recoil mass formula
             else:
                 cmet = event.met.p4()
                 cmet.SetPz( -event.xcleanJetsAK8[0].pz() )
@@ -273,22 +286,11 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanJets    = event.cleanJets
         event.xcleanJetsAK8 = event.cleanJetsAK8
         
-        # nJetsNotFatJet variables
-        event.nJetsNoFatJet30 = -1
-        event.nJetsNoFatJet50 = -1
-        event.nJetsNoFatJet100 = -1
-        if len(event.xcleanJetsAK8) > 0:
-            for i, j in enumerate(event.xcleanJets):
-                if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), j.eta(), j.phi()) > 1.2:
-                    if j.pt() > 30.:
-                        event.nJetsNoFatJet30 += 1
-                    if j.pt() > 50.:
-                        event.nJetsNoFatJet50 += 1
-                    if j.pt() > 100.:
-                        event.nJetsNoFatJet100 += 1
-        else:
-            event.nJetsNoFatJet30 = event.nJetsNoFatJet50 = event.nJetsNoFatJet100 = len(event.xcleanJets)
-        
+        event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 1.2] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
+        event.maxCSVNoAK8 = -1.
+        for i, j in enumerate(event.xcleanJetsNoAK8):
+            if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoAK8: event.maxCSVNoAK8 = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
+
         event.minDeltaPhi = 3.15
         
         
