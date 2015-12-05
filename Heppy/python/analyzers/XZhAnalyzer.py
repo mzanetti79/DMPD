@@ -500,18 +500,7 @@ class XZhAnalyzer( Analyzer ):
         # criteria: the same flavour, opposite sign piar of leptons within Z mass with the largest pT
         l1, l2 = -1, -1
         Zpt = -1
-        # Check Z->mumu first
-        if len(event.highptIdMuons) >=2:
-            for i in range(0, len(event.highptIdMuons)):
-                for j in range(1, len(event.highptIdMuons)):
-                    Zcand = event.highptIdMuons[i].p4() + event.highptIdMuons[j].p4()
-                    isOS = event.highptIdMuons[i].charge() != event.highptIdMuons[j].charge()
-                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
-                    if isOS and isZmass and Zcand.pt() > Zpt:
-                        l1, l2 = i, j
-                        event.isZ2MM = True
-                        Zpt = Zcand.pt()
-        # Then try electrons
+        # Check Z->ee first
         if len(event.highptIdElectrons) >=2:
             for i in range(0, len(event.highptIdElectrons)):
                 for j in range(1, len(event.highptIdElectrons)):
@@ -521,6 +510,19 @@ class XZhAnalyzer( Analyzer ):
                     if isOS and isZmass and Zcand.pt() > Zpt:
                         l1, l2 = i, j
                         event.isZ2EE = True
+                        Zpt = Zcand.pt()
+        # Then try muons
+        l1, l2 = -1, -1
+        Zpt = -1
+        if len(event.highptIdMuons) >=2:
+            for i in range(0, len(event.highptIdMuons)):
+                for j in range(1, len(event.highptIdMuons)):
+                    Zcand = event.highptIdMuons[i].p4() + event.highptIdMuons[j].p4()
+                    isOS = event.highptIdMuons[i].charge() != event.highptIdMuons[j].charge()
+                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
+                    if isOS and isZmass and Zcand.pt() > Zpt:
+                        l1, l2 = i, j
+                        event.isZ2MM = True
                         Zpt = Zcand.pt()
         
         if not event.isZ2MM and not event.isZ2EE:
