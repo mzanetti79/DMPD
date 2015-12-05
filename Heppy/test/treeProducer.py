@@ -623,6 +623,10 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
 #    NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
+    NTupleVariable('nJetsNoFatJet30',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 30]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet50',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 50]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet100',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 100]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet150',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 150]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
     NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
 ]
 
@@ -638,20 +642,17 @@ SignalRegionTreeProducer= cfg.Analyzer(
     verbose=False,
     vectorTree = False,
     globalVariables = globalDMVariables + [
-        NTupleVariable('isZtoNN',  lambda x: x.isZ2NN, int, help='Z -> nu nu flag'),
         NTupleVariable('isXZh',    lambda x: x.isXZh, int, help='boosted X -> Zh flag'),
-        NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-        NTupleVariable('nJetsNoFatJet50',    lambda x: getattr(x, "nJetsNoFatJet50", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-        NTupleVariable('nJetsNoFatJet100',    lambda x: getattr(x, "nJetsNoFatJet100", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+        
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
-        'theX'      : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
+        'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
-        #'A'         : NTupleObject('A', candidateFullType, help='Resonance candidate'),
+        #'A'         : NTupleObject('A', candidateType, help='Resonance candidate'),
     },
     collections = {
         'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'),
@@ -726,9 +727,6 @@ WControlRegionTreeProducer= cfg.Analyzer(
         NTupleVariable('isXZh',    lambda x: x.isXZh, int, help='boosted X -> Zh flag'),
         NTupleVariable('Upara', lambda x: x.Upara, float, help='parallel component of the recoil (MET - lepton)'),
         NTupleVariable('Uperp', lambda x: x.Uperp, float, help='perpendicular component of the recoil (MET - lepton)'),
-        NTupleVariable('nJetsNoFatJet30',    lambda x: getattr(x, "nJetsNoFatJet30", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-        NTupleVariable('nJetsNoFatJet50',    lambda x: getattr(x, "nJetsNoFatJet50", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-        NTupleVariable('nJetsNoFatJet100',    lambda x: getattr(x, "nJetsNoFatJet100", -1), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
         NTupleVariable('T_mass', lambda x: x.mtophad, float, help='invariant mass of the first 2 or 3 jets'),
     ],
     globalObjects = {
@@ -737,7 +735,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
-        'X'         : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
+        'theX'         : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
     },
     collections = {
         'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'), 
@@ -835,20 +833,14 @@ XZhTreeProducer= cfg.Analyzer(
     filter = lambda x: x.isXZh,
     verbose=False,
     vectorTree = False,
-    globalVariables = globalEventVariables + [
+    globalVariables = globalDMVariables + [
         NTupleVariable('isZtoEE',     lambda x: x.isZ2EE, int, help='Z -> ee flag'),
         NTupleVariable('isZtoMM',     lambda x: x.isZ2MM, int, help='Z -> mumu flag'),
         NTupleVariable('isGenZtoEE',  lambda x: x.isGenZ2EE, int, help='Z -> ee at gen level flag'),
         NTupleVariable('isGenZtoMM',  lambda x: x.isGenZ2MM, int, help='Z -> mumu at gen level flag'),
-        NTupleVariable('nMuons',      lambda x: len(x.highptIdMuons), int, help='Number of selected muons'),
-        NTupleVariable('nElectrons',  lambda x: len(x.highptIdElectrons), int, help='Number of selected electrons'),
-        NTupleVariable('nTaus',       lambda x: len(x.selectedTaus), int, help='Number of xcleaned taus'),
-        NTupleVariable('nPhotons',    lambda x: len(x.selectedPhotons), int, help='Number of selected photons'),
-        NTupleVariable('nJets',       lambda x: len(x.cleanJets), int, help='Number of xcleaned jets'),
-        NTupleVariable('nFatJets',    lambda x: len(x.highptFatJets), int, help='Number of xcleaned fat jets'),
     ],
     globalObjects = {
-        'X'         : NTupleObject('X', candidateFullType, help='Heavy resonance candidate'),
+        'X'         : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
@@ -904,7 +896,7 @@ sequence = [
     XCleaningAnalyzer,
     SyncAnalyzer,
 #    CategorizationAnalyzer,
-    SRAnalyzer,
+    #SRAnalyzer,
     XZhAnalyzer,
     ##### Tree producers
     SignalRegionTreeProducer,
@@ -1125,16 +1117,17 @@ selectedComponents = [
  #sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
  ##sample['TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
- #sample['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- #sample['WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- #sample['WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- #sample['WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- #sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
-#  sample['WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- sample['WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- sample['WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- sample['WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
- sample['WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+# sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+# sample['WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+ 
 
 
  #sample['WW_TuneCUETP8M1_13TeV-pythia8-v1'],
@@ -1145,33 +1138,47 @@ selectedComponents = [
  ##sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
  #sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-##  sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
-##  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
-  sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1'],
+
+#  sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
   sample['WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
-  sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+#  sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
 ]
 TriggerMatchAnalyzer.processName = 'PAT'
@@ -1222,7 +1229,7 @@ TriggerMatchAnalyzer.processName = 'PAT'
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'PAT'
 
-selectedComponents = [testMCCompontent,]
+#selectedComponents = [testMCCompontent,]
 #TriggerMatchAnalyzer.processName = 'PAT'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
