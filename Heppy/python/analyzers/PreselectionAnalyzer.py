@@ -231,6 +231,7 @@ class PreselectionAnalyzer( Analyzer ):
     # 0 - m from collinear approximation, mT is transverse mass
     def createX(self, event, lepton=None):
         event.theX = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        event.thekW = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         if len(event.xcleanJetsAK8) > 0:
             event.theX = event.xcleanJetsAK8[0].p4()
             # --- 1 lepton case: kinematic reconstruction of the neutrino pz

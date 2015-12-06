@@ -531,7 +531,13 @@ class XZhAnalyzer( Analyzer ):
         #for i, m in enumerate(event.highptMuons):
         #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
         
-        event.highptLeptons = [event.highptIdElectrons[l1], event.highptIdElectrons[l2]] if event.isZ2EE else [event.highptIdMuons[l1], event.highptIdMuons[l2]]
+        if event.isZ2EE and l1 >= 0 and l2 >= 0 and l1 < len(event.highptIdElectrons) and l2 < len(event.highptIdElectrons):
+            event.highptLeptons = [event.highptIdElectrons[l1], event.highptIdElectrons[l2]]
+        elif event.isZ2MM and l1 >= 0 and l2 >= 0 and l1 < len(event.highptIdMuons) and l2 < len(event.highptIdMuons):
+            event.highptLeptons = [event.highptIdMuons[l1], event.highptIdMuons[l2]]
+        else:
+            return True
+        
         
         # Lepton plots
         if event.isZ2EE:
