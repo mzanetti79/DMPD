@@ -386,6 +386,8 @@ class PreselectionAnalyzer( Analyzer ):
 #        pt_ = math.hypot(px_, py_)
 #        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
 
+        if not hasattr(event, "weight"): event.weight = 1.
+
         self.Counter.Fill(-1, event.weight)
         
         
