@@ -458,11 +458,11 @@ from DMPD.Heppy.analyzers.XCleaningAnalyzer import XCleaningAnalyzer
 XCleaningAnalyzer = cfg.Analyzer(
     verbose=False,
     class_object = XCleaningAnalyzer,
-    cleanTaus = True,
-    cleanJets = True,
+    cleanTaus = False,
+    cleanJets = False,
     cleanJetsAK8 = False,
-    cleanFromMuons = True,
-    cleanFromElectrons = True,
+    cleanFromMuons = False,
+    cleanFromElectrons = False,
     mu_clean_pt  = 20.,
     mu_clean_id  = 'POG_ID_Tight',
     mu_clean_iso = lambda x : x.relIso04 < 0.15,
@@ -500,7 +500,7 @@ globalEventVariables = [
     NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.) if hasattr(x, "nPU") and x.nPU is not None else -1, int, help='Number of true interactions'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
-    NTupleVariable('HT',               lambda x: sum([x.pt() for x in x.xcleanJets]), int, help='HT from AK4 jets with pt>30 GeV'),
+    NTupleVariable('HT',               lambda x: sum([x.pt() for x in x.xcleanJets]), float, help='HT from AK4 jets with pt>30 GeV'),
 ]
 globalDMVariables = globalEventVariables + [
     NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
@@ -510,7 +510,7 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nJets',            lambda x: len(x.xcleanJets), int, help='Number of xcleaned jets'),
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
-    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
+    #NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
 ]
 
 
@@ -521,20 +521,20 @@ SSRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='SSRegionTreeProducer',
     treename='SSR',
-    filter = lambda x: (len(x.inclusiveMuons)>=1 and x.inclusiveMuons[0].pt()>10) or (len(x.selectedElectrons)>=1 and x.selectedElectrons[0].pt()>25.),
+    filter = lambda x: (len(x.inclusiveMuons)>=1 and x.inclusiveMuons[0].pt()>40) or (len(x.selectedMuons)>=1 and x.selectedMuons[0].pt()>20) or (len(x.selectedElectrons)>=1 and x.selectedElectrons[0].pt()>25.),
     verbose=False,
     vectorTree = False,
     globalVariables = globalDMVariables + [],
     globalObjects = {
-        'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
+        'met'       : NTupleObject('met',      metType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
     },
     collections = {
         #'xcleanLeptons'       : NTupleCollection('lepton', leptonType, 1, help='Muon or Electron collection'),
-        'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 4, help='inclusive Electron collection'),
-        'inclusiveMuons'       : NTupleCollection('muon', leptonType, 4, help='inclusive Muon collection'),
+        'inclusiveElectrons'   : NTupleCollection('electron', leptonType, 5, help='inclusive Electron collection'),
+        'inclusiveMuons'       : NTupleCollection('muon', leptonType, 5, help='inclusive Muon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 8, help='cleaned Jet collection'),
-        'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
+        'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 2, help='cleaned fatJet collection'),
     }
 )
 
@@ -666,7 +666,7 @@ selectedComponents = [
  #sample['ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
  #sample['ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v2'],
 
- #sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
+ sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
  ##sample['TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
  #sample['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -737,7 +737,7 @@ TriggerMatchAnalyzer.processName = 'PAT'
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'PAT'
 
-selectedComponents = [testMCCompontent,]
+#selectedComponents = [testMCCompontent,]
 #TriggerMatchAnalyzer.processName = 'PAT'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
@@ -761,7 +761,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=1000,
+        nEvents=100000,
         )
     looper.loop()
     looper.write()

@@ -612,7 +612,7 @@ globalEventVariables = [
     NTupleVariable('nPU',              lambda x: getattr(x, "nPU", -1.) if hasattr(x, "nPU") and x.nPU is not None else -1, int, help='Number of true interactions'),
     NTupleVariable('nPV',              lambda x: len(x.vertices), int, help='Number of reconstructed primary vertices'),
     NTupleVariable('rho',              lambda x: getattr(x, "rho", -1.), int, help='Energy density in the event'),
-    NTupleVariable('HT',               lambda x: sum([x.pt() for x in x.xcleanJets]), int, help='HT from AK4 jets with pt>30 GeV'),
+    NTupleVariable('HT',               lambda x: sum([x.pt() for x in x.xcleanJets]), float, help='HT from AK4 jets with pt>30 GeV'),
 ]
 globalDMVariables = globalEventVariables + [
     NTupleVariable('nMuons',           lambda x: len(x.selectedMuons), int, help='Number of selected muons'),
@@ -987,7 +987,7 @@ testMCCompontent = cfg.MCComponent(
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ## MC ###
-selectedComponents = [
+#selectedComponents = [
 #  sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1007,14 +1007,14 @@ selectedComponents = [
 #  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  #sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
 #  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
@@ -1190,39 +1190,39 @@ selectedComponents = [
 #  sample['TTbarDMJets_scalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-]
-TriggerMatchAnalyzer.processName = 'PAT'
+#]
+#TriggerMatchAnalyzer.processName = 'PAT'
 
 
 #### DATA ###
-#selectedComponents = [
- ####Run2015D PromptReco
+selectedComponents = [
+ ###Run2015D PromptReco
  #sample['DoubleEG_Run2015D-PromptReco-v4'],
  #sample['DoubleMuon_Run2015D-PromptReco-v4'],
- #sample['MET_Run2015D-PromptReco-v4'],
- #sample['SingleElectron_Run2015D-PromptReco-v4'],
- #sample['SingleMuon_Run2015D-PromptReco-v4'],
-##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+ sample['MET_Run2015D-PromptReco-v4'],
+ sample['SingleElectron_Run2015D-PromptReco-v4'],
+ sample['SingleMuon_Run2015D-PromptReco-v4'],
+#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 
- ####Run2015C O5Oct2015
+ ###Run2015C O5Oct2015
  #sample['DoubleEG_Run2015C-05Oct2015-v1'],
  #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
- #sample['MET_Run2015C-05Oct2015-v1'],
- #sample['SingleElectron_Run2015C-05Oct2015-v1'],
- #sample['SingleMuon_Run2015C-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
-#]
-#filterAnalyzer.processName = 'RECO'
-#TriggerMatchAnalyzer.processName = 'RECO'
+ sample['MET_Run2015C-05Oct2015-v1'],
+ sample['SingleElectron_Run2015C-05Oct2015-v1'],
+ sample['SingleMuon_Run2015C-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
+]
+filterAnalyzer.processName = 'RECO'
+TriggerMatchAnalyzer.processName = 'RECO'
 
 #### DATA ###
 #selectedComponents = [
- ### Run2015D
- #sample['DoubleEG_Run2015D-05Oct2015-v1'],
- #sample['DoubleMuon_Run2015D-05Oct2015-v1'],
- #sample['MET_Run2015D-05Oct2015-v1'],
- #sample['SingleElectron_Run2015D-05Oct2015-v1'],
- #sample['SingleMuon_Run2015D-05Oct2015-v1'],
+# ## Run2015D
+# #sample['DoubleEG_Run2015D-05Oct2015-v1'],
+# #sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+# sample['MET_Run2015D-05Oct2015-v1'],
+# sample['SingleElectron_Run2015D-05Oct2015-v1'],
+# sample['SingleMuon_Run2015D-05Oct2015-v1'],
 ##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
 #]
 #filterAnalyzer.processName = 'RECO'
