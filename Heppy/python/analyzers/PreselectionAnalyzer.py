@@ -385,10 +385,6 @@ class PreselectionAnalyzer( Analyzer ):
 #        py_ = event.met.uncorPy()
 #        pt_ = math.hypot(px_, py_)
 #        event.rawmet.setP4(ROOT.reco.Particle.LorentzVector(px_, py_, 0, pt_))
-        
-        # In case GenAnalyzer has not been run, get LHE event weight
-        if not hasattr(event, "weight"):
-            event.weight = abs(event.LHE_originalWeight)/event.LHE_originalWeight
 
         self.Counter.Fill(-1, event.weight)
         
