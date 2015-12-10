@@ -638,7 +638,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
     class_object=AutoFillTreeProducer,
     name='SignalRegionTreeProducer',
     treename='SR',
-    filter = lambda x: x.isSR and x.met.pt() >= fake_met_cut,
+    filter = lambda x: x.isSR and x.met.pt() >= fake_met_cut and x.met.pt() >= 100.,
     verbose=False,
     vectorTree = False,
     globalVariables = globalDMVariables + [
@@ -736,7 +736,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
-        'thekW'     : NTupleObject('kW', candidateType, help='W boson candidate'),
+        'thekW'     : NTupleObject('kW', candidateType, help='W boson candidate with kinematic fit'),
         'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
     },
     collections = {
