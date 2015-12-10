@@ -425,34 +425,37 @@ class XZhAnalyzer( Analyzer ):
         
         
         # Trigger
-        elecTrigger = event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v
-        muonTrigger = event.HLT_BIT_HLT_Mu45_eta2p1_v
-        
-        if not elecTrigger and not muonTrigger:
-            return True
-        self.Hist["Z2EECounter"].AddBinContent(1, event.eventWeight)
-        self.Hist["Z2MMCounter"].AddBinContent(1, event.eventWeight)
+#        elecTrigger = event.HLT_BIT_HLT_Ele105_CaloIdVT_GsfTrkIdT_v
+#        muonTrigger = event.HLT_BIT_HLT_Mu45_eta2p1_v
+#        
+#        if not elecTrigger and not muonTrigger:
+#            return True
+#        self.Hist["Z2EECounter"].AddBinContent(1, event.eventWeight)
+#        self.Hist["Z2MMCounter"].AddBinContent(1, event.eventWeight)
         
         #########################
         #    Part 1: Leptons    #
         #########################
         
         # Lepton collections
-        if len([x for x in event.inclusiveLeptons if x.isElectron()]) < 2 and len([x for x in event.inclusiveLeptons if x.isMuon()]) < 2:
-            return True
+#        if len([x for x in event.inclusiveLeptons if x.isElectron()]) < 2 and len([x for x in event.inclusiveLeptons if x.isMuon()]) < 2:
+#            return True
         
-        elecAcc = len([x for x in event.inclusiveLeptons if x.isElectron()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.elec2pt
-        muonAcc =  len([x for x in event.inclusiveLeptons if x.isMuon()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.muon2pt
-        
-        if not elecAcc and not muonAcc:
-            return True
-        self.Hist["Z2EECounter"].AddBinContent(2, event.eventWeight)
-        self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
+#        elecAcc = len([x for x in event.inclusiveLeptons if x.isElectron()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.elec2pt
+#        muonAcc =  len([x for x in event.inclusiveLeptons if x.isMuon()]) >= 2 and event.inclusiveLeptons[0].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[1].pt() > self.cfg_ana.muon2pt
+#        
+#        if not elecAcc and not muonAcc:
+#            return True
+#        self.Hist["Z2EECounter"].AddBinContent(2, event.eventWeight)
+#        self.Hist["Z2MMCounter"].AddBinContent(2, event.eventWeight)
         
         # Id
-        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and x.isHEEP] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
+        event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and x.pt()>20.] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
         #event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
-        event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isCustomTracker] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
+        event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.pt()>20.] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
+        print len(event.highptIdElectrons), len(event.highptIdMuons)
+        if len(event.highptIdElectrons) < 2 and len(event.highptIdMuons) < 2:
+            return True
         
 #        event.highptIdElectrons.sort(key = lambda l : l.pt(), reverse = True)
 #        event.highptIdMuons.sort(key = lambda l : l.pt(), reverse = True)
@@ -498,32 +501,54 @@ class XZhAnalyzer( Analyzer ):
         
         ### Z boson recontruction ###
         # criteria: the same flavour, opposite sign piar of leptons within Z mass with the largest pT
+        
         l1, l2 = -1, -1
         Zpt = -1
         # Check Z->ee first
-        if len(event.highptIdElectrons) >=2:
-            for i in range(0, len(event.highptIdElectrons)):
-                for j in range(1, len(event.highptIdElectrons)):
-                    Zcand = event.highptIdElectrons[i].p4() + event.highptIdElectrons[j].p4()
-                    isOS = event.highptIdElectrons[i].charge() != event.highptIdElectrons[j].charge()
+        if len(event.inclusiveLeptons) >=2:
+            for i in range(0, len(event.inclusiveLeptons)):
+                for j in range(1, len(event.inclusiveLeptons)):
+                    if i==j: continue
+                    if not (event.inclusiveLeptons[i].isMuon() and event.inclusiveLeptons[j].isMuon()) and not (event.inclusiveLeptons[i].isElectron() and event.inclusiveLeptons[j].isElectron()): continue
+                    if not (event.inclusiveLeptons[i].pt() > 20. and event.inclusiveLeptons[j].pt() > 20.): continue
+                    Zcand = event.inclusiveLeptons[i].p4() + event.inclusiveLeptons[j].p4()
+                    isOS = event.inclusiveLeptons[i].charge() != event.inclusiveLeptons[j].charge()
                     isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
                     if isOS and isZmass and Zcand.pt() > Zpt:
                         l1, l2 = i, j
-                        event.isZ2EE = True
+                        event.isZ2EE = event.inclusiveLeptons[i].isElectron()
+                        event.isZ2MM = event.inclusiveLeptons[i].isMuon()
                         Zpt = Zcand.pt()
-        # Then try muons
-        l1, l2 = -1, -1
-        Zpt = -1
-        if len(event.highptIdMuons) >=2:
-            for i in range(0, len(event.highptIdMuons)):
-                for j in range(1, len(event.highptIdMuons)):
-                    Zcand = event.highptIdMuons[i].p4() + event.highptIdMuons[j].p4()
-                    isOS = event.highptIdMuons[i].charge() != event.highptIdMuons[j].charge()
-                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
-                    if isOS and isZmass and Zcand.pt() > Zpt:
-                        l1, l2 = i, j
-                        event.isZ2MM = True
-                        Zpt = Zcand.pt()
+#                        
+#                        
+#                        
+#        l1, l2 = -1, -1
+#        Zpt = -1
+#        # Check Z->ee first
+#        if len(event.highptIdElectrons) >=2:
+#            for i in range(0, len(event.highptIdElectrons)):
+#                for j in range(1, len(event.highptIdElectrons)):
+#                    Zcand = event.highptIdElectrons[i].p4() + event.highptIdElectrons[j].p4()
+#                    isOS = event.highptIdElectrons[i].charge() != event.highptIdElectrons[j].charge()
+#                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
+#                    if isOS and isZmass and Zcand.pt() > Zpt:
+#                        l1, l2 = i, j
+#                        event.isZ2EE = True
+#                        Zpt = Zcand.pt()
+#        
+#        # Then try muons
+#        #l1, l2 = -1, -1
+#        #Zpt = -1
+#        if len(event.highptIdMuons) >=2:
+#            for i in range(0, len(event.highptIdMuons)):
+#                for j in range(1, len(event.highptIdMuons)):
+#                    Zcand = event.highptIdMuons[i].p4() + event.highptIdMuons[j].p4()
+#                    isOS = event.highptIdMuons[i].charge() != event.highptIdMuons[j].charge()
+#                    isZmass = Zcand.mass() > self.cfg_ana.Z_mass_low and Zcand.mass() < self.cfg_ana.Z_mass_high
+#                    if isOS and isZmass and Zcand.pt() > Zpt:
+#                        l1, l2 = i, j
+#                        event.isZ2MM = True
+#                        Zpt = Zcand.pt()
         
         if not event.isZ2MM and not event.isZ2EE:
             return True
@@ -531,10 +556,10 @@ class XZhAnalyzer( Analyzer ):
         #for i, m in enumerate(event.highptMuons):
         #    if m.muonID("POG_ID_HighPt"): m.setP4( m.tunePMuonBestTrack().get().p4() )
         
-        if event.isZ2EE and l1 >= 0 and l2 >= 0 and l1 < len(event.highptIdElectrons) and l2 < len(event.highptIdElectrons):
-            event.highptLeptons = [event.highptIdElectrons[l1], event.highptIdElectrons[l2]]
-        elif event.isZ2MM and l1 >= 0 and l2 >= 0 and l1 < len(event.highptIdMuons) and l2 < len(event.highptIdMuons):
-            event.highptLeptons = [event.highptIdMuons[l1], event.highptIdMuons[l2]]
+        if l1 >= 0 and l2 >= 0 and l1 < len(event.inclusiveLeptons) and l2 < len(event.inclusiveLeptons):
+            event.highptLeptons = [event.inclusiveLeptons[l1], event.inclusiveLeptons[l2]]
+        #elif event.isZ2MM and l1 >= 0 and l2 >= 0 and l1 < len(event.inclusiveLeptons) and l2 < len(event.inclusiveLeptons):
+        #    event.highptLeptons = [event.inclusiveLeptons[l1], event.inclusiveLeptons[l2]]
         else:
             return True
         
