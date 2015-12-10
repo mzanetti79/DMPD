@@ -40,6 +40,7 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     NTupleVariable("isMuon",   lambda x : True if x.isMuon() else False, int, help="Muon flag" ),
     # Charge
     NTupleVariable("charge",   lambda x : x.charge(), int, help="Lepton charge"),
+    NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between lepton and met"),
     # Impact parameters
     NTupleVariable("dxy", lambda x : getattr(x, "dxyPV", -99.), float, help="Lepton dxy w.r.t. PV"),
     NTupleVariable("dz",  lambda x : getattr(x, "dzPV", -99.), float, help="Lepton dz w.r.t. PV"),
