@@ -126,6 +126,7 @@ class PreselectionAnalyzer( Analyzer ):
         for i, l in enumerate(event.inclusiveLeptons):
             l.isHEEP = self.isHEEP(l, v)
             l.isCustomTracker = self.isCustomTracker(l, v)
+            l.deltaPhi_met = abs(deltaPhi(l.phi(), event.met.phi()))
             l.dxyPV = l.gsfTrack().dxy(v) if l.isElectron() else l.bestTrack().dxy(v)
             l.dzPV  = l.gsfTrack().dz(v)  if l.isElectron() else l.bestTrack().dz(v)
     
@@ -147,7 +148,9 @@ class PreselectionAnalyzer( Analyzer ):
             self.addJECUnc(event, j)
             #if i==0:
             #    self.addBBTagVariables(j)
-    
+        
+        for i, j in enumerate(event.xcleanJetsNoFatJet):
+            if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoFatJet: event.maxCSVNoFatJet = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
     
     ##########
     
@@ -357,7 +360,7 @@ class PreselectionAnalyzer( Analyzer ):
             if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoAK8: event.maxCSVNoAK8 = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
 
         event.minDeltaPhi = 3.15
-        
+        event.maxCSVNoFatJet = -1.
         
         
         

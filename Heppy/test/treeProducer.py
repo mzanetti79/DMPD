@@ -623,11 +623,12 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nFatJets',         lambda x: len(x.xcleanJetsAK8), int, help='Number of xcleaned fat jets'),
     NTupleVariable('nBJets',           lambda x: len([jet for jet in x.xcleanJets if abs(jet.hadronFlavour()) == 5]), int, help='Number of xcleaned b-jets'),
 #    NTupleVariable('nBtagJets',        lambda x: len([jet for jet in x.xcleanJets if jet.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > 0.890]), int, help='Number of xcleaned b-jets'),
-    NTupleVariable('nJetsNoFatJet30',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 30]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-    NTupleVariable('nJetsNoFatJet50',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 50]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-    NTupleVariable('nJetsNoFatJet100',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 100]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-    NTupleVariable('nJetsNoFatJet150',    lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 150]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Number of xcleaned b-jets'),
+    NTupleVariable('nJetsNoFatJet30',  lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 30]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet50',  lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 50]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet100', lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 100]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('nJetsNoFatJet150', lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 150]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
+    NTupleVariable('maxCSVNoFatJet',   lambda x: getattr(x, "maxCSVNoFatJet", -1.), float, help='Maximum CSV of jets not overlapping with fat jet'),
+    NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Minimum dPhi between MET and jets'),
 ]
 
 
