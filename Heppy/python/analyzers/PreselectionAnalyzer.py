@@ -149,7 +149,7 @@ class PreselectionAnalyzer( Analyzer ):
             #if i==0:
             #    self.addBBTagVariables(j)
         
-        for i, j in enumerate(event.xcleanJetsNoFatJet):
+        for i, j in enumerate(event.xcleanJetsNoAK8):
             if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoFatJet: event.maxCSVNoFatJet = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
     
     ##########
@@ -355,10 +355,7 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanJetsAK8 = event.cleanJetsAK8
         
         event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 1.2] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
-        event.maxCSVNoAK8 = -1.
-        for i, j in enumerate(event.xcleanJetsNoAK8):
-            if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoAK8: event.maxCSVNoAK8 = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
-
+        
         event.minDeltaPhi = 3.15
         event.maxCSVNoFatJet = -1.
         

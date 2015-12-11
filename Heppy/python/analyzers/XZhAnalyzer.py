@@ -453,7 +453,7 @@ class XZhAnalyzer( Analyzer ):
         event.highptIdElectrons = [x for x in event.inclusiveLeptons if x.isElectron() and x.pt()>20.] # and self.addHEEP(x) and x.miniRelIso<0.1  and x.electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose')
         #event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.isTrackerMuon()] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
         event.highptIdMuons = [x for x in event.inclusiveLeptons if x.isMuon() and x.pt()>20.] #x.isTrackerMuon() and x.miniRelIso<0.1  and x.muonID("POG_ID_Loose")
-        print len(event.highptIdElectrons), len(event.highptIdMuons)
+        
         if len(event.highptIdElectrons) < 2 and len(event.highptIdMuons) < 2:
             return True
         
@@ -507,7 +507,7 @@ class XZhAnalyzer( Analyzer ):
         # Check Z->ee first
         if len(event.inclusiveLeptons) >=2:
             for i in range(0, len(event.inclusiveLeptons)):
-                for j in range(1, len(event.inclusiveLeptons)):
+                for j in range(i+1, len(event.inclusiveLeptons)):
                     if i==j: continue
                     if not (event.inclusiveLeptons[i].isMuon() and event.inclusiveLeptons[j].isMuon()) and not (event.inclusiveLeptons[i].isElectron() and event.inclusiveLeptons[j].isElectron()): continue
                     if not (event.inclusiveLeptons[i].pt() > 20. and event.inclusiveLeptons[j].pt() > 20.): continue
@@ -564,14 +564,6 @@ class XZhAnalyzer( Analyzer ):
             return True
         
         
-        # Lepton plots
-        if event.isZ2EE:
-            self.plotHEEP(event, event.highptLeptons[0])
-            self.plotHEEP(event, event.highptLeptons[1])
-        else:
-            self.plotCustomTracker(event, event.highptLeptons[0])
-            self.plotCustomTracker(event, event.highptLeptons[1])
-        
         self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
         
         # Z candidate
@@ -594,6 +586,14 @@ class XZhAnalyzer( Analyzer ):
         if event.Z.pt() < self.cfg_ana.Z_pt:
             return True
         self.Hist["Z2EECounter" if event.isZ2EE else "Z2MMCounter"].AddBinContent(4, event.eventWeight)
+        
+        # Lepton plots
+        if event.isZ2EE:
+            self.plotHEEP(event, event.highptLeptons[0])
+            self.plotHEEP(event, event.highptLeptons[1])
+        else:
+            self.plotCustomTracker(event, event.highptLeptons[0])
+            self.plotCustomTracker(event, event.highptLeptons[1])
         
         #########################
         #    Part 2: Jets       #
