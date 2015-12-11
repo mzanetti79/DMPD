@@ -657,7 +657,7 @@ def processFile(dir_name, verbose=False):
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 # Total
-                eventWeight[0] = xsWeight[0] * kfactorWeight[0] * pileupWeight[0] * triggerWeight[0]
+                eventWeight[0] = xsWeight[0] * kfactorWeight[0] * pileupWeight[0] * triggerWeight[0] * electroweakWeight[0]
                 
                 # Fill the branches
                 eventWeightBranch.Fill()
