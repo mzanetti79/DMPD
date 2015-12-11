@@ -4,11 +4,6 @@ import os, multiprocessing, math
 from array import array
 from ROOT import TFile, TH1, TF1, TLorentzVector
 
-#from DMPD.Heppy.samples.Phys14.fileLists import samples
-#from DMPD.Heppy.samples.Spring15.fileLists import mcsamples
-#from DMPD.Heppy.samples.Data.fileLists import datasamples
-#samples = datasamples.copy()
-#samples.update(mcsamples)
 from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsectionsunc
 
 #ROOT.gROOT.SetBatch(1)
@@ -16,16 +11,19 @@ from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsections
 #1.28/fb   Cert_246908-258750_13TeV_PromptReco_Collisions15_25ns_JSON.txt
 #2.1/fb    Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt
 
-ref_kf_file = '%s/src/DMPD/Heppy/python/tools/Kfactors.root' % os.environ['CMSSW_BASE']
-#ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
-ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU_1p3fb.root' % os.environ['CMSSW_BASE']
-#ref_pu_file = '%s/src/DMPD/Heppy/python/tools/PU/PU_2p1fb.root' % os.environ['CMSSW_BASE']
-ref_btag_file = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
-ref_csv_file = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
-ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
-ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v1.root' % os.environ['CMSSW_BASE']
-ref_trigger_file = '%s/src/DMPD/Heppy/python/tools/HLT/TriggerEffSF.root' % os.environ['CMSSW_BASE']
-ref_ewcorr_file = '%s/src/DMPD/Heppy/python/tools/EW/scalefactors_v4.root' % os.environ['CMSSW_BASE']
+ref_kf_file         = '%s/src/DMPD/Heppy/python/tools/Kfactors.root' % os.environ['CMSSW_BASE']
+#ref_pu_file         = '%s/src/DMPD/Heppy/python/tools/PU/PU.root' % os.environ['CMSSW_BASE']
+#ref_pu_file         = '%s/src/DMPD/Heppy/python/tools/PU/PU_1p3fb.root' % os.environ['CMSSW_BASE']
+ref_pu_file         = '%s/src/DMPD/Heppy/python/tools/PU/PU_2p1fb.root' % os.environ['CMSSW_BASE']
+ref_btag_file       = '%s/src/DMPD/Heppy/python/tools/BTAG/CSVv2.csv' % os.environ['CMSSW_BASE']
+ref_csv_file        = '%s/src/DMPD/Heppy/python/tools/BTAG/BTagShapes.root' % os.environ['CMSSW_BASE']
+ref_recoilMC_file   = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v5.root' % os.environ['CMSSW_BASE']
+ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v5.root' % os.environ['CMSSW_BASE']
+ref_muTrig_file     = '%s/src/DMPD/Heppy/python/tools/HLT/SingleMuonTrigger_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
+ref_muId_file       = '%s/src/DMPD/Heppy/python/tools/HLT/MuonID_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
+ref_muIso_file      = '%s/src/DMPD/Heppy/python/tools/HLT/MuonIso_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
+ref_trig_file       = '%s/src/DMPD/Heppy/python/tools/HLT/TriggerEffSF.root' % os.environ['CMSSW_BASE']
+ref_ewcorr_file     = '%s/src/DMPD/Heppy/python/tools/EW/scalefactors_v4.root' % os.environ['CMSSW_BASE']
 
 import optparse
 usage = 'usage: %prog [options]'
@@ -217,6 +215,25 @@ def processFile(dir_name, verbose=False):
     puRatioUp = puFile.Get('ratioUp')
     puRatioDown = puFile.Get('ratioDown')
     if verbose: print 'PU histogram entries: ', puRatio.GetEntries()
+    
+    # Muon trigger SF
+    #mutrigRunCFile = TFile(ref_muontrig_file, 'READ')
+    #trigMuRunCSF = mutrigRunCFile.Get('MuTrig_SF')  
+    
+    #mutrigRunDv42File = TFile(ref_muontrig_file, 'READ')
+    #trigMuRunDv42SF = mutrigRunDv42File.Get('MuTrig_SF')  
+    
+    #mutrigRunDv43File = TFile(ref_muontrig_file, 'READ')
+    #trigMuRunDv43SF = mutrigRunDv43File.Get('MuTrig_SF')  
+
+    # Muon trigger SF
+    mutrigFile = TFile(ref_muontrig_file, 'READ')
+    trigMuSF = trigFile.Get('MuTrig_SF')  
+
+    # Muon trigger SF
+    mutrigFile = TFile(ref_muontrig_file, 'READ')
+    trigMuSF = trigFile.Get('MuTrig_SF')  
+    
     
     # trigger SF
     trigFile = TFile(ref_trigger_file, 'READ')
@@ -569,10 +586,10 @@ def processFile(dir_name, verbose=False):
                             if applyrecoil:
                                 ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
                                 Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
-                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,njets)        
-                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,njets)        
-                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,njets)        
-                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,njets)   
+                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,njets)        
+                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,njets)        
+                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,njets)        
+                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,njets)   
                                 if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                                     ### correct fakeMET only in ZCR and WCR (and TCR)
                                     ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
@@ -583,10 +600,10 @@ def processFile(dir_name, verbose=False):
                                     Upar      = ROOT.Double(0.)
                                     Uper      = ROOT.Double(0.)
                                     Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 1, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-1, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 1,njets)        
-                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-1,njets)   
+                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,njets)        
+                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,njets)        
+                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,njets)        
+                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,njets)   
                                 pass
                             pass
                         pass
@@ -712,8 +729,10 @@ for d in os.listdir(origin):
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
     #if not ('_HT-' in d): continue
+    if not 'SingleMuon_Run2015C-05Oct2015' in d: 
+	continue
     #if not 'BBbarDMJets_scalar_Mchi-150_Mphi-295_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' in d:
-        #continue
+    #    continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
