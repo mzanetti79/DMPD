@@ -22,6 +22,7 @@ ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData
 ref_muTrig_file     = '%s/src/DMPD/Heppy/python/tools/HLT/SingleMuonTrigger_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
 ref_muId_file       = '%s/src/DMPD/Heppy/python/tools/SFMUON/MuonID_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
 ref_muIso_file      = '%s/src/DMPD/Heppy/python/tools/SFMUON/MuonIso_Z_RunCD_Reco74X_Dec1.root' % os.environ['CMSSW_BASE']
+ref_ele_file        = '%s/src/DMPD/Heppy/python/tools/SFELE/scalefactors_ele.root' % os.environ['CMSSW_BASE']
 ref_trig_file       = '%s/src/DMPD/Heppy/python/tools/HLT/TriggerEffSF.root' % os.environ['CMSSW_BASE']
 ref_ewcorr_file     = '%s/src/DMPD/Heppy/python/tools/EW/scalefactors_v4.root' % os.environ['CMSSW_BASE']
 
@@ -254,6 +255,16 @@ def processFile(dir_name, verbose=False):
     trigMETSFUp = trigFile.Get('METTrig_SFUp')
     trigMETSFDown = trigFile.Get('METTrig_SFDown')
     
+    # Electron Id+Iso
+    eleFile = TFile(ref_ele_file, 'READ')
+    eleVeto = eleFile.Get('unfactorized_scalefactors_Veto_ele')
+    eleTight = eleFile.Get('unfactorized_scalefactors_Tight_ele')
+    
+    # Muon Id
+    
+    # Muon Iso
+    
+    
     # Variables declaration
     eventWeight = array('f', [1.0])  # global event weight
     xsWeight = array('f', [1.0])  # weight due to the MC sample cross section
@@ -427,6 +438,35 @@ def processFile(dir_name, verbose=False):
                         triggerMETWeight[0]        = trigMETSF.GetBinContent( hbin )
                         triggerMETWeightUp[0]      = trigMETSFUp.GetBinContent( hbin )
                         triggerMETWeightDown[0]    = trigMETSFDown.GetBinContent( hbin )
+                    
+                    ''' ELECTRON ID+ISO '''
+                    if ( 'ZCR' in obj.GetName() and obj.isZtoEE ) or ( 'WCR' in obj.GetName() and obj.isWtoEN ):
+                        hbin = eleTight.FindBin(min(obj.lepton1_pt, eleTight.GetXaxis().GetXmax()), abs(obj.lepton1_eta)))
+                        electronWeight[0]     *= eleTight.GetBinContent( hbin ) 
+                        electronWeightUp[0]   *= eleTight.GetBinContent( hbin ) + eleTight.GetBinError( hbin )
+                        electronWeightDown[0] *= eleTight.GetBinContent( hbin ) - eleTight.GetBinError( hbin )
+                    if 'TCR' in obj.GetName():
+                        hbin = eleTight.FindBin(min(obj.lepton2_pt, eleTight.GetXaxis().GetXmax()), abs(obj.lepton2_eta)))
+                        electronWeight[0]     *= eleTight.GetBinContent( hbin ) 
+                        electronWeightUp[0]   *= eleTight.GetBinContent( hbin ) + eleTight.GetBinError( hbin )
+                        electronWeightDown[0] *= eleTight.GetBinContent( hbin ) - eleTight.GetBinError( hbin )
+                    if ( 'ZCR' in obj.GetName() and obj.isZtoEE ):
+                        hbin = eleVeto.FindBin(min(obj.lepton2_pt, eleVeto.GetXaxis().GetXmax()), abs(obj.lepton2_eta)))
+                        electronWeight[0]     *= eleVeto.GetBinContent( hbin ) 
+                        electronWeightUp[0]   *= eleVeto.GetBinContent( hbin ) + eleTight.GetBinError( hbin )
+                        electronWeightDown[0] *= eleVeto.GetBinContent( hbin ) - eleTight.GetBinError( hbin )
+                    
+                    ''' MUON ID/ISO '''
+                    if ( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.isWtoMN ) or ( 'TCR' in obj.GetName() ):
+                        hbin = muonTight.FindBin(min(obj.lepton1_pt, muonTight.GetXaxis().GetXmax()), abs(obj.lepton1_eta)))
+                        muonWeight[0]     *= muonTight.GetBinContent( hbin ) 
+                        muonWeightUp[0]   *= muonTight.GetBinContent( hbin ) + muonTight.GetBinError( hbin )
+                        muonWeightDown[0] *= muonTight.GetBinContent( hbin ) - muonTight.GetBinError( hbin )
+                    if ( 'ZCR' in obj.GetName() and obj.isZtoMM ):
+                        hbin = muonLoose.FindBin(min(obj.lepton2_pt, muonLoose.GetXaxis().GetXmax()), abs(obj.lepton2_eta)))
+                        muonWeight[0]     *= muonLoose.GetBinContent( hbin ) 
+                        muonWeightUp[0]   *= muonLoose.GetBinContent( hbin ) + muonLoose.GetBinError( hbin )
+                        muonWeightDown[0] *= muonLoose.GetBinContent( hbin ) - muonLoose.GetBinError( hbin )
                     
                     
                     ''' BTAGGING '''
