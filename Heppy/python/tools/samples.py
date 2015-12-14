@@ -5,8 +5,8 @@ from collections import OrderedDict
 sample = {
     'data_obs' : {
         'order' : 0,
-        #'files' : ['SingleMuon_Run2015C-05Oct2015-v1', 'SingleMuon_Run2015D-05Oct2015-v1', 'SingleMuon_Run2015D-PromptReco-v4', 'SingleElectron_Run2015C-05Oct2015-v1', 'SingleElectron_Run2015D-05Oct2015-v1', 'SingleElectron_Run2015D-PromptReco-v4', 'MET_Run2015C-05Oct2015-v1', 'MET_Run2015D-05Oct2015-v1', 'MET_Run2015D-PromptReco-v4'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
-        'files' : ['2p1fb/SingleMuon_Run2015C-05Oct2015-v1', '2p1fb/SingleMuon_Run2015D-05Oct2015-v1', '2p1fb/SingleMuon_Run2015D-PromptReco-v4', '2p1fb/SingleElectron_Run2015C-05Oct2015-v1', '2p1fb/SingleElectron_Run2015D-05Oct2015-v1', '2p1fb/SingleElectron_Run2015D-PromptReco-v4', '2p1fb/MET_Run2015C-05Oct2015-v1', '2p1fb/MET_Run2015D-05Oct2015-v1', '2p1fb/MET_Run2015D-PromptReco-v4'],
+        'files' : ['SingleMuon_Run2015C-05Oct2015-v1', 'SingleMuon_Run2015D-05Oct2015-v1', 'SingleMuon_Run2015D-PromptReco-v4', 'SingleElectron_Run2015C-05Oct2015-v1', 'SingleElectron_Run2015D-05Oct2015-v1', 'SingleElectron_Run2015D-PromptReco-v4', 'MET_Run2015C-05Oct2015-v1', 'MET_Run2015D-05Oct2015-v1', 'MET_Run2015D-PromptReco-v4'], #'DoubleMuon_Run2015B_PromptReco_v1', 'DoubleMuon_Run2015B_17Jul2015_v1', 'DoubleEG_Run2015B_PromptReco_v1', 'DoubleEG_Run2015B_17Jul2015_v1', 
+        #'files' : ['2p1fb/SingleMuon_Run2015C-05Oct2015-v1', '2p1fb/SingleMuon_Run2015D-05Oct2015-v1', '2p1fb/SingleMuon_Run2015D-PromptReco-v4', '2p1fb/SingleElectron_Run2015C-05Oct2015-v1', '2p1fb/SingleElectron_Run2015D-05Oct2015-v1', '2p1fb/SingleElectron_Run2015D-PromptReco-v4', '2p1fb/MET_Run2015C-05Oct2015-v1', '2p1fb/MET_Run2015D-05Oct2015-v1', '2p1fb/MET_Run2015D-PromptReco-v4'],
         'fillcolor' : 0,
         'fillstyle' : 1,
         'linecolor' : 1,
@@ -90,6 +90,7 @@ sample = {
     },
     'WJetsToLNu_HT' : {
         'order' : 2,
+        #'files' : ['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],#'WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'files' : ['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1', 'WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
         'fillcolor' : 881,
         'fillstyle' : 1001,
@@ -102,8 +103,8 @@ sample = {
     },
     'TTbar' : {
         'order' : 3,
-        'files' : ['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
-        #'files' : ['TTJets_madgraphMLM_pythia8_v2'],
+        'files' : ['TT_TuneCUETP8M1_13TeV-powheg-pythia8-ext-v1', 'TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-v1', 'TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8-v2'],
+        #'files' : ['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
         'fillcolor' : 798,
         'fillstyle' : 1001,
         'linecolor' : 798,
@@ -127,7 +128,8 @@ sample = {
     },
     'VV' : {
         'order' : 5,
-        'files' : ['WW_TuneCUETP8M1_13TeV-pythia8-v1','WZ_TuneCUETP8M1_13TeV-pythia8-v1','ZZ_TuneCUETP8M1_13TeV-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+        'files' : ['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+        #'files' : ['WW_TuneCUETP8M1_13TeV-pythia8-v1','WZ_TuneCUETP8M1_13TeV-pythia8-v1','ZZ_TuneCUETP8M1_13TeV-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
         'fillcolor' : 602,
         'fillstyle' : 1001,
         'linecolor' : 602,
@@ -1816,7 +1818,7 @@ sample = {
 #################### XZH Signals 623 625 628 629 633 634 635 636
     'XZh_M600' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M600_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M600_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1828,7 +1830,7 @@ sample = {
     },
     'XZh_M800' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M800_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M800_madgraph_v2'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1840,7 +1842,7 @@ sample = {
     },
     'XZh_M1000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M1000_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M1000_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -1852,7 +1854,7 @@ sample = {
     },
     'XZh_M1200' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M1200_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M1200_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1'],
         'fillcolor' : 625,
         'fillstyle' : 3005,
         'linecolor' : 625,
@@ -1864,7 +1866,7 @@ sample = {
     },
     'XZh_M1400' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M1400_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M1400_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1'],
         'fillcolor' : 625,
         'fillstyle' : 3005,
         'linecolor' : 625,
@@ -1876,7 +1878,7 @@ sample = {
     },
     'XZh_M1600' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M1600_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M1600_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -1888,7 +1890,7 @@ sample = {
     },
     'XZh_M1800' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M1800_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M1800_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -1900,7 +1902,7 @@ sample = {
     },
     'XZh_M2000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M2000_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M2000_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -1912,7 +1914,7 @@ sample = {
     },
     'XZh_M2500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M2500_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M2500_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1'],
         'fillcolor' : 629,
         'fillstyle' : 3005,
         'linecolor' : 629,
@@ -1924,7 +1926,7 @@ sample = {
     },
     'XZh_M3000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M3000_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M3000_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1'],
         'fillcolor' : 633,
         'fillstyle' : 3005,
         'linecolor' : 633,
@@ -1936,7 +1938,7 @@ sample = {
     },
     'XZh_M3500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M3500_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M3500_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1'],
         'fillcolor' : 634,
         'fillstyle' : 3005,
         'linecolor' : 634,
@@ -1948,7 +1950,7 @@ sample = {
     },
     'XZh_M4000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M4000_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M4000_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1'],
         'fillcolor' : 635,
         'fillstyle' : 3005,
         'linecolor' : 635,
@@ -1960,7 +1962,7 @@ sample = {
     },
     'XZh_M4500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M4500_madgraph_v1', 'ZprimeToZhToZinvhbb_narrow_M4500_madgraph_v1'],
+        'files' : ['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1'],
         'fillcolor' : 635,
         'fillstyle' : 3005,
         'linecolor' : 635,
