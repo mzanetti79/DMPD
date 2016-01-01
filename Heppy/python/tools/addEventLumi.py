@@ -4,6 +4,8 @@ import os, multiprocessing, math
 from array import array
 from ROOT import TFile, TH1, TF1, TLorentzVector
 
+from DMPD.Heppy.tools.selections import *
+
 import optparse
 usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
@@ -17,14 +19,18 @@ origin      = options.origin
 target      = options.target
 verboseon   = options.verbose
 
-cut = {
-    "SR"  : "eventWeight!=0 && met_pt>200",
-    "WCR" : "eventWeight!=0 && kW_pt>200 && fatjet1_pt>200",
-    "ZCR" : "eventWeight!=0 && Z_pt>200 && Z_mass>70 && Z_mass<110 && fatjet1_pt>200",
-    "TCR" : "eventWeight!=0",
-    "XZh" : "eventWeight!=0",
-}
+LUMI        = 2110
 
+cut = {
+    "SR"  : "eventWeight!=0 && (" + selection['XZhnnPre'] + ")",
+    "WCR" : "eventWeight!=0 && ((" + selection['XWhenPre'] + ") || (" + selection['XWhmnPre'] + "))",
+    "ZCR" : "0!=0",
+    "TCR" : "0!=0",
+    "XZh" : "eventWeight!=0 && ((" + selection['XZheePre'] + ") || (" + selection['XZhmmPre'] + "))",
+}
+for r, sel in cut.iteritems():
+    for n, c in selection.iteritems():
+        if n in sel: cut[r] = cut[r].replace(n, c)
 
 if not os.path.exists(origin):
     print 'Origin directory', origin, 'does not exist, aborting...'
@@ -81,10 +87,10 @@ def processFile(dir_name, verbose=False):
                 obj.GetEntry(event)
                 
                 # Initialize
-                eventWeightLumi[0] = obj.eventWeight
+                eventWeightLumi[0] = 1.
                 
                 # Weights
-                if isMC: eventWeightLumi[0] *= 2110
+                if isMC: eventWeightLumi[0] = obj.eventWeight*LUMI
                 
                 # Fill the branches
                 eventWeightLumiBranch.Fill()
@@ -99,7 +105,8 @@ def processFile(dir_name, verbose=False):
 
 jobs = []
 for d in os.listdir(origin):
-    
+    if 'BBbarDM' in d or 'TTbarDM' in d: continue
+    if not 'MET' in d: continue
 #    print d
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
