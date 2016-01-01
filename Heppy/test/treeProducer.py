@@ -58,7 +58,7 @@ triggerAnalyzer= cfg.Analyzer(
         'DoubleMu'       : ['HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v*','HLT_Mu30_TkMu11_v*'],
         'DoubleElectron' : ['HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*', 'HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v*'],
         'MuonEG'         : ['HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v*'],        
-        'SingleElectron' : ['HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele23_WP85_Gsf_v*', 'HLT_Ele27_WP85_Gsf_v*', 'HLT_Ele27_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*'],
+        'SingleElectron' : ['HLT_Ele23_CaloIdL_TrackIdL_IsoVL_v*', 'HLT_Ele23_WPLoose_Gsf_v*', 'HLT_Ele23_WP85_Gsf_v*', 'HLT_Ele27_WP85_Gsf_v*', 'HLT_Ele27_WPLoose_Gsf_v*', 'HLT_Ele105_CaloIdVT_GsfTrkIdT_v*', 'HLT_Ele115_CaloIdVT_GsfTrkIdT_v*'],
         'SinglePhoton'   : ['HLT_Photon165_HE10', 'HLT_Photon175'],
         'MET'            : [
                             'HLT_PFMETNoMu90_NoiseCleaned_PFMHTNoMu90_IDTight_v*',
@@ -627,8 +627,9 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('nJetsNoFatJet50',  lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 50]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
     NTupleVariable('nJetsNoFatJet100', lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 100]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
     NTupleVariable('nJetsNoFatJet150', lambda x: len([x for x in x.xcleanJetsNoAK8 if x.pt() > 150]), int, help='Number of xcleaned jets excluding those close to the leading fat jet'),
-    NTupleVariable('maxCSVNoFatJet',   lambda x: getattr(x, "maxCSVNoFatJet", -1.), float, help='Maximum CSV of jets not overlapping with fat jet'),
+    #NTupleVariable('maxCSVNoFatJet',   lambda x: getattr(x, "maxCSVNoFatJet", -1.), float, help='Maximum CSV of jets not overlapping with fat jet'),
     NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Minimum dPhi between MET and jets'),
+    NTupleVariable('minDeltaPhiNoFatJet', lambda x: getattr(x, "minDeltaPhiNoAK8", -1.), float, help='Minimum dPhi between MET and jets, AK8 jet excluded'),
 ]
 
 
