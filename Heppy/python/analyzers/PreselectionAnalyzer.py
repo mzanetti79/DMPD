@@ -137,7 +137,10 @@ class PreselectionAnalyzer( Analyzer ):
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
             if j.deltaPhi_met < event.minDeltaPhi: event.minDeltaPhi = j.deltaPhi_met
             self.addJECUnc(event, j)
-            
+        
+        for i, j in enumerate(event.xcleanJetsNoAK8):
+            if j.deltaPhi_met < event.minDeltaPhiNoAK8: event.minDeltaPhiNoAK8 = j.deltaPhi_met
+        
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJetsAK8[0].phi()))
@@ -148,9 +151,6 @@ class PreselectionAnalyzer( Analyzer ):
             self.addJECUnc(event, j)
             #if i==0:
             #    self.addBBTagVariables(j)
-        
-        for i, j in enumerate(event.xcleanJetsNoAK8):
-            if j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags') > event.maxCSVNoFatJet: event.maxCSVNoFatJet = j.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')
     
     ##########
     
@@ -259,17 +259,20 @@ class PreselectionAnalyzer( Analyzer ):
                 event.neutrino = ROOT.reco.Particle.LorentzVector(event.met.px(), event.met.py(), pz, math.hypot(event.met.pt(), pz))
                 
                 # Kinematic W
-                thekW = lepton.p4() + event.neutrino
-                thekW.charge = lepton.charge()
-                thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
-                thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
-                thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
-                thekW.deltaPhi_met = abs(deltaPhi(thekW.phi(), event.met.phi()))
-                thekW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
-                event.thekW = thekW
-                
+                event.thekW = lepton.p4() + event.neutrino
+                event.thekW.charge = lepton.charge()
+                event.thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
+                event.thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
+                event.thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
+                event.thekW.deltaPhi_met = abs(deltaPhi(event.thekW.phi(), event.met.phi()))
+                event.thekW.mT = math.sqrt( 2.*lepton.et()*event.met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.met.phi())) ) )
                 
                 event.theX += lepton.p4() + event.neutrino
+                event.theX.charge = lepton.charge()
+                event.theX.deltaR = deltaR(event.thekW.eta(), event.thekW.phi(), event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi())
+                event.theX.deltaEta = abs(event.thekW.eta()-event.xcleanJetsAK8[0].eta())
+                event.theX.deltaPhi = abs(deltaPhi(event.thekW.phi(), event.xcleanJetsAK8[0].phi()))
+                event.theX.deltaPhi_met = abs(deltaPhi(event.thekW.phi(), event.xcleanJetsAK8[0].phi()))
                 event.theX.mT = (lepton.p4() + event.met.p4() + event.xcleanJetsAK8[0].p4()).Mt()
                 
             # --- 0  lepton case: recoil mass formula
@@ -288,6 +291,11 @@ class PreselectionAnalyzer( Analyzer ):
                 else:
                     mX = -B/2.
                 event.theX.SetE(math.sqrt(mX**2 + event.theX.Px()**2+event.theX.Py()**2+event.theX.Pz()**2))
+                event.theX.charge = 0
+                event.theX.deltaR = deltaR(event.met.eta(), event.met.phi(), event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi())
+                event.theX.deltaEta = abs(event.met.eta()-event.xcleanJetsAK8[0].eta())
+                event.theX.deltaPhi = abs(deltaPhi(event.met.phi(), event.xcleanJetsAK8[0].phi()))
+                event.theX.deltaPhi_met = abs(deltaPhi(event.xcleanJetsAK8[0].phi(), event.met.phi()))
                 event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*event.met.pt()*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), event.met.phi())) ) )
         return True
     
@@ -297,11 +305,11 @@ class PreselectionAnalyzer( Analyzer ):
         event.T_mass = -1.
         
         # Promote the highest b-tagged jets as b
-        xcleanJetsCSV = event.xcleanJetsAK8 + event.xcleanJetsNoAK8
+        xcleanJetsCSV = copy.deepcopy(event.xcleanBJetsNoAK8) +  copy.deepcopy(event.xcleanJetsAK8)
+        xcleanJetsCSV.sort(key = lambda l : l.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
         if not len(xcleanJetsCSV) >= 4:
             return True
         
-        xcleanJetsCSV.sort(key = lambda l : l.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
         b1 = xcleanJetsCSV[0]
         xcleanJetsCSV.pop(0)
         b2 = xcleanJetsCSV[0]
@@ -355,11 +363,11 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanJetsAK8 = event.cleanJetsAK8
         
         event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 0.8] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
-        event.xcleanBJetsNoAK8 = event.xcleanJetsNoAK8
+        event.xcleanBJetsNoAK8 = copy.deepcopy(event.xcleanJetsNoAK8)
         event.xcleanBJetsNoAK8.sort(key = lambda l : l.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
-        
+
         event.minDeltaPhi = 3.15
-        event.maxCSVNoFatJet = -1.
+        event.minDeltaPhiNoAK8 = 3.15
         
         
         
