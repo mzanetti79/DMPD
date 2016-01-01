@@ -632,6 +632,7 @@ class XZhAnalyzer( Analyzer ):
         event.X.deltaR = deltaR(event.Z.eta(), event.Z.phi(), event.highptFatJets[0].eta(), event.highptFatJets[0].phi())
         event.X.deltaEta = abs(event.Z.eta() - event.highptFatJets[0].eta())
         event.X.deltaPhi = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
+        event.X.deltaPhi_met = abs(deltaPhi(event.Z.phi(), event.highptFatJets[0].phi()))
         event.X.charge = 0
         
 #        elif len(event.highptLeptons) == 1:
