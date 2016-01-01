@@ -154,25 +154,25 @@ class PreselectionAnalyzer( Analyzer ):
     
     ##########
     
-    def addBBTagVariables(self, j):
-#        j.z_ratio          = -1.
-#        j.tau_dot          = -1.
-#        j.tau_21           = -1.
-#        j.SV_pt_0          = -1.
-#        j.SV_mass_0        = -1.
-#        j.SV_EnergyRatio_0 = -1.
-#        j.SV_EnergyRatio_1 = -1.
-#        j.contSV           = 0
-#        j.vertexNTracks    = 0
-        
-        muonTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFMuons')
-        elecTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFElectrons')
-        ipTagInfo = j.tagInfoTrackIP('slimmedJetsAK8ImpactParameter')
-        svTagInfo = j.tagInfoSecondaryVertex('slimmedJetsAK8pfInclusiveSecondaryVertexFinder')
-        maxSVDeltaRToJet = 0.7
-        print svTagInfo.nVertexCandidates()
-        print muonTagInfos.leptons()
-        print elecTagInfos.leptons()
+#    def addBBTagVariables(self, j):
+##        j.z_ratio          = -1.
+##        j.tau_dot          = -1.
+##        j.tau_21           = -1.
+##        j.SV_pt_0          = -1.
+##        j.SV_mass_0        = -1.
+##        j.SV_EnergyRatio_0 = -1.
+##        j.SV_EnergyRatio_1 = -1.
+##        j.contSV           = 0
+##        j.vertexNTracks    = 0
+#        
+#        muonTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFMuons')
+#        elecTagInfos = j.tagInfoSoftLepton('slimmedJetsAK8softPFElectrons')
+#        ipTagInfo = j.tagInfoTrackIP('slimmedJetsAK8ImpactParameter')
+#        svTagInfo = j.tagInfoSecondaryVertex('slimmedJetsAK8pfInclusiveSecondaryVertexFinder')
+#        maxSVDeltaRToJet = 0.7
+#        print svTagInfo.nVertexCandidates()
+#        print muonTagInfos.leptons()
+#        print elecTagInfos.leptons()
         
         
     
@@ -354,7 +354,9 @@ class PreselectionAnalyzer( Analyzer ):
         event.xcleanJets    = event.cleanJets
         event.xcleanJetsAK8 = event.cleanJetsAK8
         
-        event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 1.2] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
+        event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 0.8] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
+        event.xcleanBJetsNoAK8 = event.xcleanJetsNoAK8
+        event.xcleanBJetsNoAK8.sort(key = lambda l : l.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), reverse = True)
         
         event.minDeltaPhi = 3.15
         event.maxCSVNoFatJet = -1.

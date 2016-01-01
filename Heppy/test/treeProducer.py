@@ -662,12 +662,12 @@ SignalRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
-        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
 #        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
 #        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+        'xcleanBJetsNoAK8'    : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
     }
 )
 
@@ -705,12 +705,12 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
 #        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
 #        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+        'xcleanBJetsNoAK8'    : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
     }
 )
 
@@ -752,12 +752,12 @@ WControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
-        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
 #        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
 #        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+        'xcleanBJetsNoAK8'    : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
     }
 )
 
@@ -788,12 +788,12 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
-        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
 #        'xcleanJetsAK8JERUp'  : NTupleCollection('fatjetJERUp', lorentzVectorType, 1, help='cleaned fatJet collection with JER +1 sigma'),
 #        'xcleanJetsAK8JERDown': NTupleCollection('fatjetJERDown', lorentzVectorType, 1, help='cleaned fatJet collection with JER -1 sigma'),
+        'xcleanBJetsNoAK8'    : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
     }
 )
 
@@ -855,7 +855,7 @@ XZhTreeProducer= cfg.Analyzer(
     collections = {
         'highptLeptons' : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
         'highptFatJets' : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
-        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
+        'xcleanBJetsNoAK8'    : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
         }
     )
 
@@ -1015,14 +1015,14 @@ selectedComponents = [
 #  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
 #  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
@@ -1067,7 +1067,7 @@ selectedComponents = [
 #  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
