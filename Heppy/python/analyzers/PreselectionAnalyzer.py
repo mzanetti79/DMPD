@@ -369,8 +369,6 @@ class PreselectionAnalyzer( Analyzer ):
         event.minDeltaPhi = 3.15
         event.minDeltaPhiNoAK8 = 3.15
         
-        
-        
         for i in event.xcleanLeptons:
             setattr(i,'trigMatch',    False)
             setattr(i,'trigMatchPt',  -999.)

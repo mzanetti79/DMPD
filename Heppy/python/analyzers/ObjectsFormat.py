@@ -133,6 +133,14 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     NTupleVariable("prunedMassCorr",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMassCorr") if x.hasUserFloat("ak8PFJetsCHSPrunedMassCorr") else -1., float, help="Jet pruned mass corrected"),
     NTupleVariable("softdropMassCorr",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMassCorr") if x.hasUserFloat("ak8PFJetsCHSSoftDropMassCorr") else -1., float, help="Jet SoftDrop mass corrected"),
     
+    NTupleVariable("pt1",   lambda x : x.subjets('SoftDrop')[0].pt() if len(x.subjets('SoftDrop')) > 0 else -1., float, help="subJet 1 pt"),
+    NTupleVariable("eta1",   lambda x : x.subjets('SoftDrop')[0].eta() if len(x.subjets('SoftDrop')) > 0 else -1., float, help="subJet 1 eta"),
+    NTupleVariable("phi1",   lambda x : x.subjets('SoftDrop')[0].phi() if len(x.subjets('SoftDrop')) > 0 else -1., float, help="subJet 1 phi"),
+    NTupleVariable("pt2",   lambda x : x.subjets('SoftDrop')[1].pt() if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 pt"),
+    NTupleVariable("eta2",   lambda x : x.subjets('SoftDrop')[1].eta() if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 eta"),
+    NTupleVariable("phi2",   lambda x : x.subjets('SoftDrop')[1].phi() if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 phi"),
+    
+    
     NTupleVariable("dR",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
