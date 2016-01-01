@@ -661,7 +661,8 @@ SignalRegionTreeProducer= cfg.Analyzer(
         #'genTauLepFromW'       : NTupleCollection('genTauLepFromW', genParticleType, 1, help='Generated leptonic taus from W decays'),
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
-        'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+        'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -704,6 +705,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -750,6 +752,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 4, help='cleaned Jet collection'),
+        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -785,6 +788,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         #'xcleanTaus'          : NTupleCollection('tau', tauType, 1, help='cleaned Tau collection'),
         #'xcleanPhotons'       : NTupleCollection('photon', photonType, 1, help='cleaned Photon collection'),
         'xcleanJets'          : NTupleCollection('jet', jetType, 3, help='cleaned Jet collection'),
+        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
 #        'xcleanJetsJERUp'     : NTupleCollection('jetJERUp', lorentzVectorType, 3, help='cleaned Jet collection with JER +1 sigma'),
 #        'xcleanJetsJERDown'   : NTupleCollection('jetJERDown', lorentzVectorType, 3, help='cleaned Jet collection with JER -1 sigma'),
         'xcleanJetsAK8'       : NTupleCollection('fatjet', fatjetType, 1, help='cleaned fatJet collection'),
@@ -851,6 +855,7 @@ XZhTreeProducer= cfg.Analyzer(
     collections = {
         'highptLeptons' : NTupleCollection('lepton', leptonType, 2, help='Muons and Electrons after the preselection'),
         'highptFatJets' : NTupleCollection('fatjet', fatjetType, 1, help='fatJets after the preselection'),
+        'xcleanBJets'         : NTupleCollection('bjet', jetSlimType, 1, help='cleaned Jet collection ordered by CSV'),
         }
     )
 
@@ -955,10 +960,12 @@ for i in mcsamples:
 
 testDataCompontent = cfg.Component(
         files   = [
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/50000/548FB0B9-D072-E511-84CA-0025908653C4.root',
-            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/05Oct2015-v1/10000/021FD3F0-876F-E511-99D2-0025905A6060.root',
-            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/258/159/00000/6CA1C627-246C-E511-8A6A-02163E014147.root',
-            #'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015C_25ns/SingleMuon/MINIAOD/05Oct2015-v1/50000/AAC7E1E8-1274-E511-886D-0025905A60C6.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleElectron/MINIAOD/PromptReco-v4/000/260/572/00000/A6AC14CA-E083-E511-BC4C-02163E0140EC.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SinglePhoton/MINIAOD/PromptReco-v4/000/260/572/00000/52B0256C-E283-E511-89C7-02163E013806.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/MET/MINIAOD/PromptReco-v4/000/260/572/00000/4EDE9265-ED83-E511-8989-02163E012A0C.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleEG/MINIAOD/PromptReco-v4/000/260/572/00000/7679173B-EE83-E511-9342-02163E012451.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/0484EEB4-E183-E511-8488-02163E01410A.root',
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/7843B305-EE83-E511-86BB-02163E0134CD.root',
         ],
         name    = "test",
         json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
@@ -988,7 +995,7 @@ testMCCompontent = cfg.MCComponent(
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ## MC ###
-#selectedComponents = [
+selectedComponents = [
 #  sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1008,14 +1015,14 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
 #  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
@@ -1175,6 +1182,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #  sample['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_pseudoscalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_pseudoscalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
+#  
 #  sample['TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-1_Mphi-1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1191,30 +1199,30 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #  sample['TTbarDMJets_scalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['TTbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#]
-#TriggerMatchAnalyzer.processName = 'PAT'
+]
+TriggerMatchAnalyzer.processName = 'PAT'
 
 
 #### DATA ###
-selectedComponents = [
- ###Run2015D PromptReco
- #sample['DoubleEG_Run2015D-PromptReco-v4'],
- #sample['DoubleMuon_Run2015D-PromptReco-v4'],
- sample['MET_Run2015D-PromptReco-v4'],
- sample['SingleElectron_Run2015D-PromptReco-v4'],
- sample['SingleMuon_Run2015D-PromptReco-v4'],
-#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+#selectedComponents = [
+# ###Run2015D PromptReco
+# #sample['DoubleEG_Run2015D-PromptReco-v4'],
+# #sample['DoubleMuon_Run2015D-PromptReco-v4'],
+# sample['MET_Run2015D-PromptReco-v4'],
+# sample['SingleElectron_Run2015D-PromptReco-v4'],
+# sample['SingleMuon_Run2015D-PromptReco-v4'],
+##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 
- ###Run2015C O5Oct2015
- #sample['DoubleEG_Run2015C-05Oct2015-v1'],
- #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
- sample['MET_Run2015C-05Oct2015-v1'],
- sample['SingleElectron_Run2015C-05Oct2015-v1'],
- sample['SingleMuon_Run2015C-05Oct2015-v1'],
-#  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
-]
-filterAnalyzer.processName = 'RECO'
-TriggerMatchAnalyzer.processName = 'RECO'
+# ###Run2015C O5Oct2015
+# #sample['DoubleEG_Run2015C-05Oct2015-v1'],
+# #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+# sample['MET_Run2015C-05Oct2015-v1'],
+# sample['SingleElectron_Run2015C-05Oct2015-v1'],
+# sample['SingleMuon_Run2015C-05Oct2015-v1'],
+##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
+#]
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'RECO'
 
 #### DATA ###
 #selectedComponents = [

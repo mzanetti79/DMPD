@@ -94,6 +94,11 @@ electronType = NTupleObjectType("electron", baseObjectTypes = [ particleType ], 
     NTupleVariable("dz",  lambda x : x.dz(), float, help="Lepton dz"),
 ])
 
+jetSlimType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("flavour", lambda x : x.hadronFlavour(), int,     mcOnly=False, help="flavour of the ghost hadron clustered inside the jet"),
+    NTupleVariable("CSV",   lambda x : x.bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags'), float, help="Jet CSV-IVF v2 discriminator"),
+])
+
 jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
