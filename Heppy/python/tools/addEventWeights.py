@@ -308,9 +308,13 @@ def processFile(dir_name, verbose=False):
         CSV[i] = array('f', [1.0])
         CSVUp[i] = array('f', [1.0])
         CSVDown[i] = array('f', [1.0])
-    bCSV = array('f', [1.0])
-    bCSVUp = array('f', [1.0])
-    bCSVDown = array('f', [1.0])
+    subjetCSV = {}
+    subjetCSVUp = {}
+    subjetCSVDown = {}
+    for i in range(2):
+        subjetCSV[i] = array('f', [1.0])
+        subjetCSVUp[i] = array('f', [1.0])
+        subjetCSVDown[i] = array('f', [1.0])
     # Recoil Variables
     cormet_pt         = array('f', [0.0])  
     cormet_phi        = array('f', [0.0])  
@@ -385,6 +389,10 @@ def processFile(dir_name, verbose=False):
                 CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVR', CSV[i], 'bjet1_CSVR/F')
                 CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRUp', CSVUp[i], 'bjet1_CSVRUp/F')
                 CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRDown', CSVDown[i], 'bjet1_CSVRDown/F')
+            for i in range(2):
+                subjetCSVBranch[i] = new_tree.Branch('fatjet1_CSVR%d' % (i+1), subjetCSV[i], 'fatjet1_CSVR%d/F' % (i+1))
+                subjetCSVUpBranch[i] = new_tree.Branch('fatjet1_CSVR%dUp' % (i+1), subjetCSVUp[i], 'fatjet1_CSVR%dUp/F' % (i+1))
+                subjetCSVDownBranch[i] = new_tree.Branch('fatjet1_CSVR%dDown' % (i+1), subjetCSVDown[i], 'fatjet1_CSVR%dDown/F' % (i+1))
             cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
             cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
             cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
@@ -411,8 +419,10 @@ def processFile(dir_name, verbose=False):
                 
                 nBtagJets[0] = 0
                 for i in range(njets+nbjets):
-                    csv = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -999)
-                    CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
+                    CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -99)
+                for i in range(2):
+                    subjetCSV[i] = subjetCSVUp[i] = subjetCSVDown[i] = getattr(obj, 'fatjet1_CSV%d' % (i+1), -99)
+                
                 
                 # Weights
                 if isMC:
@@ -534,8 +544,19 @@ def processFile(dir_name, verbose=False):
                             sfDown[i] = reader['M'][-1].eval(fl, eta, pt)
                             if csv>=workingpoint[2]: nbjets += 1
                     
-                    
-                    
+                    # Subjet reshaping
+                    for i in range(2):
+                        pt = getattr(obj, 'fatjet1_pt%d' % (i+1), -1)
+                        eta = getattr(obj, 'fatjet1_eta%d' % (i+1), -1)
+                        flav = getattr(obj, 'fatjet1_flavour%d' % (i+1), -1)
+                        csv = getattr(obj, 'fatjet1_CSV%d' % (i+1), -1)
+                        pt = min(pt, 669)
+                        if abs(flav) == 5: fl = 0
+                        elif abs(flav) == 4: fl = 1
+                        else: fl = 2
+                        subjetCSV[i] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        subjetCSVUp[i] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        subjetCSVDown[i] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                     
                     
                     # Calculate weight
@@ -772,6 +793,10 @@ def processFile(dir_name, verbose=False):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
                     CSVDownBranch[i].Fill()
+                for i in range(2):
+                    subjetCSVBranch[i].Fill()
+                    subjetCSVUpBranch[i].Fill()
+                    subjetCSVDownBranch[i].Fill()
                 cormet_ptBranch.Fill()
                 cormet_phiBranch.Fill()
                 cormet_ptScaleUpBranch.Fill()
