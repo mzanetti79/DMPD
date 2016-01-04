@@ -159,7 +159,7 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     #NTupleVariable("rawPt",  lambda x : x.pt()*x.rawFactor(), help="p_{T} before JEC"),
     #NTupleVariable("ptUnc",  lambda x : x.pt()*x.jetEnergyCorrUncertainty(), help="JEC uncertainty"),
     NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Up"),
-    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Down"),
+    NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESDown", 0), float, help="JEC uncertainty Down"),
     NTupleVariable("chf",    lambda x : x.chargedHadronEnergyFraction() , float, mcOnly=False,help="Jet charged hadron energy fraction"),
     NTupleVariable("nhf",    lambda x : x.neutralHadronEnergyFraction() , float, mcOnly=False,help="Jet neutral hadron energy fraction"),
     NTupleVariable("phf",    lambda x : x.neutralEmEnergyFraction() , float, mcOnly=False,help="Jet neutral electromagnetic energy fraction"),
