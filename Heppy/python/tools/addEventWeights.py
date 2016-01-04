@@ -41,7 +41,7 @@ target      = options.target
 json_path   = options.json
 verboseon   = options.verbose
 
-numberOfJets = {'ZCR' : 3, 'WCR' : 4, 'TCR' : 3, 'SR': 3}
+numberOfJets = {'ZCR' : 3, 'WCR' : 4, 'TCR' : 3, 'SR': 4}
 
 import json
 
@@ -308,6 +308,9 @@ def processFile(dir_name, verbose=False):
         CSV[i] = array('f', [1.0])
         CSVUp[i] = array('f', [1.0])
         CSVDown[i] = array('f', [1.0])
+    bCSV = array('f', [1.0])
+    bCSVUp = array('f', [1.0])
+    bCSVDown = array('f', [1.0])
     # Recoil Variables
     cormet_pt         = array('f', [0.0])  
     cormet_phi        = array('f', [0.0])  
@@ -342,6 +345,7 @@ def processFile(dir_name, verbose=False):
         elif obj.IsA().InheritsFrom('TTree'):
             nev = obj.GetEntriesFast()
             njets = numberOfJets[obj.GetName()] if obj.GetName() in numberOfJets else 0 #FIXME
+            nbjets = 1 if hasattr(obj, 'bjet1_CSV') else 0
             new_file.cd()
             new_tree = obj.CloneTree(-1, 'fast')
             # New branches
@@ -377,10 +381,10 @@ def processFile(dir_name, verbose=False):
             CSVBranch = {}
             CSVUpBranch = {}
             CSVDownBranch = {}
-            for i in range(njets):
-                CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1))
-                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1))
-                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1))
+            for i in range(njets+nbjets):
+                CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVR', CSV[i], 'bjet1_CSVR/F')
+                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRUp', CSVUp[i], 'bjet1_CSVRUp/F')
+                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRDown', CSVDown[i], 'bjet1_CSVRDown/F')
             cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
             cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
             cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
@@ -406,8 +410,8 @@ def processFile(dir_name, verbose=False):
                 electronWeight[0] = electronWeightUp[0] = electronWeightDown[0] = muonWeight[0] = muonWeightUp[0] = muonWeightDown[0] = 1.
                 
                 nBtagJets[0] = 0
-                for i in range(njets):
-                    csv = getattr(obj, 'jet%d_CSV' % (i+1), -999)
+                for i in range(njets+nbjets):
+                    csv = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -999)
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = csv
                 
                 # Weights
@@ -508,11 +512,11 @@ def processFile(dir_name, verbose=False):
                     sf = [1]*3
                     sfUp = [1]*3
                     sfDown = [1]*3
-                    for i in range(njets):
-                        pt = getattr(obj, 'jet%d_pt' % (i+1), -1)
-                        eta = getattr(obj, 'jet%d_eta' % (i+1), -1)
-                        flav = getattr(obj, 'jet%d_flavour' % (i+1), -1)
-                        csv = getattr(obj, 'jet%d_CSV' % (i+1), -1)
+                    for i in range(njets+nbjets):
+                        pt = getattr(obj, 'jet%d_pt' % (i+1) if i<njets else 'bjet1_pt', -1)
+                        eta = getattr(obj, 'jet%d_eta' % (i+1) if i<njets else 'bjet1_eta', -1)
+                        flav = getattr(obj, 'jet%d_flavour' % (i+1) if i<njets else 'bjet1_flavour', -1)
+                        csv = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else 'bjet1_CSV', -1)
                         pt = min(pt, 669)
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
@@ -523,13 +527,17 @@ def processFile(dir_name, verbose=False):
                         CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
                         CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
-                        if CSV[i][0] > workingpoint[2]: nBtagJets[0] += 1
+                        if CSV[i][0] > workingpoint[2] and i<njets: nBtagJets[0] += 1
                         if i<3:
                             sf[i] = reader['M'][0].eval(fl, eta, pt)
                             sfUp[i] = reader['M'][1].eval(fl, eta, pt)
                             sfDown[i] = reader['M'][-1].eval(fl, eta, pt)
                             if csv>=workingpoint[2]: nbjets += 1
-                        
+                    
+                    
+                    
+                    
+                    
                     # Calculate weight
                     if njets <= 0:
                         btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
@@ -656,11 +664,11 @@ def processFile(dir_name, verbose=False):
                             
                             if applyrecoil:
                                 ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
-                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
-                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,njets)        
-                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,njets)        
-                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,njets)        
-                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,njets)   
+                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,obj.nJets)        
+                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,obj.nJets)        
+                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,obj.nJets)        
+                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,obj.nJets)        
+                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,obj.nJets)   
                                 if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                                     ### correct fakeMET only in ZCR and WCR (and TCR)
                                     ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
@@ -670,11 +678,11 @@ def processFile(dir_name, verbose=False):
                                     lepphi    = ROOT.Double(0.)
                                     Upar      = ROOT.Double(0.)
                                     Uper      = ROOT.Double(0.)
-                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,njets)        
-                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,njets)        
-                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,njets)   
+                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,obj.nJets)   
                                 pass
                             pass
                         pass
@@ -760,7 +768,7 @@ def processFile(dir_name, verbose=False):
                 btagWeightUpBranch.Fill()
                 btagWeightDownBranch.Fill()
                 nBtagJetsBranch.Fill()
-                for i in range(njets):
+                for i in range(njets+nbjets):
                     CSVBranch[i].Fill()
                     CSVUpBranch[i].Fill()
                     CSVDownBranch[i].Fill()
