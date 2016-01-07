@@ -950,7 +950,7 @@ for d in os.listdir(origin):
     #if not ('_HT-' in d): continue
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
-    if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
+    #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
