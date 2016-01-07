@@ -138,7 +138,10 @@ def returnReshapedDiscr(f, discr, pt, eta, sigma=''):
     
     y0 = returnNewWorkingPoint(f, i0, pt, eta, sigma)
     y1 = returnNewWorkingPoint(f, i1, pt, eta, sigma)
-    return y0 + (discr-x0)*((y1-y0)/(x1-x0))
+    d = y0 + (discr-x0)*((y1-y0)/(x1-x0))
+    if d < 0.: d = 0.
+    if d > 1.: d = 1.
+    return d
 
 ### RECOIL CORRECTIONS SETUP ###
 
@@ -300,6 +303,7 @@ def processFile(dir_name, verbose=False):
     btagWeightUp = array('f', [1.0])
     btagWeightDown = array('f', [1.0])
     nBtagJets = array('f', [1.0])
+    nBtagSubJets = array('f', [1.0])
     # Lists of arrays do not work #@!
     CSV = {}
     CSVUp = {}
@@ -389,10 +393,14 @@ def processFile(dir_name, verbose=False):
                 CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVR', CSV[i], 'bjet1_CSVR/F')
                 CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRUp', CSVUp[i], 'bjet1_CSVRUp/F')
                 CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRDown', CSVDown[i], 'bjet1_CSVRDown/F')
+            subjetCSVBranch = {}
+            subjetCSVUpBranch = {}
+            subjetCSVDownBranch = {}
             for i in range(2):
                 subjetCSVBranch[i] = new_tree.Branch('fatjet1_CSVR%d' % (i+1), subjetCSV[i], 'fatjet1_CSVR%d/F' % (i+1))
                 subjetCSVUpBranch[i] = new_tree.Branch('fatjet1_CSVR%dUp' % (i+1), subjetCSVUp[i], 'fatjet1_CSVR%dUp/F' % (i+1))
                 subjetCSVDownBranch[i] = new_tree.Branch('fatjet1_CSVR%dDown' % (i+1), subjetCSVDown[i], 'fatjet1_CSVR%dDown/F' % (i+1))
+            nBtagSubJetsBranch = new_tree.Branch('fatjet1_nBtag', nBtagSubJets, 'fatjet1_nBtag/F')
             cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
             cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
             cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
@@ -417,11 +425,11 @@ def processFile(dir_name, verbose=False):
                 triggerMuonWeight[0] = triggerMuonWeightUp[0] = triggerMuonWeightDown[0] = triggerElectronWeight[0] = triggerElectronWeightUp[0] = triggerElectronWeightDown[0] = triggerMETWeight[0] = triggerMETWeightUp[0] = triggerMETWeightDown[0] = 1.
                 electronWeight[0] = electronWeightUp[0] = electronWeightDown[0] = muonWeight[0] = muonWeightUp[0] = muonWeightDown[0] = 1.
                 
-                nBtagJets[0] = 0
+                nBtagJets[0] = nBtagSubJets[0] = 0
                 for i in range(njets+nbjets):
                     CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -99)
                 for i in range(2):
-                    subjetCSV[i] = subjetCSVUp[i] = subjetCSVDown[i] = getattr(obj, 'fatjet1_CSV%d' % (i+1), -99)
+                    subjetCSV[i][0] = subjetCSVUp[i][0] = subjetCSVDown[i][0] = getattr(obj, 'fatjet1_CSV%d' % (i+1), -99)
                 
                 
                 # Weights
@@ -518,7 +526,7 @@ def processFile(dir_name, verbose=False):
                     
                     ''' BTAGGING '''
                     # Reshaping
-                    nbjets = 0
+                    nbtagjets = 0
                     sf = [1]*3
                     sfUp = [1]*3
                     sfDown = [1]*3
@@ -542,7 +550,7 @@ def processFile(dir_name, verbose=False):
                             sf[i] = reader['M'][0].eval(fl, eta, pt)
                             sfUp[i] = reader['M'][1].eval(fl, eta, pt)
                             sfDown[i] = reader['M'][-1].eval(fl, eta, pt)
-                            if csv>=workingpoint[2]: nbjets += 1
+                            if csv>=workingpoint[2]: nbtagjets += 1
                     
                     # Subjet reshaping
                     for i in range(2):
@@ -554,16 +562,17 @@ def processFile(dir_name, verbose=False):
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
-                        subjetCSV[i] = returnReshapedDiscr(fl, csv, pt, eta, 0)
-                        subjetCSVUp[i] = returnReshapedDiscr(fl, csv, pt, eta, +1)
-                        subjetCSVDown[i] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        subjetCSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        subjetCSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        subjetCSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        if subjetCSV[i][0] > workingpoint[2]: nBtagSubJets[0] += 1
                     
                     
                     # Calculate weight
                     if njets <= 0:
                         btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
                     elif njets == 1:
-                        if nbjets == 0:
+                        if nbtagjets == 0:
                             btagWeight[0] *= (1.-sf[0])
                             btagWeightUp[0] *= (1.-sfUp[0])
                             btagWeightDown[0] *= (1.-sfDown[0])
@@ -572,11 +581,11 @@ def processFile(dir_name, verbose=False):
                             btagWeightUp[0] *= sfUp[0]
                             btagWeightDown[0] *= sfDown[0]
                     elif njets == 2:
-                        if nbjets == 0:
+                        if nbtagjets == 0:
                             btagWeight[0] *= (1.-sf[0])*(1.-sf[1])
                             btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])
                             btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])
-                        elif nbjets == 1:
+                        elif nbtagjets == 1:
                             btagWeight[0] *= (1.-sf[0])*sf[1] + sf[0]*(1.-sf[1])
                             btagWeightUp[0] *= (1.-sfUp[0])*sfUp[1] + sfUp[0]*(1.-sfUp[1])
                             btagWeightDown[0] *= (1.-sfDown[0])*sfDown[1] + sfDown[0]*(1.-sfDown[1])
@@ -585,15 +594,15 @@ def processFile(dir_name, verbose=False):
                             btagWeightUp[0] *= sfUp[0]*sfUp[1]
                             btagWeightDown[0] *= sfDown[0]*sfDown[1]
                     else:
-                        if nbjets == 0:
+                        if nbtagjets == 0:
                             btagWeight[0] *= (1.-sf[0])*(1.-sf[1])*(1.-sf[2])
                             btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])*(1.-sfUp[2])
                             btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])*(1.-sfDown[2])
-                        elif nbjets == 1:
+                        elif nbtagjets == 1:
                             btagWeight[0] *= sf[0]*(1.-sf[1])*(1.-sf[2]) + sf[1]*(1.-sf[0])*(1.-sf[2]) + sf[2]*(1.-sf[0])*(1.-sf[1])
                             btagWeightUp[0] *= sfUp[0]*(1.-sfUp[1])*(1.-sfUp[2]) + sfUp[1]*(1.-sfUp[0])*(1.-sfUp[2]) + sfUp[2]*(1.-sfUp[0])*(1.-sfUp[1])
                             btagWeightDown[0] *= sfDown[0]*(1.-sfDown[1])*(1.-sfDown[2]) + sfDown[1]*(1.-sfDown[0])*(1.-sfDown[2]) + sfDown[2]*(1.-sfDown[0])*(1.-sfDown[1])
-                        elif nbjets == 2:
+                        elif nbtagjets == 2:
                             btagWeight[0] *= sf[0]*sf[1]*(1.-sf[2]) + sf[0]*sf[2]*(1.-sf[1]) + sf[1]*sf[2]*(1.-sf[0])
                             btagWeightUp[0] *= sfUp[0]*sfUp[1]*(1.-sfUp[2]) + sfUp[0]*sfUp[2]*(1.-sfUp[1]) + sfUp[1]*sfUp[2]*(1.-sfUp[0])
                             btagWeightDown[0] *= sfDown[0]*sfDown[1]*(1.-sfDown[2]) + sfDown[0]*sfDown[2]*(1.-sfDown[1]) + sfDown[1]*sfDown[2]*(1.-sfDown[0])
@@ -743,7 +752,7 @@ def processFile(dir_name, verbose=False):
                         fakecormet_ptResDown[0]  = obj.fakemet_pt               
 
                     # Check JSON
-                    if isJson_file and not isJSON(obj.run, obj.lumi): xsWeight[0] = 0.
+                    if isJson_file and not isJSON(obj.run, obj.lumi) and not 'XZh' in obj.GetName(): xsWeight[0] = 0.
                     # Filters
                     elif not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_HBHENoiseIsoFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
                     # Filter by PD
@@ -848,6 +857,7 @@ for d in os.listdir(origin):
     #if not ('_HT-' in d): continue
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
+    #if not 'ZprimeToZhToZinvhbb_narrow_M-1000' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
