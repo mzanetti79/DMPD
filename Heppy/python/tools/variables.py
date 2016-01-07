@@ -381,7 +381,71 @@ var_template = {
       "max" : 50,
       "log" : False,
     },
-
+    
+    # bjet
+    "bjet1_pt": {
+      "title" : "highest CSV jet p_{T} (GeV)",
+      "nbins" : 40,
+      "min" : 0,
+      "max" : 800,
+      "log" : True,
+    },
+    "bjet1_eta": {
+      "title" : "highest CSV jet #eta",
+      "nbins" : 30,
+      "min" : -3,
+      "max" : 3,
+      "log" : False,
+    },
+    "bjet1_phi": {
+      "title" : "highest CSV jet #varphi",
+      "nbins" : 60,
+      "min" : -3.15,
+      "max" : 3.15,
+      "log" : False,
+    },
+    "bjet1_mass": {
+      "title" : "highest CSV jet mass (GeV)",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 150,
+      "log" : False,
+    },
+    "bjet1_CSV": {
+      "title" : "highest CSV jet CSV",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 1,
+      "log" : False,
+    },
+    "bjet1_CSVR": {
+      "title" : "highest CSV jet CSV",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 1,
+      "log" : False,
+    },
+    "bjet1_CSVRUp": {
+      "title" : "highest CSV jet CSV (+1 #sigma)",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 1,
+      "log" : False,
+    },
+    "bjet1_CSVRDown": {
+      "title" : "highest CSV jet CSV (-1 #sigma)",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 1,
+      "log" : False,
+    },
+    "bjet1_flavour": {
+      "title" : "highest CSV jet flavour",
+      "nbins" : 25,
+      "min" : -0.5,
+      "max" : 24.5,
+      "log" : False,
+    },
     
     # Fatjets
     "fatjet[N]_pt": {
