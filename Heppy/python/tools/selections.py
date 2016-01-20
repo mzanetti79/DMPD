@@ -15,7 +15,7 @@ selection = {
     # SR
     "SR1" : "triggerMET && nElectrons==0 && nMuons==0 && cormet_pt>200 && minDeltaPhi>0.5 && cat1",
     "SR2" : "triggerMET && nElectrons==0 && nMuons==0 && cormet_pt>200 && minDeltaPhi>0.5 && cat2",
-    "SR"  : "triggerMET && nElectrons==0 && nMuons==0 && cormet_pt>200 && minDeltaPhi>0.5 && (cat1 || cat2)",
+    #"SR"  : "triggerMET && nElectrons==0 && nMuons==0 && cormet_pt>200 && minDeltaPhi>0.5 && (cat1 || cat2)",
     # W
     "WeInc" : "triggerIsoEle && nElectrons==1 && lepton1_isElectron && lepton1_tightId && lepton1_pt>30 && W_tmass>50 && cormet_pt>60",
     "WmInc" : "triggerIsoMuo && nMuons==1 && lepton1_isMuon && lepton1_tightId && lepton1_pt>30 && lepton1_relIso04<0.15 && W_tmass>50",
@@ -49,16 +49,17 @@ selection = {
     # XZh preselections
     "singleEle" : "isWtoEN && lepton1_pt>135 && lepton1_tightId && W_dPhi<2 && fatjet1_dPhi_met>2 && met_pt>80 && nTaus==0", # && lepton1_relIso03<0.15 
     "singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_relIso04<0.15 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",
-    "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_vetoId && lepton2_vetoId", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1
+    "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_vetoId && lepton2_vetoId", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
     "doubleMuo" : "isZtoMM && (lepton1_highptId || lepton2_highptId) && lepton1_pt>55 && lepton2_pt>20 && lepton1_miniIso<0.2 && lepton2_miniIso<0.2",
     "noLeptons" : "met_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",# && fatjet1_dPhi_met>2 && nJetsNoFatJet100<=2 && minDeltaPhi>2
     # XZh
     "Zcut" : "Z_pt>200 && Z_mass>70 && Z_mass<110 && fatjet1_pt>200",
     "Wcut" : "kW_pt>200 && fatjet1_pt>200",
-    "Topcut" : "bjet1_CSVR>0.605",
+    "Topcut" : "bjet1_CSVR>0.890",
     "TopVetocut" : "bjet1_CSVR<0.605",
     "SRcut" : "(fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135)",
     "SBcut" : "((fatjet1_prunedMassCorr>30 && fatjet1_prunedMassCorr<65) || (fatjet1_prunedMassCorr>135))", # && fatjet1_prunedMassCorr<300
+    "VRcut" : "(fatjet1_prunedMassCorr>65 && fatjet1_prunedMassCorr<105)",
     "LSBcut" : "fatjet1_prunedMassCorr>30 && fatjet1_prunedMassCorr<65",
     "HSBcut" : "fatjet1_prunedMassCorr>135 && fatjet1_prunedMassCorr<300",
 #    "Btag" : "(fatjet1_dR>0.3 ? fatjet1_CSV1>0.605 && fatjet1_CSV2>0.605 : fatjet1_CSV1>0.605 || fatjet1_CSV2>0.605)",
@@ -111,11 +112,14 @@ selection = {
     "XZhnnbSR"  : "triggerMET && noLeptons && TopVetocut && 1Btag && SRcut",
     "XZhnnbbSR" : "triggerMET && noLeptons && TopVetocut && 2Btag && SRcut",
     # 1 lepton, 1 additional btag
-    "XTopenbSB" : "triggerEle && singleEle && Wcut && Topcut && 1Btag && SBcut",
-    "XTopenbbSB": "triggerEle && singleEle && Wcut && Topcut && 2Btag && SBcut",
+    "XWhenbTR" : "triggerEle && singleEle && Wcut && Topcut && 1Btag && SBcut",
+    "XWhenbbTR": "triggerEle && singleEle && Wcut && Topcut && 2Btag && SBcut",
     #
-    "XTopmnbSB" : "triggerMuo && singleMuo && Wcut && Topcut && 1Btag && SBcut",
-    "XTopmnbbSB": "triggerMuo && singleMuo && Wcut && Topcut && 2Btag && SBcut",
+    "XWhmnbTR" : "triggerMuo && singleMuo && Topcut && 1Btag && SBcut",
+    "XWhmnbbTR": "triggerMuo && singleMuo && Topcut && 2Btag && SBcut",
+    # 0 lepton, 1 additional btag
+    "XZhnnbTR" : "triggerMET && noLeptons && Topcut && 1Btag && SBcut",
+    "XZhnnbbTR": "triggerMET && noLeptons && Topcut && 2Btag && SBcut",
     #
     "XZheebbNoHm" : "preEle && Zcut && fatjet1_pt>200 && Btag",
     "XZhmmbbNoHm" : "preMuo && Zcut && fatjet1_pt>200 && Btag",
