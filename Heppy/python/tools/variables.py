@@ -710,15 +710,15 @@ var_template = {
       "max" : 1.5,
       "log" : False,
     },
-    "lepton[N]_ip2d": {
-      "title" : "lepton [N] IP_{2D}",
+    "lepton[N]_dxy": {
+      "title" : "lepton [N] d_{xy}",
       "nbins" : 50,
       "min" : -0.02,
       "max" : 0.02,
       "log" : True,
     },
-    "lepton[N]_ip3d": {
-      "title" : "lepton [N] IP_{3D}",
+    "lepton[N]_dz": {
+      "title" : "lepton [N] d_{z}",
       "nbins" : 50,
       "min" : -0.05,
       "max" : 0.05,
