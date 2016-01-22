@@ -118,7 +118,14 @@ class PreselectionAnalyzer( Analyzer ):
         
         jet.ptJESUp = jet.pt() * corrUp * jet.rawFactor()
         jet.ptJESDown = jet.pt() * corrDown * jet.rawFactor()
-    
+        
+        if jet.hasUserFloat("ak8PFJetsCHSPrunedMassCorr"):
+            jet.addUserFloat("ak8PFJetsCHSPrunedMassCorrJESUp",   jet.userFloat("ak8PFJetsCHSPrunedMassCorr") * corrUp   * jet.rawFactor())
+            jet.addUserFloat("ak8PFJetsCHSPrunedMassCorrJESDown", jet.userFloat("ak8PFJetsCHSPrunedMassCorr") * corrDown * jet.rawFactor())
+
+        if jet.hasUserFloat("ak8PFJetsCHSSoftDropMassCorr"):
+            jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorrJESUp",   jet.userFloat("ak8PFJetsCHSSoftDropMassCorr") * corrUp   * jet.rawFactor())
+            jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorrJESDown", jet.userFloat("ak8PFJetsCHSSoftDropMassCorr") * corrDown * jet.rawFactor())
     ##########
     
     def addLeptonVariables(self, event):
@@ -127,10 +134,10 @@ class PreselectionAnalyzer( Analyzer ):
             l.isHEEP = self.isHEEP(l, v)
             l.isCustomTracker = self.isCustomTracker(l, v)
             l.deltaPhi_met = abs(deltaPhi(l.phi(), event.met.phi()))
-            l.dxyPV = l.gsfTrack().dxy(v) if l.isElectron() else l.bestTrack().dxy(v)
-            l.dzPV  = l.gsfTrack().dz(v)  if l.isElectron() else l.bestTrack().dz(v)
-    
-    
+            l.dxyPV  = l.gsfTrack().dxy(v) if l.isElectron() else l.bestTrack().dxy(v)
+            l.dzPV   = l.gsfTrack().dz(v)  if l.isElectron() else l.bestTrack().dz(v)
+            l.trkIso = l.isolationR03().sumPt/l.pt() if l.isMuon() else -1.
+
     def addJetVariables(self, event):
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))

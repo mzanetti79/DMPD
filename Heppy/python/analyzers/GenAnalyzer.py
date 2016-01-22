@@ -21,6 +21,7 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenPhi1mass"] = ROOT.TH1F("GenPhi1mass", ";m_{X} [GeV]", 1000, 0., 5000.)
             self.Hist["GenPhi1pt"] = ROOT.TH1F("GenPhi1pt", ";X p_{T} [GeV]", 500, 0., 1000.)
             self.Hist["GenPhi1eta"] = ROOT.TH1F("GenPhi1eta", ";#Phi #eta", 50, -5, 5.)
+            self.Hist["GenPhi1y"] = ROOT.TH1F("GenPhi1y", ";#Phi y", 50, -5, 5.)
             self.Hist["GenChi1mass"] = ROOT.TH1F("GenChi1mass", ";#chi_{1} mass [GeV]", 1000, 0., 1000.)
             self.Hist["GenChi1pt"] = ROOT.TH1F("GenChi1pt", ";#chi_{1} p_{T} [GeV]", 500, 0., 500.)
             self.Hist["GenChi1eta"] = ROOT.TH1F("GenChi1eta", ";#chi_{1} #eta", 50, -5, 5.)
@@ -33,14 +34,17 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenZmass"] = ROOT.TH1F("GenZmass", ";m_{Z} [GeV]", 150, 0., 150.)
             self.Hist["GenZpt"] = ROOT.TH1F("GenZpt", ";Z p_{T} [GeV]", 2500, 0., 2500.)
             self.Hist["GenZeta"] = ROOT.TH1F("GenZeta", ";Z #eta", 50, -5, 5.)
+            self.Hist["GenZy"] = ROOT.TH1F("GenZy", ";Z y", 50, -5, 5.)
             self.Hist["GenZdR"] = ROOT.TH1F("GenZdR", ";Leptons #Delta R", 60, 0, 3.)
             self.Hist["GenWmass"] = ROOT.TH1F("GenWmass", ";m_{W} [GeV]", 150, 0., 150.)
             self.Hist["GenWpt"] = ROOT.TH1F("GenWpt", ";W p_{T} [GeV]", 2500, 0., 2500.)
             self.Hist["GenWeta"] = ROOT.TH1F("GenWeta", ";W #eta", 50, -5, 5.)
+            self.Hist["GenWy"] = ROOT.TH1F("GenWy", ";W y", 50, -5, 5.)
             self.Hist["GenHdecay"] = ROOT.TH1F("GenHdecay", ";H daughter pdgId", 25, 0.5, 25.5)
             self.Hist["GenHmass"] = ROOT.TH1F("GenHmass", ";m_{H} [GeV]", 100, 120., 130.)
             self.Hist["GenHpt"] = ROOT.TH1F("GenHpt", ";H p_{T} [GeV]", 250, 0., 2500.)
             self.Hist["GenHeta"] = ROOT.TH1F("GenHeta", ";H #eta", 50, -5, 5.)
+            self.Hist["GenHy"] = ROOT.TH1F("GenHy", ";H y", 50, -5, 5.)
             self.Hist["GenHdR"] = ROOT.TH1F("GenHdR", ";b-quarks #Delta R", 50, 0, 5.)
             self.Hist["GenHdPhi"] = ROOT.TH1F("GenHdPhi", ";b-quarks #Delta #varphi", 50, 0, 3.15)
             self.Hist["GenLepton1pt"] = ROOT.TH1F("GenLepton1pt", ";Lepton 1 p_{T} [GeV]", 250, 0., 2500.)
@@ -73,6 +77,7 @@ class GenAnalyzer( Analyzer ):
     def process(self, event):
         
         event.genV = ROOT.reco.GenParticle()
+        event.gennu = ROOT.reco.GenParticle()
         event.genmet = ROOT.reco.Particle.LorentzVector()
         event.genChi = []
         event.genLeptFromW   = []
@@ -110,6 +115,11 @@ class GenAnalyzer( Analyzer ):
 
         if hasattr(event, "genVBosons") and len(event.genVBosons) > 0:
             event.genV = event.genVBosons[0]
+            # check for gen neutrino from W-> l nu
+            if abs(event.genV.pdgId()) == 24:
+                for d in realGenDaughters(event.genVBosons[0]):
+                    if abs(d.pdgId()) in [12, 14, 16]: 
+                        event.gennu = d
         else:
             leptons = [x for x in event.genParticles if abs(x.pdgId())>10 and abs(x.pdgId())<17 and x.status()==23]
             if len(leptons) >=2:
@@ -128,6 +138,7 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenPhi1mass"].Fill(event.genPhi.mass(), event.weight)
             self.Hist["GenPhi1pt"].Fill(event.genPhi.pt(), event.weight)
             self.Hist["GenPhi1eta"].Fill(event.genPhi.eta(), event.weight)
+            self.Hist["GenPhi1y"].Fill(event.genPhi.rapidity(), event.weight)
         if len(event.genChi) >= 2:
             i1, i2 = [0, 1] if event.genChi[0].pt() > event.genChi[1].pt() else [1, 0]
             self.Hist["GenChi1mass"].Fill(event.genChi[i1].mass(), event.weight)
@@ -137,17 +148,19 @@ class GenAnalyzer( Analyzer ):
             self.Hist["GenChi2pt"].Fill(event.genChi[i1].pt(), event.weight)
             self.Hist["GenChi2eta"].Fill(event.genChi[i1].eta(), event.weight)
             self.Hist["GenChi12dR"].Fill(deltaR(event.genChi[0].eta(), event.genChi[0].phi(), event.genChi[1].eta(), event.genChi[1].phi()), event.weight)
-        # Z
+        # Z/W
         if hasattr(event, "genVBosons"):
             if len(event.genVBosons) > 0:
                 if event.genVBosons[0].pdgId() == 23:
                     self.Hist["GenZmass"].Fill(event.genVBosons[0].mass(), event.weight)
                     self.Hist["GenZpt"].Fill(event.genVBosons[0].pt(), event.weight)
                     self.Hist["GenZeta"].Fill(event.genVBosons[0].eta(), event.weight)
+                    self.Hist["GenZy"].Fill(event.genVBosons[0].rapidity(), event.weight)
                 elif event.genVBosons[0].pdgId() == 24:
                     self.Hist["GenWmass"].Fill(event.genVBosons[0].mass(), event.weight)
                     self.Hist["GenWpt"].Fill(event.genVBosons[0].pt(), event.weight)
                     self.Hist["GenWeta"].Fill(event.genVBosons[0].eta(), event.weight)
+                    self.Hist["GenWy"].Fill(event.genVBosons[0].rapidity(), event.weight)
                     # check the W->lv decay
                     for d in realGenDaughters(event.genVBosons[0]):
                         # save only if is leptonic
@@ -168,6 +181,7 @@ class GenAnalyzer( Analyzer ):
                 self.Hist["GenHmass"].Fill(event.genHiggsBosons[0].mass(), event.weight)
                 self.Hist["GenHpt"].Fill(event.genHiggsBosons[0].pt(), event.weight)
                 self.Hist["GenHeta"].Fill(event.genHiggsBosons[0].eta(), event.weight)
+                self.Hist["GenHy"].Fill(event.genHiggsBosons[0].rapidity(), event.weight)
         # Leptons from Z
         if hasattr(event, "genleps"):
             if len(event.genleps) >= 2:

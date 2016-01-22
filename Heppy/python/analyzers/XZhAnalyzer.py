@@ -386,7 +386,17 @@ class XZhAnalyzer( Analyzer ):
 
 #        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
 #        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
-    
+
+    def addTrackerIsolation(self, event):
+        for i, l in enumerate(event.highptLeptons):
+            if not l.isMuon():  continue
+            for j, k  in enumerate(event.highptLeptons):
+                if not k.isMuon():  continue
+                if l == k :         continue
+                if deltaR(l.eta(), l.phi(), k.eta(), k.phi()) > 0.3:    continue
+                if not k.innerTrack().isNonnull():                      continue
+                l.trkIso = max( (l.isolationR03().sumPt - k.innerTrack().pt() ) / l.pt(), 0.)
+
     def process(self, event):
         event.isXZh = False
         event.isZ2EE = False
@@ -563,7 +573,6 @@ class XZhAnalyzer( Analyzer ):
         else:
             return True
         
-        
         self.addFakeMet(event, [event.highptLeptons[0], event.highptLeptons[1]])
         
         # Z candidate
@@ -657,6 +666,8 @@ class XZhAnalyzer( Analyzer ):
         
         # Fill tree
         event.isXZh = True
+
+        self.addTrackerIsolation(event)
         
 #        # ---------- Estimate cuts ----------
 #        if event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) > 130:

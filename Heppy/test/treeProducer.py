@@ -657,6 +657,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
         #'A'         : NTupleObject('A', candidateType, help='Resonance candidate'),
     },
     collections = {
+        'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
         #'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'),
         #'genTauHadFromW'       : NTupleCollection('genTauHadFromW', genParticleType, 1, help='Generated hadronic taus from W decays'),
         #'genTauLepFromW'       : NTupleCollection('genTauLepFromW', genParticleType, 1, help='Generated leptonic taus from W decays'),
@@ -699,6 +700,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
     },
     collections = {
+        'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
         #'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'), 
         #'genTauHadFromW'       : NTupleCollection('genTauHadFromW', genParticleType, 1, help='Generated hadronic taus from W decays'), 
         #'genTauLepFromW'       : NTupleCollection('genTauLepFromW', genParticleType, 1, help='Generated leptonic taus from W decays'),
@@ -736,6 +738,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
+        'gennu'     : NTupleObject('gennu', particleType, help='Gen Neutrino'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
@@ -744,6 +747,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
     },
     collections = {
+        'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
         #'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'), 
         #'genTauHadFromW'       : NTupleCollection('genTauHadFromW', genParticleType, 1, help='Generated hadronic taus from W decays'), 
         #'genTauLepFromW'       : NTupleCollection('genTauLepFromW', genParticleType, 1, help='Generated leptonic taus from W decays'), 
@@ -782,6 +786,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
     },
     collections = {
+        'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
         #'genLeptFromW'         : NTupleCollection('genLeptFromW', genParticleType, 1, help='Generated leptons from W decays'), 
         #'genTauHadFromW'       : NTupleCollection('genTauHadFromW', genParticleType, 1, help='Generated hadronic taus from W decays'), 
         #'genTauLepFromW'       : NTupleCollection('genTauLepFromW', genParticleType, 1, help='Generated leptonic taus from W decays'), 
@@ -1228,12 +1233,12 @@ TriggerMatchAnalyzer.processName = 'PAT'
 
 #### DATA ###
 #selectedComponents = [
-# ## Run2015D
-# #sample['DoubleEG_Run2015D-05Oct2015-v1'],
-# #sample['DoubleMuon_Run2015D-05Oct2015-v1'],
-# sample['MET_Run2015D-05Oct2015-v1'],
-# sample['SingleElectron_Run2015D-05Oct2015-v1'],
-# sample['SingleMuon_Run2015D-05Oct2015-v1'],
+### Run2015D
+##sample['DoubleEG_Run2015D-05Oct2015-v1'],
+##sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+#sample['MET_Run2015D-05Oct2015-v1'],
+#sample['SingleElectron_Run2015D-05Oct2015-v1'],
+#sample['SingleMuon_Run2015D-05Oct2015-v1'],
 ##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
 #]
 #filterAnalyzer.processName = 'RECO'
@@ -1250,8 +1255,8 @@ TriggerMatchAnalyzer.processName = 'PAT'
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'PAT'
 
-#selectedComponents = [testMCCompontent,]
-#TriggerMatchAnalyzer.processName = 'PAT'
+selectedComponents = [testMCCompontent,]
+TriggerMatchAnalyzer.processName = 'PAT'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("preprocessor.py")

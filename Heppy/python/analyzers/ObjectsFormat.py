@@ -47,7 +47,8 @@ leptonType = NTupleObjectType("lepton", baseObjectTypes = [ particleType ], vari
     # Isolations with the two radia
     NTupleVariable("relIso03",  lambda x : x.relIso03, float, help="PF Rel Iso, R=0.3, pile-up corrected"),
     NTupleVariable("relIso04",  lambda x : x.relIso04, float, help="PF Rel Iso, R=0.4, pile-up corrected"),
-    NTupleVariable("miniIso", lambda x : getattr(x, "miniRelIso", -1.), float, help="Rel Mini-Iso, pile-up corrected"),
+    NTupleVariable("miniIso",   lambda x : getattr(x, "miniRelIso", -1.), float, help="Rel Mini-Iso, pile-up corrected"),
+    NTupleVariable("trkIso",    lambda x : x.trkIso, float, help="Tracker-Iso, pile-up corrected (tracks from PV only)"),
     # Cut Based Identification
     NTupleVariable("vetoId",  lambda x : getattr(x, "isCustomTracker", 0) if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto")    and ( ( x.isEB() and x.relIso03 < 0.1260 ) or  ( x.isEE() and x.relIso03 < 0.1440 ) ) ), int, help="Cut Based Veto id" ),
     NTupleVariable("looseId", lambda x : x.muonID("POG_ID_Loose")   if x.isMuon() else ( x.electronID("POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose")   and ( ( x.isEB() and x.relIso03 < 0.0893 ) or  ( x.isEE() and x.relIso03 < 0.1210 ) ) ), int, help="Cut Based Loose id" ),
@@ -140,7 +141,6 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     NTupleVariable("eta2",   lambda x : x.subjets('SoftDrop')[1].eta() if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 eta"),
     NTupleVariable("phi2",   lambda x : x.subjets('SoftDrop')[1].phi() if len(x.subjets('SoftDrop')) > 1 else -1., float, help="subJet 2 phi"),
     
-    
     NTupleVariable("dR",   lambda x : getattr(x, "dR_subjets", -1.), float, help="dR between the two subjets"),
     NTupleVariable("dPhi_met",   lambda x : getattr(x, "deltaPhi_met", -9.), float, help="dPhi between jet and met"),
     #NTupleVariable("dPhi_jet1",   lambda x : getattr(x, "deltaPhi_jet1", -9.), float, help="dPhi between jet and leading jet"),
@@ -160,6 +160,11 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     #NTupleVariable("ptUnc",  lambda x : x.pt()*x.jetEnergyCorrUncertainty(), help="JEC uncertainty"),
     NTupleVariable("ptJESUp",  lambda x : getattr(x, "ptJESUp", 0), float, help="JEC uncertainty Up"),
     NTupleVariable("ptJESDown",  lambda x : getattr(x, "ptJESDown", 0), float, help="JEC uncertainty Down"),
+    NTupleVariable("prunedMassCorrJESUp",   lambda x : x.userFloat("ak8PFJetsCHSPrunedMassCorrJESUp") if x.hasUserFloat("ak8PFJetsCHSPrunedMassCorrJESUp") else -1., float, help="Jet pruned mass corrected JEC Up"),
+    NTupleVariable("prunedMassCorrJESDown", lambda x : x.userFloat("ak8PFJetsCHSPrunedMassCorrJESDown") if x.hasUserFloat("ak8PFJetsCHSPrunedMassCorrJESDown") else -1., float, help="Jet pruned mass corrected JEC Down"),
+    NTupleVariable("softDropMassCorrJESUp",   lambda x : x.userFloat("ak8PFJetsCHSSoftDropMassCorrJESUp") if x.hasUserFloat("ak8PFJetsCHSSoftDropMassCorrJESUp") else -1., float, help="Jet SoftDrop mass corrected JEC Up"),
+    NTupleVariable("softDropMassCorrJESDown", lambda x : x.userFloat("ak8PFJetsCHSSoftDropMassCorrJESDown") if x.hasUserFloat("ak8PFJetsCHSSoftDropMassCorrJESDown") else -1., float, help="Jet SoftDrop mass corrected JEC Down"),
+
     NTupleVariable("chf",    lambda x : x.chargedHadronEnergyFraction() , float, mcOnly=False,help="Jet charged hadron energy fraction"),
     NTupleVariable("nhf",    lambda x : x.neutralHadronEnergyFraction() , float, mcOnly=False,help="Jet neutral hadron energy fraction"),
     NTupleVariable("phf",    lambda x : x.neutralEmEnergyFraction() , float, mcOnly=False,help="Jet neutral electromagnetic energy fraction"),
@@ -168,7 +173,7 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     NTupleVariable("chm",    lambda x : x.chargedHadronMultiplicity() , int, mcOnly=False,help="Jet charged hadron multiplicity"),
     NTupleVariable("npr",    lambda x : x.chargedMultiplicity()+x.neutralMultiplicity() , int, mcOnly=False,help="Jet constituents multiplicity"),
     #NTupleVariable("looseId",    lambda x : x.jetID("POG_PFID_Loose") , int, mcOnly=False,help="Jet POG Loose id"),
-    NTupleVariable("mediumId",   lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
+    #NTupleVariable("mediumId",   lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
     NTupleVariable("tightId",    lambda x : x.jetID("POG_PFID_Tight") , int, mcOnly=False,help="Jet POG Tight id"),
 ])
 
