@@ -166,6 +166,11 @@ class XZhAnalyzer( Analyzer ):
                         if miniIso:
                             self.Hist["EffElecZdR_HEEP_miniIso"].Fill(genZdR)
                             self.Hist["EffElecZpt_HEEP_miniIso"].Fill(genZpt)
+                    
+                    # Veto / Veto (SPRING15)
+                    if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto'):
+                        self.Hist["EffElecZdR_Veto"].Fill(genZdR)
+                        self.Hist["EffElecZpt_Veto"].Fill(genZpt)
                     # Loose / Loose (SPRING15)
                     if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose'):
                         self.Hist["EffElecZdR_Loose"].Fill(genZdR)
@@ -182,10 +187,7 @@ class XZhAnalyzer( Analyzer ):
                     if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Tight'):
                         self.Hist["EffElecZdR_Tight"].Fill(genZdR)
                         self.Hist["EffElecZpt_Tight"].Fill(genZpt)
-                    # Veto / Veto (SPRING15)
-                    if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto') and event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Veto'):
-                        self.Hist["EffElecZdR_Veto"].Fill(genZdR)
-                        self.Hist["EffElecZpt_Veto"].Fill(genZpt)
+                    
                 
         # Muons
         if abs(event.genleps[0].pdgId()) == 13:
@@ -216,8 +218,8 @@ class XZhAnalyzer( Analyzer ):
             # both leptons
             if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.muon2pt:
                 Zmass = (event.inclusiveLeptons[l1].p4() + event.inclusiveLeptons[l2].p4()).mass()
-                pfIso = event.inclusiveLeptons[l1].relIso04<0.20 and event.inclusiveLeptons[l2].relIso04<0.20
-                miniIso = event.inclusiveLeptons[l1].trkIso<0.1 and event.inclusiveLeptons[l2].trkIso<0.1
+                pfIso = event.inclusiveLeptons[l1].trkIso<0.1 and event.inclusiveLeptons[l2].trkIso<0.1
+                miniIso = event.inclusiveLeptons[l1].miniRelIso<0.2 and event.inclusiveLeptons[l2].miniRelIso<0.2
                 # Z
                 if Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high and event.inclusiveLeptons[l1].charge()!=event.inclusiveLeptons[l2].charge():
                     self.Hist["MuonZdR"].Fill(genZdR)
@@ -401,15 +403,20 @@ class XZhAnalyzer( Analyzer ):
 #        jet.addUserFloat("ak8PFJetsCHSPrunedMassCorr", corr*jet.userFloat("ak8PFJetsCHSPrunedMass"))
 #        jet.addUserFloat("ak8PFJetsCHSSoftDropMassCorr", corr*jet.userFloat("ak8PFJetsCHSSoftDropMass"))
 
-    def addTrackerIsolation(self, event):
-        for i, l in enumerate(event.highptLeptons):
-            if not l.isMuon():  continue
-            for j, k  in enumerate(event.highptLeptons):
-                if not k.isMuon():  continue
-                if l == k :         continue
-                if deltaR(l.eta(), l.phi(), k.eta(), k.phi()) > 0.3:    continue
-                if not k.innerTrack().isNonnull():                      continue
-                l.trkIso = max( (l.isolationR03().sumPt - k.innerTrack().pt() ) / l.pt(), 0.)
+    def fixTrackerIsolation(self, l1, l2):
+        if not l1.isMuon() or not l2.isMuon(): return True
+        if deltaR(l1.eta(), l1.phi(), l2.eta(), l2.phi()) < 0.3:
+            if l1.innerTrack().isNonnull() and l2.innerTrack().isNonnull():
+                l1.trkIso = max( (l1.trackIso().sumPt - l2.innerTrack().pt() ) / l1.pt(), 0.)
+                l2.trkIso = max( (l2.trackIso().sumPt - l1.innerTrack().pt() ) / l2.pt(), 0.)
+#        for i, l in enumerate(event.highptLeptons):
+#            if not l.isMuon():  continue
+#            for j, k  in enumerate(event.highptLeptons):
+#                if not k.isMuon():  continue
+#                if l == k :         continue
+#                if deltaR(l.eta(), l.phi(), k.eta(), k.phi()) > 0.3:    continue
+#                if not k.innerTrack().isNonnull():                      continue
+#                l.trkIso = max( (l.isolationR03().sumPt - k.innerTrack().pt() ) / l.pt(), 0.)
 
     def process(self, event):
         event.isXZh = False
@@ -543,7 +550,7 @@ class XZhAnalyzer( Analyzer ):
                         event.isZ2EE = event.inclusiveLeptons[i].isElectron()
                         event.isZ2MM = event.inclusiveLeptons[i].isMuon()
                         Zpt = Zcand.pt()
-#                        
+         
 #                        
 #                        
 #        l1, l2 = -1, -1
@@ -618,6 +625,8 @@ class XZhAnalyzer( Analyzer ):
             self.plotCustomTracker(event, event.highptLeptons[0])
             self.plotCustomTracker(event, event.highptLeptons[1])
         
+        self.fixTrackerIsolation(event.highptLeptons[0], event.highptLeptons[1])
+        
         #########################
         #    Part 2: Jets       #
         #########################
@@ -680,8 +689,6 @@ class XZhAnalyzer( Analyzer ):
         
         # Fill tree
         event.isXZh = True
-
-        self.addTrackerIsolation(event)
         
 #        # ---------- Estimate cuts ----------
 #        if event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) < 95 or event.highptFatJets[0].userFloat(self.cfg_ana.jetAlgo) > 130:
