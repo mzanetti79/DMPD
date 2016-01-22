@@ -630,6 +630,7 @@ globalDMVariables = globalEventVariables + [
     #NTupleVariable('maxCSVNoFatJet',   lambda x: getattr(x, "maxCSVNoFatJet", -1.), float, help='Maximum CSV of jets not overlapping with fat jet'),
     NTupleVariable('minDeltaPhi',      lambda x: getattr(x, "minDeltaPhi", -1.), float, help='Minimum dPhi between MET and jets'),
     NTupleVariable('minDeltaPhiNoFatJet', lambda x: getattr(x, "minDeltaPhiNoAK8", -1.), float, help='Minimum dPhi between MET and jets, AK8 jet excluded'),
+    NTupleVariable('minDeltaR',        lambda x: getattr(x, "minDeltaR", -1.), float, help='Minimum R between the lepton and jets'),
 ]
 
 
@@ -1067,14 +1068,14 @@ selectedComponents = [
 #  #sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
 #  sample['ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 #  sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
 #  sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
@@ -1255,8 +1256,8 @@ TriggerMatchAnalyzer.processName = 'PAT'
 #filterAnalyzer.processName = 'RECO'
 #TriggerMatchAnalyzer.processName = 'PAT'
 
-selectedComponents = [testMCCompontent,]
-TriggerMatchAnalyzer.processName = 'PAT'
+#selectedComponents = [testMCCompontent,]
+#TriggerMatchAnalyzer.processName = 'PAT'
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
 preprocessor = CmsswPreprocessor("preprocessor.py")
