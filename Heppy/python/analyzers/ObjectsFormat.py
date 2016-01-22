@@ -168,8 +168,8 @@ fatjetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], vari
     NTupleVariable("chm",    lambda x : x.chargedHadronMultiplicity() , int, mcOnly=False,help="Jet charged hadron multiplicity"),
     NTupleVariable("npr",    lambda x : x.chargedMultiplicity()+x.neutralMultiplicity() , int, mcOnly=False,help="Jet constituents multiplicity"),
     #NTupleVariable("looseId",    lambda x : x.jetID("POG_PFID_Loose") , int, mcOnly=False,help="Jet POG Loose id"),
-    #NTupleVariable("mediumId",    lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
-    #NTupleVariable("tightId",    lambda x : x.jetID("POG_PFID_Tight") , int, mcOnly=False,help="Jet POG Tight id"),
+    NTupleVariable("mediumId",   lambda x : x.jetID("POG_PFID_Medium") , int, mcOnly=False,help="Jet POG Medium id"),
+    NTupleVariable("tightId",    lambda x : x.jetID("POG_PFID_Tight") , int, mcOnly=False,help="Jet POG Tight id"),
 ])
 
 #subjetType = NTupleObjectType("subjet",  baseObjectTypes = [ fourVectorType ], variables = [
