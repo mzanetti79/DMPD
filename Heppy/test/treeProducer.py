@@ -523,9 +523,9 @@ from DMPD.Heppy.analyzers.XZhAnalyzer import XZhAnalyzer
 XZhAnalyzer = cfg.Analyzer(
     verbose = False,
     class_object = XZhAnalyzer,
-    elec1pt = 115.,
-    elec2pt = 35.,
-    muon1pt = 50.,
+    elec1pt = 135.,
+    elec2pt = 20.,
+    muon1pt = 55.,
     muon2pt = 20.,
     fatjet_pt = 200.,
     jetlep_dR = 0.8,
