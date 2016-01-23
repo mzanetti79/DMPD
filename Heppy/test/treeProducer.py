@@ -485,7 +485,7 @@ XCleaningAnalyzer = cfg.Analyzer(
     class_object = XCleaningAnalyzer,
     cleanTaus = True,
     cleanJets = True,
-    cleanJetsAK8 = False,
+    cleanJetsAK8 = True,
     cleanFromMuons = True,
     cleanFromElectrons = True,
     mu_clean_pt  = 20.,
@@ -900,6 +900,7 @@ sequence = [
 #    SyncAnalyzerZCR,
 #    SyncAnalyzerWCR,
     TriggerMatchAnalyzer,
+    XCleaningAnalyzer,
     PreselectionAnalyzer,
     ##### Analysis Analyzers
 #    ZeroLeptonAnalyzer,
@@ -908,7 +909,6 @@ sequence = [
 #    TwoLeptonOSSFAnalyzer,
 #    TwoLeptonOSDFAnalyzer,
     ##### Categorization Analyzers
-    XCleaningAnalyzer,
     SyncAnalyzer,
 #    CategorizationAnalyzer,
     #SRAnalyzer,
