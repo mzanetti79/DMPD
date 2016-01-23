@@ -111,6 +111,12 @@ class XCleaningAnalyzer( Analyzer ):
 
     def process(self, event):
         
+        event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
+        event.xcleanTaus    = event.selectedTaus
+        event.xcleanPhotons = event.selectedPhotons
+        event.xcleanJets    = event.cleanJets
+        event.xcleanJetsAK8 = event.cleanJetsAK8
+        
         if self.cfg_ana.cleanTaus:
             self.crossCleanTaus(event)
         

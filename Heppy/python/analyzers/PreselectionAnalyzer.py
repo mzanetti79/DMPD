@@ -139,7 +139,6 @@ class PreselectionAnalyzer( Analyzer ):
             l.trkIso = l.trackIso()/l.pt() if l.isMuon() else -1.
 
     def addJetVariables(self, event):
-        minDR = 99.
         for i, j in enumerate(event.xcleanJets):#+event.xcleanJetsJERUp+event.xcleanJetsJERDown:
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
@@ -366,11 +365,11 @@ class PreselectionAnalyzer( Analyzer ):
         event.inclusiveMuons = [x for x in event.inclusiveLeptons if x.isMuon()]
         
         # Build clean collections
-        event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
-        event.xcleanTaus    = event.selectedTaus
-        event.xcleanPhotons = event.selectedPhotons
-        event.xcleanJets    = event.cleanJets
-        event.xcleanJetsAK8 = event.cleanJetsAK8
+        if not hasattr(event, "xcleanLeptons"): event.xcleanLeptons = event.selectedMuons + event.selectedElectrons
+        if not hasattr(event, "xcleanTaus"):    event.xcleanTaus    = event.selectedTaus
+        if not hasattr(event, "xcleanPhotons"): event.xcleanPhotons = event.selectedPhotons
+        if not hasattr(event, "xcleanJets"):    event.xcleanJets    = event.cleanJets
+        if not hasattr(event, "xcleanJetsAK8"): event.xcleanJetsAK8 = event.cleanJetsAK8
         
         event.xcleanJetsNoAK8 = [x for x in event.xcleanJets if deltaR(event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi(), x.eta(), x.phi()) > 0.8] if len(event.xcleanJetsAK8) > 0 else event.xcleanJets
         event.xcleanBJetsNoAK8 = copy.deepcopy(event.xcleanJetsNoAK8)
