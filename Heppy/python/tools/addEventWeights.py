@@ -830,7 +830,11 @@ def processFile(dir_name, verbose=False):
                         fakecormet_ptResUp[0]    = obj.fakemet_pt
                         fakecormet_ptResDown[0]  = obj.fakemet_pt               
                     
-                    
+                    # b-tagging multiplicity
+                    for i in range(njets):
+                        if getattr(obj, 'jet%d_CSV' % (i+1), -1) > workingpoint[2]: nBtagJets[0] += 1
+                    for i in range(2):
+                        if getattr(obj, 'fatjet1_CSV%d' % (i+1), -1) > workingpoint[1]: nBtagSubJets[0] += 1
                     
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi):
