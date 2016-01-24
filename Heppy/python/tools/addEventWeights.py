@@ -632,63 +632,86 @@ def processFile(dir_name, verbose=False):
                             if csv>=workingpoint[2]: nbtagjets += 1
                     
                     # Subjet reshaping
+                    ssf = [1]*2
+                    ssfUp = [1]*2
+                    ssfDown = [1]*2
                     for i in range(2):
                         pt = getattr(obj, 'fatjet1_pt%d' % (i+1), -1)
                         eta = getattr(obj, 'fatjet1_eta%d' % (i+1), -1)
                         flav = getattr(obj, 'fatjet1_flavour%d' % (i+1), -1)
                         csv = getattr(obj, 'fatjet1_CSV%d' % (i+1), -1)
                         pt = min(pt, 669)
+                        eta = min(eta, 2.39) if eta>0 else max(eta, -2.39)
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
+                        # standard weight
+                        ssf[i] = reader['L'][0].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][0].eval(fl, eta, pt)
+                        ssfUp[i] = reader['L'][1].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][1].eval(fl, eta, pt)
+                        ssfDown[i] = reader['L'][-1].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][-1].eval(fl, eta, pt)
                         subjetCSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
                         subjetCSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
                         subjetCSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
                         if subjetCSV[i][0] > workingpoint[1]: nBtagSubJets[0] += 1
                     
+#                    # Calculate weight
+#                    if njets <= 0:
+#                        btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
+#                    elif njets == 1:
+#                        if nbtagjets == 0:
+#                            btagWeight[0] *= (1.-sf[0])
+#                            btagWeightUp[0] *= (1.-sfUp[0])
+#                            btagWeightDown[0] *= (1.-sfDown[0])
+#                        else:
+#                            btagWeight[0] *= sf[0]
+#                            btagWeightUp[0] *= sfUp[0]
+#                            btagWeightDown[0] *= sfDown[0]
+#                    elif njets == 2:
+#                        if nbtagjets == 0:
+#                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])
+#                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])
+#                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])
+#                        elif nbtagjets == 1:
+#                            btagWeight[0] *= (1.-sf[0])*sf[1] + sf[0]*(1.-sf[1])
+#                            btagWeightUp[0] *= (1.-sfUp[0])*sfUp[1] + sfUp[0]*(1.-sfUp[1])
+#                            btagWeightDown[0] *= (1.-sfDown[0])*sfDown[1] + sfDown[0]*(1.-sfDown[1])
+#                        else:
+#                            btagWeight[0] *= sf[0]*sf[1]
+#                            btagWeightUp[0] *= sfUp[0]*sfUp[1]
+#                            btagWeightDown[0] *= sfDown[0]*sfDown[1]
+#                    else:
+#                        if nbtagjets == 0:
+#                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])*(1.-sf[2])
+#                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])*(1.-sfUp[2])
+#                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])*(1.-sfDown[2])
+#                        elif nbtagjets == 1:
+#                            btagWeight[0] *= sf[0]*(1.-sf[1])*(1.-sf[2]) + sf[1]*(1.-sf[0])*(1.-sf[2]) + sf[2]*(1.-sf[0])*(1.-sf[1])
+#                            btagWeightUp[0] *= sfUp[0]*(1.-sfUp[1])*(1.-sfUp[2]) + sfUp[1]*(1.-sfUp[0])*(1.-sfUp[2]) + sfUp[2]*(1.-sfUp[0])*(1.-sfUp[1])
+#                            btagWeightDown[0] *= sfDown[0]*(1.-sfDown[1])*(1.-sfDown[2]) + sfDown[1]*(1.-sfDown[0])*(1.-sfDown[2]) + sfDown[2]*(1.-sfDown[0])*(1.-sfDown[1])
+#                        elif nbtagjets == 2:
+#                            btagWeight[0] *= sf[0]*sf[1]*(1.-sf[2]) + sf[0]*sf[2]*(1.-sf[1]) + sf[1]*sf[2]*(1.-sf[0])
+#                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*(1.-sfUp[2]) + sfUp[0]*sfUp[2]*(1.-sfUp[1]) + sfUp[1]*sfUp[2]*(1.-sfUp[0])
+#                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*(1.-sfDown[2]) + sfDown[0]*sfDown[2]*(1.-sfDown[1]) + sfDown[1]*sfDown[2]*(1.-sfDown[0])
+#                        else:
+#                            btagWeight[0] *= sf[0]*sf[1]*sf[2]
+#                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*sfUp[2]
+#                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*sfDown[2]
                     
                     # Calculate weight
-                    if njets <= 0:
-                        btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
-                    elif njets == 1:
-                        if nbtagjets == 0:
-                            btagWeight[0] *= (1.-sf[0])
-                            btagWeightUp[0] *= (1.-sfUp[0])
-                            btagWeightDown[0] *= (1.-sfDown[0])
-                        else:
-                            btagWeight[0] *= sf[0]
-                            btagWeightUp[0] *= sfUp[0]
-                            btagWeightDown[0] *= sfDown[0]
-                    elif njets == 2:
-                        if nbtagjets == 0:
-                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])
-                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])
-                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])
-                        elif nbtagjets == 1:
-                            btagWeight[0] *= (1.-sf[0])*sf[1] + sf[0]*(1.-sf[1])
-                            btagWeightUp[0] *= (1.-sfUp[0])*sfUp[1] + sfUp[0]*(1.-sfUp[1])
-                            btagWeightDown[0] *= (1.-sfDown[0])*sfDown[1] + sfDown[0]*(1.-sfDown[1])
-                        else:
-                            btagWeight[0] *= sf[0]*sf[1]
-                            btagWeightUp[0] *= sfUp[0]*sfUp[1]
-                            btagWeightDown[0] *= sfDown[0]*sfDown[1]
-                    else:
-                        if nbtagjets == 0:
-                            btagWeight[0] *= (1.-sf[0])*(1.-sf[1])*(1.-sf[2])
-                            btagWeightUp[0] *= (1.-sfUp[0])*(1.-sfUp[1])*(1.-sfUp[2])
-                            btagWeightDown[0] *= (1.-sfDown[0])*(1.-sfDown[1])*(1.-sfDown[2])
-                        elif nbtagjets == 1:
-                            btagWeight[0] *= sf[0]*(1.-sf[1])*(1.-sf[2]) + sf[1]*(1.-sf[0])*(1.-sf[2]) + sf[2]*(1.-sf[0])*(1.-sf[1])
-                            btagWeightUp[0] *= sfUp[0]*(1.-sfUp[1])*(1.-sfUp[2]) + sfUp[1]*(1.-sfUp[0])*(1.-sfUp[2]) + sfUp[2]*(1.-sfUp[0])*(1.-sfUp[1])
-                            btagWeightDown[0] *= sfDown[0]*(1.-sfDown[1])*(1.-sfDown[2]) + sfDown[1]*(1.-sfDown[0])*(1.-sfDown[2]) + sfDown[2]*(1.-sfDown[0])*(1.-sfDown[1])
-                        elif nbtagjets == 2:
-                            btagWeight[0] *= sf[0]*sf[1]*(1.-sf[2]) + sf[0]*sf[2]*(1.-sf[1]) + sf[1]*sf[2]*(1.-sf[0])
-                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*(1.-sfUp[2]) + sfUp[0]*sfUp[2]*(1.-sfUp[1]) + sfUp[1]*sfUp[2]*(1.-sfUp[0])
-                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*(1.-sfDown[2]) + sfDown[0]*sfDown[2]*(1.-sfDown[1]) + sfDown[1]*sfDown[2]*(1.-sfDown[0])
-                        else:
-                            btagWeight[0] *= sf[0]*sf[1]*sf[2]
-                            btagWeightUp[0] *= sfUp[0]*sfUp[1]*sfUp[2]
-                            btagWeightDown[0] *= sfDown[0]*sfDown[1]*sfDown[2]
+                    
+                    btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
+                    if nBtagSubJets[0]==2: 
+                        btagWeight[0] *= ssf[0]*ssf[1]
+                        btagWeightUp[0] *= ssfUp[0]*ssfUp[1]
+                        btagWeightDown[0] *= ssfDown[0]*ssfDown[1]
+                    elif nBtagSubJets[0]==1:
+                        btagWeight[0] *= (1.-ssf[0])*ssf[1] + ssf[0]*(1.-ssf[1])
+                        btagWeightUp[0] *= (1.-ssfUp[0])*ssfUp[1] + ssfUp[0]*(1.-ssfUp[1])
+                        btagWeightDown[0] *= (1.-ssfDown[0])*ssfDown[1] + ssfDown[0]*(1.-ssfDown[1])
+                    else: 
+                        btagWeight[0] *= (1.-ssf[0])*(1.-ssf[1])
+                        btagWeightUp[0] *= (1.-ssfUp[0])*(1.-ssfUp[1])
+                        btagWeightDown[0] *= (1.-ssfDown[0])*(1.-ssfDown[1])
                     
                     
                     ''' RECOIL '''
@@ -956,7 +979,7 @@ for d in os.listdir(origin):
     #if not ('_HT-' in d): continue
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
-    if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
+    #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
