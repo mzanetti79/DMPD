@@ -505,18 +505,18 @@ def processFile(dir_name, verbose=False):
                     ''' TRIGGER '''
                     ### SINGLE MUON
                     if (( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.isWtoMN ) or ( 'TCR' in obj.GetName() )) and ( obj.HLT_BIT_HLT_IsoMu20_v or obj.HLT_BIT_HLT_IsoTkMu20_v ):
-                        hbin = trigMuSF.FindBin(min(max(obj.lepton1_pt, trigMuSF.GetXaxis().GetXmin()), trigMuSF.GetXaxis().GetXmax()-1.), abs(obj.lepton1_eta))
+                        hbin = trigMuSF.FindBin(min(max(obj.lepton1_pt, trigMuSF.GetXaxis().GetXmin()), trigMuSF.GetXaxis().GetXmax()-1.), min(abs(obj.lepton1_eta), trigMuSF.GetYaxis().GetXmax()-0.01))
                         triggerMuonIsoWeight[0]        = trigMuSF.GetBinContent( hbin )
                         triggerMuonIsoWeightUp[0]      = trigMuSF.GetBinContent( hbin ) + trigMuSF.GetBinError( hbin )
                         triggerMuonIsoWeightDown[0]    = trigMuSF.GetBinContent( hbin ) - trigMuSF.GetBinError( hbin )
                     if ( 'XZh' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.isWtoMN ):
                         if obj.HLT_BIT_HLT_Mu45_eta2p1_v:
-                            hbin = trigMu45SF.FindBin(min(max(obj.lepton1_pt, trigMu45SF.GetXaxis().GetXmin()), trigMu45SF.GetXaxis().GetXmax()-1.), abs(obj.lepton1_eta))
+                            hbin = trigMu45SF.FindBin(min(max(obj.lepton1_pt, trigMu45SF.GetXaxis().GetXmin()), trigMu45SF.GetXaxis().GetXmax()-1.), min(abs(obj.lepton1_eta), trigMu45SF.GetYaxis().GetXmax()-0.01))
                             triggerMuonWeight[0]        = trigMu45SF.GetBinContent( hbin )
                             triggerMuonWeightUp[0]      = trigMu45SF.GetBinContent( hbin ) + trigMu45SF.GetBinError( hbin )
                             triggerMuonWeightDown[0]    = trigMu45SF.GetBinContent( hbin ) - trigMu45SF.GetBinError( hbin )
                         elif obj.HLT_BIT_HLT_Mu50_v:
-                            hbin = trigMu50SF.FindBin(min(max(obj.lepton1_pt, trigMu50SF.GetXaxis().GetXmin()), trigMu50SF.GetXaxis().GetXmax()-1.), abs(obj.lepton1_eta))
+                            hbin = trigMu50SF.FindBin(min(max(obj.lepton1_pt, trigMu50SF.GetXaxis().GetXmin()), trigMu50SF.GetXaxis().GetXmax()-1.), min(abs(obj.lepton1_eta), trigMu50SF.GetYaxis().GetXmax()-0.01))
                             triggerMuonWeight[0]        = trigMu50SF.GetBinContent( hbin )
                             triggerMuonWeightUp[0]      = trigMu50SF.GetBinContent( hbin ) + trigMu50SF.GetBinError( hbin )
                             triggerMuonWeightDown[0]    = trigMu50SF.GetBinContent( hbin ) - trigMu50SF.GetBinError( hbin )
@@ -570,14 +570,14 @@ def processFile(dir_name, verbose=False):
                     
                     ''' MUON ID/ISO '''
                     if ( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.isWtoMN ) or ( 'TCR' in obj.GetName() ) or ( 'XZh' in obj.GetName() and obj.isZtoMM ):
-                        hbin = muonIdTight.FindBin(min(max(obj.lepton1_pt, muonIdTight.GetXaxis().GetXmin()), muonIdTight.GetXaxis().GetXmax()-1.), abs(obj.lepton1_eta))
+                        hbin = muonIdTight.FindBin(min(max(obj.lepton1_pt, muonIdTight.GetXaxis().GetXmin()), muonIdTight.GetXaxis().GetXmax()-1.), min(abs(obj.lepton1_eta), muonIdTight.GetYaxis().GetXmax()-0.01))
                         muonIsoWeight[0]     *= muonIdTight.GetBinContent( hbin )
                         muonIsoWeightUp[0]   *= muonIdTight.GetBinContent( hbin ) + muonIdTight.GetBinError( hbin )
                         muonIsoWeightDown[0] *= muonIdTight.GetBinContent( hbin ) - muonIdTight.GetBinError( hbin )
                         muonIsoWeight[0]     *= muonIsoTight.GetBinContent( hbin )
                         muonIsoWeightUp[0]   *= muonIsoTight.GetBinContent( hbin ) + muonIsoTight.GetBinError( hbin )
                         muonIsoWeightDown[0] *= muonIsoTight.GetBinContent( hbin ) - muonIsoTight.GetBinError( hbin )
-                        hbin = muonIdHighpt.FindBin(min(max(obj.lepton1_pt, muonIdHighpt.GetXaxis().GetXmin()), muonIdHighpt.GetXaxis().GetXmax()-1.), abs(obj.lepton1_eta))
+                        hbin = muonIdHighpt.FindBin(min(max(obj.lepton1_pt, muonIdHighpt.GetXaxis().GetXmin()), muonIdHighpt.GetXaxis().GetXmax()-1.), min(abs(obj.lepton1_eta), muonIdHighpt.GetYaxis().GetXmax()-0.01))
                         if obj.lepton1_highptId:
                             muonWeight[0]     *= muonIdHighpt.GetBinContent( hbin )
                             muonWeightUp[0]   *= muonIdHighpt.GetBinContent( hbin ) + muonIdHighpt.GetBinError( hbin )
@@ -586,14 +586,14 @@ def processFile(dir_name, verbose=False):
                         muonWeightUp[0]   *= muonIsoHighpt.GetBinContent( hbin ) + muonIsoHighpt.GetBinError( hbin )
                         muonWeightDown[0] *= muonIsoHighpt.GetBinContent( hbin ) - muonIsoHighpt.GetBinError( hbin )
                     if ( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'XZh' in obj.GetName() and obj.isZtoMM ):
-                        hbin = muonIdLoose.FindBin(min(max(obj.lepton2_pt, muonIdLoose.GetXaxis().GetXmin()), muonIdLoose.GetXaxis().GetXmax()-1.), abs(obj.lepton2_eta))
+                        hbin = muonIdLoose.FindBin(min(max(obj.lepton2_pt, muonIdLoose.GetXaxis().GetXmin()), muonIdLoose.GetXaxis().GetXmax()-1.), min(abs(obj.lepton2_eta), muonIdLoose.GetYaxis().GetXmax()-0.01))
                         muonIsoWeight[0]     *= muonIdLoose.GetBinContent( hbin )
                         muonIsoWeightUp[0]   *= muonIdLoose.GetBinContent( hbin ) + muonIdLoose.GetBinError( hbin )
                         muonIsoWeightDown[0] *= muonIdLoose.GetBinContent( hbin ) - muonIdLoose.GetBinError( hbin )
                         muonIsoWeight[0]     *= muonIsoLoose.GetBinContent( hbin )
                         muonIsoWeightUp[0]   *= muonIsoLoose.GetBinContent( hbin ) + muonIsoLoose.GetBinError( hbin )
                         muonIsoWeightDown[0] *= muonIsoLoose.GetBinContent( hbin ) - muonIsoLoose.GetBinError( hbin )
-                        hbin = muonIdHighpt.FindBin(min(max(obj.lepton2_pt, muonIdHighpt.GetXaxis().GetXmin()), muonIdHighpt.GetXaxis().GetXmax()-1.), abs(obj.lepton2_eta))
+                        hbin = muonIdHighpt.FindBin(min(max(obj.lepton2_pt, muonIdHighpt.GetXaxis().GetXmin()), muonIdHighpt.GetXaxis().GetXmax()-1.), min(abs(obj.lepton2_eta), muonIdHighpt.GetYaxis().GetXmax()-0.01))
                         if obj.lepton2_highptId and not obj.lepton1_highptId:
                             muonWeight[0]     *= muonIdHighpt.GetBinContent( hbin )
                             muonWeightUp[0]   *= muonIdHighpt.GetBinContent( hbin ) + muonIdHighpt.GetBinError( hbin )
@@ -601,7 +601,7 @@ def processFile(dir_name, verbose=False):
                         muonWeight[0]     *= muonIsoHighpt.GetBinContent( hbin )
                         muonWeightUp[0]   *= muonIsoHighpt.GetBinContent( hbin ) + muonIsoHighpt.GetBinError( hbin )
                         muonWeightDown[0] *= muonIsoHighpt.GetBinContent( hbin ) - muonIsoHighpt.GetBinError( hbin )
-                    
+                        if muonWeight[0]<0.1: print obj.lepton2_pt, obj.lepton2_eta
                     
                     ''' BTAGGING '''
                     # Reshaping
@@ -829,7 +829,9 @@ def processFile(dir_name, verbose=False):
                         fakecormet_ptScaleDown[0]= obj.fakemet_pt
                         fakecormet_ptResUp[0]    = obj.fakemet_pt
                         fakecormet_ptResDown[0]  = obj.fakemet_pt               
-
+                    
+                    
+                    
                     # Check JSON
                     if isJson_file and not isJSON(obj.run, obj.lumi):
                         if not 'XZh' in obj.GetName(): xsWeight[0] = 0.
@@ -950,7 +952,7 @@ for d in os.listdir(origin):
     #if not ('_HT-' in d): continue
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
-    #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
+    if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
