@@ -91,7 +91,7 @@ class GenAnalyzer( Analyzer ):
         event.RenScaleUp   = 1.
         event.RenScaleDown = 1.
         event.PDFweight    = 1.
-        
+        if not hasattr(event, "gentopquarks"): event.gentopquarks = []
         
         # LHE weights
         if hasattr(event, "LHE_originalWeight"):
