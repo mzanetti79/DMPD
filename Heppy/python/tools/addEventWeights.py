@@ -3,6 +3,7 @@
 import os, multiprocessing, math
 from array import array
 from ROOT import TFile, TH1, TF1, TLorentzVector
+from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
 
 from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsectionsunc
 
@@ -353,7 +354,8 @@ def processFile(dir_name, verbose=False):
     fakecormet_ptScaleDown= array('f', [0.0])
     fakecormet_ptResUp    = array('f', [0.0])
     fakecormet_ptResDown  = array('f', [0.0])
-
+    X_cmass = array('f', [1.0])
+    
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
@@ -446,6 +448,7 @@ def processFile(dir_name, verbose=False):
             fakecormet_ptScaleDownBranch = new_tree.Branch('fakecormet_ptScaleDown', fakecormet_ptScaleDown, 'fakecormet_ptScaleDown/F')
             fakecormet_ptResUpBranch     = new_tree.Branch('fakecormet_ptResUp',     fakecormet_ptResUp,     'fakecormet_ptResUp/F')
             fakecormet_ptResDownBranch   = new_tree.Branch('fakecormet_ptResDown',   fakecormet_ptResDown,   'fakecormet_ptResDown/F')
+            X_cmassBranch = new_tree.Branch('X_cmass', X_cmass, 'X_cmass/F')
 
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -460,6 +463,7 @@ def processFile(dir_name, verbose=False):
                 triggerMETWeight[0] = triggerMETWeightUp[0] = triggerMETWeightDown[0] = 1.
                 electronWeight[0] = electronWeightUp[0] = electronWeightDown[0] = electronIsoWeight[0] = electronIsoWeightUp[0] = electronIsoWeightDown[0] = 1.
                 muonWeight[0] = muonWeightUp[0] = muonWeightDown[0] = muonIsoWeight[0] = muonIsoWeightUp[0] = muonIsoWeightDown[0] = 1.
+                X_cmass[0] = 0.
                 
                 nBtagJets[0] = nBtagSubJets[0] = 0
                 for i in range(njets+nbjets):
@@ -796,11 +800,11 @@ def processFile(dir_name, verbose=False):
                             
                             if applyrecoil:
                                 ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
-                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,obj.nJets)        
-                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,obj.nJets)        
-                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,obj.nJets)        
-                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,obj.nJets)        
-                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,obj.nJets)   
+                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
+                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
+                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
+                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
+                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
                                 if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
                                     ### correct fakeMET only in ZCR and WCR (and TCR)
                                     ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
@@ -810,11 +814,11 @@ def processFile(dir_name, verbose=False):
                                     lepphi    = ROOT.Double(0.)
                                     Upar      = ROOT.Double(0.)
                                     Uper      = ROOT.Double(0.)
-                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0,obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0,obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0,obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3,obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3,obj.nJets)   
+                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
+                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
                                 pass
                             pass
                         pass
@@ -873,6 +877,9 @@ def processFile(dir_name, verbose=False):
                         #if 'MET' in dir_name and obj.HLT_MET: den +=1
                         #xsWeight[0] = 1./max(den, 1.)
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
+                
+                
+                X_cmass[0] = math.sqrt( max(2.*obj.fatjet1_pt*cormet_pt[0]*(1.-math.cos(deltaPhi(obj.fatjet1_phi, cormet_phi[0])) ), 0.) )
                 
                 # Total
                 eventWeight[0] = xsWeight[0] * kfactorWeight[0] * pileupWeight[0] * triggerMuonIsoWeight[0] * triggerElectronIsoWeight[0] * triggerMETWeight[0] * muonIsoWeight[0] * electronIsoWeight[0] * electroweakWeight[0]
@@ -941,6 +948,7 @@ def processFile(dir_name, verbose=False):
                     fakecormet_ptScaleDownBranch.Fill()
                     fakecormet_ptResUpBranch.Fill()
                     fakecormet_ptResDownBranch.Fill()
+                X_cmassBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
