@@ -19,7 +19,7 @@ origin      = options.origin
 target      = options.target
 verboseon   = options.verbose
 
-LUMI        = 2110
+#LUMI        = 2110
 
 cut = {
     "SR"  : "eventWeight!=0 && (" + selection['XZhnnPre'] + ")",
@@ -73,7 +73,13 @@ def processFile(dir_name, verbose=False):
     # Looping over file content
     for key in ref_file.GetListOfKeys():
         obj = key.ReadObj()
-        if obj.IsA().InheritsFrom('TTree'):
+        # Histograms
+        if obj.IsA().InheritsFrom('TH1'):
+            if verbose: print ' + TH1:', obj.GetName()
+            new_file.cd()
+            obj.Write()
+        # Tree
+        elif obj.IsA().InheritsFrom('TTree'):
             nev = obj.GetEntriesFast()
             new_file.cd()
             new_tree = obj.CopyTree(cut[obj.GetName()])
@@ -90,7 +96,17 @@ def processFile(dir_name, verbose=False):
                 eventWeightLumi[0] = 1.
                 
                 # Weights
-                if isMC: eventWeightLumi[0] = obj.eventWeight*LUMI
+                if isMC:
+                    eventWeightLumi[0] = obj.eventWeight #* (obj.triggerElectronWeight*obj.triggerMuonWeight*obj.electronWeight*obj.muonWeight)/(obj.triggerElectronIsoWeight*obj.triggerMuonIsoWeight*obj.electronIsoWeight*obj.muonIsoWeight)
+                    eventWeightLumi[0] *= obj.triggerElectronWeight if obj.triggerElectronWeight>0 else 1.
+                    eventWeightLumi[0] *= obj.triggerMuonWeight if obj.triggerMuonWeight>0 else 1.
+                    eventWeightLumi[0] *= obj.electronWeight if obj.electronWeight>0 else 1.
+                    eventWeightLumi[0] *= obj.muonWeight if obj.muonWeight>0 else 1.
+                    eventWeightLumi[0] /= obj.triggerElectronIsoWeight if obj.triggerElectronIsoWeight>0 else 1.
+                    eventWeightLumi[0] /= obj.triggerMuonIsoWeight if obj.triggerMuonIsoWeight>0 else 1.
+                    eventWeightLumi[0] /= obj.electronIsoWeight if obj.electronIsoWeight>0 else 1.
+                    eventWeightLumi[0] /= obj.muonIsoWeight if obj.muonIsoWeight>0 else 1.
+                    eventWeightLumi[0] *= 2460 if 'XZh' in obj.GetName() else 2110
                 
                 # Fill the branches
                 eventWeightLumiBranch.Fill()
@@ -99,6 +115,20 @@ def processFile(dir_name, verbose=False):
             new_tree.Write()
             if verbose: print ' '
         
+        # Directories
+        elif obj.IsFolder():
+            subdir = obj.GetName()
+            if verbose: print ' \ Directory', subdir, ':'
+            new_file.mkdir(subdir)
+            new_file.cd(subdir)
+            for subkey in ref_file.GetDirectory(subdir).GetListOfKeys():
+                subobj = subkey.ReadObj()
+                if subobj.IsA().InheritsFrom('TH1'):
+                    if verbose: print '   + TH1:', subobj.GetName()
+                    new_file.cd(subdir)
+                    subobj.Write()
+            new_file.cd('..')
+        
     new_file.Close() 
 
 
@@ -106,7 +136,7 @@ def processFile(dir_name, verbose=False):
 jobs = []
 for d in os.listdir(origin):
     if 'BBbarDM' in d or 'TTbarDM' in d: continue
-    if not 'MET' in d: continue
+    #if not 'ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1' in d: continue
 #    print d
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
