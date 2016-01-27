@@ -738,6 +738,13 @@ var_template = {
       "max" : 0.25,
       "log" : True,
     },
+    "lepton[N]_trkIso": {
+      "title" : "lepton [N] tracker Iso",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 0.25,
+      "log" : True,
+    },
     "lepton[N]_miniIso": {
       "title" : "lepton [N] miniIso",
       "nbins" : 50,
