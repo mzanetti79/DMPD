@@ -56,7 +56,7 @@ selection = {
     "Zcut" : "Z_pt>200 && Z_mass>70 && Z_mass<110 && fatjet1_pt>200",
     "Wcut" : "kW_pt>200 && fatjet1_pt>200",
     "Topcut" : "bjet1_CSVR>0.890",
-    "TopVetocut" : "bjet1_CSVR<0.605",
+    "TopVetocut" : "bjet1_CSVR<0.890",
     "SRcut" : "(fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135)",
     "SBcut" : "((fatjet1_prunedMassCorr>30 && fatjet1_prunedMassCorr<65) || (fatjet1_prunedMassCorr>135))", # && fatjet1_prunedMassCorr<300
     "VRcut" : "(fatjet1_prunedMassCorr>65 && fatjet1_prunedMassCorr<105)",
@@ -85,8 +85,8 @@ selection = {
     "XZhmmbSR"  : "triggerMuo && doubleMuo && Zcut && 1Btag && SRcut",
     "XZhmmbbSR" : "triggerMuo && doubleMuo && Zcut && 2Btag && SRcut",
     # 1 electron
-    "XWhenPre"  : "triggerEle && singleEle && Wcut && TopVetocut",
-    "XWhenInc"  : "triggerEle && singleEle && Wcut && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
+    "XWhenPre"  : "triggerEle && singleEle && Wcut",
+    "XWhenInc"  : "triggerEle && singleEle && Wcut && TopVetocut && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
     #
     "XWhenbSB"  : "triggerEle && singleEle && Wcut && TopVetocut && 1Btag && SBcut",
     "XWhenbbSB" : "triggerEle && singleEle && Wcut && TopVetocut && 2Btag && SBcut",
@@ -94,8 +94,8 @@ selection = {
     "XWhenbSR"  : "triggerEle && singleEle && Wcut && TopVetocut && 1Btag && SRcut",
     "XWhenbbSR" : "triggerEle && singleEle && Wcut && TopVetocut && 2Btag && SRcut",
     # 1 muon
-    "XWhmnPre"  : "triggerMuo && singleMuo && Wcut && TopVetocut",
-    "XWhmnInc"  : "triggerMuo && singleMuo && Wcut && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
+    "XWhmnPre"  : "triggerMuo && singleMuo && Wcut",
+    "XWhmnInc"  : "triggerMuo && singleMuo && Wcut && TopVetocut && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
     #
     "XWhmnbSB"  : "triggerMuo && singleMuo && Wcut && TopVetocut && 1Btag && SBcut",
     "XWhmnbbSB" : "triggerMuo && singleMuo && Wcut && TopVetocut && 2Btag && SBcut",
@@ -103,8 +103,8 @@ selection = {
     "XWhmnbSR"  : "triggerMuo && singleMuo && Wcut && TopVetocut && 1Btag && SRcut",
     "XWhmnbbSR" : "triggerMuo && singleMuo && Wcut && TopVetocut && 2Btag && SRcut",
     # 0 leptons
-    "XZhnnPre"  : "triggerMET && noLeptons && TopVetocut",
-    "XZhnnInc"  : "triggerMET && noLeptons && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
+    "XZhnnPre"  : "triggerMET && noLeptons",
+    "XZhnnInc"  : "triggerMET && noLeptons && TopVetocut && (fatjet1_prunedMassCorr<65 || fatjet1_prunedMassCorr>135)",
     #
     "XZhnnbSB"  : "triggerMET && noLeptons && TopVetocut && 1Btag && SBcut",
     "XZhnnbbSB" : "triggerMET && noLeptons && TopVetocut && 2Btag && SBcut",
