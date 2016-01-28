@@ -78,6 +78,7 @@ class GenAnalyzer( Analyzer ):
         
         event.genV = ROOT.reco.GenParticle()
         event.gennu = ROOT.reco.GenParticle()
+        event.genlep = ROOT.reco.GenParticle()
         event.genmet = ROOT.reco.Particle.LorentzVector()
         event.genChi = []
         event.genLeptFromW   = []
@@ -184,6 +185,8 @@ class GenAnalyzer( Analyzer ):
                 self.Hist["GenHy"].Fill(event.genHiggsBosons[0].rapidity(), event.weight)
         # Leptons from Z
         if hasattr(event, "genleps"):
+            if len(event.genleps) >= 1:
+                event.genlep = event.genleps[0].p4()
             if len(event.genleps) >= 2:
                 self.Hist["GenZdecay"].Fill(abs(event.genleps[0].pdgId()), event.weight)
                 self.Hist["GenZdR"].Fill(deltaR(event.genleps[0].eta(), event.genleps[0].phi(), event.genleps[1].eta(), event.genleps[1].phi()), event.weight)
