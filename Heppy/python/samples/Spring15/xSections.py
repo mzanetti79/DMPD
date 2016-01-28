@@ -365,7 +365,7 @@ xsections = {
     'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8' : 0.05066463346,
     'ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8' : 0.05066463346,
     'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8' : 0.10035184,
-    'WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1' : 0.25798824,
+    'WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8' : 0.25798824,
     'ZJetsToNuNu_HT-100To200_13TeV-madgraph' : 280.47,
     'ZJetsToNuNu_HT-200To400_13TeV-madgraph' : 78.36,
     'ZJetsToNuNu_HT-400To600_13TeV-madgraph' : 10.944,
