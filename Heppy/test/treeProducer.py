@@ -284,7 +284,7 @@ fatJetAnalyzer = cfg.Analyzer(
     jetPt                       = 200.,
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
-    jetLepDR                    = 1.0,
+    jetLepDR                    = 0.8,
     jetLepArbitration           = (lambda jet,lepton : jet), # you can decide which to keep in case of overlaps -> keeping the jet -> resolving it later
     minLepPt                    = 20,
     relaxJetId                  = False,
@@ -485,7 +485,7 @@ XCleaningAnalyzer = cfg.Analyzer(
     class_object = XCleaningAnalyzer,
     cleanTaus = True,
     cleanJets = True,
-    cleanJetsAK8 = True,
+    cleanJetsAK8 = False,
     cleanFromMuons = True,
     cleanFromElectrons = True,
     mu_clean_pt  = 20.,
@@ -739,6 +739,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
     ],
     globalObjects = {
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
+        'genlep'    : NTupleObject('genlep',  metType, help='Lepton at generation level'),
         'gennu'     : NTupleObject('gennu', particleType, help='Gen Neutrino'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
@@ -901,7 +902,6 @@ sequence = [
 #    SyncAnalyzerZCR,
 #    SyncAnalyzerWCR,
     TriggerMatchAnalyzer,
-    XCleaningAnalyzer,
     PreselectionAnalyzer,
     ##### Analysis Analyzers
 #    ZeroLeptonAnalyzer,
@@ -910,6 +910,7 @@ sequence = [
 #    TwoLeptonOSSFAnalyzer,
 #    TwoLeptonOSDFAnalyzer,
     ##### Categorization Analyzers
+    XCleaningAnalyzer,
     SyncAnalyzer,
 #    CategorizationAnalyzer,
     #SRAnalyzer,
@@ -968,12 +969,12 @@ for i in mcsamples:
 
 testDataCompontent = cfg.Component(
         files   = [
+            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/7843B305-EE83-E511-86BB-02163E0134CD.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleElectron/MINIAOD/PromptReco-v4/000/260/572/00000/A6AC14CA-E083-E511-BC4C-02163E0140EC.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SinglePhoton/MINIAOD/PromptReco-v4/000/260/572/00000/52B0256C-E283-E511-89C7-02163E013806.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/MET/MINIAOD/PromptReco-v4/000/260/572/00000/4EDE9265-ED83-E511-8989-02163E012A0C.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleEG/MINIAOD/PromptReco-v4/000/260/572/00000/7679173B-EE83-E511-9342-02163E012451.root',
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/0484EEB4-E183-E511-8488-02163E01410A.root',
-            'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/SingleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/7843B305-EE83-E511-86BB-02163E0134CD.root',
         ],
         name    = "test",
         json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
@@ -1003,7 +1004,7 @@ testMCCompontent = cfg.MCComponent(
 from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ## MC ###
-#selectedComponents = [
+selectedComponents = [
 #  sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1023,14 +1024,14 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-##  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
 #  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
@@ -1076,7 +1077,7 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
@@ -1208,8 +1209,8 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 ##  sample['TTbarDMJets_scalar_Mchi-50_Mphi-300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##  sample['TTbarDMJets_scalar_Mchi-50_Mphi-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##  sample['TTbarDMJets_scalar_Mchi-500_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#]
-#TriggerMatchAnalyzer.processName = 'PAT'
+]
+TriggerMatchAnalyzer.processName = 'PAT'
 
 
 #### DATA ###
@@ -1234,17 +1235,17 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 #TriggerMatchAnalyzer.processName = 'RECO'
 
 #### DATA ###
-selectedComponents = [
-## Run2015D
-#sample['DoubleEG_Run2015D-05Oct2015-v1'],
-#sample['DoubleMuon_Run2015D-05Oct2015-v1'],
-sample['MET_Run2015D-05Oct2015-v1'],
-sample['SingleElectron_Run2015D-05Oct2015-v1'],
-sample['SingleMuon_Run2015D-05Oct2015-v1'],
-#  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
-]
-filterAnalyzer.processName = 'RECO'
-TriggerMatchAnalyzer.processName = 'PAT'
+#selectedComponents = [
+### Run2015D
+##sample['DoubleEG_Run2015D-05Oct2015-v1'],
+##sample['DoubleMuon_Run2015D-05Oct2015-v1'],
+#sample['MET_Run2015D-05Oct2015-v1'],
+#sample['SingleElectron_Run2015D-05Oct2015-v1'],
+#sample['SingleMuon_Run2015D-05Oct2015-v1'],
+##  sample['SinglePhoton_Run2015D-05Oct2015-v1'],
+#]
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'PAT'
 
 #selectedComponents = [sample['SYNCH_ADDMonojet'],]
 #selectedComponents = [sample['SYNCH_TTBar'],]
@@ -1281,7 +1282,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=10000000,
+        nEvents=100000,
         )
     looper.loop()
     looper.write()
