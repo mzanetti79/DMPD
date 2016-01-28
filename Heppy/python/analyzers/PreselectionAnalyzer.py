@@ -144,11 +144,11 @@ class PreselectionAnalyzer( Analyzer ):
             j.deltaPhi_jet1 = abs(deltaPhi(j.phi(), event.xcleanJets[0].phi()))
             j.deltaR_lep1 = deltaR(event.xcleanLeptons[0].eta(), event.xcleanLeptons[0].phi(), j.eta(), j.phi()) if hasattr(event, "xcleanLeptons") and len(event.xcleanLeptons) > 0 else 9.
             if j.deltaPhi_met < event.minDeltaPhi: event.minDeltaPhi = j.deltaPhi_met
-            if j.deltaR_lep1 < event.minDeltaR: event.minDeltaR = j.deltaR_lep1
             self.addJECUnc(event, j)
         
         for i, j in enumerate(event.xcleanJetsNoAK8):
             if j.deltaPhi_met < event.minDeltaPhiNoAK8: event.minDeltaPhiNoAK8 = j.deltaPhi_met
+            if j.deltaR_lep1 < event.minDeltaR: event.minDeltaR = j.deltaR_lep1
         
         for i, j in enumerate(event.xcleanJetsAK8):#+event.xcleanJetsAK8JERUp+event.xcleanJetsAK8JERDown):
             j.deltaPhi_met = abs(deltaPhi(j.phi(), event.fakemet.phi()))
