@@ -210,8 +210,13 @@ class XZhAnalyzer( Analyzer ):
             # both leptons
             if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.muon1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.muon2pt:
                 Zmass = (event.inclusiveLeptons[l1].p4() + event.inclusiveLeptons[l2].p4()).mass()
-                pfIso = event.inclusiveLeptons[l1].trkIso<0.1 and event.inclusiveLeptons[l2].trkIso<0.1
                 miniIso = event.inclusiveLeptons[l1].miniRelIso<0.2 and event.inclusiveLeptons[l2].miniRelIso<0.2
+                tkIso1, tkIso2 = event.inclusiveLeptons[l1].trkIso, event.inclusiveLeptons[l2].trkIso
+                if deltaR(event.inclusiveLeptons[l1].eta(), event.inclusiveLeptons[l1].phi(), event.inclusiveLeptons[l2].eta(), event.inclusiveLeptons[l2].phi())<0.3:
+                    if event.inclusiveLeptons[l1].innerTrack().isNonnull() and event.inclusiveLeptons[l2].innerTrack().isNonnull():
+                        tkIso1 = max(event.inclusiveLeptons[l1].trackIso() - event.inclusiveLeptons[l2].innerTrack().pt(), 0.) / event.inclusiveLeptons[l1].pt()
+                        tkIso2 = max(event.inclusiveLeptons[l2].trackIso() - event.inclusiveLeptons[l1].innerTrack().pt(), 0.) / event.inclusiveLeptons[l2].pt()
+                pfIso = tkIso1<0.1 and tkIso2<0.1
                 # Z
                 if Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high and event.inclusiveLeptons[l1].charge()!=event.inclusiveLeptons[l2].charge():
                     self.Hist["MuonZdR"].Fill(genZdR)
@@ -399,8 +404,8 @@ class XZhAnalyzer( Analyzer ):
         if not l1.isMuon() or not l2.isMuon(): return True
         if deltaR(l1.eta(), l1.phi(), l2.eta(), l2.phi()) < 0.3:
             if l1.innerTrack().isNonnull() and l2.innerTrack().isNonnull():
-                l1.trkIso = max( (l1.trackIso() - l2.innerTrack().pt() ) / l1.pt(), 0.)
-                l2.trkIso = max( (l2.trackIso() - l1.innerTrack().pt() ) / l2.pt(), 0.)
+                l1.trkIso = max(l1.trackIso() - l2.innerTrack().pt(), 0.) / l1.pt()
+                l2.trkIso = max(l2.trackIso() - l1.innerTrack().pt(), 0.) / l2.pt()
 #        for i, l in enumerate(event.highptLeptons):
 #            if not l.isMuon():  continue
 #            for j, k  in enumerate(event.highptLeptons):
@@ -420,6 +425,15 @@ class XZhAnalyzer( Analyzer ):
         event.Z = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         event.X = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         
+        ### Preliminary operations ###
+        # Gen info
+        if self.cfg_comp.isMC:
+            if hasattr(event, "genleps") and len(event.genleps) >= 2:
+                if abs(event.genleps[0].pdgId()) == 11: event.isGenZ2EE = True
+                elif abs(event.genleps[0].pdgId()) == 13: event.isGenZ2MM = True
+            #
+            self.fillGenPlots(event)
+        
         # Skip events with less than 1 fat-jet with pt > fatjet_pt
         if len(event.cleanJetsAK8) < 1:
             return True
@@ -435,16 +449,6 @@ class XZhAnalyzer( Analyzer ):
         
         # Attach muon Custom Tracker Id
         #for i, l in enumerate(event.inclusiveLeptons): self.addCustomTracker(event, l, i==0)
-        
-
-        ### Preliminary operations ###
-        # Gen info
-        if self.cfg_comp.isMC:
-            if hasattr(event, "genleps") and len(event.genleps) >= 2:
-                if abs(event.genleps[0].pdgId()) == 11: event.isGenZ2EE = True
-                elif abs(event.genleps[0].pdgId()) == 13: event.isGenZ2MM = True
-            #
-            self.fillGenPlots(event)
         
         
         # Trigger
