@@ -952,7 +952,8 @@ for i in datasamples:
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver.txt' % os.environ['CMSSW_BASE'],
+        #json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' % os.environ['CMSSW_BASE'], # 2.26
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt' % os.environ['CMSSW_BASE'], # 2.63
         splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
@@ -977,7 +978,7 @@ testDataCompontent = cfg.Component(
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/0484EEB4-E183-E511-8488-02163E01410A.root',
         ],
         name    = "test",
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'],
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt' % os.environ['CMSSW_BASE'],
         splitFactor = 1,
     )
 
@@ -1005,33 +1006,33 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ## MC ###
 selectedComponents = [
-#  sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+#  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
 #  sample['DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  sample['DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+#  #sample['DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  sample['ZJetsToNuNu_HT-100To200_13TeV-madgraph-v1'],
 #  sample['ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1'],
 #  sample['ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1'],
 #  sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
 
-##  #sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  #sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  #sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-##  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  #sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  #sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  #sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+#  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT1500to2000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT300to500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
 #  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
@@ -1052,7 +1053,7 @@ selectedComponents = [
 #  sample['WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+#  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
 #  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1'],
@@ -1077,7 +1078,7 @@ selectedComponents = [
 #  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+#  sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
 #  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
@@ -1282,7 +1283,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=100000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
