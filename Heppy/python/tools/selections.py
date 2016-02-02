@@ -51,10 +51,10 @@ selection = {
     "singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_trkIso<0.1 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",#FIXME
     #"singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_relIso04<0.15 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",
     "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_looseId && lepton2_looseId", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
-    "doubleMuo" : "isZtoMM && ((lepton1_highptId && lepton2_vetoId) || (lepton2_highptId && lepton1_vetoId)) && lepton1_pt>55 && lepton2_pt>20 && lepton1_trkIso<0.1 && lepton2_trkIso<0.1", #FIXME
+    "doubleMuo" : "isZtoMM && ((lepton1_highptId && lepton2_vetoId) || (lepton2_highptId && lepton1_vetoId)) && lepton1_pt>55 && lepton2_pt>20 && lepton1_trkIso<0.1 && lepton2_trkIso<0.1",
     #"doubleMuo" : "isZtoMM && (lepton1_highptId || lepton2_highptId) && lepton1_pt>55 && lepton2_pt>20 && lepton1_miniIso<0.2 && lepton2_miniIso<0.2",
-    #"noLeptons" : "cormet_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_tightId && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",# && fatjet1_dPhi_met>2 && nJetsNoFatJet100<=2 && minDeltaPhi>2 #FIXME
-    "noLeptons" : "met_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",
+    "noLeptons" : "cormet_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_tightId && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",# && fatjet1_dPhi_met>2 && nJetsNoFatJet100<=2 && minDeltaPhi>2
+    #"noLeptons" : "met_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",
     # XZh
     "Zcut" : "Z_pt>200 && Z_mass>70 && Z_mass<110 && fatjet1_pt>200",
     "Wcut" : "kW_pt>200 && fatjet1_pt>200",
