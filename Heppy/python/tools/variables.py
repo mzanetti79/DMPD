@@ -3,6 +3,27 @@ variable = {}
 
 var_template = {
     # Event
+    "run": {
+      "title" : "run number",
+      "nbins" : 7000,
+      "min" : 254000,
+      "max" : 261000,
+      "log" : False,
+    },
+    "lumi": {
+      "title" : "lumisection number",
+      "nbins" : 2000,
+      "min" : 0,
+      "max" : 2000,
+      "log" : False,
+    },
+    "evt": {
+      "title" : "event number",
+      "nbins" : 10000000,
+      "min" : 0,
+      "max" : 1.e7,
+      "log" : False,
+    },
     "rho": {
       "title" : "rho",
       "nbins" : 50,
@@ -488,7 +509,7 @@ var_template = {
       "nbins" : 60,
       "min" : 0,
       "max" : 300,
-      "log" : True,
+      "log" : False,
     },
     "fatjet[N]_softdropMass": {
       "title" : "soft drop mass (GeV)",
@@ -579,7 +600,7 @@ var_template = {
       "nbins" : 3,
       "min" : -0.5,
       "max" : 2.5,
-      "log" : False,
+      "log" : True,
     },
     "fatjet[N]_flavour": {
       "title" : "fatjet flavour",
@@ -742,7 +763,7 @@ var_template = {
       "title" : "lepton [N] tracker Iso",
       "nbins" : 50,
       "min" : 0,
-      "max" : 0.25,
+      "max" : 0.1,
       "log" : True,
     },
     "lepton[N]_miniIso": {
@@ -964,11 +985,11 @@ var_template = {
     },
     "X_mass": {
       "title" : "m_{X} (GeV)",
-      "nbins" : 17*10,
+      "nbins" : 18*5,
       #"bins" : [500, 540, 583, 629, 678, 730, 785, 843, 904, 968, 1035, 1105, 1178, 1254, 1333, 1415, 1500, 1588, 1679, 1773, 1870, 1970, 2073, 2179, 2288, 2400, 2515, 2633, 2754, 2878, 3005, 3135, 3268, 3404, 3543, 3685, 3830, 3978, 4129, 4283, 4440, 4600],
       #"bins" : [500, 583, 678, 785, 904, 1035, 1178, 1333, 1500, 1679, 1870, 2073, 2288, 2515, 2754, 3005, 3268, 3543, 3830, 4129, 4600],
       "bins" : [x*(1+0.1*x)*40+800 for x in range(28)],#[x*(1+0.1*x)*20+500 for x in range(40)], #[x*(1+0.16*x)*50+500 for x in range(20)],
-      "min" : 750.,
+      "min" : 500.,
       "max" : 5000.,
       "log" : True,
     },
@@ -984,11 +1005,11 @@ var_template = {
     },
     "X_cmass": {
       "title" : "m_{T}^{X} (GeV)",
-      "nbins" : 17,
+      "nbins" : 18,
       #"bins" : [500, 540, 583, 629, 678, 730, 785, 843, 904, 968, 1035, 1105, 1178, 1254, 1333, 1415, 1500, 1588, 1679, 1773, 1870, 1970, 2073, 2179, 2288, 2400, 2515, 2633, 2754, 2878, 3005, 3135, 3268, 3404, 3543, 3685, 3830, 3978, 4129, 4283, 4440, 4600],
       #"bins" : [200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 1000, 1250, 1500, 2000, 2500, 3000, 3500, 4500],
       "bins" : [x*(1+0.30*x)*50+800 for x in range(16)],
-      "min" : 750.,
+      "min" : 500.,
       "max" : 5000.,
       "log" : True,
     },
@@ -1074,6 +1095,13 @@ var_template = {
       "nbins" : 50,
       "min" : -3.14,
       "max" : 3.14,
+      "log" : False,
+    },
+    "sqrt((lepton1_eta-fatjet1_eta)**2+deltaPhi(lepton1_phi,fatjet1_phi)**2)": {
+      "title" : "#Delta #varphi (l-#slash{E}_{T})",
+      "nbins" : 50,
+      "min" : 0,
+      "max" : 5,
       "log" : False,
     },
     

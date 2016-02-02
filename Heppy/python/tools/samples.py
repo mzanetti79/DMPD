@@ -128,7 +128,7 @@ sample = {
     },
     'VV' : {#'WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1', 
         'order' : 5,
-        'files' : ['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'], #'WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'
+        'files' : ['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
         #'files' : ['WW_TuneCUETP8M1_13TeV-pythia8-v1','WZ_TuneCUETP8M1_13TeV-pythia8-v1','ZZ_TuneCUETP8M1_13TeV-pythia8-v1', 'ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1', 'ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
         'fillcolor' : 602,
         'fillstyle' : 1001,
