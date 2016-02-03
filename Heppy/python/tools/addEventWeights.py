@@ -5,7 +5,7 @@ from array import array
 from ROOT import TFile, TH1, TF1, TLorentzVector
 from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaR2, deltaPhi
 
-from DMPD.Heppy.samples.Spring15.xSections import xsections, kfactors, xsectionsunc
+from DMPD.Heppy.samples.Spring15.xSections import xsections, xsectionsunc, kfactors, kfactors4F5F
 
 #ROOT.gROOT.SetBatch(1)
 
@@ -206,6 +206,7 @@ def processFile(dir_name, verbose=False):
     if isMC: 
         weightXS = xsections[dir_name[:-3]]/totalEntries
         if dir_name[:-3] in kfactors: kfactorXS = kfactors[dir_name[:-3]]
+        elif dir_name[:-3] in kfactors4F5F: kfactorXS = kfactors4F5F[dir_name[:-3]]
         else: kfactorXS = 1.
     else: weightXS = kfactorXS = 1.
     
@@ -266,6 +267,7 @@ def processFile(dir_name, verbose=False):
     # Electron Id+Iso
     eleFile = TFile(ref_ele_file, 'READ')
     eleVeto = eleFile.Get('unfactorized_scalefactors_Veto_ele')
+    eleLoose = eleFile.Get('unfactorized_scalefactors_Loose_ele')
     eleTight = eleFile.Get('unfactorized_scalefactors_Tight_ele')
     
     # Muon Id
@@ -563,14 +565,14 @@ def processFile(dir_name, verbose=False):
                         electronIsoWeightUp[0]   *= eleVeto.GetBinContent( hbin ) + eleTight.GetBinError( hbin )
                         electronIsoWeightDown[0] *= eleVeto.GetBinContent( hbin ) - eleTight.GetBinError( hbin )
                     if ( 'XZh' in obj.GetName() and obj.isZtoEE ):
-                        hbin = eleVeto.FindBin(min(abs(obj.lepton1_eta), eleVeto.GetXaxis().GetXmax()-0.01), min(obj.lepton1_pt, eleVeto.GetYaxis().GetXmax()-1.))
-                        electronWeight[0]     *= eleVeto.GetBinContent( hbin )
-                        electronWeightUp[0]   *= eleVeto.GetBinContent( hbin ) + eleVeto.GetBinError( hbin )
-                        electronWeightDown[0] *= eleVeto.GetBinContent( hbin ) - eleVeto.GetBinError( hbin )
-                        hbin = eleVeto.FindBin(min(abs(obj.lepton2_eta), eleVeto.GetXaxis().GetXmax()-0.01), min(obj.lepton2_pt, eleVeto.GetYaxis().GetXmax()-1.))
-                        electronWeight[0]     *= eleVeto.GetBinContent( hbin )
-                        electronWeightUp[0]   *= eleVeto.GetBinContent( hbin ) + eleVeto.GetBinError( hbin )
-                        electronWeightDown[0] *= eleVeto.GetBinContent( hbin ) - eleVeto.GetBinError( hbin )
+                        hbin = eleLoose.FindBin(min(abs(obj.lepton1_eta), eleLoose.GetXaxis().GetXmax()-0.01), min(obj.lepton1_pt, eleLoose.GetYaxis().GetXmax()-1.))
+                        electronWeight[0]     *= eleLoose.GetBinContent( hbin )
+                        electronWeightUp[0]   *= eleLoose.GetBinContent( hbin ) + eleLoose.GetBinError( hbin )
+                        electronWeightDown[0] *= eleLoose.GetBinContent( hbin ) - eleLoose.GetBinError( hbin )
+                        hbin = eleLoose.FindBin(min(abs(obj.lepton2_eta), eleLoose.GetXaxis().GetXmax()-0.01), min(obj.lepton2_pt, eleLoose.GetYaxis().GetXmax()-1.))
+                        electronWeight[0]     *= eleLoose.GetBinContent( hbin )
+                        electronWeightUp[0]   *= eleLoose.GetBinContent( hbin ) + eleLoose.GetBinError( hbin )
+                        electronWeightDown[0] *= eleLoose.GetBinContent( hbin ) - eleLoose.GetBinError( hbin )
                     
                     ''' MUON ID/ISO '''
                     if ( 'ZCR' in obj.GetName() and obj.isZtoMM ) or ( 'WCR' in obj.GetName() and obj.isWtoMN ) or ( 'TCR' in obj.GetName() ) or ( 'XZh' in obj.GetName() and obj.isZtoMM ):
@@ -984,6 +986,7 @@ for d in os.listdir(origin):
     if not d[:-3] in xsections.keys():
         continue
     #if not ('DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX' in d or '_HT-' in d): continue
+    #if not ('WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8' in d): continue
     #if not ('_HT-' in d): continue
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
