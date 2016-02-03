@@ -91,6 +91,8 @@ class GenAnalyzer( Analyzer ):
         event.FacScaleDown = 1.
         event.RenScaleUp   = 1.
         event.RenScaleDown = 1.
+        event.FacRenScaleUp   = 1.
+        event.FacRenScaleDown = 1.
         event.PDFweight    = 1.
         if not hasattr(event, "gentopquarks"): event.gentopquarks = []
         
@@ -103,6 +105,8 @@ class GenAnalyzer( Analyzer ):
                     event.FacScaleDown = abs(event.LHE_weights[2].wgt/event.LHE_originalWeight)
                     event.RenScaleUp   = abs(event.LHE_weights[3].wgt/event.LHE_originalWeight)
                     event.RenScaleDown = abs(event.LHE_weights[6].wgt/event.LHE_originalWeight)
+                    event.FacRenScaleUp   = abs(event.LHE_weights[4].wgt/event.LHE_originalWeight)
+                    event.FacRenScaleDown = abs(event.LHE_weights[8].wgt/event.LHE_originalWeight)
                     PDFw = []
                     if len(event.LHE_weights) > 8:
                         for i in range(9,min(109, len(event.LHE_weights))): PDFw.append(abs(event.LHE_weights[i].wgt/event.LHE_originalWeight))
