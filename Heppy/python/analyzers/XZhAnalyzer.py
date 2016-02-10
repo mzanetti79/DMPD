@@ -17,7 +17,7 @@ class XZhAnalyzer( Analyzer ):
         HEEPlabels = ["isEcalDriven", "#Delta #eta_{in}^{seed}", "#Delta #varphi_{in}", "H/E", "E^{2x5}/E^{5x5}", "Lost Hits", "|d_{xy}|", "All"]
         CstTrklabels = ["isTracker", "Matched Stations", "#delta p_{T}/p_{T}", "|d_{xy}|", "|d_{z}|", "Pixel Hits", "Trk Lay w/ Meas", "All"]
         # define binning
-        pTbins = [0., 5., 10., 15., 20., 25., 30., 35., 40., 45., 50., 60., 70., 80., 90., 100., 110., 120., 130., 150., 175., 200., 225., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
+        pTbins = [0., 25., 50., 75., 100., 125., 150., 175., 200., 250., 300., 350., 400., 500., 750., 1000., 1250., 1500., 2000., 2500.]
         dRbins = [0., 0.025, 0.05, 0.075, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.75, 1.0]
         
         if "outputfile" in setup.services:
@@ -73,9 +73,9 @@ class XZhAnalyzer( Analyzer ):
             for i, n in enumerate(["EffElecEta_Veto", "EffElecEta_HEEP", "EffMuonEta_Highpt", "EffMuonEta_CustomTracker"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
             #   Z ee mm
-            for i, n in enumerate(["EffElecZdR_Veto", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_pfIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_pfIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_pfIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptCustomTracker", "EffMuonZdR_HighptCustomTracker_pfIso", "EffMuonZdR_HighptCustomTracker_miniIso", "EffMuonZdR_HighptCustomTracker_trkIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_pfIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight"]):
+            for i, n in enumerate(["EffElecZdR_Veto", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_tkIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_tkIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_tkIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptCustomTracker", "EffMuonZdR_HighptCustomTracker_tkIso", "EffMuonZdR_HighptCustomTracker_miniIso", "EffMuonZdR_HighptCustomTracker_trkIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_tkIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
-            for i, n in enumerate(["EffElecZpt_Veto", "EffElecZpt_Loose", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_pfIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_pfIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_pfIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptCustomTracker", "EffMuonZpt_HighptCustomTracker_pfIso", "EffMuonZpt_HighptCustomTracker_miniIso", "EffMuonZpt_HighptCustomTracker_trkIso","EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_pfIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
+            for i, n in enumerate(["EffElecZpt_Veto", "EffElecZpt_Loose", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_tkIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_tkIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_tkIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptCustomTracker", "EffMuonZpt_HighptCustomTracker_tkIso", "EffMuonZpt_HighptCustomTracker_miniIso", "EffMuonZpt_HighptCustomTracker_trkIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_tkIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             # Set Sumw2
             for n, h in self.Hist.iteritems():
@@ -216,7 +216,7 @@ class XZhAnalyzer( Analyzer ):
                     if event.inclusiveLeptons[l1].innerTrack().isNonnull() and event.inclusiveLeptons[l2].innerTrack().isNonnull():
                         tkIso1 = max(event.inclusiveLeptons[l1].trackIso() - event.inclusiveLeptons[l2].innerTrack().pt(), 0.) / event.inclusiveLeptons[l1].pt()
                         tkIso2 = max(event.inclusiveLeptons[l2].trackIso() - event.inclusiveLeptons[l1].innerTrack().pt(), 0.) / event.inclusiveLeptons[l2].pt()
-                pfIso = tkIso1<0.1 and tkIso2<0.1
+                tkIso = tkIso1<0.1 and tkIso2<0.1
                 # Z
                 if Zmass > self.cfg_ana.Z_mass_low and Zmass < self.cfg_ana.Z_mass_high and event.inclusiveLeptons[l1].charge()!=event.inclusiveLeptons[l2].charge():
                     self.Hist["MuonZdR"].Fill(genZdR)
@@ -226,9 +226,9 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffMuonZdR_TrackerTracker"].Fill(genZdR)
                         self.Hist["EffMuonZpt_TrackerTracker"].Fill(genZpt)
                         # Tracker+PFiso / Tracker+PFiso
-                        if pfIso:
-                            self.Hist["EffMuonZdR_TrackerTracker_pfIso"].Fill(genZdR)
-                            self.Hist["EffMuonZpt_TrackerTracker_pfIso"].Fill(genZpt)
+                        if tkIso:
+                            self.Hist["EffMuonZdR_TrackerTracker_tkIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_TrackerTracker_tkIso"].Fill(genZpt)
                         # Tracker+miniiso / Tracker+miniiso
                         if miniIso:
                             self.Hist["EffMuonZdR_TrackerTracker_miniIso"].Fill(genZdR)
@@ -238,9 +238,9 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffMuonZdR_LooseLoose"].Fill(genZdR)
                         self.Hist["EffMuonZpt_LooseLoose"].Fill(genZpt)
                         # Loose+PFiso / Loose+PFiso
-                        if pfIso:
-                            self.Hist["EffMuonZdR_LooseLoose_pfIso"].Fill(genZdR)
-                            self.Hist["EffMuonZpt_LooseLoose_pfIso"].Fill(genZpt)
+                        if tkIso:
+                            self.Hist["EffMuonZdR_LooseLoose_tkIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_LooseLoose_tkIso"].Fill(genZpt)
                         # Loose+miniiso / Loose+miniiso
                         if miniIso:
                             self.Hist["EffMuonZdR_LooseLoose_miniIso"].Fill(genZdR)
@@ -250,9 +250,9 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffMuonZdR_HighptTracker"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptTracker"].Fill(genZpt)
                         # HighPt+PFiso / Tracker+PFiso
-                        if pfIso:
-                            self.Hist["EffMuonZdR_HighptTracker_pfIso"].Fill(genZdR)
-                            self.Hist["EffMuonZpt_HighptTracker_pfIso"].Fill(genZpt)
+                        if tkIso:
+                            self.Hist["EffMuonZdR_HighptTracker_tkIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptTracker_tkIso"].Fill(genZpt)
                         # HighPt+miniiso / Tracker+miniiso
                         if miniIso:
                             self.Hist["EffMuonZdR_HighptTracker_miniIso"].Fill(genZdR)
@@ -262,9 +262,9 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffMuonZdR_HighptCustomTracker"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptCustomTracker"].Fill(genZpt)
                         # HighPt+PFiso / Tracker+PFiso
-                        if pfIso:
-                            self.Hist["EffMuonZdR_HighptCustomTracker_pfIso"].Fill(genZdR)
-                            self.Hist["EffMuonZpt_HighptCustomTracker_pfIso"].Fill(genZpt)
+                        if tkIso:
+                            self.Hist["EffMuonZdR_HighptCustomTracker_tkIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptCustomTracker_tkIso"].Fill(genZpt)
                         # HighPt+miniiso / Tracker+miniiso
                         if miniIso:
                             self.Hist["EffMuonZdR_HighptCustomTracker_miniIso"].Fill(genZdR)
@@ -278,9 +278,9 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffMuonZdR_HighptLoose"].Fill(genZdR)
                         self.Hist["EffMuonZpt_HighptLoose"].Fill(genZpt)
                         # HighPt+PFiso / Loose+PFiso
-                        if pfIso:
-                            self.Hist["EffMuonZdR_HighptLoose_pfIso"].Fill(genZdR)
-                            self.Hist["EffMuonZpt_HighptLoose_pfIso"].Fill(genZpt)
+                        if tkIso:
+                            self.Hist["EffMuonZdR_HighptLoose_tkIso"].Fill(genZdR)
+                            self.Hist["EffMuonZpt_HighptLoose_tkIso"].Fill(genZpt)
                         # HighPt+miniiso / Loose+miniiso
                         if miniIso:
                             self.Hist["EffMuonZdR_HighptLoose_miniIso"].Fill(genZdR)
