@@ -281,7 +281,7 @@ fatJetAnalyzer = cfg.Analyzer(
     ### Jet - General
     ##############################
     jetCol                      = 'slimmedJetsAK8',
-    jetPt                       = 200.,
+    jetPt                       = 150.,
     jetEta                      = 4.7,
     jetEtaCentral               = 2.5,
     jetLepDR                    = 0.8,
@@ -434,6 +434,16 @@ METNoHFAnalyzer = cfg.Analyzer(
     ### ====================== ###
     )
 
+
+from DMPD.Heppy.analyzers.RecoilAnalyzer import RecoilAnalyzer
+RecoilAnalyzer = cfg.Analyzer(
+    class_object = RecoilAnalyzer,
+    processLine = '.L %s/src/DMPD/Heppy/python/tools/RECOIL/RecoilCorrector.hh+' % os.environ['CMSSW_BASE'],
+    ref_recoilMC_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsMC_Zu1_pf_v5.root' % os.environ['CMSSW_BASE'],
+    ref_recoilData_file = '%s/src/DMPD/Heppy/python/tools/RECOIL/recoilfit_gjetsData_Zu1_pf_v5.root' % os.environ['CMSSW_BASE'],
+    )
+
+
 ######################################
 ### TRIGGER MATCHING ANALYZERS     ###
 ######################################
@@ -516,7 +526,7 @@ SRAnalyzer = cfg.Analyzer(
     class_object = SRAnalyzer,
     jetAlgo = "ak8PFJetsCHSPrunedMass",
     met_pt = 100.,
-    fatjet_pt = 200.,
+    fatjet_pt = 150.,
     )
 
 from DMPD.Heppy.analyzers.XZhAnalyzer import XZhAnalyzer
@@ -527,14 +537,20 @@ XZhAnalyzer = cfg.Analyzer(
     elec2pt = 20.,
     muon1pt = 55.,
     muon2pt = 20.,
-    fatjet_pt = 200.,
+    fatjet_pt = 150.,
     jetlep_dR = 0.8,
     Z_mass_low = 70.,
     Z_mass_high = 110.,
-    Z_pt = 200.,
+    Z_pt = 150.,
     jetAlgo = "ak8PFJetsCHSPrunedMass",#"ak8PFJetsCHSSoftDropMass"
     )
 
+
+from DMPD.Heppy.analyzers.CandidateAnalyzer import CandidateAnalyzer
+CandidateAnalyzer = cfg.Analyzer(
+    verbose = False,
+    class_object = CandidateAnalyzer,
+)
 
 #from DMPD.Heppy.analyzers.CategorizationAnalyzer import CategorizationAnalyzer
 #CategorizationAnalyzer = cfg.Analyzer(
@@ -654,6 +670,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
@@ -699,6 +716,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         'genV'      : NTupleObject('genV', particleType, help='Gen Boson'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
     },
@@ -745,6 +763,7 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'gennu'     : NTupleObject('gennu', particleType, help='Gen Neutrino'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
         'thekW'     : NTupleObject('kW', candidateType, help='W boson candidate with kinematic fit'),
@@ -787,6 +806,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         'genmet'    : NTupleObject('genmet',  metType, help='MET at generation level'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
     },
     collections = {
@@ -821,6 +841,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
     #globalObjects = {
         #'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         #'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        #'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         #'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in gamma + jets event obtained removing the photon'),
         #'genmet'     : NTupleObject('genmet',  metType, help='MET at generation level'),
     #},
@@ -861,6 +882,7 @@ XZhTreeProducer= cfg.Analyzer(
         'Z'         : NTupleObject('Z', candidateType, help='Z boson candidate'),
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
+        'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         },
     collections = {
         'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
@@ -887,7 +909,6 @@ sequence = [
     vertexAnalyzer,
     MEtAnalyzer,
     MEtNoHFAnalyzer,
-    #METNoHFAnalyzer,
     photonAnalyzer,
     leptonAnalyzer,
     tauAnalyzer,
@@ -917,6 +938,8 @@ sequence = [
 #    CategorizationAnalyzer,
     #SRAnalyzer,
     XZhAnalyzer,
+    RecoilAnalyzer,
+    CandidateAnalyzer,
     ##### Tree producers
     SignalRegionTreeProducer,
     ZControlRegionTreeProducer,
@@ -1008,24 +1031,24 @@ from PhysicsTools.HeppyCore.framework.eventsfwlite import Events
 
 ## MC ###
 selectedComponents = [
-#  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
-#  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
-#  sample['DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+  sample['DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v2'],
+  sample['DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  #sample['DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
-#  sample['ZJetsToNuNu_HT-100To200_13TeV-madgraph-v1'],
-#  sample['ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1'],
-#  sample['ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1'],
-#  sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
+  #sample['DYJetsToNuNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+  sample['ZJetsToNuNu_HT-100To200_13TeV-madgraph-v1'],
+  sample['ZJetsToNuNu_HT-200To400_13TeV-madgraph-v1'],
+  sample['ZJetsToNuNu_HT-400To600_13TeV-madgraph-v1'],
+  sample['ZJetsToNuNu_HT-600ToInf_13TeV-madgraph-v2'],
 
-#  #sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
 #  sample['QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['QCD_HT100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1036,86 +1059,86 @@ selectedComponents = [
 #  sample['QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 #  sample['QCD_HT500to700_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
-#  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
-#  sample['ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
-#  sample['ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
-#  sample['ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v2'],
-#  sample['TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8-v2'],
-#  sample['TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-v1'],
+  sample['ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-v1'],
+  sample['ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
+  sample['ST_t-channel_top_4f_leptonDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
+  sample['ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v1'],
+  sample['ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-v2'],
+  sample['TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8-v2'],
+  sample['TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-v1'],
 
-##  sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
-#  sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-ext-v1'],
+#  sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-v1'],
+  sample['TT_TuneCUETP8M1_13TeV-powheg-pythia8-ext-v1'],
 
-#  sample['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  sample['WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
-#  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
-#  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  sample['WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
+  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+  #sample['WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 
-#  sample['ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1'],
-#  sample['ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  #sample['ZZTo4Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'], 
-#  #sample['WZJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
-#  sample['WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  #sample['WW_TuneCUETP8M1_13TeV-pythia8-v1'],
-#  #sample['WZ_TuneCUETP8M1_13TeV-pythia8-v1'],
-#  #sample['ZZ_TuneCUETP8M1_13TeV-pythia8-v1'],
-#  #sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
-#  sample['ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
-#  sample['WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['ZZTo4L_13TeV-amcatnloFXFX-pythia8-v1'],
+  sample['ZZTo2Q2Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['WWTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  #sample['ZZTo4Q_13TeV_amcatnloFXFX_madspin_pythia8-v1'], 
+  #sample['WZJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-v1'],
+  sample['WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  #sample['WW_TuneCUETP8M1_13TeV-pythia8-v1'],
+  #sample['WZ_TuneCUETP8M1_13TeV-pythia8-v1'],
+  #sample['ZZ_TuneCUETP8M1_13TeV-pythia8-v1'],
+  #sample['ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8-v1'],
+  sample['ZH_HToBB_ZToLL_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['ZH_HToBB_ZToNuNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
+  sample['WH_HToBB_WToLNu_M125_13TeV_amcatnloFXFX_madspin_pythia8-v1'],
 
-#  sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1'],
   sample['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
-#  sample['ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1'],
-#  sample['ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1'],
+  sample['ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1'],
 
-#  sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
-#  sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+  sample['WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
 
 ##  sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
 ##  sample['BBbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1'],
@@ -1217,25 +1240,25 @@ TriggerMatchAnalyzer.processName = 'PAT'
 
 
 #### DATA ###
-#selectedComponents = [
-# ###Run2015D PromptReco
-# #sample['DoubleEG_Run2015D-PromptReco-v4'],
-# #sample['DoubleMuon_Run2015D-PromptReco-v4'],
-# sample['MET_Run2015D-PromptReco-v4'],
-# sample['SingleElectron_Run2015D-PromptReco-v4'],
-# sample['SingleMuon_Run2015D-PromptReco-v4'],
-##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+selectedComponents = [
+ ###Run2015D PromptReco
+ #sample['DoubleEG_Run2015D-PromptReco-v4'],
+ #sample['DoubleMuon_Run2015D-PromptReco-v4'],
+ sample['MET_Run2015D-PromptReco-v4'],
+ sample['SingleElectron_Run2015D-PromptReco-v4'],
+ sample['SingleMuon_Run2015D-PromptReco-v4'],
+#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
 
-# ###Run2015C O5Oct2015
-# #sample['DoubleEG_Run2015C-05Oct2015-v1'],
-# #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
-# sample['MET_Run2015C-05Oct2015-v1'],
-# sample['SingleElectron_Run2015C-05Oct2015-v1'],
-# sample['SingleMuon_Run2015C-05Oct2015-v1'],
-##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
-#]
-#filterAnalyzer.processName = 'RECO'
-#TriggerMatchAnalyzer.processName = 'RECO'
+ ###Run2015C O5Oct2015
+ #sample['DoubleEG_Run2015C-05Oct2015-v1'],
+ #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+ sample['MET_Run2015C-05Oct2015-v1'],
+ sample['SingleElectron_Run2015C-05Oct2015-v1'],
+ sample['SingleMuon_Run2015C-05Oct2015-v1'],
+#  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
+]
+filterAnalyzer.processName = 'RECO'
+TriggerMatchAnalyzer.processName = 'RECO'
 
 #### DATA ###
 #selectedComponents = [
@@ -1285,7 +1308,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=1000000,
+        nEvents=100000,
         )
     looper.loop()
     looper.write()
