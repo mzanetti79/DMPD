@@ -75,7 +75,7 @@ ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/BTAG/BTagCalibrationSt
 
 fl = ['B', 'C', 'L']
 wp = ['L', 'M', 'T']
-workingpoint = [0., 0.605, 0.890, 0.980, 1.]
+workingpoint = [0., 0.605, 0.890, 0.970, 1.]
 shape = {}
 
 calib = ROOT.BTagCalibration('csvv2', ref_btag_file)
@@ -148,10 +148,10 @@ def returnReshapedDiscr(f, discr, pt, eta, sigma=''):
 
 ### RECOIL CORRECTIONS SETUP ###
 
-ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/RECOIL/RecoilCorrector.hh+' % os.environ['CMSSW_BASE'])
-Recoil = ROOT.RecoilCorrector(ref_recoilMC_file)
-Recoil.addDataFile(ref_recoilData_file)
-Recoil.addMCFile(ref_recoilMC_file)
+#ROOT.gROOT.ProcessLine('.L %s/src/DMPD/Heppy/python/tools/RECOIL/RecoilCorrector.hh+' % os.environ['CMSSW_BASE'])
+#Recoil = ROOT.RecoilCorrector(ref_recoilMC_file)
+#Recoil.addDataFile(ref_recoilData_file)
+#Recoil.addMCFile(ref_recoilMC_file)
 
 ### ELECTROWEAK CORRECTIONS SETUP ###
 
@@ -343,20 +343,20 @@ def processFile(dir_name, verbose=False):
         subjetCSV[i] = array('f', [1.0])
         subjetCSVUp[i] = array('f', [1.0])
         subjetCSVDown[i] = array('f', [1.0])
-    # Recoil Variables
-    cormet_pt         = array('f', [0.0])  
-    cormet_phi        = array('f', [0.0])  
-    cormet_ptScaleUp  = array('f', [0.0])  
-    cormet_ptScaleDown= array('f', [0.0])
-    cormet_ptResUp    = array('f', [0.0])
-    cormet_ptResDown  = array('f', [0.0])
-    fakecormet_pt         = array('f', [0.0])  
-    fakecormet_phi        = array('f', [0.0])  
-    fakecormet_ptScaleUp  = array('f', [0.0])  
-    fakecormet_ptScaleDown= array('f', [0.0])
-    fakecormet_ptResUp    = array('f', [0.0])
-    fakecormet_ptResDown  = array('f', [0.0])
-    X_cmass = array('f', [1.0])
+#    # Recoil Variables
+#    cormet_pt         = array('f', [0.0])  
+#    cormet_phi        = array('f', [0.0])  
+#    cormet_ptScaleUp  = array('f', [0.0])  
+#    cormet_ptScaleDown= array('f', [0.0])
+#    cormet_ptResUp    = array('f', [0.0])
+#    cormet_ptResDown  = array('f', [0.0])
+#    fakecormet_pt         = array('f', [0.0])  
+#    fakecormet_phi        = array('f', [0.0])  
+#    fakecormet_ptScaleUp  = array('f', [0.0])  
+#    fakecormet_ptScaleDown= array('f', [0.0])
+#    fakecormet_ptResUp    = array('f', [0.0])
+#    fakecormet_ptResDown  = array('f', [0.0])
+#    X_cmass = array('f', [1.0])
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -368,8 +368,8 @@ def processFile(dir_name, verbose=False):
             new_file.cd()
             #if 'SR' in obj.GetName() or 'CR' in obj.GetName():
             #    obj.Add(ref_hist)
-            if 'Counter' in obj.GetName():
-                obj.Scale(weightXS)
+            #if 'Counter' in obj.GetName():
+            #    obj.Scale(weightXS)
             obj.SetBinContent(0, totalEntries)
             new_file.cd()
             obj.Write()
@@ -438,19 +438,19 @@ def processFile(dir_name, verbose=False):
                 subjetCSVUpBranch[i] = new_tree.Branch('fatjet1_CSVR%dUp' % (i+1), subjetCSVUp[i], 'fatjet1_CSVR%dUp/F' % (i+1))
                 subjetCSVDownBranch[i] = new_tree.Branch('fatjet1_CSVR%dDown' % (i+1), subjetCSVDown[i], 'fatjet1_CSVR%dDown/F' % (i+1))
             nBtagSubJetsBranch = new_tree.Branch('fatjet1_nBtag', nBtagSubJets, 'fatjet1_nBtag/F')
-            cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
-            cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
-            cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
-            cormet_ptScaleDownBranch = new_tree.Branch('cormet_ptScaleDown', cormet_ptScaleDown, 'cormet_ptScaleDown/F')
-            cormet_ptResUpBranch     = new_tree.Branch('cormet_ptResUp',     cormet_ptResUp,     'cormet_ptResUp/F')
-            cormet_ptResDownBranch   = new_tree.Branch('cormet_ptResDown',   cormet_ptResDown,   'cormet_ptResDown/F')
-            fakecormet_ptBranch          = new_tree.Branch('fakecormet_pt',          fakecormet_pt,          'fakecormet_pt/F')
-            fakecormet_phiBranch         = new_tree.Branch('fakecormet_phi',         fakecormet_phi,         'fakecormet_phi/F')
-            fakecormet_ptScaleUpBranch   = new_tree.Branch('fakecormet_ptScaleUp',   fakecormet_ptScaleUp,   'fakecormet_ptScaleUp/F')
-            fakecormet_ptScaleDownBranch = new_tree.Branch('fakecormet_ptScaleDown', fakecormet_ptScaleDown, 'fakecormet_ptScaleDown/F')
-            fakecormet_ptResUpBranch     = new_tree.Branch('fakecormet_ptResUp',     fakecormet_ptResUp,     'fakecormet_ptResUp/F')
-            fakecormet_ptResDownBranch   = new_tree.Branch('fakecormet_ptResDown',   fakecormet_ptResDown,   'fakecormet_ptResDown/F')
-            X_cmassBranch = new_tree.Branch('X_cmass', X_cmass, 'X_cmass/F')
+#            cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
+#            cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
+#            cormet_ptScaleUpBranch   = new_tree.Branch('cormet_ptScaleUp',   cormet_ptScaleUp,   'cormet_ptScaleUp/F')
+#            cormet_ptScaleDownBranch = new_tree.Branch('cormet_ptScaleDown', cormet_ptScaleDown, 'cormet_ptScaleDown/F')
+#            cormet_ptResUpBranch     = new_tree.Branch('cormet_ptResUp',     cormet_ptResUp,     'cormet_ptResUp/F')
+#            cormet_ptResDownBranch   = new_tree.Branch('cormet_ptResDown',   cormet_ptResDown,   'cormet_ptResDown/F')
+#            fakecormet_ptBranch          = new_tree.Branch('fakecormet_pt',          fakecormet_pt,          'fakecormet_pt/F')
+#            fakecormet_phiBranch         = new_tree.Branch('fakecormet_phi',         fakecormet_phi,         'fakecormet_phi/F')
+#            fakecormet_ptScaleUpBranch   = new_tree.Branch('fakecormet_ptScaleUp',   fakecormet_ptScaleUp,   'fakecormet_ptScaleUp/F')
+#            fakecormet_ptScaleDownBranch = new_tree.Branch('fakecormet_ptScaleDown', fakecormet_ptScaleDown, 'fakecormet_ptScaleDown/F')
+#            fakecormet_ptResUpBranch     = new_tree.Branch('fakecormet_ptResUp',     fakecormet_ptResUp,     'fakecormet_ptResUp/F')
+#            fakecormet_ptResDownBranch   = new_tree.Branch('fakecormet_ptResDown',   fakecormet_ptResDown,   'fakecormet_ptResDown/F')
+#            X_cmassBranch = new_tree.Branch('X_cmass', X_cmass, 'X_cmass/F')
 
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -465,7 +465,7 @@ def processFile(dir_name, verbose=False):
                 triggerMETWeight[0] = triggerMETWeightUp[0] = triggerMETWeightDown[0] = 1.
                 electronWeight[0] = electronWeightUp[0] = electronWeightDown[0] = electronIsoWeight[0] = electronIsoWeightUp[0] = electronIsoWeightDown[0] = 1.
                 muonWeight[0] = muonWeightUp[0] = muonWeightDown[0] = muonIsoWeight[0] = muonIsoWeightUp[0] = muonIsoWeightDown[0] = 1.
-                X_cmass[0] = 0.
+#                X_cmass[0] = 0.
                 
                 nBtagJets[0] = nBtagSubJets[0] = 0
                 for i in range(njets+nbjets):
@@ -720,144 +720,144 @@ def processFile(dir_name, verbose=False):
                         btagWeightDown[0] *= (1.-ssfDown[0])*(1.-ssfDown[1])
                     
                     
-                    ''' RECOIL '''
-                    ### fill default values
-                    # in every region
-                    cmetpt           = ROOT.Double(obj.met_pt)
-                    cmetphi          = ROOT.Double(obj.met_phi)
-                    cmetptScaleUp    = ROOT.Double(obj.met_pt)
-                    cmetphiScaleUp   = ROOT.Double(obj.met_phi)
-                    cmetptScaleDown  = ROOT.Double(obj.met_pt)
-                    cmetphiScaleDown = ROOT.Double(obj.met_phi)
-                    cmetptResUp      = ROOT.Double(obj.met_pt)
-                    cmetphiResUp     = ROOT.Double(obj.met_phi)
-                    cmetptResDown    = ROOT.Double(obj.met_pt)
-                    cmetphiResDown   = ROOT.Double(obj.met_phi)
-                    cfmetpt           = ROOT.Double(0.)
-                    cfmetphi          = ROOT.Double(0.)
-                    cfmetptScaleUp    = ROOT.Double(0.)
-                    cfmetphiScaleUp   = ROOT.Double(0.)
-                    cfmetptScaleDown  = ROOT.Double(0.)
-                    cfmetphiScaleDown = ROOT.Double(0.)
-                    cfmetptResUp      = ROOT.Double(0.)
-                    cfmetphiResUp     = ROOT.Double(0.)
-                    cfmetptResDown    = ROOT.Double(0.)
-                    cfmetphiResDown   = ROOT.Double(0.)
-                    # with valid fakemet in CRs
-                    if (obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR'):
-                        cfmetpt           = ROOT.Double(obj.fakemet_pt)
-                        cfmetphi          = ROOT.Double(obj.fakemet_phi)
-                        cfmetptScaleUp    = ROOT.Double(obj.fakemet_pt)
-                        cfmetphiScaleUp   = ROOT.Double(obj.fakemet_phi)
-                        cfmetptScaleDown  = ROOT.Double(obj.fakemet_pt)
-                        cfmetphiScaleDown = ROOT.Double(obj.fakemet_phi)
-                        cfmetptResUp      = ROOT.Double(obj.fakemet_pt)
-                        cfmetphiResUp     = ROOT.Double(obj.fakemet_phi)
-                        cfmetptResDown    = ROOT.Double(obj.fakemet_pt)
-                        cfmetphiResDown   = ROOT.Double(obj.fakemet_phi)
+#                    ''' RECOIL '''
+#                    ### fill default values
+#                    # in every region
+#                    cmetpt           = ROOT.Double(obj.met_pt)
+#                    cmetphi          = ROOT.Double(obj.met_phi)
+#                    cmetptScaleUp    = ROOT.Double(obj.met_pt)
+#                    cmetphiScaleUp   = ROOT.Double(obj.met_phi)
+#                    cmetptScaleDown  = ROOT.Double(obj.met_pt)
+#                    cmetphiScaleDown = ROOT.Double(obj.met_phi)
+#                    cmetptResUp      = ROOT.Double(obj.met_pt)
+#                    cmetphiResUp     = ROOT.Double(obj.met_phi)
+#                    cmetptResDown    = ROOT.Double(obj.met_pt)
+#                    cmetphiResDown   = ROOT.Double(obj.met_phi)
+#                    cfmetpt           = ROOT.Double(0.)
+#                    cfmetphi          = ROOT.Double(0.)
+#                    cfmetptScaleUp    = ROOT.Double(0.)
+#                    cfmetphiScaleUp   = ROOT.Double(0.)
+#                    cfmetptScaleDown  = ROOT.Double(0.)
+#                    cfmetphiScaleDown = ROOT.Double(0.)
+#                    cfmetptResUp      = ROOT.Double(0.)
+#                    cfmetphiResUp     = ROOT.Double(0.)
+#                    cfmetptResDown    = ROOT.Double(0.)
+#                    cfmetphiResDown   = ROOT.Double(0.)
+#                    # with valid fakemet in CRs
+#                    if (obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR'):
+#                        cfmetpt           = ROOT.Double(obj.fakemet_pt)
+#                        cfmetphi          = ROOT.Double(obj.fakemet_phi)
+#                        cfmetptScaleUp    = ROOT.Double(obj.fakemet_pt)
+#                        cfmetphiScaleUp   = ROOT.Double(obj.fakemet_phi)
+#                        cfmetptScaleDown  = ROOT.Double(obj.fakemet_pt)
+#                        cfmetphiScaleDown = ROOT.Double(obj.fakemet_phi)
+#                        cfmetptResUp      = ROOT.Double(obj.fakemet_pt)
+#                        cfmetphiResUp     = ROOT.Double(obj.fakemet_phi)
+#                        cfmetptResDown    = ROOT.Double(obj.fakemet_pt)
+#                        cfmetphiResDown   = ROOT.Double(obj.fakemet_phi)
 
-                    applyrecoil    = True # safety (maybe useless now)
-                    
-                    # configure input parameters (GENMET / RECO_V_PT / RECOIL) only for Z->ll, Z->vv, and W->lv
-                    if 'DYJets' in dir_name or 'ZJets' in dir_name or 'WJets' in dir_name:
-                        if obj.GetName()=='ZCR' or obj.GetName()=='WCR'or obj.GetName()=='SR' or obj.GetName()=='TCR' :
-                            genmetpt  = ROOT.Double(obj.genV_pt)
-                            genmetphi = ROOT.Double(obj.genV_phi)
-                            leppt     = ROOT.Double(0.)
-                            lepphi    = ROOT.Double(0.)
-                            Upar      = ROOT.Double(0.)
-                            Uper      = ROOT.Double(0.)
-                            if obj.GetName()=='SR':
-                                leppt     = ROOT.Double(0.)
-                                lepphi    = ROOT.Double(0.)
-                                Upar      = ROOT.Double(0.)
-                                Uper      = ROOT.Double(0.)
-                            elif obj.GetName()=='ZCR':
-                                leppt     = ROOT.Double(obj.Z_pt)
-                                lepphi    = ROOT.Double(obj.Z_phi)
-                                Upar      = ROOT.Double(obj.Upara)
-                                Uper      = ROOT.Double(obj.Uperp)
-                            elif obj.GetName()=='WCR':
-                                leppt     = ROOT.Double(obj.lepton1_pt)
-                                lepphi    = ROOT.Double(obj.lepton1_phi)
-                                Upar      = ROOT.Double(obj.Upara)
-                                Uper      = ROOT.Double(obj.Uperp)
-                            elif obj.GetName()=='TCR':
-                                # in situ evaluation of pseudo-boson (mu^\pm + e^\mp)
-                                l1 = l2 = TLorentzVector(0,0,0,0) 
-                                l1.SetPtEtaPhiM(obj.lepton1_pt,obj.lepton1_eta,obj.lepton1_phi,obj.lepton1_mass)
-                                l2.SetPtEtaPhiM(obj.lepton2_pt,obj.lepton2_eta,obj.lepton2_phi,obj.lepton2_mass)
-                                pseudoboson = l1+l2
-                                recoilX = - obj.met_pt*math.cos(obj.met_phi) - pseudoboson.Px()
-                                recoilY = - obj.met_pt*math.cos(obj.met_phi) - pseudoboson.Py()
-                                pseudoUpara = (recoilX*pseudoboson.Px() + recoilY*pseudoboson.Py())/pseudoboson.Pt()
-                                pseudoUperp = (recoilX*pseudoboson.Py() - recoilY*pseudoboson.Px())/pseudoboson.Pt()    
-                                
-                                leppt     = ROOT.Double(pseudoboson.Pt())
-                                lepphi    = ROOT.Double(pseudoboson.Phi())
-                                Upar      = ROOT.Double(pseudoUpara)
-                                Uper      = ROOT.Double(pseudoUperp)
-                            else:
-                                applyrecoil = False
-                            
-                            if applyrecoil:
-                                ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
-                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
-                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
-                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
-                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
-                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
-                                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
-                                    ### correct fakeMET only in ZCR and WCR (and TCR)
-                                    ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
-                                    genmetpt  = ROOT.Double(obj.genV_pt)
-                                    genmetphi = ROOT.Double(obj.genV_phi)
-                                    leppt     = ROOT.Double(0.)
-                                    lepphi    = ROOT.Double(0.)
-                                    Upar      = ROOT.Double(0.)
-                                    Uper      = ROOT.Double(0.)
-                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
-                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
-                                pass
-                            pass
-                        pass
-                    pass
-                    
-                    ### fill the variables
-                    # add corrected MET in all regions
-                    cormet_pt[0]         = cmetpt
-                    cormet_phi[0]        = cmetphi
-                    cormet_ptScaleUp[0]  = cmetptScaleUp
-                    cormet_ptScaleDown[0]= cmetptScaleDown
-                    cormet_ptResUp[0]    = cmetptResUp
-                    cormet_ptResDown[0]  = cmetptResDown
-                    # add corrected fake-MET in control regions only
-                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
-                        fakecormet_pt[0]         = cfmetpt
-                        fakecormet_phi[0]        = cfmetphi
-                        fakecormet_ptScaleUp[0]  = cfmetptScaleUp
-                        fakecormet_ptScaleDown[0]= cfmetptScaleDown
-                        fakecormet_ptResUp[0]    = cfmetptResUp
-                        fakecormet_ptResDown[0]  = cfmetptResDown               
-                #### Data
-                ### fill the recoil corrected variables for consistency (with uncorrected values)
-                else:
-                    cormet_pt[0]         = obj.met_pt
-                    cormet_phi[0]        = obj.met_phi
-                    cormet_ptScaleUp[0]  = obj.met_pt
-                    cormet_ptScaleDown[0]= obj.met_pt
-                    cormet_ptResUp[0]    = obj.met_pt
-                    cormet_ptResDown[0]  = obj.met_pt
-                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
-                        fakecormet_pt[0]         = obj.fakemet_pt
-                        fakecormet_phi[0]        = obj.fakemet_phi
-                        fakecormet_ptScaleUp[0]  = obj.fakemet_pt
-                        fakecormet_ptScaleDown[0]= obj.fakemet_pt
-                        fakecormet_ptResUp[0]    = obj.fakemet_pt
-                        fakecormet_ptResDown[0]  = obj.fakemet_pt               
+#                    applyrecoil    = True # safety (maybe useless now)
+#                    
+#                    # configure input parameters (GENMET / RECO_V_PT / RECOIL) only for Z->ll, Z->vv, and W->lv
+#                    if 'DYJets' in dir_name or 'ZJets' in dir_name or 'WJets' in dir_name or 'prime' in dir_name:
+#                        if obj.GetName()=='ZCR' or obj.GetName()=='WCR'or obj.GetName()=='SR' or obj.GetName()=='TCR' :
+#                            genmetpt  = ROOT.Double(obj.genV_pt)
+#                            genmetphi = ROOT.Double(obj.genV_phi)
+#                            leppt     = ROOT.Double(0.)
+#                            lepphi    = ROOT.Double(0.)
+#                            Upar      = ROOT.Double(0.)
+#                            Uper      = ROOT.Double(0.)
+#                            if obj.GetName()=='SR':
+#                                leppt     = ROOT.Double(0.)
+#                                lepphi    = ROOT.Double(0.)
+#                                Upar      = ROOT.Double(0.)
+#                                Uper      = ROOT.Double(0.)
+#                            elif obj.GetName()=='ZCR':
+#                                leppt     = ROOT.Double(obj.Z_pt)
+#                                lepphi    = ROOT.Double(obj.Z_phi)
+#                                Upar      = ROOT.Double(obj.Upara)
+#                                Uper      = ROOT.Double(obj.Uperp)
+#                            elif obj.GetName()=='WCR':
+#                                leppt     = ROOT.Double(obj.lepton1_pt)
+#                                lepphi    = ROOT.Double(obj.lepton1_phi)
+#                                Upar      = ROOT.Double(obj.Upara)
+#                                Uper      = ROOT.Double(obj.Uperp)
+#                            elif obj.GetName()=='TCR':
+#                                # in situ evaluation of pseudo-boson (mu^\pm + e^\mp)
+#                                l1 = l2 = TLorentzVector(0,0,0,0) 
+#                                l1.SetPtEtaPhiM(obj.lepton1_pt,obj.lepton1_eta,obj.lepton1_phi,obj.lepton1_mass)
+#                                l2.SetPtEtaPhiM(obj.lepton2_pt,obj.lepton2_eta,obj.lepton2_phi,obj.lepton2_mass)
+#                                pseudoboson = l1+l2
+#                                recoilX = - obj.met_pt*math.cos(obj.met_phi) - pseudoboson.Px()
+#                                recoilY = - obj.met_pt*math.sin(obj.met_phi) - pseudoboson.Py()
+#                                pseudoUpara = (recoilX*pseudoboson.Px() + recoilY*pseudoboson.Py())/pseudoboson.Pt()
+#                                pseudoUperp = (recoilX*pseudoboson.Py() - recoilY*pseudoboson.Px())/pseudoboson.Pt()    
+#                                
+#                                leppt     = ROOT.Double(pseudoboson.Pt())
+#                                lepphi    = ROOT.Double(pseudoboson.Phi())
+#                                Upar      = ROOT.Double(pseudoUpara)
+#                                Uper      = ROOT.Double(pseudoUperp)
+#                            else:
+#                                applyrecoil = False
+#                            
+#                            if applyrecoil:
+#                                ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
+#                                Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
+#                                Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
+#                                Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
+#                                Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
+#                                Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
+#                                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
+#                                    ### correct fakeMET only in ZCR and WCR (and TCR)
+#                                    ### set reconstructed leptons and recoil to zero (as if in SR with fake-met)
+#                                    genmetpt  = ROOT.Double(obj.genV_pt)
+#                                    genmetphi = ROOT.Double(obj.genV_phi)
+#                                    leppt     = ROOT.Double(0.)
+#                                    lepphi    = ROOT.Double(0.)
+#                                    Upar      = ROOT.Double(0.)
+#                                    Uper      = ROOT.Double(0.)
+#                                    Recoil.CorrectType2(cfmetpt,          cfmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, obj.nJets)        
+#                                    Recoil.CorrectType2(cfmetptScaleUp,   cfmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, obj.nJets)        
+#                                    Recoil.CorrectType2(cfmetptScaleDown, cfmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, obj.nJets)        
+#                                    Recoil.CorrectType2(cfmetptResUp,     cfmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, obj.nJets)        
+#                                    Recoil.CorrectType2(cfmetptResDown,   cfmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, obj.nJets)   
+#                                pass
+#                            pass
+#                        pass
+#                    pass
+#                    
+#                    ### fill the variables
+#                    # add corrected MET in all regions
+#                    cormet_pt[0]         = cmetpt
+#                    cormet_phi[0]        = cmetphi
+#                    cormet_ptScaleUp[0]  = cmetptScaleUp
+#                    cormet_ptScaleDown[0]= cmetptScaleDown
+#                    cormet_ptResUp[0]    = cmetptResUp
+#                    cormet_ptResDown[0]  = cmetptResDown
+#                    # add corrected fake-MET in control regions only
+#                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
+#                        fakecormet_pt[0]         = cfmetpt
+#                        fakecormet_phi[0]        = cfmetphi
+#                        fakecormet_ptScaleUp[0]  = cfmetptScaleUp
+#                        fakecormet_ptScaleDown[0]= cfmetptScaleDown
+#                        fakecormet_ptResUp[0]    = cfmetptResUp
+#                        fakecormet_ptResDown[0]  = cfmetptResDown               
+#                #### Data
+#                ### fill the recoil corrected variables for consistency (with uncorrected values)
+#                else:
+#                    cormet_pt[0]         = obj.met_pt
+#                    cormet_phi[0]        = obj.met_phi
+#                    cormet_ptScaleUp[0]  = obj.met_pt
+#                    cormet_ptScaleDown[0]= obj.met_pt
+#                    cormet_ptResUp[0]    = obj.met_pt
+#                    cormet_ptResDown[0]  = obj.met_pt
+#                    if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
+#                        fakecormet_pt[0]         = obj.fakemet_pt
+#                        fakecormet_phi[0]        = obj.fakemet_phi
+#                        fakecormet_ptScaleUp[0]  = obj.fakemet_pt
+#                        fakecormet_ptScaleDown[0]= obj.fakemet_pt
+#                        fakecormet_ptResUp[0]    = obj.fakemet_pt
+#                        fakecormet_ptResDown[0]  = obj.fakemet_pt               
                     
                     # b-tagging multiplicity
                     for i in range(njets):
@@ -881,7 +881,7 @@ def processFile(dir_name, verbose=False):
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 
-                X_cmass[0] = math.sqrt( max(2.*obj.fatjet1_pt*cormet_pt[0]*(1.-math.cos(deltaPhi(obj.fatjet1_phi, cormet_phi[0])) ), 0.) )
+#                X_cmass[0] = math.sqrt( max(2.*obj.fatjet1_pt*cormet_pt[0]*(1.-math.cos(deltaPhi(obj.fatjet1_phi, cormet_phi[0])) ), 0.) )
                 
                 # Total
                 eventWeight[0] = xsWeight[0] * kfactorWeight[0] * pileupWeight[0] * triggerMuonIsoWeight[0] * triggerElectronIsoWeight[0] * triggerMETWeight[0] * muonIsoWeight[0] * electronIsoWeight[0] * electroweakWeight[0]
@@ -937,20 +937,20 @@ def processFile(dir_name, verbose=False):
                     subjetCSVUpBranch[i].Fill()
                     subjetCSVDownBranch[i].Fill()
                 nBtagSubJetsBranch.Fill()
-                cormet_ptBranch.Fill()
-                cormet_phiBranch.Fill()
-                cormet_ptScaleUpBranch.Fill()
-                cormet_ptScaleDownBranch.Fill()
-                cormet_ptResUpBranch.Fill()
-                cormet_ptResDownBranch.Fill()
-                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
-                    fakecormet_ptBranch.Fill()
-                    fakecormet_phiBranch.Fill()
-                    fakecormet_ptScaleUpBranch.Fill()
-                    fakecormet_ptScaleDownBranch.Fill()
-                    fakecormet_ptResUpBranch.Fill()
-                    fakecormet_ptResDownBranch.Fill()
-                X_cmassBranch.Fill()
+#                cormet_ptBranch.Fill()
+#                cormet_phiBranch.Fill()
+#                cormet_ptScaleUpBranch.Fill()
+#                cormet_ptScaleDownBranch.Fill()
+#                cormet_ptResUpBranch.Fill()
+#                cormet_ptResDownBranch.Fill()
+#                if obj.GetName()=='ZCR' or obj.GetName()=='WCR' or obj.GetName()=='TCR':
+#                    fakecormet_ptBranch.Fill()
+#                    fakecormet_phiBranch.Fill()
+#                    fakecormet_ptScaleUpBranch.Fill()
+#                    fakecormet_ptScaleDownBranch.Fill()
+#                    fakecormet_ptResUpBranch.Fill()
+#                    fakecormet_ptResDownBranch.Fill()
+#                X_cmassBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
@@ -967,7 +967,7 @@ def processFile(dir_name, verbose=False):
                 if subobj.IsA().InheritsFrom('TH1'):
                     if verbose: print '   + TH1:', subobj.GetName()
                     if not 'Eff' in subdir:
-                        subobj.Scale(weightXS)
+                        #subobj.Scale(weightXS)
                         subobj.SetBinContent(0, totalEntries)
                     new_file.cd(subdir)
                     subobj.Write()
@@ -991,6 +991,7 @@ for d in os.listdir(origin):
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
     #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
+    #if not 'prime' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
