@@ -186,7 +186,7 @@ class PreselectionAnalyzer( Analyzer ):
         
     
     
-    def addFakeMet(self, event, particles):
+    def createFakeMet(self, event, particles):
         # Copy regular met
         event.fakemet = copy.deepcopy(event.met)
         px, py = event.met.px(), event.met.py()
@@ -214,7 +214,7 @@ class PreselectionAnalyzer( Analyzer ):
         recoilX = - event.met.px() - event.theZ.px()
         recoilY = - event.met.py() - event.theZ.py()
         event.Upara = (recoilX*event.theZ.px() + recoilY*event.theZ.py())/event.theZ.pt()
-        event.Uperp = (recoilX*event.theZ.py() - recoilY*event.theZ.px())/event.theZ.pt()        
+        event.Uperp = (recoilX*event.theZ.py() - recoilY*event.theZ.px())/event.theZ.pt()
         return True
     
     def createW(self, event, lepton):
@@ -230,7 +230,7 @@ class PreselectionAnalyzer( Analyzer ):
         recoilX = - event.met.px() - lepton.px()
         recoilY = - event.met.py() - lepton.py()
         event.Upara = (recoilX*lepton.px() + recoilY*lepton.py())/lepton.pt()
-        event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()      
+        event.Uperp = (recoilX*lepton.py() - recoilY*lepton.px())/lepton.pt()
         
         return True
     
@@ -435,7 +435,7 @@ class PreselectionAnalyzer( Analyzer ):
             ###   Z(mm) Control Region   ###
             if len(event.selectedMuons) >= 2 and event.selectedMuons[0].charge() != event.selectedMuons[1].charge():
                 event.xcleanLeptons = event.selectedMuons
-                self.addFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
+                self.createFakeMet(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.createZ(event, [event.selectedMuons[0], event.selectedMuons[1]])
                 self.Counter.AddBinContent(3, event.weight)
                 event.isZtoMM = True
@@ -444,7 +444,7 @@ class PreselectionAnalyzer( Analyzer ):
             ###   Z(ee) Control Region   ###
             elif len(event.selectedElectrons) >= 2 and event.selectedElectrons[0].charge() != event.selectedElectrons[1].charge():
                 event.xcleanLeptons = event.selectedElectrons
-                self.addFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
+                self.createFakeMet(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.createZ(event, [event.selectedElectrons[0], event.selectedElectrons[1]])
                 self.Counter.AddBinContent(3, event.weight)
                 event.isZtoEE = True
@@ -453,7 +453,7 @@ class PreselectionAnalyzer( Analyzer ):
             ###   TTbar Control Region   ###
             elif len(event.selectedElectrons) >= 1 and len(event.selectedMuons) >= 1 and event.selectedElectrons[0].charge() != event.selectedMuons[0].charge():
                 event.xcleanLeptons =  [event.selectedMuons[0]] + [event.selectedElectrons[0]]
-                self.addFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
+                self.createFakeMet(event, [event.selectedElectrons[0], event.selectedMuons[0]])
                 #event.xcleanLeptons.sort(key = lambda l : l.pt(), reverse = True)
                 self.Counter.AddBinContent(5, event.weight)
                 event.isTCR = True
@@ -467,10 +467,10 @@ class PreselectionAnalyzer( Analyzer ):
             ###   W(mnu) Control Region   ###
             if len(event.selectedMuons) == 1:
                 event.xcleanLeptons = event.selectedMuons
-                self.addFakeMet(event, [event.selectedMuons[0]])
+                self.createFakeMet(event, [event.selectedMuons[0]])
                 self.createW(event, event.selectedMuons[0])
-                self.createX(event, event.selectedMuons[0])
-                self.createT(event)
+                #self.createX(event, event.selectedMuons[0])
+                #self.createT(event)
                 self.Counter.AddBinContent(4, event.weight)
                 event.isWtoMN = True
                 event.isWCR = True
@@ -478,10 +478,10 @@ class PreselectionAnalyzer( Analyzer ):
             ###   W(enu) Control Region   ###
             elif len(event.selectedElectrons) == 1:
                 event.xcleanLeptons = event.selectedElectrons
-                self.addFakeMet(event, [event.selectedElectrons[0]])
+                self.createFakeMet(event, [event.selectedElectrons[0]])
                 self.createW(event, event.selectedElectrons[0])
-                self.createX(event, event.selectedElectrons[0])
-                self.createT(event)
+                #self.createX(event, event.selectedElectrons[0])
+                #self.createT(event)
                 self.Counter.AddBinContent(4, event.weight)
                 event.isWtoEN = True
                 event.isWCR = True
@@ -491,15 +491,15 @@ class PreselectionAnalyzer( Analyzer ):
         
         #### One photon
         #elif len(event.selectedPhotons) >= 1:
-            #self.addFakeMet(event, [event.selectedPhotons[0]])
+            #self.createFakeMet(event, [event.selectedPhotons[0]])
             #self.Counter.AddBinContent(6, event.weight)
             #event.isGCR = True
         
         ### No leptons nor photons
         else:
-            self.addFakeMet(event, [])
-            self.createX(event)
-            self.createT(event)
+            self.createFakeMet(event, [])
+            #self.createX(event)
+            #self.createT(event)
             self.Counter.AddBinContent(2, event.weight)
             event.isSR = True
         
