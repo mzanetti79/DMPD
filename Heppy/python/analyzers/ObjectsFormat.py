@@ -218,6 +218,13 @@ photonType = NTupleObjectType("photon", baseObjectTypes = [ particleType ], vari
 
 metType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [])
 
+metCorType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [
+    NTupleVariable("ptScaleUp",     lambda x : x.ptScaleUp, float, mcOnly=False, help="ptScaleUp"),
+    NTupleVariable("ptScaleDown",     lambda x : x.ptScaleDown, float, mcOnly=False, help="ptScaleDown"),
+    NTupleVariable("ptResUp",     lambda x : x.ptResUp, float, mcOnly=False, help="ptResUp"),
+    NTupleVariable("ptResDown",     lambda x : x.ptResDown, float, mcOnly=False, help="ptResDown"),
+])
+
 metFullType = NTupleObjectType("met",  baseObjectTypes = [ twoVectorType ], variables = [
     NTupleVariable("ptRaw",     lambda x : x.uncorPt(), float, mcOnly=False, help="Raw MET pt"),
     NTupleVariable("phiRaw",    lambda x : x.uncorPhi(), float, mcOnly=False, help="Raw MET phi"),
