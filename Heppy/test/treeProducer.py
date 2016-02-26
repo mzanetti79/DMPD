@@ -651,6 +651,12 @@ globalDMVariables = globalEventVariables + [
     NTupleVariable('minDeltaR',        lambda x: getattr(x, "minDeltaR", -1.), float, help='Minimum R between the lepton and jets'),
 ]
 
+#XmassVariables = [
+#    NTupleVariable('X_tmassScaleUp',      lambda x: x.theX.mTScaleUp, float, help='Transverse mass, met Scale Up'),
+#    NTupleVariable('X_tmassScaleDown',      lambda x: x.theX.mTScaleDown, float, help='Transverse mass, met Scale Down'),
+#    NTupleVariable('X_tmassResUp',      lambda x: x.theX.mTResUp, float, help='Transverse mass, met Resolution Up'),
+#    NTupleVariable('X_tmassResDown',      lambda x: x.theX.mTResDown, float, help='Transverse mass, met Resolution Down'),
+#]
 
 ##############################
 ### SIGNAL REGION TREE     ###
@@ -671,7 +677,7 @@ SignalRegionTreeProducer= cfg.Analyzer(
         'met'       : NTupleObject('met',  metFullType, help='PF MET after default type 1 corrections'),
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
-        'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
+        'theX'      : NTupleObject('X', candidateMetType, help='Heavy resonance candidate with MET uncertainties'),
         #'tkMetPVchs': NTupleObject('met_tk',  metType, help='Tracker MET'),
         #'V'         : NTupleObject('V', candidateType, help='Boson candidate'),
         #'A'         : NTupleObject('A', candidateType, help='Resonance candidate'),
@@ -718,6 +724,7 @@ ZControlRegionTreeProducer= cfg.Analyzer(
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in Z events obtained removing the leptons'),
+        'fakecormet': NTupleObject('fakecormet', metCorType, help='fake MET in Z events obtained removing the leptons'),
         'theZ'      : NTupleObject('Z', candidateType, help='Z boson candidate'),
     },
     collections = {
@@ -765,8 +772,9 @@ WControlRegionTreeProducer= cfg.Analyzer(
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in W -> mu nu event obtained removing the lepton'),
+        'fakecormet': NTupleObject('fakecormet', metCorType, help='fake MET in W -> mu nu events obtained removing the leptons'),
         'theW'      : NTupleObject('W', candidateType, help='W boson candidate'),
-        'thekW'     : NTupleObject('kW', candidateType, help='W boson candidate with kinematic fit'),
+        'thekW'     : NTupleObject('kW', candidateType, help='W boson candidate with kinematic reconstruction'),
         'theX'      : NTupleObject('X', candidateType, help='Heavy resonance candidate'),
     },
     collections = {
@@ -808,6 +816,7 @@ TTbarControlRegionTreeProducer= cfg.Analyzer(
         'metNoHF'   : NTupleObject('metNoHF',  metType, help='PF MET after default type 1 corrections without HF'),
         'cormet'    : NTupleObject('cormet',  metCorType, help='PF MET after recoil corrections'),
         'fakemet'   : NTupleObject('fakemet', metType, help='fake MET in ttbar events obtained removing the leptons'),
+        'fakecormet': NTupleObject('fakecormet', metCorType, help='fake MET in ttbar events obtained removing the leptons'),
     },
     collections = {
         'gentopquarks'      : NTupleCollection('gentop', particleType, 2, help='Gen Top quarks'),
@@ -1240,25 +1249,25 @@ TriggerMatchAnalyzer.processName = 'PAT'
 
 
 #### DATA ###
-selectedComponents = [
- ###Run2015D PromptReco
- #sample['DoubleEG_Run2015D-PromptReco-v4'],
- #sample['DoubleMuon_Run2015D-PromptReco-v4'],
- sample['MET_Run2015D-PromptReco-v4'],
- sample['SingleElectron_Run2015D-PromptReco-v4'],
- sample['SingleMuon_Run2015D-PromptReco-v4'],
-#  sample['SinglePhoton_Run2015D-PromptReco-v4'],
-
- ###Run2015C O5Oct2015
- #sample['DoubleEG_Run2015C-05Oct2015-v1'],
- #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
- sample['MET_Run2015C-05Oct2015-v1'],
- sample['SingleElectron_Run2015C-05Oct2015-v1'],
- sample['SingleMuon_Run2015C-05Oct2015-v1'],
-#  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
-]
-filterAnalyzer.processName = 'RECO'
-TriggerMatchAnalyzer.processName = 'RECO'
+#selectedComponents = [
+# ###Run2015D PromptReco
+# #sample['DoubleEG_Run2015D-PromptReco-v4'],
+# #sample['DoubleMuon_Run2015D-PromptReco-v4'],
+# sample['MET_Run2015D-PromptReco-v4'],
+# sample['SingleElectron_Run2015D-PromptReco-v4'],
+# sample['SingleMuon_Run2015D-PromptReco-v4'],
+##  sample['SinglePhoton_Run2015D-PromptReco-v4'],
+#
+# ###Run2015C O5Oct2015
+# #sample['DoubleEG_Run2015C-05Oct2015-v1'],
+# #sample['DoubleMuon_Run2015C-05Oct2015-v1'],
+# sample['MET_Run2015C-05Oct2015-v1'],
+# sample['SingleElectron_Run2015C-05Oct2015-v1'],
+# sample['SingleMuon_Run2015C-05Oct2015-v1'],
+##  sample['SinglePhoton_Run2015C-05Oct2015-v1'],
+#]
+#filterAnalyzer.processName = 'RECO'
+#TriggerMatchAnalyzer.processName = 'RECO'
 
 #### DATA ###
 #selectedComponents = [
@@ -1308,7 +1317,7 @@ if __name__ == '__main__':
         'DM',
         config,
         nPrint = 0,
-        nEvents=100000,
+        nEvents=1000,
         )
     looper.loop()
     looper.write()
