@@ -21,6 +21,17 @@ candidateType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType
 ])
 
 
+candidateMetType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
+    NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), float, help="transverse mass"),
+    NTupleVariable('tmassScaleUp',      lambda x: getattr(x, "mTScaleUp", -1.), float, help='Transverse mass, met Scale Up'),
+    NTupleVariable('tmassScaleDown',      lambda x: getattr(x, "mTScaleDown", -1.), float, help='Transverse mass, met Scale Down'),
+    NTupleVariable('tmassResUp',      lambda x: getattr(x, "mTResUp", -1.), float, help='Transverse mass, met Resolution Up'),
+    NTupleVariable('tmassResDown',      lambda x: getattr(x, "mTResDown", -1.), float, help='Transverse mass, met Resolution Down'),
+    NTupleVariable("dR",   lambda x : getattr(x, "deltaR", -1.), float, help="delta R"),
+    NTupleVariable("dEta",   lambda x : getattr(x, "deltaEta", -9.), float, help="delta Eta"),
+    NTupleVariable("dPhi",   lambda x : getattr(x, "deltaPhi", -9.), float, help="delta Phi"),
+])
+
 candidateFullType = NTupleObjectType("candidate", baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("tmass",   lambda x : getattr(x, "mT", -1.), float, help="transverse mass"),
     NTupleVariable("cmass",   lambda x : getattr(x, "mC", -1.), float, help="collinear mass"),
