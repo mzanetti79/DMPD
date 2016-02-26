@@ -986,8 +986,9 @@ for i in datasamples:
     sample[i] = cfg.Component(
         files   = datasamples[i]['files'],
         name    = i,
-        #json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt' % os.environ['CMSSW_BASE'], # 2.26
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt' % os.environ['CMSSW_BASE'], # 2.63
+        #json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON.txt' % os.environ['CMSSW_BASE'], # 2.26
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_Silver.txt' % os.environ['CMSSW_BASE'], # 2.63
+
         splitFactor = int(datasamples[i]['nevents']/(maxlsftime*3600*eventspersec)),
     )
 
@@ -1012,7 +1013,7 @@ testDataCompontent = cfg.Component(
             'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/data/Run2015D/DoubleMuon/MINIAOD/PromptReco-v4/000/260/572/00000/0484EEB4-E183-E511-8488-02163E01410A.root',
         ],
         name    = "test",
-        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Silver_v2.txt' % os.environ['CMSSW_BASE'],
+        json    = '%s/src/DMPD/Heppy/python/tools/JSON/Cert_13TeV_16Dec2015ReReco_Collisions15_25ns_JSON_Silver.txt' % os.environ['CMSSW_BASE'], # 2.63
         splitFactor = 1,
     )
 
