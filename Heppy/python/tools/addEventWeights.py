@@ -210,7 +210,6 @@ def processFile(dir_name, verbose=False):
         else: kfactorXS = 1.
     else: weightXS = kfactorXS = 1.
     
-    
     # K factors
     kfFile = TFile(ref_kf_file, 'READ')
     zkf = kfFile.Get("Zkfactor")
@@ -858,7 +857,9 @@ def processFile(dir_name, verbose=False):
 #                        fakecormet_ptScaleDown[0]= obj.fakemet_pt
 #                        fakecormet_ptResUp[0]    = obj.fakemet_pt
 #                        fakecormet_ptResDown[0]  = obj.fakemet_pt               
-                    
+                
+                #### Data
+                else:    
                     # b-tagging multiplicity
                     for i in range(njets):
                         if getattr(obj, 'jet%d_CSV' % (i+1), -1) > workingpoint[2]: nBtagJets[0] += 1
@@ -869,10 +870,10 @@ def processFile(dir_name, verbose=False):
                     if isJson_file and not isJSON(obj.run, obj.lumi):
                         if not 'XZh' in obj.GetName(): xsWeight[0] = 0.
                     # Filters
-                    elif not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_HBHENoiseIsoFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
+                    if not (obj.Flag_BIT_Flag_HBHENoiseFilter and obj.Flag_BIT_Flag_HBHENoiseIsoFilter and obj.Flag_BIT_Flag_CSCTightHaloFilter and obj.Flag_BIT_Flag_goodVertices and obj.Flag_BIT_Flag_eeBadScFilter): xsWeight[0] = 0.
                     # Filter by PD
-                    else:
-                        xsWeight[0] = 1.
+                    #else:
+                        #xsWeight[0] = 1.
                         #den = 0
                         #if 'SingleMuon' in dir_name and obj.HLT_SingleMu: den +=1
                         #if 'SingleElectron' in dir_name and obj.HLT_SingleElectron: den +=1
@@ -991,7 +992,7 @@ for d in os.listdir(origin):
     #if not 'SingleMuon_Run2015C-05Oct2015' in d: continue
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
     #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
-    #if not 'prime' in d: continue
+    #if 'TT_' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()
