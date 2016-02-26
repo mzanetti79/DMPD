@@ -55,16 +55,17 @@ class CandidateAnalyzer( Analyzer ):
     def createX(self, event, lepton=None):
         event.theX = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
         event.thekW = ROOT.reco.Particle.LorentzVector(0, 0, 0, 0)
+        met = event.cormet if hasattr(event, "cormet") else event.met
         if len(event.xcleanJetsAK8) > 0:
             event.theX = event.xcleanJetsAK8[0].p4()
             # --- 1 lepton case: kinematic reconstruction of the neutrino pz
             if not lepton is None:
                 # Step 1: solve 2nd degree equation
                 pz = 0.
-                a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*event.cormet.px() + 2.*lepton.py()*event.cormet.py()
+                a = 80.4**2 - lepton.mass()**2 + 2.*lepton.px()*met.px() + 2.*lepton.py()*met.py()
                 A = 4*( lepton.energy()**2 - lepton.pz()**2 )
                 B = -4*a*lepton.pz()
-                C = 4*lepton.energy()**2 * (event.cormet.px()**2  + event.cormet.py()**2) - a**2
+                C = 4*lepton.energy()**2 * (met.px()**2  + met.py()**2) - a**2
                 D = B**2 - 4*A*C
                 # If there are real solutions, use the one with lowest pz
                 if D>=0:
@@ -76,7 +77,7 @@ class CandidateAnalyzer( Analyzer ):
                     pz = -B/(2*A)
                 
                 # Neutrino candidate
-                event.neutrino = ROOT.reco.Particle.LorentzVector(event.cormet.px(), event.cormet.py(), pz, math.hypot(event.cormet.pt(), pz))
+                event.neutrino = ROOT.reco.Particle.LorentzVector(met.px(), met.py(), pz, math.hypot(met.pt(), pz))
                 
                 # Kinematic W
                 event.thekW = lepton.p4() + event.neutrino
@@ -84,8 +85,8 @@ class CandidateAnalyzer( Analyzer ):
                 event.thekW.deltaR = deltaR(lepton.eta(), lepton.phi(), event.neutrino.eta(), event.neutrino.phi())
                 event.thekW.deltaEta = abs(lepton.eta()-event.neutrino.eta())
                 event.thekW.deltaPhi = abs(deltaPhi(lepton.phi(), event.neutrino.phi()))
-                event.thekW.deltaPhi_met = abs(deltaPhi(event.thekW.phi(), event.cormet.phi()))
-                event.thekW.mT = math.sqrt( 2.*lepton.et()*event.cormet.pt()*(1.-math.cos(deltaPhi(lepton.phi(), event.cormet.phi())) ) )
+                event.thekW.deltaPhi_met = abs(deltaPhi(event.thekW.phi(), met.phi()))
+                event.thekW.mT = math.sqrt( 2.*lepton.et()*met.pt()*(1.-math.cos(deltaPhi(lepton.phi(), met.phi())) ) )
                 
                 event.theX += lepton.p4() + event.neutrino
                 event.theX.charge = lepton.charge()
@@ -93,13 +94,13 @@ class CandidateAnalyzer( Analyzer ):
                 event.theX.deltaEta = abs(event.thekW.eta()-event.xcleanJetsAK8[0].eta())
                 event.theX.deltaPhi = abs(deltaPhi(event.thekW.phi(), event.xcleanJetsAK8[0].phi()))
                 event.theX.deltaPhi_met = abs(deltaPhi(event.thekW.phi(), event.xcleanJetsAK8[0].phi()))
-                event.theX.mT = (lepton.p4() + event.cormet.p4() + event.xcleanJetsAK8[0].p4()).Mt()
+                event.theX.mT = (lepton.p4() + met.p4() + event.xcleanJetsAK8[0].p4()).Mt()
                 
             # --- 0  lepton case: recoil mass formula
             else:
-                cmet = event.cormet.p4()
+                cmet = met.p4()
                 cmet.SetPz( -event.xcleanJetsAK8[0].pz() )
-                event.theX += event.cormet.p4()
+                event.theX += met.p4()
                 event.theX.SetPz(0)
                 B = -2.*event.xcleanJetsAK8[0].energy()
                 C = event.xcleanJetsAK8[0].mass()**2 - 90.18**2
@@ -112,11 +113,15 @@ class CandidateAnalyzer( Analyzer ):
                     mX = -B/2.
                 event.theX.SetE(math.sqrt(mX**2 + event.theX.Px()**2+event.theX.Py()**2+event.theX.Pz()**2))
                 event.theX.charge = 0
-                event.theX.deltaR = deltaR(event.cormet.eta(), event.cormet.phi(), event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi())
-                event.theX.deltaEta = abs(event.cormet.eta()-event.xcleanJetsAK8[0].eta())
-                event.theX.deltaPhi = abs(deltaPhi(event.cormet.phi(), event.xcleanJetsAK8[0].phi()))
-                event.theX.deltaPhi_met = abs(deltaPhi(event.xcleanJetsAK8[0].phi(), event.cormet.phi()))
-                event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*event.cormet.pt()*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), event.cormet.phi())) ) )
+                event.theX.deltaR = deltaR(met.eta(), met.phi(), event.xcleanJetsAK8[0].eta(), event.xcleanJetsAK8[0].phi())
+                event.theX.deltaEta = abs(met.eta()-event.xcleanJetsAK8[0].eta())
+                event.theX.deltaPhi = abs(deltaPhi(met.phi(), event.xcleanJetsAK8[0].phi()))
+                event.theX.deltaPhi_met = abs(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi()))
+                event.theX.mT = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*met.pt()*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi())) ) )
+                event.theX.mTScaleUp = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*float(met.ptScaleUp)*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi())) ) ) if hasattr(met, "ptScaleUp") else event.theX.mT
+                event.theX.mTScaleDown = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*float(met.ptScaleDown)*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi())) ) ) if hasattr(met, "ptScaleDown") else event.theX.mT
+                event.theX.mTResUp = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*float(met.ptResUp)*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi())) ) ) if hasattr(met, "ptResUp") else event.theX.mT
+                event.theX.mTResDown = math.sqrt( 2.*event.xcleanJetsAK8[0].et()*float(met.ptResDown)*(1.-math.cos(deltaPhi(event.xcleanJetsAK8[0].phi(), met.phi())) ) ) if hasattr(met, "ptresDown") else event.theX.mT
         return True
     
     

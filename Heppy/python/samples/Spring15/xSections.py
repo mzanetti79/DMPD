@@ -278,7 +278,10 @@ xsections = {
     ### OLD DM SIGNAL XSECTIONS FROM THEORY PAPER --- END    
     
     
-    ### DIBOSON SIGNAL XSECTIONS --- BEGIN    
+    ### DIBOSON SIGNAL XSECTIONS --- BEGIN
+    #ZprimeToZhToZlephbb : 0.05826
+    #ZprimeToZhToZinvhbb : 0.1154
+    #WprimeToWhToWlephbb : 0.18712  
     'ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph' : 0.05826,
     'ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph' : 0.05826,
     'ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph' : 0.05826,
@@ -320,6 +323,51 @@ xsections = {
     'WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph' : 0.18712,
     'WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph' : 0.18712,
     'WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph' : 0.18712,
+    
+    
+#    'ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph' : 0.*0.,
+#    'ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph' : 0.855309*0.567236*0.05
+#    'ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph' : 0.509804*0.517614*0.0
+#    'ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph' : 0.271104*0.500699*0.0
+#    'ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph' : 0.146961*0.492143*0.0
+#    'ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph' : 0.0822156*0.487091*0.
+#    'ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph' : 0.0473673*0.483825*0.
+#    'ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph' : 0.0279823*0.481578*0.
+#    'ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph' : 0.00815289*0.478265*0
+#    'ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph' : 0.00257265*0.47653*0.
+#    'ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph' : 0.000850838*0.475504*
+#    'ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph' : 0.000288261*0.474847*
+#    'ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph' : 0.*0.,
+
+#    'ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph' : 0.*0.,
+#    'ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph' : 0.855309*0.567236*0.11
+#    'ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph' : 0.509804*0.517614*0.1
+#    'ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph' : 0.271104*0.500699*0.1
+#    'ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph' : 0.146961*0.492143*0.1
+#    'ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph' : 0.0822156*0.487091*0.
+#    'ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph' : 0.0473673*0.483825*0.
+#    'ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph' : 0.0279823*0.481578*0.
+#    'ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph' : 0.00815289*0.478265*0
+#    'ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph' : 0.00257265*0.47653*0.
+#    'ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph' : 0.000850838*0.475504*
+#    'ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph' : 0.000288261*0.474847*
+#    'ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph' : 0.*0.,
+#    
+#    'WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph' : 0.*0.,
+#    'WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph' : 1.587885*0.552862*0.18
+#    'WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph' : 0.986533*0.507973*0.1
+#    'WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph' : 0.535394*0.493896*0.1
+#    'WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph' : 0.2955239*0.487101*0.
+#    'WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph' : 0.1681478*0.48321*0.1
+#    'WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph' : 0.0984325*0.480747*0.
+#    'WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph' : 0.058998*0.479079*0.1
+#    'WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph' : 0.01771031*0.476659*0
+#    'WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph' : 0.00567529*0.475412*0
+#    'WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph' : 0.001878491*0.474682*
+#    'WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph' : 0.00062615*0.474217*0
+#    'WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph' : 0.*0.,
+     ### DIBOSON SIGNAL XSECTIONS --- END
+    
     ### DIBOSON SIGNAL XSECTIONS --- END   
     
     ### BACKGROUND XSECTIONS
