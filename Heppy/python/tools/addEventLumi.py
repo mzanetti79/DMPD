@@ -11,15 +11,18 @@ usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
 parser.add_option('-i', '--input', action='store', type='string', dest='origin', default='')
 parser.add_option('-o', '--output', action='store', type='string', dest='target', default='')
+parser.add_option('-j', '--json', action='store', type='string', dest='json', default='')
 parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False)
 
 (options, args) = parser.parse_args()
 
 origin      = options.origin
 target      = options.target
+json_path   = options.json
 verboseon   = options.verbose
 
-#LUMI        = 2110
+GOLDENLUMI  = 2170
+SILVERLUMI  = 2520
 
 cut = {
     "SR"  : "eventWeight!=0 && (" + selection['XZhnnPre'] + ")",
@@ -38,6 +41,7 @@ if not os.path.exists(origin):
 if not os.path.exists(target):
     print 'Target directory', target,'does not exist, aborting...'
     exit()
+
 
 ##############################
 
@@ -106,8 +110,8 @@ def processFile(dir_name, verbose=False):
                     eventWeightLumi[0] /= obj.triggerMuonIsoWeight if obj.triggerMuonIsoWeight>0 else 1.
                     eventWeightLumi[0] /= obj.electronIsoWeight if obj.electronIsoWeight>0 else 1.
                     eventWeightLumi[0] /= obj.muonIsoWeight if obj.muonIsoWeight>0 else 1.
-                    eventWeightLumi[0] *= 2460 if 'XZh' in obj.GetName() else 2110
-                
+                    eventWeightLumi[0] *= SILVERLUMI if 'XZh' in obj.GetName() else GOLDENLUMI
+               
                 # Fill the branches
                 eventWeightLumiBranch.Fill()
 
@@ -135,8 +139,9 @@ def processFile(dir_name, verbose=False):
 
 jobs = []
 for d in os.listdir(origin):
+    if not '.root' in d: continue
     if 'BBbarDM' in d or 'TTbarDM' in d: continue
-    #if not 'ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1' in d: continue
+#    if not 'WprimeToWhToWlephbb_narrow_M-800_13TeV-madgrap' in d: continue
 #    print d
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
