@@ -50,14 +50,16 @@ selection = {
     "singleEle" : "isWtoEN && lepton1_pt>135 && lepton1_tightId && W_dPhi<2 && fatjet1_dPhi_met>2 && cormet_pt>80 && nTaus==0", # && lepton1_relIso03<0.15 
     "singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_trkIso<0.1 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",#FIXME
     #"singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_relIso04<0.15 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",
-    "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_looseId && lepton2_looseId", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
-    "doubleMuo" : "isZtoMM && ((lepton1_highptId && lepton2_vetoId) || (lepton2_highptId && lepton1_vetoId)) && lepton1_pt>55 && lepton2_pt>20 && lepton1_trkIso<0.1 && lepton2_trkIso<0.1",
+    "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_looseId && lepton2_looseId && X_dPhi>2.5", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
+    "doubleMuo" : "isZtoMM && ((lepton1_highptId && lepton2_vetoId) || (lepton2_highptId && lepton1_vetoId)) && lepton1_pt>55 && lepton2_pt>20 && lepton1_trkIso<0.1 && lepton2_trkIso<0.1 && X_dPhi>2.5",
     #"doubleMuo" : "isZtoMM && (lepton1_highptId || lepton2_highptId) && lepton1_pt>55 && lepton2_pt>20 && lepton1_miniIso<0.2 && lepton2_miniIso<0.2",
     "noLeptons" : "cormet_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_tightId && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",# && fatjet1_dPhi_met>2 && nJetsNoFatJet100<=2 && minDeltaPhi>2
     #"noLeptons" : "met_pt>200 && nMuons==0 && nElectrons==0 && nTaus==0 && nPhotons==0 && fatjet1_chf>0.1 && fatjet1_nhf<0.8 && minDeltaPhiNoFatJet>0.5 && X_dPhi>2",
     # XZh
     "Zcut" : "Z_pt>200 && Z_mass>70 && Z_mass<110 && fatjet1_pt>200",
+    #"Zcut" : "Z_pt>150 && Z_mass>70 && Z_mass<110 && fatjet1_pt>175",
     "Wcut" : "kW_pt>200 && fatjet1_pt>200",
+    #"Wcut" : "kW_pt>150 && fatjet1_pt>175",
     "Topcut" : "bjet1_CSVR>0.970",
     "TopVetocut" : "bjet1_CSVR<0.605",
     "SRcut" : "(fatjet1_prunedMassCorr>105 && fatjet1_prunedMassCorr<135)",
@@ -117,11 +119,11 @@ selection = {
     "XZhnnbSR"  : "triggerMET && noLeptons && TopVetocut && 1Btag && SRcut",
     "XZhnnbbSR" : "triggerMET && noLeptons && TopVetocut && 2Btag && SRcut",
     # 1 lepton, 1 additional btag
-    "XWhlnbTR" : "((triggerEle && singleEle) || (triggerMuo && singleMuo)) && Wcut && Topcut && 1Btag && SBcut",
-    "XWhlnbbTR": "((triggerEle && singleEle) || (triggerMuo && singleMuo)) && Wcut && Topcut && 2Btag && SBcut",
+    "XWhlnbTR" : "((triggerEle && singleEle) || (triggerMuo && singleMuo)) && Wcut && Topcut && 1Btag && (SBcut || VRcut || SRcut)",
+    "XWhlnbbTR": "((triggerEle && singleEle) || (triggerMuo && singleMuo)) && Wcut && Topcut && 2Btag && (SBcut || VRcut || SRcut)",
     # 0 lepton, 1 additional btag
-    "XZhnnbTR" : "triggerMET && noLeptons && Topcut && 1Btag && SBcut",
-    "XZhnnbbTR" : "triggerMET && noLeptons && Topcut && 2Btag && SBcut",
+    "XZhnnbTR" : "triggerMET && noLeptons && Topcut && 1Btag && (SBcut || VRcut || SRcut)",
+    "XZhnnbbTR" : "triggerMET && noLeptons && Topcut && 2Btag && (SBcut || VRcut || SRcut)",
     #
     "XZheebbNoHm" : "preEle && Zcut && fatjet1_pt>200 && Btag",
     "XZhmmbbNoHm" : "preMuo && Zcut && fatjet1_pt>200 && Btag",
