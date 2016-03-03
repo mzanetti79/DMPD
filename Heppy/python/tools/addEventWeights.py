@@ -728,13 +728,13 @@ def processFile(dir_name, verbose=False):
                         btagWeightUp[0] *= subjetCSVSFUp[0][0]*subjetCSVSFUp[1][0]
                         btagWeightDown[0] *= subjetCSVSFDown[0][0]*subjetCSVSFDown[1][0]
                     elif (obj.fatjet1_CSV1 > workingpoint[1] and obj.fatjet1_CSV2 < workingpoint[1]) or (obj.fatjet1_CSV1 < workingpoint[1] and obj.fatjet1_CSV2 > workingpoint[1]):
-                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*subjetCSVSF[1][0] + subjetCSVSF[0][0]*(1.-subjetCSVSF[1][0])
-                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*subjetCSVSFUp[1][0] + subjetCSVSFUp[0][0]*(1.-subjetCSVSFUp[1][0])
-                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*subjetCSVSFDown[1][0] + subjetCSVSFDown[0][0]*(1.-subjetCSVSFDown[1][0])
+                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*subjetCSVSF[1][0] + subjetCSVSF[0][0]*(1.-subjetCSVSF[1][0]) + 1
+                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*subjetCSVSFUp[1][0] + subjetCSVSFUp[0][0]*(1.-subjetCSVSFUp[1][0]) + 1
+                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*subjetCSVSFDown[1][0] + subjetCSVSFDown[0][0]*(1.-subjetCSVSFDown[1][0]) + 1
                     else: 
-                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*(1.-subjetCSVSF[1][0])
-                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*(1.-subjetCSVSFUp[1][0])
-                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*(1.-subjetCSVSFDown[1][0])
+                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*(1.-subjetCSVSF[1][0]) + 1
+                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*(1.-subjetCSVSFUp[1][0]) + 1
+                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*(1.-subjetCSVSFDown[1][0]) + 1
                     
                     
 #                    ''' RECOIL '''
