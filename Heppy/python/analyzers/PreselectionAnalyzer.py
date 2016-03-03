@@ -416,6 +416,7 @@ class PreselectionAnalyzer( Analyzer ):
         if not event.passedVertexAnalyzer:
             return False
         
+        
         # Check if there is at least one jet
         #if len(event.cleanJets) < 1:# and len(event.cleanJetsAK8) < 1:
         #    return False

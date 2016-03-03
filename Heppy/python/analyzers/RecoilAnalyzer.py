@@ -35,6 +35,9 @@ class RecoilAnalyzer( Analyzer ):
 
         ''' RECOIL '''
         
+        # add corrected MET in all regions
+        event.cormet = copy.deepcopy(event.met)
+        
         ### fill default values
         cmetpt           = ROOT.Double(event.met.pt())
         cmetphi          = ROOT.Double(event.met.phi())
@@ -52,7 +55,7 @@ class RecoilAnalyzer( Analyzer ):
         nJets = len(event.cleanJets)
         
         # configure input parameters (GENMET / RECO_V_PT / RECOIL) only for Z->ll, Z->vv, and W->lv
-        if hasattr(event, "genV"):
+        if self.cfg_comp.isMC and hasattr(event, "genV"):
             genmetpt  = ROOT.Double(event.genV.pt())
             genmetphi = ROOT.Double(event.genV.phi())
             leppt     = ROOT.Double(0.)
@@ -65,8 +68,8 @@ class RecoilAnalyzer( Analyzer ):
                 Upar      = ROOT.Double(event.Upara)
                 Uper      = ROOT.Double(event.Uperp)
             elif event.isWCR and hasattr(event, "theW") and hasattr(event, "Upara") and hasattr(event, "Uperp"):
-                leppt     = ROOT.Double(event.theW.pt())
-                lepphi    = ROOT.Double(event.theW.phi())
+                leppt     = ROOT.Double(event.xcleanLeptons[0].pt())
+                lepphi    = ROOT.Double(event.xcleanLeptons[0].phi())
                 Upar      = ROOT.Double(event.Upara)
                 Uper      = ROOT.Double(event.Uperp)
             elif event.isTCR:
@@ -81,29 +84,28 @@ class RecoilAnalyzer( Analyzer ):
                 lepphi    = ROOT.Double(pseudoboson.phi())
                 Upar      = ROOT.Double(pseudoUpara)
                 Uper      = ROOT.Double(pseudoUperp)
-            elif event.genV.pt()>0.:
-                recoilX = - event.met.px() - event.genV.px()
-                recoilY = - event.met.py() - event.genV.py()
-                event.Upara = (recoilX*event.genV.px() + recoilY*event.genV.py())/event.genV.pt()
-                event.Uperp = (recoilX*event.genV.py() - recoilY*event.genV.px())/event.genV.pt()        
+#            elif event.genV.pt()>0.:
+#                recoilX = - event.met.px() - event.genV.px()
+#                recoilY = - event.met.py() - event.genV.py()
+#                event.Upara = (recoilX*event.genV.px() + recoilY*event.genV.py())/event.genV.pt()
+#                event.Uperp = (recoilX*event.genV.py() - recoilY*event.genV.px())/event.genV.pt()        
             else:
                 applyrecoil = False
             
             if applyrecoil:
                 ### do the MET recoil corrections in SR, ZCR and WCR, only for DYJets, ZJets and WJets samples
-                self.Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, nJets)        
-                self.Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, nJets)        
-                self.Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, nJets)        
-                self.Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, nJets)        
-                self.Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, nJets)   
+                self.Recoil.CorrectType2(cmetpt,          cmetphi,          genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 0, nJets)
+                self.Recoil.CorrectType2(cmetptScaleUp,   cmetphiScaleUp,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 3, 0, nJets)
+                self.Recoil.CorrectType2(cmetptScaleDown, cmetphiScaleDown, genmetpt,genmetphi,leppt,lepphi,Upar,Uper,-3, 0, nJets)
+                self.Recoil.CorrectType2(cmetptResUp,     cmetphiResUp,     genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0, 3, nJets)
+                self.Recoil.CorrectType2(cmetptResDown,   cmetphiResDown,   genmetpt,genmetphi,leppt,lepphi,Upar,Uper, 0,-3, nJets)
+                #
+                event.cormet.setP4(ROOT.reco.Particle.LorentzVector(cmetpt*math.cos(cmetphi), cmetpt*math.sin(cmetphi), 0, cmetpt))
             pass
             
         pass
         
-        ### fill the variables
-        # add corrected MET in all regions
-        event.cormet = copy.deepcopy(event.met)
-        event.cormet.setP4(ROOT.reco.Particle.LorentzVector(cmetpt*math.cos(cmetphi), cmetpt*math.sin(cmetphi), 0, cmetpt))
+        ### fill the scale/resolution variables
         event.cormet.ptScaleUp = cmetptScaleUp
         event.cormet.ptScaleDown = cmetptScaleDown
         event.cormet.ptResUp = cmetptResUp
