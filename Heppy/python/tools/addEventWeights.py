@@ -328,20 +328,32 @@ def processFile(dir_name, verbose=False):
     nBtagJets = array('f', [1.0])
     nBtagSubJets = array('f', [1.0])
     # Lists of arrays do not work #@!
-    CSV = {}
-    CSVUp = {}
-    CSVDown = {}
+    CSVSF = {}
+    CSVSFUp = {}
+    CSVSFDown = {}
+    CSVR = {}
+    CSVRUp = {}
+    CSVRDown = {}
     for i in range(10):
-        CSV[i] = array('f', [1.0])
-        CSVUp[i] = array('f', [1.0])
-        CSVDown[i] = array('f', [1.0])
-    subjetCSV = {}
-    subjetCSVUp = {}
-    subjetCSVDown = {}
+        CSVSF[i] = array('f', [1.0])
+        CSVSFUp[i] = array('f', [1.0])
+        CSVSFDown[i] = array('f', [1.0])
+        CSVR[i] = array('f', [1.0])
+        CSVRUp[i] = array('f', [1.0])
+        CSVRDown[i] = array('f', [1.0])
+    subjetCSVSF = {}
+    subjetCSVSFUp = {}
+    subjetCSVSFDown = {}
+    subjetCSVR = {}
+    subjetCSVRUp = {}
+    subjetCSVRDown = {}
     for i in range(2):
-        subjetCSV[i] = array('f', [1.0])
-        subjetCSVUp[i] = array('f', [1.0])
-        subjetCSVDown[i] = array('f', [1.0])
+        subjetCSVSF[i] = array('f', [1.0])
+        subjetCSVSFUp[i] = array('f', [1.0])
+        subjetCSVSFDown[i] = array('f', [1.0])
+        subjetCSVR[i] = array('f', [1.0])
+        subjetCSVRUp[i] = array('f', [1.0])
+        subjetCSVRDown[i] = array('f', [1.0])
 #    # Recoil Variables
 #    cormet_pt         = array('f', [0.0])  
 #    cormet_phi        = array('f', [0.0])  
@@ -422,20 +434,32 @@ def processFile(dir_name, verbose=False):
             btagWeightUpBranch = new_tree.Branch('btagWeightUp', btagWeightUp, 'btagWeightUp/F')
             btagWeightDownBranch = new_tree.Branch('btagWeightDown', btagWeightDown, 'btagWeightDown/F')
             nBtagJetsBranch = new_tree.Branch('nBtagJets', nBtagJets, 'nBtagJets/F')
-            CSVBranch = {}
-            CSVUpBranch = {}
-            CSVDownBranch = {}
+            CSVSFBranch = {}
+            CSVSFUpBranch = {}
+            CSVSFDownBranch = {}
+            CSVRBranch = {}
+            CSVRUpBranch = {}
+            CSVRDownBranch = {}
             for i in range(njets+nbjets):
-                CSVBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSV[i], 'jet%d_CSVR/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVR', CSV[i], 'bjet1_CSVR/F')
-                CSVUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVUp[i], 'jet%d_CSVRUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRUp', CSVUp[i], 'bjet1_CSVRUp/F')
-                CSVDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVDown[i], 'jet%d_CSVRDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRDown', CSVDown[i], 'bjet1_CSVRDown/F')
-            subjetCSVBranch = {}
-            subjetCSVUpBranch = {}
-            subjetCSVDownBranch = {}
+                CSVSFBranch[i] = new_tree.Branch('jet%d_CSVSF' % (i+1), CSVSF[i], 'jet%d_CSVSF/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVSF', CSVSF[i], 'bjet1_CSVSF/F')
+                CSVSFUpBranch[i] = new_tree.Branch('jet%d_CSVSFUp' % (i+1), CSVSFUp[i], 'jet%d_CSVSFUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVSFUp', CSVSFUp[i], 'bjet1_CSVSFUp/F')
+                CSVSFDownBranch[i] = new_tree.Branch('jet%d_CSVSFDown' % (i+1), CSVSFDown[i], 'jet%d_CSVSFDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVSFDown', CSVSFDown[i], 'bjet1_CSVSFDown/F')
+                CSVRBranch[i] = new_tree.Branch('jet%d_CSVR' % (i+1), CSVR[i], 'jet%d_CSVR/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVR', CSVR[i], 'bjet1_CSVR/F')
+                CSVRUpBranch[i] = new_tree.Branch('jet%d_CSVRUp' % (i+1), CSVRUp[i], 'jet%d_CSVRUp/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRUp', CSVRUp[i], 'bjet1_CSVRUp/F')
+                CSVRDownBranch[i] = new_tree.Branch('jet%d_CSVRDown' % (i+1), CSVRDown[i], 'jet%d_CSVRDown/F' % (i+1)) if i < njets else new_tree.Branch('bjet1_CSVRDown', CSVRDown[i], 'bjet1_CSVRDown/F')
+            subjetCSVSFBranch = {}
+            subjetCSVSFUpBranch = {}
+            subjetCSVSFDownBranch = {}
+            subjetCSVRBranch = {}
+            subjetCSVRUpBranch = {}
+            subjetCSVRDownBranch = {}
             for i in range(2):
-                subjetCSVBranch[i] = new_tree.Branch('fatjet1_CSVR%d' % (i+1), subjetCSV[i], 'fatjet1_CSVR%d/F' % (i+1))
-                subjetCSVUpBranch[i] = new_tree.Branch('fatjet1_CSVR%dUp' % (i+1), subjetCSVUp[i], 'fatjet1_CSVR%dUp/F' % (i+1))
-                subjetCSVDownBranch[i] = new_tree.Branch('fatjet1_CSVR%dDown' % (i+1), subjetCSVDown[i], 'fatjet1_CSVR%dDown/F' % (i+1))
+                subjetCSVSFBranch[i] = new_tree.Branch('fatjet1_CSVSF%d' % (i+1), subjetCSVSF[i], 'fatjet1_CSVSF%d/F' % (i+1))
+                subjetCSVSFUpBranch[i] = new_tree.Branch('fatjet1_CSVSF%dUp' % (i+1), subjetCSVSFUp[i], 'fatjet1_CSVSF%dUp/F' % (i+1))
+                subjetCSVSFDownBranch[i] = new_tree.Branch('fatjet1_CSVSF%dDown' % (i+1), subjetCSVSFDown[i], 'fatjet1_CSVSF%dDown/F' % (i+1))
+                subjetCSVRBranch[i] = new_tree.Branch('fatjet1_CSVR%d' % (i+1), subjetCSVR[i], 'fatjet1_CSVR%d/F' % (i+1))
+                subjetCSVRUpBranch[i] = new_tree.Branch('fatjet1_CSVR%dUp' % (i+1), subjetCSVRUp[i], 'fatjet1_CSVR%dUp/F' % (i+1))
+                subjetCSVRDownBranch[i] = new_tree.Branch('fatjet1_CSVR%dDown' % (i+1), subjetCSVRDown[i], 'fatjet1_CSVR%dDown/F' % (i+1))
             nBtagSubJetsBranch = new_tree.Branch('fatjet1_nBtag', nBtagSubJets, 'fatjet1_nBtag/F')
 #            cormet_ptBranch          = new_tree.Branch('cormet_pt',          cormet_pt,          'cormet_pt/F')
 #            cormet_phiBranch         = new_tree.Branch('cormet_phi',         cormet_phi,         'cormet_phi/F')
@@ -468,9 +492,11 @@ def processFile(dir_name, verbose=False):
                 
                 nBtagJets[0] = nBtagSubJets[0] = 0
                 for i in range(njets+nbjets):
-                    CSV[i][0] = CSVUp[i][0] = CSVDown[i][0] = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -99)
+                    CSVSF[i][0] = CSVSFUp[i][0] = CSVSFDown[i][0] = 1.
+                    CSVR[i][0] = CSVRUp[i][0] = CSVRDown[i][0] = getattr(obj, 'jet%d_CSV' % (i+1) if i<njets else "bjet1_CSV", -99)
                 for i in range(2):
-                    subjetCSV[i][0] = subjetCSVUp[i][0] = subjetCSVDown[i][0] = getattr(obj, 'fatjet1_CSV%d' % (i+1), -99)
+                    subjetCSVSF[i][0] = subjetCSVSFUp[i][0] = subjetCSVSFDown[i][0] = 1.
+                    subjetCSVR[i][0] = subjetCSVRUp[i][0] = subjetCSVRDown[i][0] = getattr(obj, 'fatjet1_CSV%d' % (i+1), -99)
                 
                 
                 # Weights
@@ -611,9 +637,6 @@ def processFile(dir_name, verbose=False):
                     ''' BTAGGING '''
                     # Reshaping
                     nbtagjets = 0
-                    sf = [1]*3
-                    sfUp = [1]*3
-                    sfDown = [1]*3
                     for i in range(njets+nbjets):
                         pt = getattr(obj, 'jet%d_pt' % (i+1) if i<njets else 'bjet1_pt', -1)
                         eta = getattr(obj, 'jet%d_eta' % (i+1) if i<njets else 'bjet1_eta', -1)
@@ -623,23 +646,17 @@ def processFile(dir_name, verbose=False):
                         if abs(flav) == 5: fl = 0
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
-#                        CSV[i][0] = reader['M'][0].eval(fl, eta, pt)
-#                        CSVUp[i][0] = reader['M'][1].eval(fl, eta, pt)
-#                        CSVDown[i][0] = reader['M'][-1].eval(fl, eta, pt)
-                        CSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
-                        CSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
-                        CSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
-                        if CSV[i][0] > workingpoint[2] and i<njets: nBtagJets[0] += 1
+                        CSVSF[i][0] = reader['M'][0].eval(fl, eta, pt)
+                        CSVSFUp[i][0] = reader['M'][1].eval(fl, eta, pt)
+                        CSVSFDown[i][0] = reader['M'][-1].eval(fl, eta, pt)
+                        CSVR[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        CSVRUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        CSVRDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        if CSVR[i][0] > workingpoint[2] and i<njets: nBtagJets[0] += 1
                         if i<3:
-                            sf[i] = reader['M'][0].eval(fl, eta, pt)
-                            sfUp[i] = reader['M'][1].eval(fl, eta, pt)
-                            sfDown[i] = reader['M'][-1].eval(fl, eta, pt)
                             if csv>=workingpoint[2]: nbtagjets += 1
                     
                     # Subjet reshaping
-                    ssf = [1]*2
-                    ssfUp = [1]*2
-                    ssfDown = [1]*2
                     for i in range(2):
                         pt = getattr(obj, 'fatjet1_pt%d' % (i+1), -1)
                         eta = getattr(obj, 'fatjet1_eta%d' % (i+1), -1)
@@ -651,13 +668,14 @@ def processFile(dir_name, verbose=False):
                         elif abs(flav) == 4: fl = 1
                         else: fl = 2
                         # standard weight
-                        ssf[i] = reader['L'][0].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][0].eval(fl, eta, pt)
-                        ssfUp[i] = reader['L'][1].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][1].eval(fl, eta, pt)
-                        ssfDown[i] = reader['L'][-1].eval(fl, eta, pt) if fl==0 else 1.-reader['L'][-1].eval(fl, eta, pt)
-                        subjetCSV[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
-                        subjetCSVUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
-                        subjetCSVDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
-                        if subjetCSV[i][0] > workingpoint[1]: nBtagSubJets[0] += 1
+                        subjetCSVSF[i][0] = reader['L'][0].eval(fl, eta, pt)
+                        subjetCSVSFUp[i][0] = reader['L'][1].eval(fl, eta, pt)
+                        subjetCSVSFDown[i][0] = reader['L'][-1].eval(fl, eta, pt)
+                        subjetCSVR[i][0] = returnReshapedDiscr(fl, csv, pt, eta, 0)
+                        subjetCSVRUp[i][0] = returnReshapedDiscr(fl, csv, pt, eta, +1)
+                        subjetCSVRDown[i][0] = returnReshapedDiscr(fl, csv, pt, eta, -1)
+                        
+                        if subjetCSVR[i][0] > workingpoint[1]: nBtagSubJets[0] += 1
                     
 #                    # Calculate weight
 #                    if njets <= 0:
@@ -704,19 +722,19 @@ def processFile(dir_name, verbose=False):
                     
                     # Calculate weight
                     
-                    btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1
-                    if nBtagSubJets[0]==2: 
-                        btagWeight[0] *= ssf[0]*ssf[1]
-                        btagWeightUp[0] *= ssfUp[0]*ssfUp[1]
-                        btagWeightDown[0] *= ssfDown[0]*ssfDown[1]
-                    elif nBtagSubJets[0]==1:
-                        btagWeight[0] *= (1.-ssf[0])*ssf[1] + ssf[0]*(1.-ssf[1])
-                        btagWeightUp[0] *= (1.-ssfUp[0])*ssfUp[1] + ssfUp[0]*(1.-ssfUp[1])
-                        btagWeightDown[0] *= (1.-ssfDown[0])*ssfDown[1] + ssfDown[0]*(1.-ssfDown[1])
+                    btagWeight[0] = btagWeightUp[0] = btagWeightDown[0] = 1.
+                    if obj.fatjet1_CSV1 > workingpoint[1] and obj.fatjet1_CSV2 > workingpoint[1]: 
+                        btagWeight[0] *= subjetCSVSF[0][0]*subjetCSVSF[1][0]
+                        btagWeightUp[0] *= subjetCSVSFUp[0][0]*subjetCSVSFUp[1][0]
+                        btagWeightDown[0] *= subjetCSVSFDown[0][0]*subjetCSVSFDown[1][0]
+                    elif (obj.fatjet1_CSV1 > workingpoint[1] and obj.fatjet1_CSV2 < workingpoint[1]) or (obj.fatjet1_CSV1 < workingpoint[1] and obj.fatjet1_CSV2 > workingpoint[1]):
+                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*subjetCSVSF[1][0] + subjetCSVSF[0][0]*(1.-subjetCSVSF[1][0])
+                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*subjetCSVSFUp[1][0] + subjetCSVSFUp[0][0]*(1.-subjetCSVSFUp[1][0])
+                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*subjetCSVSFDown[1][0] + subjetCSVSFDown[0][0]*(1.-subjetCSVSFDown[1][0])
                     else: 
-                        btagWeight[0] *= (1.-ssf[0])*(1.-ssf[1])
-                        btagWeightUp[0] *= (1.-ssfUp[0])*(1.-ssfUp[1])
-                        btagWeightDown[0] *= (1.-ssfDown[0])*(1.-ssfDown[1])
+                        btagWeight[0] *= (1.-subjetCSVSF[0][0])*(1.-subjetCSVSF[1][0])
+                        btagWeightUp[0] *= (1.-subjetCSVSFUp[0][0])*(1.-subjetCSVSFUp[1][0])
+                        btagWeightDown[0] *= (1.-subjetCSVSFDown[0][0])*(1.-subjetCSVSFDown[1][0])
                     
                     
 #                    ''' RECOIL '''
@@ -930,13 +948,19 @@ def processFile(dir_name, verbose=False):
                 btagWeightDownBranch.Fill()
                 nBtagJetsBranch.Fill()
                 for i in range(njets+nbjets):
-                    CSVBranch[i].Fill()
-                    CSVUpBranch[i].Fill()
-                    CSVDownBranch[i].Fill()
+                    CSVSFBranch[i].Fill()
+                    CSVSFUpBranch[i].Fill()
+                    CSVSFDownBranch[i].Fill()
+                    CSVRBranch[i].Fill()
+                    CSVRUpBranch[i].Fill()
+                    CSVRDownBranch[i].Fill()
                 for i in range(2):
-                    subjetCSVBranch[i].Fill()
-                    subjetCSVUpBranch[i].Fill()
-                    subjetCSVDownBranch[i].Fill()
+                    subjetCSVSFBranch[i].Fill()
+                    subjetCSVSFUpBranch[i].Fill()
+                    subjetCSVSFDownBranch[i].Fill()
+                    subjetCSVRBranch[i].Fill()
+                    subjetCSVRUpBranch[i].Fill()
+                    subjetCSVRDownBranch[i].Fill()
                 nBtagSubJetsBranch.Fill()
 #                cormet_ptBranch.Fill()
 #                cormet_phiBranch.Fill()
@@ -1000,3 +1024,5 @@ for d in os.listdir(origin):
     
 #print '\nDone.'
 
+
+# python ../python/tools/addEventWeights.py -i NewBatchTop/ -o /lustre/cmsdata/DM/ntuples/Prod_v28/ -j ../python/tools/JSON/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt &
