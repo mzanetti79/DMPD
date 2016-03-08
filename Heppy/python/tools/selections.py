@@ -47,8 +47,8 @@ selection = {
     "monoB" : "HLT_BIT_HLT_PFMET170_NoiseCleaned_v && met_pt>200 && jet1_pt>50 && jet1_chf>0.1 && jet1_nhf<0.8 && jet1_CSVR>0.890 && ((nJets==1 && abs(jet1_dPhi_met)>2) || (nJets==2 && jet2_nhf<0.7 && jet2_phf<0.9 && abs(jet2_dPhi_jet1)<2.5 && jet2_CSVR>0.890)) && nElectrons==0 && nMuons==0 && nTaus==0", # && abs(H_dPhi_met)>2
     
     # XZh preselections
-    "singleEle" : "isWtoEN && lepton1_pt>135 && lepton1_tightId && W_dPhi<2 && fatjet1_dPhi_met>2 && cormet_pt>80 && nTaus==0", # && lepton1_relIso03<0.15 
-    "singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_trkIso<0.1 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",#FIXME
+    "singleEle" : "isWtoEN && !isXZh && lepton1_pt>135 && lepton1_tightId && W_dPhi<2 && fatjet1_dPhi_met>2 && cormet_pt>80 && nTaus==0", # && lepton1_relIso03<0.15 
+    "singleMuo" : "isWtoMN && !isXZh && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_trkIso<0.1 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",
     #"singleMuo" : "isWtoMN && lepton1_pt>55 && lepton1_highptId && lepton1_looseId && lepton1_relIso04<0.15 && W_dPhi<2 && fatjet1_dPhi_met>2 && nTaus==0",
     "doubleEle" : "isZtoEE && lepton1_pt>135 && lepton2_pt>35 && lepton1_looseId && lepton2_looseId && X_dPhi>2.5", # && lepton1_highptId && lepton2_highptId && lepton1_miniIso<0.1 && lepton2_miniIso<0.1",
     "doubleMuo" : "isZtoMM && ((lepton1_highptId && lepton2_vetoId) || (lepton2_highptId && lepton1_vetoId)) && lepton1_pt>55 && lepton2_pt>20 && lepton1_trkIso<0.1 && lepton2_trkIso<0.1 && X_dPhi>2.5",
