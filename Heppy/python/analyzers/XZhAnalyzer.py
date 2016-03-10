@@ -73,9 +73,9 @@ class XZhAnalyzer( Analyzer ):
             for i, n in enumerate(["EffElecEta_Veto", "EffElecEta_HEEP", "EffMuonEta_Highpt", "EffMuonEta_CustomTracker"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
             #   Z ee mm
-            for i, n in enumerate(["EffElecZdR_Veto", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_tkIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_tkIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_tkIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptCustomTracker", "EffMuonZdR_HighptCustomTracker_tkIso", "EffMuonZdR_HighptCustomTracker_miniIso", "EffMuonZdR_HighptCustomTracker_trkIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_tkIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight"]):
+            for i, n in enumerate(["EffElecZdR_Veto", "EffElecZdR_Loose", "EffElecZdR_Tight", "EffElecZdR_HEEP", "EffElecZdR_HEEP_pfIso", "EffElecZdR_HEEP_miniIso", "EffMuonZdR_TrackerTracker", "EffMuonZdR_TrackerTracker_tkIso", "EffMuonZdR_TrackerTracker_miniIso", "EffMuonZdR_LooseLoose", "EffMuonZdR_LooseLoose_tkIso", "EffMuonZdR_LooseLoose_miniIso", "EffMuonZdR_HighptTracker", "EffMuonZdR_HighptTracker_tkIso", "EffMuonZdR_HighptTracker_miniIso", "EffMuonZdR_HighptCustomTracker", "EffMuonZdR_HighptCustomTracker_tkIso", "EffMuonZdR_HighptCustomTracker_miniIso", "EffMuonZdR_HighptCustomTracker_trkIso", "EffMuonZdR_HighptLoose", "EffMuonZdR_HighptLoose_tkIso", "EffMuonZdR_HighptLoose_miniIso", "EffMuonZdR_HighptHighpt", "EffMuonZdR_TightTight", "EffElecZdR_Loose1", "EffElecZdR_Loose2", "EffMuonZdR_Highpt", "EffMuonZdR_Tracker"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
-            for i, n in enumerate(["EffElecZpt_Veto", "EffElecZpt_Loose", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_tkIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_tkIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_tkIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptCustomTracker", "EffMuonZpt_HighptCustomTracker_tkIso", "EffMuonZpt_HighptCustomTracker_miniIso", "EffMuonZpt_HighptCustomTracker_trkIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_tkIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
+            for i, n in enumerate(["EffElecZpt_Veto", "EffElecZpt_Loose", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_tkIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_tkIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_tkIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptCustomTracker", "EffMuonZpt_HighptCustomTracker_tkIso", "EffMuonZpt_HighptCustomTracker_miniIso", "EffMuonZpt_HighptCustomTracker_trkIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_tkIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight", "EffElecZpt_Loose1", "EffElecZpt_Loose2", "EffMuonZpt_Highpt", "EffMuonZpt_Tracker"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
             # Set Sumw2
             for n, h in self.Hist.iteritems():
@@ -180,6 +180,12 @@ class XZhAnalyzer( Analyzer ):
                         self.Hist["EffElecZdR_Tight"].Fill(genZdR)
                         self.Hist["EffElecZpt_Tight"].Fill(genZpt)
                     
+                    if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose'):
+                        self.Hist["EffElecZdR_Loose1"].Fill(genZdR)
+                        self.Hist["EffElecZpt_Loose1"].Fill(genZpt)
+                    if event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_SPRING15_25ns_v1_ConvVetoDxyDz_Loose'):
+                        self.Hist["EffElecZdR_Loose2"].Fill(genZdR)
+                        self.Hist["EffElecZpt_Loose2"].Fill(genZpt)
                 
         # Muons
         if abs(event.genleps[0].pdgId()) == 13:
@@ -293,7 +299,13 @@ class XZhAnalyzer( Analyzer ):
                     if event.inclusiveLeptons[l1].muonID("POG_ID_Tight") and event.inclusiveLeptons[l2].muonID("POG_ID_Tight"):
                         self.Hist["EffMuonZdR_TightTight"].Fill(genZdR)
                         self.Hist["EffMuonZpt_TightTight"].Fill(genZpt)
-    
+                    
+                    if event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") or event.inclusiveLeptons[l2].muonID("POG_ID_HighPt"):
+                        self.Hist["EffMuonZdR_Highpt"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_Highpt"].Fill(genZpt)
+                    if (event.inclusiveLeptons[l2].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l1].isCustomTracker) or (event.inclusiveLeptons[l1].muonID("POG_ID_HighPt") and event.inclusiveLeptons[l2].isCustomTracker):
+                        self.Hist["EffMuonZdR_Tracker"].Fill(genZdR)
+                        self.Hist["EffMuonZpt_Tracker"].Fill(genZpt)
     
     def addFakeMet(self, event, particles):
         # Copy regular met
