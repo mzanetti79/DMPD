@@ -64,6 +64,41 @@ class XZhAnalyzer( Analyzer ):
                 self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
             for i, n in enumerate(["EffElecZpt_Loose", "EffElecZpt_Loose_pfIso", "EffElecZpt_Loose_miniIso", "EffElecZpt_Tight", "EffElecZpt_HEEP", "EffElecZpt_HEEP_pfIso", "EffElecZpt_HEEP_miniIso", "EffMuonZpt_TrackerTracker", "EffMuonZpt_TrackerTracker_pfIso", "EffMuonZpt_TrackerTracker_miniIso", "EffMuonZpt_LooseLoose", "EffMuonZpt_LooseLoose_pfIso", "EffMuonZpt_LooseLoose_miniIso", "EffMuonZpt_HighptTracker", "EffMuonZpt_HighptTracker_pfIso", "EffMuonZpt_HighptTracker_miniIso", "EffMuonZpt_HighptLoose", "EffMuonZpt_HighptLoose_pfIso", "EffMuonZpt_HighptLoose_miniIso", "EffMuonZpt_HighptHighpt", "EffMuonZpt_TightTight"]):
                 self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+
+            for i, n in enumerate(["Elec1Pt", "Muon1Pt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["Elec1Eta", "Muon1Eta"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Events", 60, -3., 3.)
+            for i, n in enumerate(["Elec1ZdR", "Muon1ZdR"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["Elec1Zpt", "Muon1Zpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["EffElec1Pt_HEEP", "EffMuon1Pt_Highpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["EffElec1Eta_HEEP", "EffMuon1Eta_Highpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
+            for i, n in enumerate(["EffElec1ZdR_Loose", "EffElec1ZdR_Loose_pfIso", "EffElec1ZdR_Loose_miniIso", "EffElec1ZdR_Tight", "EffElec1ZdR_HEEP", "EffElec1ZdR_HEEP_pfIso", "EffElec1ZdR_HEEP_miniIso", "EffMuon1ZdR_TrackerTracker", "EffMuon1ZdR_TrackerTracker_pfIso", "EffMuon1ZdR_TrackerTracker_miniIso", "EffMuon1ZdR_LooseLoose", "EffMuon1ZdR_LooseLoose_pfIso", "EffMuon1ZdR_LooseLoose_miniIso", "EffMuon1ZdR_HighptTracker", "EffMuon1ZdR_HighptTracker_pfIso", "EffMuon1ZdR_HighptTracker_miniIso", "EffMuon1ZdR_HighptLoose", "EffMuon1ZdR_HighptLoose_pfIso", "EffMuon1ZdR_HighptLoose_miniIso", "EffMuon1ZdR_HighptHighpt", "EffMuon1ZdR_TightTight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["EffElec1Zpt_Loose", "EffElec1Zpt_Loose_pfIso", "EffElec1Zpt_Loose_miniIso", "EffElec1Zpt_Tight", "EffElec1Zpt_HEEP", "EffElec1Zpt_HEEP_pfIso", "EffElec1Zpt_HEEP_miniIso", "EffMuon1Zpt_TrackerTracker", "EffMuon1Zpt_TrackerTracker_pfIso", "EffMuon1Zpt_TrackerTracker_miniIso", "EffMuon1Zpt_LooseLoose", "EffMuon1Zpt_LooseLoose_pfIso", "EffMuon1Zpt_LooseLoose_miniIso", "EffMuon1Zpt_HighptTracker", "EffMuon1Zpt_HighptTracker_pfIso", "EffMuon1Zpt_HighptTracker_miniIso", "EffMuon1Zpt_HighptLoose", "EffMuon1Zpt_HighptLoose_pfIso", "EffMuon1Zpt_HighptLoose_miniIso", "EffMuon1Zpt_HighptHighpt", "EffMuon1Zpt_TightTight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+
+            for i, n in enumerate(["Elec2Pt", "Muon2Pt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["Elec2Eta", "Muon2Eta"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Events", 60, -3., 3.)
+            for i, n in enumerate(["Elec2ZdR", "Muon2ZdR"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Events", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["Elec2Zpt", "Muon2Zpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Events", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["EffElec2Pt_HEEP", "EffMuon2Pt_Highpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+            for i, n in enumerate(["EffElec2Eta_HEEP", "EffMuon2Eta_Highpt"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Lepton #eta;Efficiency", 60, -3., 3.)
+            for i, n in enumerate(["EffElec2ZdR_Loose", "EffElec2ZdR_Loose_pfIso", "EffElec2ZdR_Loose_miniIso", "EffElec2ZdR_Tight", "EffElec2ZdR_HEEP", "EffElec2ZdR_HEEP_pfIso", "EffElec2ZdR_HEEP_miniIso", "EffMuon2ZdR_TrackerTracker", "EffMuon2ZdR_TrackerTracker_pfIso", "EffMuon2ZdR_TrackerTracker_miniIso", "EffMuon2ZdR_LooseLoose", "EffMuon2ZdR_LooseLoose_pfIso", "EffMuon2ZdR_LooseLoose_miniIso", "EffMuon2ZdR_HighptTracker", "EffMuon2ZdR_HighptTracker_pfIso", "EffMuon2ZdR_HighptTracker_miniIso", "EffMuon2ZdR_HighptLoose", "EffMuon2ZdR_HighptLoose_pfIso", "EffMuon2ZdR_HighptLoose_miniIso", "EffMuon2ZdR_HighptHighpt", "EffMuon2ZdR_TightTight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Gen #Delta R;Efficiency", len(dRbins)-1, array('f', dRbins))
+            for i, n in enumerate(["EffElec2Zpt_Loose", "EffElec2Zpt_Loose_pfIso", "EffElec2Zpt_Loose_miniIso", "EffElec2Zpt_Tight", "EffElec2Zpt_HEEP", "EffElec2Zpt_HEEP_pfIso", "EffElec2Zpt_HEEP_miniIso", "EffMuon2Zpt_TrackerTracker", "EffMuon2Zpt_TrackerTracker_pfIso", "EffMuon2Zpt_TrackerTracker_miniIso", "EffMuon2Zpt_LooseLoose", "EffMuon2Zpt_LooseLoose_pfIso", "EffMuon2Zpt_LooseLoose_miniIso", "EffMuon2Zpt_HighptTracker", "EffMuon2Zpt_HighptTracker_pfIso", "EffMuon2Zpt_HighptTracker_miniIso", "EffMuon2Zpt_HighptLoose", "EffMuon2Zpt_HighptLoose_pfIso", "EffMuon2Zpt_HighptLoose_miniIso", "EffMuon2Zpt_HighptHighpt", "EffMuon2Zpt_TightTight"]):
+                self.Hist[n] = ROOT.TH1F(n, ";Z p_{T} (GeV);Efficiency", len(pTbins)-1, array('f', pTbins))
+
             # Set Sumw2
             for n, h in self.Hist.iteritems():
                 h.Sumw2()
@@ -93,12 +128,62 @@ class XZhAnalyzer( Analyzer ):
                     if event.inclusiveLeptons[l1].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i1].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i1].eta())
+                    pfIso = event.inclusiveLeptons[l1].relIso03<0.15 
+                    miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 
+                    self.Hist["Elec1ZdR"].Fill(genZdR)
+                    self.Hist["Elec1Zpt"].Fill(genZpt)
+                    if event.inclusiveLeptons[l1].isHEEP
+                        self.Hist["EffElec1ZdR_HEEP"].Fill(genZdR)
+                        self.Hist["EffElec1Zpt_HEEP"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElec1ZdR_HEEP_pfIso"].Fill(genZdR)
+                            self.Hist["EffElec1Zpt_HEEP_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElec1ZdR_HEEP_miniIso"].Fill(genZdR)
+                            self.Hist["EffElec1Zpt_HEEP_miniIso"].Fill(genZpt)
+                    if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose') 
+                        self.Hist["EffElec1ZdR_Loose"].Fill(genZdR)
+                        self.Hist["EffElec1Zpt_Loose"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElec1ZdR_Loose_pfIso"].Fill(genZdR)
+                            self.Hist["EffElec1Zpt_Loose_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElec1ZdR_Loose_miniIso"].Fill(genZdR)
+                            self.Hist["EffElec1Zpt_Loose_miniIso"].Fill(genZpt)
+                    if event.inclusiveLeptons[l1].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight') 
+                        self.Hist["EffElec1ZdR_Tight"].Fill(genZdR)
+                        self.Hist["EffElec1Zpt_Tight"].Fill(genZpt)
                 if l2 >= 0 and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt:
                     self.Hist["ElecPt"].Fill(event.genleps[i2].pt())
                     self.Hist["ElecEta"].Fill(event.genleps[i2].eta())
                     if event.inclusiveLeptons[l2].isHEEP:
                         self.Hist["EffElecPt_HEEP"].Fill(event.genleps[i2].pt())
                         self.Hist["EffElecEta_HEEP"].Fill(event.genleps[i2].eta())
+                    pfIso = event.inclusiveLeptons[l2].relIso03<0.15 
+                    miniIso = event.inclusiveLeptons[l2].miniRelIso<0.1 
+                    self.Hist["Elec2ZdR"].Fill(genZdR)
+                    self.Hist["Elec2Zpt"].Fill(genZpt)
+                    if event.inclusiveLeptons[l2].isHEEP
+                        self.Hist["EffElec2ZdR_HEEP"].Fill(genZdR)
+                        self.Hist["EffElec2Zpt_HEEP"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElec2ZdR_HEEP_pfIso"].Fill(genZdR)
+                            self.Hist["EffElec2Zpt_HEEP_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElec2ZdR_HEEP_miniIso"].Fill(genZdR)
+                            self.Hist["EffElec2Zpt_HEEP_miniIso"].Fill(genZpt)
+                    if event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Loose') 
+                        self.Hist["EffElec2ZdR_Loose"].Fill(genZdR)
+                        self.Hist["EffElec2Zpt_Loose"].Fill(genZpt)
+                        if pfIso:
+                            self.Hist["EffElec2ZdR_Loose_pfIso"].Fill(genZdR)
+                            self.Hist["EffElec2Zpt_Loose_pfIso"].Fill(genZpt)
+                        if miniIso:
+                            self.Hist["EffElec2ZdR_Loose_miniIso"].Fill(genZdR)
+                            self.Hist["EffElec2Zpt_Loose_miniIso"].Fill(genZpt)
+                    if event.inclusiveLeptons[l2].electronID('POG_Cuts_ID_PHYS14_25ns_v1_ConvVetoDxyDz_Tight') 
+                        self.Hist["EffElec2ZdR_Tight"].Fill(genZdR)
+                        self.Hist["EffElec2Zpt_Tight"].Fill(genZpt)
                 if l1 >= 0 and l2 >= 0 and event.inclusiveLeptons[l1].pt() > self.cfg_ana.elec1pt and event.inclusiveLeptons[l2].pt() > self.cfg_ana.elec2pt+15:
                     pfIso = event.inclusiveLeptons[l1].relIso03<0.15 and event.inclusiveLeptons[l2].relIso03<0.15
                     miniIso = event.inclusiveLeptons[l1].miniRelIso<0.1 and event.inclusiveLeptons[l2].miniRelIso<0.1
