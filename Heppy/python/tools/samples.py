@@ -2150,7 +2150,7 @@ sample = {
 
     'XVh_M600' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-600_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-600_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-600_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -2162,7 +2162,7 @@ sample = {
     },
     'XVh_M800' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-800_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-800_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-800_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 623,
@@ -2174,7 +2174,7 @@ sample = {
     },
     'XVh_M1000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-1000_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-1000_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-1000_13TeV-madgraph-v1'],
         'fillcolor' : 623,
         'fillstyle' : 3005,
         'linecolor' : 625,
@@ -2186,7 +2186,7 @@ sample = {
     },
     'XVh_M1200' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-1200_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-1200_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-1200_13TeV-madgraph-v1'],
         'fillcolor' : 625,
         'fillstyle' : 3005,
         'linecolor' : 625,
@@ -2198,7 +2198,7 @@ sample = {
     },
     'XVh_M1400' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-1400_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-1400_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-1400_13TeV-madgraph-v1'],
         'fillcolor' : 625,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -2210,7 +2210,7 @@ sample = {
     },
     'XVh_M1600' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2', 'WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-1600_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-1600_13TeV-madgraph-v2', 'HVT/WprimeToWhToWlephbb_narrow_M-1600_13TeV-madgraph-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 628,
@@ -2222,7 +2222,7 @@ sample = {
     },
     'XVh_M1800' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-1800_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-1800_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-1800_13TeV-madgraph-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 629,
@@ -2234,7 +2234,7 @@ sample = {
     },
     'XVh_M2000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-2000_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-2000_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-2000_13TeV-madgraph-v1'],
         'fillcolor' : 628,
         'fillstyle' : 3005,
         'linecolor' : 629,
@@ -2246,7 +2246,7 @@ sample = {
     },
     'XVh_M2500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-2500_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-2500_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-2500_13TeV-madgraph-v1'],
         'fillcolor' : 629,
         'fillstyle' : 3005,
         'linecolor' : 633,
@@ -2258,7 +2258,7 @@ sample = {
     },
     'XVh_M3000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-3000_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-3000_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-3000_13TeV-madgraph-v1'],
         'fillcolor' : 633,
         'fillstyle' : 3005,
         'linecolor' : 634,
@@ -2270,7 +2270,7 @@ sample = {
     },
     'XVh_M3500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-3500_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-3500_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-3500_13TeV-madgraph-v1'],
         'fillcolor' : 634,
         'fillstyle' : 3005,
         'linecolor' : 635,
@@ -2282,7 +2282,7 @@ sample = {
     },
     'XVh_M4000' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-4000_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-4000_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-4000_13TeV-madgraph-v1'],
         'fillcolor' : 635,
         'fillstyle' : 3005,
         'linecolor' : 636,
@@ -2294,7 +2294,7 @@ sample = {
     },
     'XVh_M4500' : {
         'order' : 1001,
-        'files' : ['ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1', 'ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1', 'WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
+        'files' : ['HVT/ZprimeToZhToZlephbb_narrow_M-4500_13TeV-madgraph-v1', 'HVT/ZprimeToZhToZinvhbb_narrow_M-4500_13TeV-madgraph-v1', 'HVT/WprimeToWhToWlephbb_narrow_M-4500_13TeV-madgraph-v1'],
         'fillcolor' : 635,
         'fillstyle' : 3005,
         'linecolor' : 636,
