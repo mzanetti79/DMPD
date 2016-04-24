@@ -1,5 +1,21 @@
 xsections = {
     
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-600_MA0-300_13TeV-madgraph' : 0.0260,
+       
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph' : 0.0288,
+    
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-1000_MA0-300_13TeV-madgraph' : 0.0234,
+
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph' : 0.0183,
+
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-1400_MA0-300_13TeV-madgraph' : 0.0136,
+
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph' : 0.00871,
+    
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph' : 0.00561,
+              
+   'ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph' : 0.00280,
+         
     #### NEW DM SIGNAL XSECTIONS FROM THEORY PAPER --- BEGIN
 #    'TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 19.59,
 #    'TTbarDMJets_scalar_Mchi-1_Mphi-20_TuneCUETP8M1_13TeV-madgraphMLM-pythia8' : 10.48,

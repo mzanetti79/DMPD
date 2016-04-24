@@ -1,4 +1,90 @@
 mcsamples   = {
+
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/FA8E707B-D988-E511-B79F-001E67396793.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/F631207D-D988-E511-8E7B-001E67E6A166.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/C8298F42-3188-E511-82D8-002590D0AFFC.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1700_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/CCAEB186-B488-E511-9DE0-008CFA197DA4.root',
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/70932B49-3188-E511-ABA8-00259074AE9A.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/149C2444-3188-E511-92FF-0025907B4F88.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/F0B0FC43-3188-E511-A4C7-002590D0AFF4.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1200_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/10BE8A53-CE89-E511-9121-0025905C2CC2.root',
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  ### FIXME!!!
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/CEA06E2A-BF88-E511-A6F6-000F530E47E0.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/84619B94-4289-E511-B318-008CFAF0751E.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/90F749D4-8588-E511-B04C-549F35AD8BA2.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/6EC48F51-3188-E511-9079-A01D48EE836C.root',
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-600_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-600_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/FE3C2616-6F8C-E511-810F-D8D385FF322D.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-600_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/A2250005-6F8C-E511-A911-00266CF94C44.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-600_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/62651EBB-9889-E511-B11E-AC853D9DAC2B.root',
+
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-1000_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/706858DD-EA88-E511-8BBD-00259073E4D8.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/6239C272-BA88-E511-8A4B-002590E39F4E.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1000_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/7C68F0E0-FC88-E511-91FC-00259021A0BA.root',
+
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-1400_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1400_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/E86A0CE7-D38A-E511-9306-002590D9D8C2.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1400_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/D263E9E5-D38A-E511-91F0-00259029E81A.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-1400_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/741C629A-D38A-E511-8E78-002590747D9C.root',
+
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+  ### FIXME!!!
+  'ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph' : {
+    'files'   : [
+
+    ],
+    'xsec'    : 0.0,
+    'nevents' : 639191.,
+  },
+
+
     
   'BBbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-v1' : {
     'files'   : [
