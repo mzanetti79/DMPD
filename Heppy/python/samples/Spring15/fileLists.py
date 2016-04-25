@@ -23,9 +23,12 @@ mcsamples   = {
     'nevents' : 639191.,
   },
 
-  ### FIXME!!!
   'ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph' : {
     'files'   : [
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/2E11045E-4B90-E511-B64A-34E6D7E387A8.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/7C3C9A43-1789-E511-9657-00237DF27450.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/B01853CF-6E8C-E511-8016-003048D439B2.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-800_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/30000/183019DF-6E8C-E511-A4B1-002590DE6E8A.root',
     ],
     'xsec'    : 0.0,
     'nevents' : 639191.,
@@ -78,7 +81,9 @@ mcsamples   = {
   ### FIXME!!!
   'ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph' : {
     'files'   : [
-
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/700A0806-658A-E511-A805-B083FED73FEC.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/48AC6F7C-8B89-E511-BF07-0CC47A4D764A.root',
+        'dcap://t2-srm-02.lnl.infn.it/pnfs/lnl.infn.it/data/cms//store/mc/RunIISpring15MiniAODv2/ZprimeToA0hToA0chichihbb_2HDM_MZp-2500_MA0-300_13TeV-madgraph/MINIAODSIM/74X_mcRun2_asymptotic_v2-v1/20000/3A84B576-8B89-E511-AD7A-002618943834.root',
     ],
     'xsec'    : 0.0,
     'nevents' : 639191.,
