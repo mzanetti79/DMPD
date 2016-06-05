@@ -416,9 +416,9 @@ def drawCMS(lumi, text, onTop=False):
 #    latex.SetTextAlign(13)
 #    latex.DrawLatex(0.45, 0.98, "DM monojet")
 
-def drawAnalysis(s):
+def drawAnalysis(s, center=False):
     text = ""
-    if "VH" in s or s.startswith('X'): text = "X #rightarrow Vh #rightarrow (ll,l#nu,#nu#nu)bb"
+    if "VH" in s or "Vh" in s or s.startswith('X'): text = "X #rightarrow Vh #rightarrow (ll,l#nu,#nu#nu)bb"
     elif "Zh" in s: text = "Z' #rightarrow Zh #rightarrow (ll,#nu#nu)bb"
     elif "Wh" in s: text = "W' #rightarrow Wh #rightarrow l#nu bb"
     elif "DM" in s or "CR" in s: text = "DM + heavy flavour"
@@ -428,10 +428,10 @@ def drawAnalysis(s):
     latex.SetTextSize(0.04)
     latex.SetTextFont(42)
     #latex.SetTextAlign(33)
-    latex.DrawLatex(0.15, 0.95, text)
+    latex.DrawLatex(0.15 if not center else 0.3, 0.95, text)
 
 def drawRegion(channel, left=False):
-    region = {"SR" : "1 + 2 b-tag categories", "SR1" : "1 b-tag category", "SR2" : "2 b-tag category", "ZCR" : "Z region", "ZeeCR" : "2e region", "ZeebCR" : "2e, 1 b-tag region", "ZeebbCR" : "2e, 2 b-tag region", "ZmmCR" : "2#mu region", "ZmmbCR" : "2#mu, 1 b-tag region", "ZmmbbCR" : "2#mu, 2 b-tag region", "WCR" : "W region", "WeCR" : "1e region", "WebCR" : "1e, 1 b-tag region", "WebbCR" : "1e, 2 b-tag region", "WmCR" : "1#mu region", "WmbCR" : "1#mu, 1 b-tag region", "WmbbCR" : "1#mu, 2 b-tag region", "TCR" : "1#mu, 1e region", "TbCR" : "1#mu, 1e, 1 b-tag region", "TbbCR" : "1#mu, 1e, 2 b-tag region", "CR" : "Control regions", "ZmmInc" : "2#mu selection", "ZeeInc" : "2e selection", "WmInc" : "1#mu selection", "WeInc" : "1e selection", "TInc" : "1#mu, 1e selection", "XZh" : "0l, 2l channel", "XWh" : "1l channel", "XZhnn" : "0l channel", "XZhee" : "2e channel", "XZhmm" : "2#mu channel", "XWhen" : "1e channel", "XWhmn" : "1#mu channel"}
+    region = {"SR" : "1 + 2 b-tag categories", "SR1" : "1 b-tag category", "SR2" : "2 b-tag category", "ZCR" : "Z region", "ZeeCR" : "2e region", "ZeebCR" : "2e, 1 b-tag region", "ZeebbCR" : "2e, 2 b-tag region", "ZmmCR" : "2#mu region", "ZmmbCR" : "2#mu, 1 b-tag region", "ZmmbbCR" : "2#mu, 2 b-tag region", "WCR" : "W region", "WeCR" : "1e region", "WebCR" : "1e, 1 b-tag region", "WebbCR" : "1e, 2 b-tag region", "WmCR" : "1#mu region", "WmbCR" : "1#mu, 1 b-tag region", "WmbbCR" : "1#mu, 2 b-tag region", "TCR" : "1#mu, 1e region", "TbCR" : "1#mu, 1e, 1 b-tag region", "TbbCR" : "1#mu, 1e, 2 b-tag region", "CR" : "Control regions", "ZmmInc" : "2#mu selection", "ZeeInc" : "2e selection", "WmInc" : "1#mu selection", "WeInc" : "1e selection", "TInc" : "1#mu, 1e selection", "XVh" : "0l, 1l, 2l channel", "XZh" : "0l, 2l channel", "XWh" : "1l channel", "XZhnn" : "0l channel", "XZhll" : "2l channel", "XZhee" : "2e channel", "XZhmm" : "2#mu channel", "XWhen" : "1e channel", "XWhmn" : "1#mu channel"}
     
     text = ""
     if channel in region:
