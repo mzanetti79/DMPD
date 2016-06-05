@@ -84,11 +84,11 @@ class RecoilAnalyzer( Analyzer ):
                 lepphi    = ROOT.Double(pseudoboson.phi())
                 Upar      = ROOT.Double(pseudoUpara)
                 Uper      = ROOT.Double(pseudoUperp)
-#            elif event.genV.pt()>0.:
-#                recoilX = - event.met.px() - event.genV.px()
-#                recoilY = - event.met.py() - event.genV.py()
-#                event.Upara = (recoilX*event.genV.px() + recoilY*event.genV.py())/event.genV.pt()
-#                event.Uperp = (recoilX*event.genV.py() - recoilY*event.genV.px())/event.genV.pt()        
+            elif event.genV.pt()>0.:
+                recoilX = - event.met.px() - event.genV.px()
+                recoilY = - event.met.py() - event.genV.py()
+                event.Upara = (recoilX*event.genV.px() + recoilY*event.genV.py())/event.genV.pt()
+                event.Uperp = (recoilX*event.genV.py() - recoilY*event.genV.px())/event.genV.pt()        
             else:
                 applyrecoil = False
             
