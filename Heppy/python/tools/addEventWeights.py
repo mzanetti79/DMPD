@@ -367,7 +367,7 @@ def processFile(dir_name, verbose=False):
 #    fakecormet_ptScaleDown= array('f', [0.0])
 #    fakecormet_ptResUp    = array('f', [0.0])
 #    fakecormet_ptResDown  = array('f', [0.0])
-#    X_cmass = array('f', [1.0])
+    X_cmass = array('f', [1.0])
     
     # Looping over file content
     for key in ref_file.GetListOfKeys():
@@ -473,7 +473,7 @@ def processFile(dir_name, verbose=False):
 #            fakecormet_ptScaleDownBranch = new_tree.Branch('fakecormet_ptScaleDown', fakecormet_ptScaleDown, 'fakecormet_ptScaleDown/F')
 #            fakecormet_ptResUpBranch     = new_tree.Branch('fakecormet_ptResUp',     fakecormet_ptResUp,     'fakecormet_ptResUp/F')
 #            fakecormet_ptResDownBranch   = new_tree.Branch('fakecormet_ptResDown',   fakecormet_ptResDown,   'fakecormet_ptResDown/F')
-#            X_cmassBranch = new_tree.Branch('X_cmass', X_cmass, 'X_cmass/F')
+            X_cmassBranch = new_tree.Branch('X_cmass', X_cmass, 'X_cmass/F')
 
             # looping over events
             for event in range(0, obj.GetEntries()):
@@ -488,7 +488,7 @@ def processFile(dir_name, verbose=False):
                 triggerMETWeight[0] = triggerMETWeightUp[0] = triggerMETWeightDown[0] = 1.
                 electronWeight[0] = electronWeightUp[0] = electronWeightDown[0] = electronIsoWeight[0] = electronIsoWeightUp[0] = electronIsoWeightDown[0] = 1.
                 muonWeight[0] = muonWeightUp[0] = muonWeightDown[0] = muonIsoWeight[0] = muonIsoWeightUp[0] = muonIsoWeightDown[0] = 1.
-#                X_cmass[0] = 0.
+                X_cmass[0] = 0.
                 
                 nBtagJets[0] = nBtagSubJets[0] = 0
                 for i in range(njets+nbjets):
@@ -900,7 +900,7 @@ def processFile(dir_name, verbose=False):
                         #xsWeight[0] = 1./max(obj.HLT_SingleMu + obj.HLT_SingleElectron + obj.HLT_DoubleMu + obj.HLT_DoubleElectron + obj.HLT_MET, 1.)
                 
                 
-#                X_cmass[0] = math.sqrt( max(2.*obj.fatjet1_pt*cormet_pt[0]*(1.-math.cos(deltaPhi(obj.fatjet1_phi, cormet_phi[0])) ), 0.) )
+                X_cmass[0] = math.sqrt( max(2.*obj.fatjet1_pt*obj.cormet_pt*(1.-math.cos(deltaPhi(obj.fatjet1_phi, obj.cormet_phi)) ), 0.) )
                 
                 # Total
                 eventWeight[0] = xsWeight[0] * kfactorWeight[0] * pileupWeight[0] * triggerMuonIsoWeight[0] * triggerElectronIsoWeight[0] * triggerMETWeight[0] * muonIsoWeight[0] * electronIsoWeight[0] * electroweakWeight[0]
@@ -975,7 +975,7 @@ def processFile(dir_name, verbose=False):
 #                    fakecormet_ptScaleDownBranch.Fill()
 #                    fakecormet_ptResUpBranch.Fill()
 #                    fakecormet_ptResDownBranch.Fill()
-#                X_cmassBranch.Fill()
+                X_cmassBranch.Fill()
 
             new_file.cd()
             new_tree.Write()
@@ -1017,6 +1017,7 @@ for d in os.listdir(origin):
     #if not 'TTbarDM' in d and not 'BBbarDM' in d: continue
     #if not 'ZprimeToZhToZlephbb_narrow_M-1000' in d: continue
     #if 'TT_' in d: continue
+    if not 'prime' in d: continue
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
     p.start()

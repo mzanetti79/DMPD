@@ -6,12 +6,15 @@ from ROOT import TFile, TH1, TF1, TLorentzVector
 
 from DMPD.Heppy.tools.selections import *
 
+from DMPD.Heppy.samples.Spring15.xSections import xsections, xsectionsunc, kfactors, kfactors4F5F
+
 import optparse
 usage = 'usage: %prog [options]'
 parser = optparse.OptionParser(usage)
 parser.add_option('-i', '--input', action='store', type='string', dest='origin', default='')
 parser.add_option('-o', '--output', action='store', type='string', dest='target', default='')
 parser.add_option('-j', '--json', action='store', type='string', dest='json', default='')
+parser.add_option('-x', '--xsec', action='store_true', dest='xsec', default=False)
 parser.add_option('-v', '--verbose', action='store_true', dest='verbose', default=False)
 
 (options, args) = parser.parse_args()
@@ -19,6 +22,7 @@ parser.add_option('-v', '--verbose', action='store_true', dest='verbose', defaul
 origin      = options.origin
 target      = options.target
 json_path   = options.json
+newxsec     = options.xsec
 verboseon   = options.verbose
 
 GOLDENLUMI  = 2170
@@ -70,6 +74,8 @@ def processFile(dir_name, verbose=False):
     
     # Open old file
     ref_file = TFile(ref_file_name, 'READ')
+    ref_hist = ref_file.Get('Counters/Counter')
+    totalEntries = ref_hist.GetBinContent(0)
     
     # Variables declaration
     eventWeightLumi = array('f', [1.0])  # global event weight with lumi
@@ -111,6 +117,8 @@ def processFile(dir_name, verbose=False):
                     eventWeightLumi[0] /= obj.electronIsoWeight if obj.electronIsoWeight>0 else 1.
                     eventWeightLumi[0] /= obj.muonIsoWeight if obj.muonIsoWeight>0 else 1.
                     eventWeightLumi[0] *= SILVERLUMI if 'XZh' in obj.GetName() else GOLDENLUMI
+                    
+                    if newxsec: eventWeightLumi[0] *= (xsections[dir_name[:-3-5]]/totalEntries) / obj.xsWeight
                
                 # Fill the branches
                 eventWeightLumiBranch.Fill()
@@ -141,7 +149,7 @@ jobs = []
 for d in os.listdir(origin):
     if not '.root' in d: continue
     if 'BBbarDM' in d or 'TTbarDM' in d: continue
-#    if not 'WprimeToWhToWlephbb_narrow_M-800_13TeV-madgrap' in d: continue
+    if not 'prime' in d: continue
 #    print d
     p = multiprocessing.Process(target=processFile, args=(d,verboseon,))
     jobs.append(p)
