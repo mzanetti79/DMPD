@@ -505,7 +505,7 @@ var_template = {
       "log" : False,
     },
     "fatjet[N]_prunedMassCorr": {
-      "title" : "jet corrected pruned mass (GeV)",
+      "title" : "jet pruned mass (GeV)",
       "nbins" : 60,
       "min" : 0,
       "max" : 300,
@@ -519,7 +519,7 @@ var_template = {
       "log" : False,
     },
     "fatjet[N]_softdropMassCorr": {
-      "title" : "jet corrected soft drop mass (GeV)",
+      "title" : "jet soft drop mass (GeV)",
       "nbins" : 20,
       "min" : 0.,
       "max" : 200.,
@@ -992,7 +992,7 @@ var_template = {
     },
     "X_mass": {
       "title" : "m_{Vh} (GeV)",
-      "nbins" : 35,
+      "nbins" : 70,
       #"bins" : [500, 540, 583, 629, 678, 730, 785, 843, 904, 968, 1035, 1105, 1178, 1254, 1333, 1415, 1500, 1588, 1679, 1773, 1870, 1970, 2073, 2179, 2288, 2400, 2515, 2633, 2754, 2878, 3005, 3135, 3268, 3404, 3543, 3685, 3830, 3978, 4129, 4283, 4440, 4600],
       #"bins" : [500, 583, 678, 785, 904, 1035, 1178, 1333, 1500, 1679, 1870, 2073, 2288, 2515, 2754, 3005, 3268, 3543, 3830, 4129, 4600],
       "bins" : [x*(1+0.1*x)*40+800 for x in range(28)],#[x*(1+0.1*x)*20+500 for x in range(40)], #[x*(1+0.16*x)*50+500 for x in range(20)],
